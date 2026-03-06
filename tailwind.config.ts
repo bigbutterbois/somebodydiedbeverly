@@ -17,6 +17,10 @@ const config: Config = {
       fontFamily: {
         sans: ['var(--font-geist-sans)', 'sans-serif'],
       },
+      maxWidth: {
+        page: '1200px',
+        text: '640px',
+      },
     },
   },
   plugins: [],

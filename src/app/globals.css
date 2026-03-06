@@ -1,6 +1,5 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import "tailwindcss";
+@config "../../tailwind.config.ts";
 
 @layer base {
   html {
@@ -19,5 +18,37 @@
   ::selection {
     background-color: #1a1a1a;
     color: #ffffff;
+  }
+}
+
+@layer components {
+  .prose-custom p {
+    font-size: 14px;
+    line-height: 1.75;
+    color: #1a1a1a;
+    margin-bottom: 1.5rem;
+  }
+  .prose-custom p:last-child {
+    margin-bottom: 0;
+  }
+  .prose-custom a {
+    color: #1a1a1a;
+    text-decoration: underline;
+    text-underline-offset: 2px;
+  }
+  .prose-custom a:hover {
+    color: #6b6b6b;
+  }
+  .prose-custom h2 {
+    font-size: 16px;
+    font-weight: 400;
+    margin-top: 2.5rem;
+    margin-bottom: 1rem;
+  }
+  .prose-custom blockquote {
+    border-left: 1px solid #d4d4d4;
+    padding-left: 1rem;
+    color: #6b6b6b;
+    font-style: italic;
   }
 }

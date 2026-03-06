@@ -1,0 +1,73 @@
+.grid {
+  columns: 3;
+  column-gap: 16px;
+}
+
+@media (max-width: 768px) {
+  .grid {
+    columns: 2;
+  }
+}
+
+@media (max-width: 480px) {
+  .grid {
+    columns: 1;
+  }
+}
+
+.item {
+  break-inside: avoid;
+  margin-bottom: 16px;
+  cursor: pointer;
+  border: none;
+  padding: 0;
+  background: none;
+  display: block;
+  width: 100%;
+}
+
+.item:hover .placeholder {
+  opacity: 0.85;
+}
+
+.placeholder {
+  width: 100%;
+  border-radius: 2px;
+  transition: opacity 150ms ease;
+}
+
+.overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  background-color: rgba(107, 107, 107, 0.85);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 48px 24px;
+  cursor: pointer;
+}
+
+.lightboxContent {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+  max-width: 90vw;
+  max-height: 90vh;
+  cursor: default;
+}
+
+.lightboxTitle {
+  font-size: 14px;
+  color: #ffffff;
+  margin: 0;
+}
+
+.lightboxImage {
+  max-width: 90vw;
+  max-height: calc(90vh - 48px);
+  width: auto;
+  border-radius: 2px;
+  min-width: 300px;
+}

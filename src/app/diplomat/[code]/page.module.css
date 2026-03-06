@@ -1,0 +1,28 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.5rem;
+  min-height: 60vh;
+  justify-content: center;
+}
+
+.code {
+  font-family: monospace;
+  font-size: 48px;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  color: #1a1a1a;
+}
+
+.results {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.notFound {
+  font-size: 14px;
+  color: #ef4444;
+}
