@@ -4,51 +4,142 @@
 @layer base {
   html {
     -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
   }
-  body {
-    background-color: #ffffff;
-    color: #1a1a1a;
-  }
+
+  /* all text lowercase — no exceptions */
   * {
     text-transform: lowercase;
   }
   code, pre {
     text-transform: none;
   }
+
   ::selection {
-    background-color: #1a1a1a;
-    color: #ffffff;
+    background-color: #00BAAD;
+    color: #161615;
   }
 }
 
+/* blog post prose — used on /blog/[slug] dark pages */
 @layer components {
-  .prose-custom p {
-    font-size: 14px;
-    line-height: 1.75;
-    color: #1a1a1a;
-    margin-bottom: 1.5rem;
+  .prose-post p {
+    font-size: 14.5px;
+    font-weight: 400;
+    color: #8a8a82;
+    line-height: 1.8;
+    margin-bottom: 22px;
+    letter-spacing: 0.01em;
   }
-  .prose-custom p:last-child {
+  .prose-post p:last-child {
     margin-bottom: 0;
   }
-  .prose-custom a {
-    color: #1a1a1a;
+  .prose-post p strong {
+    color: #eceae4;
+    font-weight: 500;
+  }
+  .prose-post h2 {
+    font-size: 15px;
+    font-weight: 400;
+    color: #eceae4;
+    letter-spacing: 0.01em;
+    margin-top: 40px;
+    margin-bottom: 16px;
+  }
+  .prose-post h3 {
+    font-size: 13.5px;
+    font-weight: 400;
+    color: #eceae4;
+    letter-spacing: 0.01em;
+    margin-top: 32px;
+    margin-bottom: 12px;
+  }
+  .prose-post blockquote {
+    border-left: 2px solid #00BAAD;
+    padding: 2px 0 2px 22px;
+    margin: 32px 0;
+  }
+  .prose-post blockquote p {
+    color: #eceae4;
+    font-size: 14px;
+    font-style: normal;
+  }
+  .prose-post a {
+    color: #eceae4;
     text-decoration: underline;
     text-underline-offset: 2px;
+    text-decoration-color: #4a4a45;
   }
-  .prose-custom a:hover {
-    color: #6b6b6b;
+  .prose-post a:hover {
+    text-decoration-color: #eceae4;
   }
-  .prose-custom h2 {
-    font-size: 16px;
+  .prose-post hr {
+    border: none;
+    border-top: 1px solid #2c2c2a;
+    margin: 40px 0;
+  }
+  .prose-post ul,
+  .prose-post ol {
+    color: #8a8a82;
+    font-size: 14.5px;
+    line-height: 1.8;
+    padding-left: 20px;
+    margin-bottom: 22px;
+  }
+  .prose-post li {
+    margin-bottom: 6px;
+  }
+  .prose-post code {
+    font-size: 12.5px;
+    background: #1c1c1a;
+    color: #eceae4;
+    padding: 2px 6px;
+    border-radius: 2px;
+  }
+  .prose-post pre {
+    background: #1c1c1a;
+    border: 1px solid #2c2c2a;
+    padding: 16px 20px;
+    overflow-x: auto;
+    margin-bottom: 22px;
+  }
+  .prose-post pre code {
+    background: none;
+    padding: 0;
+    font-size: 12.5px;
+    color: #eceae4;
+  }
+  .prose-post table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
+    margin-bottom: 22px;
+  }
+  .prose-post th {
+    text-align: left;
+    color: #eceae4;
     font-weight: 400;
-    margin-top: 2.5rem;
-    margin-bottom: 1rem;
+    padding: 10px 14px;
+    border-bottom: 1px solid #2c2c2a;
   }
-  .prose-custom blockquote {
-    border-left: 1px solid #d4d4d4;
-    padding-left: 1rem;
-    color: #6b6b6b;
-    font-style: italic;
+  .prose-post td {
+    color: #8a8a82;
+    padding: 10px 14px;
+    border-bottom: 1px solid #2c2c2a;
+  }
+  .prose-post tr:last-child td {
+    border-bottom: none;
+  }
+  .prose-post img {
+    max-width: 100%;
+    display: block;
+    margin: 32px auto;
+  }
+  .prose-post figcaption {
+    text-align: center;
+    font-size: 11px;
+    color: #4a4a45;
+    margin-top: 8px;
+    letter-spacing: 0.04em;
   }
 }

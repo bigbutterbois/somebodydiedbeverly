@@ -1,19 +1,12 @@
 import { notFound } from 'next/navigation'
-import PageWrapper from '@/components/ui/PageWrapper'
-import { getPostBySlug, blogPosts } from '@/data/blogPosts'
-import HelloWorld from './posts/hello-world'
-import OnDiplomats from './posts/on-diplomats'
-import FirstPost from './posts/first-post'
+import { cookies } from 'next/headers'
+import { auth } from '@/lib/auth'
+import { getPost } from '@/lib/blog'
+import NavBar from '@/components/ui/NavBar'
+import PasswordPrompt from './PasswordPrompt'
+import Link from 'next/link'
 
-const postComponents: Record<string, React.ComponentType> = {
-  'hello-world': HelloWorld,
-  'on-diplomats': OnDiplomats,
-  'first-post': FirstPost,
-}
-
-export function generateStaticParams() {
-  return blogPosts.map(post => ({ slug: post.slug }))
-}
+export const dynamic = 'force-dynamic'
 
 interface Props {
   params: Promise<{ slug: string }>
@@ -21,24 +14,52 @@ interface Props {
 
 export default async function BlogPostPage({ params }: Props) {
   const { slug } = await params
-  const post = getPostBySlug(slug)
+  const post = await getPost(slug)
 
   if (!post) notFound()
 
-  const Content = postComponents[slug]
-  if (!Content) notFound()
+  const session = await auth()
+
+  // if not published and not admin, 404
+  if (!post.published && !session) notFound()
+
+  // password check — admin bypasses
+  if (post.password && !session) {
+    const cookieStore = await cookies()
+    const accessCookie = cookieStore.get(`post_access_${slug}`)
+    if (!accessCookie) {
+      return <PasswordPrompt slug={slug} title={post.title} />
+    }
+  }
 
   return (
-    <PageWrapper>
-      <article>
-        <header className="mb-12">
-          <h1 className="text-lg font-normal text-ink mb-2">{post.title}</h1>
-          <time className="text-xs text-muted">{post.date}</time>
-        </header>
-        <div className="prose-custom">
-          <Content />
-        </div>
-      </article>
-    </PageWrapper>
+    <div className="min-h-screen bg-charcoal">
+      <NavBar />
+      <main className="max-w-post mx-auto px-6 sm:px-10 pt-[60px] pb-[100px] w-full">
+        <article>
+          <span className="block text-[10.5px] text-text-muted tracking-[0.08em] mb-[18px]">
+            {post.created_at.slice(0, 10)}
+          </span>
+          <h1 className="text-[20px] font-normal text-text-primary tracking-[0.01em] leading-[1.4] mb-[48px] pb-8 border-b border-border-dark">
+            {post.title}
+          </h1>
+          <div
+            className="prose-post"
+            dangerouslySetInnerHTML={{ __html: post.content ?? '' }}
+          />
+        </article>
+
+        {session && (
+          <div className="mt-16 pt-6 border-t border-border-dark">
+            <Link
+              href={`/admin/blog/edit/${slug}`}
+              className="text-[10.5px] text-text-muted tracking-[0.08em] no-underline hover:text-accent transition-colors duration-150"
+            >
+              edit post
+            </Link>
+          </div>
+        )}
+      </main>
+    </div>
   )
 }
