@@ -1,0 +1,688 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>somebody died beverly — design mockup v2</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Geist+Sans:wght@300;400;500&display=swap');
+:root {
+--black: #111110;
+--charcoal: #161615;
+--border-dark: #2c2c2a;
+--text-primary: #eceae4;
+--text-secondary: #8a8a82;
+--text-muted: #4a4a45;
+--accent: #00BAAD;
+--off-white: #f5f4f0;
+--warm-white: #faf9f6;
+--white-text: #1a1a18;
+--white-secondary: #7a7a72;
+--white-muted: #b0afa8;
+--white-border: #e4e3de;
+  }
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+font-family: 'Geist Sans', -apple-system, sans-serif;
+background: #1a1a1a;
+font-size: 13px;
+letter-spacing: 0.01em;
+  }
+/* ─── mockup chrome ─── */
+.mockup-nav {
+display: flex;
+align-items: center;
+border-bottom: 1px solid #2a2a2a;
+background: #0d0d0d;
+position: sticky;
+top: 0;
+z-index: 1000;
+  }
+.mockup-nav button {
+background: none;
+border: none;
+border-right: 1px solid #1e1e1e;
+color: #4a4a4a;
+font-family: inherit;
+font-size: 10.5px;
+letter-spacing: 0.08em;
+padding: 11px 18px;
+cursor: pointer;
+transition: color 0.15s;
+  }
+.mockup-nav button:hover { color: #777; }
+.mockup-nav button.active { color: var(--accent); }
+.mockup-note {
+margin-left: auto;
+padding: 0 18px;
+font-size: 10px;
+color: #333;
+letter-spacing: 0.06em;
+  }
+.screen { display: none; min-height: calc(100vh - 37px); }
+.screen.active { display: flex; flex-direction: column; }
+/* ════════════════════════════════
+     SHARED HEADER COMPONENT
+     nav = opposite of page bg
+  ════════════════════════════════ */
+/* dark-page header: nav is near-black, logo + links are light */
+.header-on-dark {
+display: flex;
+align-items: center;
+justify-content: space-between;
+padding: 0 40px;
+height: 52px;
+background: var(--black);
+border-bottom: 1px solid var(--border-dark);
+flex-shrink: 0;
+  }
+/* light-page header: nav is off-white, logo + links are dark */
+.header-on-light {
+display: flex;
+align-items: center;
+justify-content: space-between;
+padding: 0 40px;
+height: 52px;
+background: var(--off-white);
+border-bottom: 1px solid var(--white-border);
+flex-shrink: 0;
+  }
+.site-name-dark {
+font-size: 12.5px;
+font-weight: 400;
+color: var(--text-primary);
+letter-spacing: 0.02em;
+  }
+.site-name-light {
+font-size: 12.5px;
+font-weight: 400;
+color: var(--white-text);
+letter-spacing: 0.02em;
+  }
+.nav-links-dark {
+display: flex;
+gap: 28px;
+  }
+.nav-links-dark span {
+font-size: 11.5px;
+color: var(--text-secondary);
+letter-spacing: 0.04em;
+cursor: pointer;
+transition: color 0.15s;
+  }
+.nav-links-dark span:hover, .nav-links-dark span.active { color: var(--text-primary); }
+.nav-links-dark span.active { color: var(--accent); }
+.nav-links-light {
+display: flex;
+gap: 28px;
+  }
+.nav-links-light span {
+font-size: 11.5px;
+color: var(--white-secondary);
+letter-spacing: 0.04em;
+cursor: pointer;
+transition: color 0.15s;
+  }
+.nav-links-light span:hover { color: var(--white-text); }
+.nav-links-light span.active { color: var(--accent); }
+/* ════════════════════════════════
+     HOMEPAGE — dark page, dark nav
+     simple. name once. three links.
+  ════════════════════════════════ */
+#home {
+background: var(--charcoal);
+  }
+.home-body {
+flex: 1;
+display: flex;
+align-items: center;
+justify-content: center;
+  }
+.home-center {
+display: flex;
+flex-direction: column;
+align-items: center;
+gap: 48px;
+  }
+.home-title {
+font-size: 16px;
+font-weight: 400;
+color: var(--text-primary);
+letter-spacing: 0.04em;
+  }
+.home-footer {
+padding: 24px;
+display: flex;
+justify-content: center;
+  }
+.admin-btn {
+background: none;
+border: none;
+font-family: inherit;
+font-size: 10.5px;
+letter-spacing: 0.08em;
+color: var(--text-muted);
+cursor: pointer;
+padding: 6px 10px;
+transition: color 0.2s, opacity 0.2s;
+opacity: 0.35;
+  }
+.admin-btn:hover { color: var(--text-secondary); opacity: 1; }
+.home-links {
+display: flex;
+flex-direction: column;
+width: 180px;
+gap: 0;
+  }
+.home-link {
+display: flex;
+align-items: center;
+justify-content: space-between;
+padding: 13px 0;
+border-bottom: 1px solid var(--border-dark);
+cursor: pointer;
+text-decoration: none;
+  }
+.home-link:first-child { border-top: 1px solid var(--border-dark); }
+.home-link-label {
+font-size: 12.5px;
+color: var(--text-secondary);
+letter-spacing: 0.04em;
+transition: color 0.15s;
+  }
+.home-link:hover .home-link-label { color: var(--accent); }
+.home-link-arrow {
+font-size: 11px;
+color: var(--text-muted);
+transition: color 0.15s, transform 0.15s;
+  }
+.home-link:hover .home-link-arrow {
+color: var(--accent);
+transform: translateX(3px);
+  }
+/* ════════════════════════════════
+     BLOG LISTING — light page
+     dark nav on light bg
+  ════════════════════════════════ */
+#blog {
+background: var(--warm-white);
+  }
+.blog-body {
+max-width: 660px;
+margin: 0 auto;
+padding: 60px 40px 100px;
+width: 100%;
+  }
+.section-label {
+font-size: 10.5px;
+letter-spacing: 0.12em;
+color: var(--accent);
+margin-bottom: 36px;
+display: block;
+text-transform: none;
+  }
+.post-list { display: flex; flex-direction: column; }
+.post-item {
+display: flex;
+align-items: baseline;
+justify-content: space-between;
+padding: 16px 0;
+border-bottom: 1px solid var(--white-border);
+cursor: pointer;
+gap: 24px;
+  }
+.post-item:first-child { border-top: 1px solid var(--white-border); }
+.post-title {
+font-size: 13.5px;
+font-weight: 400;
+color: var(--white-text);
+letter-spacing: 0.01em;
+transition: color 0.15s;
+flex: 1;
+line-height: 1.4;
+  }
+.post-item:hover .post-title { color: var(--accent); }
+.post-meta {
+display: flex;
+align-items: center;
+gap: 10px;
+flex-shrink: 0;
+  }
+.post-date {
+font-size: 11px;
+color: var(--white-muted);
+letter-spacing: 0.03em;
+  }
+.post-lock {
+font-size: 9.5px;
+color: var(--white-muted);
+opacity: 0.55;
+  }
+/* ════════════════════════════════
+     BLOG POST — dark page
+  ════════════════════════════════ */
+#post { background: var(--charcoal); }
+.post-body {
+max-width: 620px;
+margin: 0 auto;
+padding: 68px 40px 120px;
+width: 100%;
+  }
+.post-eyebrow {
+font-size: 10.5px;
+color: var(--text-muted);
+letter-spacing: 0.08em;
+margin-bottom: 18px;
+display: block;
+  }
+.post-h1 {
+font-size: 20px;
+font-weight: 400;
+color: var(--text-primary);
+letter-spacing: 0.01em;
+line-height: 1.4;
+margin-bottom: 48px;
+padding-bottom: 32px;
+border-bottom: 1px solid var(--border-dark);
+  }
+.post-body p {
+font-size: 14.5px;
+font-weight: 400;
+color: var(--text-secondary);
+line-height: 1.8;
+margin-bottom: 22px;
+letter-spacing: 0.01em;
+  }
+.post-body p strong { color: var(--text-primary); font-weight: 500; }
+.post-body blockquote {
+border-left: 2px solid var(--accent);
+padding: 2px 0 2px 22px;
+margin: 32px 0;
+  }
+.post-body blockquote p {
+color: var(--text-primary);
+font-size: 14px;
+font-style: normal;
+  }
+/* ════════════════════════════════
+     ART GALLERY — white, gallery feel
+     masonry-ish with vertical offsets
+  ════════════════════════════════ */
+#art { background: var(--warm-white); }
+.art-body {
+padding: 48px 48px 100px;
+flex: 1;
+  }
+.art-label {
+font-size: 10.5px;
+letter-spacing: 0.12em;
+color: var(--accent);
+margin-bottom: 48px;
+display: block;
+  }
+/* Masonry-style gallery — CSS columns, both start at top */
+.art-gallery {
+columns: 2;
+column-gap: 28px;
+  }
+.art-col { display: none; } /* replaced by masonry */
+.art-figure {
+break-inside: avoid;
+margin-bottom: 28px;
+cursor: pointer;
+display: block;
+  }
+.art-img {
+width: 100%;
+overflow: hidden;
+position: relative;
+display: block;
+  }
+.art-img-inner {
+width: 100%;
+display: block;
+transition: opacity 0.25s;
+  }
+.art-figure:hover .art-img-inner {
+opacity: 0.85;
+  }
+/* placeholder image blocks with varying aspect ratios */
+.ph { display: block; width: 100%; }
+.ph-landscape { aspect-ratio: 4/3; }
+.ph-portrait  { aspect-ratio: 3/4; }
+.ph-square    { aspect-ratio: 1; }
+.ph-wide      { aspect-ratio: 16/9; }
+.ph-1 { background: linear-gradient(160deg, #e8e4dc 0%, #d4cfc5 100%); }
+.ph-2 { background: linear-gradient(160deg, #dcd8d0 0%, #c8c2b8 100%); }
+.ph-3 { background: linear-gradient(160deg, #e4e0d8 0%, #ccc8be 100%); }
+.ph-4 { background: linear-gradient(160deg, #d8d4cc 0%, #c4bfb4 100%); }
+.ph-5 { background: linear-gradient(160deg, #e0dcd4 0%, #ccc6bc 100%); }
+.ph-6 { background: linear-gradient(160deg, #dedad2 0%, #cac4ba 100%); }
+.ph-7 { background: linear-gradient(160deg, #e2ddd5 0%, #cec8be 100%); }
+.ph-8 { background: linear-gradient(160deg, #dad6ce 0%, #c6c0b6 100%); }
+/* ════════════════════════════════
+     PASSWORD PROMPT — dark page
+  ════════════════════════════════ */
+#password { background: var(--charcoal); }
+.password-body {
+flex: 1;
+display: flex;
+align-items: center;
+justify-content: center;
+padding: 40px;
+  }
+.password-box {
+width: 100%;
+max-width: 300px;
+  }
+.password-eyebrow {
+font-size: 10.5px;
+letter-spacing: 0.1em;
+color: var(--text-muted);
+margin-bottom: 20px;
+display: block;
+  }
+.password-title {
+font-size: 15px;
+font-weight: 400;
+color: var(--text-primary);
+line-height: 1.45;
+letter-spacing: 0.01em;
+margin-bottom: 32px;
+  }
+.pw-wrap {
+display: flex;
+border: 1px solid var(--border-dark);
+overflow: hidden;
+transition: border-color 0.15s;
+  }
+.pw-wrap:focus-within { border-color: var(--accent); }
+.pw-input {
+flex: 1;
+background: #1c1c1a;
+border: none;
+outline: none;
+color: var(--text-primary);
+font-family: inherit;
+font-size: 13px;
+letter-spacing: 0.04em;
+padding: 11px 14px;
+  }
+.pw-input::placeholder { color: var(--text-muted); }
+.pw-submit {
+background: none;
+border: none;
+border-left: 1px solid var(--border-dark);
+color: var(--text-muted);
+font-family: inherit;
+font-size: 11px;
+letter-spacing: 0.06em;
+padding: 11px 16px;
+cursor: pointer;
+transition: color 0.15s, background 0.15s;
+  }
+.pw-submit:hover { color: var(--text-primary); background: #222220; }
+.pw-error {
+font-size: 11px;
+color: #b84040;
+margin-top: 11px;
+letter-spacing: 0.03em;
+opacity: 0;
+transition: opacity 0.2s;
+  }
+.pw-error.show { opacity: 1; }
+/* ════════════════════════════════
+     TOOLS — light page
+  ════════════════════════════════ */
+#tools { background: var(--warm-white); }
+.tools-body {
+max-width: 660px;
+margin: 0 auto;
+padding: 60px 40px 100px;
+width: 100%;
+  }
+.tool-item {
+display: flex;
+align-items: center;
+justify-content: space-between;
+padding: 20px 0;
+border-bottom: 1px solid var(--white-border);
+cursor: pointer;
+gap: 24px;
+  }
+.tool-item:first-child { border-top: 1px solid var(--white-border); }
+.tool-info { flex: 1; }
+.tool-name {
+font-size: 13.5px;
+font-weight: 400;
+color: var(--white-text);
+letter-spacing: 0.01em;
+margin-bottom: 5px;
+transition: color 0.15s;
+  }
+.tool-item:hover .tool-name { color: var(--accent); }
+.tool-desc {
+font-size: 11.5px;
+color: var(--white-muted);
+letter-spacing: 0.02em;
+line-height: 1.5;
+  }
+.tool-arrow {
+font-size: 11px;
+color: var(--white-border);
+flex-shrink: 0;
+transition: color 0.15s, transform 0.15s;
+  }
+.tool-item:hover .tool-arrow { color: var(--accent); transform: translateX(2px); }
+</style>
+</head>
+<body>
+<div class="mockup-nav">
+<button class="active" onclick="show('home', this)">homepage</button>
+<button onclick="show('blog', this)">blog listing</button>
+<button onclick="show('post', this)">blog post</button>
+<button onclick="show('art', this)">art gallery</button>
+<button onclick="show('password', this)">password prompt</button>
+<button onclick="show('tools', this)">tools</button>
+<span class="mockup-note">design mockup v2</span>
+</div>
+<!-- ══════ HOMEPAGE ══════ -->
+<div id="home" class="screen active">
+<div class="home-body">
+<div class="home-center">
+<div class="home-title">somebody died beverly</div>
+<div class="home-links">
+<a class="home-link">
+<span class="home-link-label">blog</span>
+<span class="home-link-arrow">→</span>
+</a>
+<a class="home-link">
+<span class="home-link-label">art</span>
+<span class="home-link-arrow">→</span>
+</a>
+<a class="home-link">
+<span class="home-link-label">tools</span>
+<span class="home-link-arrow">→</span>
+</a>
+</div>
+</div>
+</div>
+<div class="home-footer">
+<button class="admin-btn">admin</button>
+</div>
+</div>
+<!-- ══════ BLOG LISTING ══════ -->
+<div id="blog" class="screen">
+<!-- light page → dark nav on top -->
+<header class="header-on-dark">
+<span class="site-name-dark">somebody died beverly</span>
+<nav class="nav-links-dark">
+<span class="active">blog</span>
+<span>art</span>
+<span>tools</span>
+</nav>
+</header>
+<div style="background:var(--warm-white);flex:1;">
+<div class="blog-body">
+<span class="section-label">blog</span>
+<div class="post-list">
+<div class="post-item">
+<span class="post-title">the last diplomat on the beltway</span>
+<div class="post-meta"><span class="post-date">2025-11-14</span></div>
+</div>
+<div class="post-item">
+<span class="post-title">beverly hills is not a place, it's a feeling</span>
+<div class="post-meta"><span class="post-date">2025-10-03</span></div>
+</div>
+<div class="post-item">
+<span class="post-title">on photographing things that no longer exist</span>
+<div class="post-meta"><span class="post-date">2025-09-18</span></div>
+</div>
+<div class="post-item">
+<span class="post-title">notes on three years of watching license plates</span>
+<div class="post-meta">
+<span class="post-date">2025-08-27</span>
+<span class="post-lock">🔒</span>
+</div>
+</div>
+<div class="post-item">
+<span class="post-title">what it means when someone dies near you</span>
+<div class="post-meta">
+<span class="post-date">2025-07-12</span>
+<span class="post-lock">🔒</span>
+</div>
+</div>
+<div class="post-item">
+<span class="post-title">a brief theory of diplomatic immunity</span>
+<div class="post-meta"><span class="post-date">2025-06-05</span></div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- ══════ BLOG POST ══════ -->
+<div id="post" class="screen">
+<!-- dark page → dark nav -->
+<header class="header-on-dark">
+<span class="site-name-dark">somebody died beverly</span>
+<nav class="nav-links-dark">
+<span class="active">blog</span>
+<span>art</span>
+<span>tools</span>
+</nav>
+</header>
+<div class="post-body">
+<span class="post-eyebrow">2025-11-14</span>
+<h1 class="post-h1">the last diplomat on the beltway</h1>
+<p>there is a car that circles the beltway every thursday. i know this because i've seen it. diplomatic plates, country code i won't mention, same exit every time. it's not the plate that interests me — it's the routine. the ritual of it. the way bureaucracy becomes habit becomes something almost human.</p>
+<p>i started logging plates three years ago out of boredom. what it became is harder to describe. a record of presence. proof that specific people from specific countries were, at some point, <strong>here</strong>. this particular stretch of pavement. this city that exists mostly as a backdrop to other people's importance.</p>
+<blockquote><p>diplomacy is the art of letting someone else have your way.</p></blockquote>
+<p>the plates don't tell you much. a number, a country, a color scheme. what they don't tell you is what was discussed at the meeting that morning, or whether the car is heading home or running from something, or whether the person in the back seat is thinking about dinner or about war.</p>
+<p>but i keep logging them anyway. because the alternative is not knowing, and i've never been comfortable with that.</p>
+</div>
+</div>
+<!-- ══════ ART GALLERY ══════ -->
+<div id="art" class="screen">
+<!-- light page → dark nav on top -->
+<header class="header-on-dark">
+<span class="site-name-dark">somebody died beverly</span>
+<nav class="nav-links-dark">
+<span>blog</span>
+<span class="active">art</span>
+<span>tools</span>
+</nav>
+</header>
+<div style="background:var(--warm-white);flex:1;">
+<div class="art-body">
+<span class="art-label">art</span>
+<div class="art-gallery">
+<figure class="art-figure">
+<div class="art-img"><span class="ph ph-portrait ph-1"></span></div>
+</figure>
+<figure class="art-figure">
+<div class="art-img"><span class="ph ph-landscape ph-2"></span></div>
+</figure>
+<figure class="art-figure">
+<div class="art-img"><span class="ph ph-wide ph-3"></span></div>
+</figure>
+<figure class="art-figure">
+<div class="art-img"><span class="ph ph-portrait ph-4"></span></div>
+</figure>
+<figure class="art-figure">
+<div class="art-img"><span class="ph ph-square ph-5"></span></div>
+</figure>
+<figure class="art-figure">
+<div class="art-img"><span class="ph ph-landscape ph-6"></span></div>
+</figure>
+<figure class="art-figure">
+<div class="art-img"><span class="ph ph-portrait ph-7"></span></div>
+</figure>
+<figure class="art-figure">
+<div class="art-img"><span class="ph ph-square ph-8"></span></div>
+</figure>
+</div>
+</div>
+</div>
+</div>
+<!-- ══════ PASSWORD ══════ -->
+<div id="password" class="screen">
+<header class="header-on-dark">
+<span class="site-name-dark">somebody died beverly</span>
+<nav class="nav-links-dark">
+<span class="active">blog</span>
+<span>art</span>
+<span>tools</span>
+</nav>
+</header>
+<div class="password-body">
+<div class="password-box">
+<span class="password-eyebrow">protected</span>
+<p class="password-title">what it means when someone dies near you</p>
+<div class="pw-wrap">
+<input class="pw-input" type="text" placeholder="password" id="pw-input" />
+<button class="pw-submit" onclick="checkPw()">enter</button>
+</div>
+<p class="pw-error" id="pw-error">incorrect password</p>
+</div>
+</div>
+</div>
+<!-- ══════ TOOLS ══════ -->
+<div id="tools" class="screen">
+<header class="header-on-dark">
+<span class="site-name-dark">somebody died beverly</span>
+<nav class="nav-links-dark">
+<span>blog</span>
+<span>art</span>
+<span class="active">tools</span>
+</nav>
+</header>
+<div style="background:var(--warm-white);flex:1;">
+<div class="tools-body">
+<span class="section-label">tools</span>
+<div>
+<div class="tool-item">
+<div class="tool-info">
+<div class="tool-name">diplomat plates</div>
+<div class="tool-desc">look up and track diplomatic license plates. country codes, sightings log, progress tracker.</div>
+</div>
+<span class="tool-arrow">→</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+<script>
+function show(id, btn) {
+document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+document.querySelectorAll('.mockup-nav button').forEach(b => b.classList.remove('active'));
+document.getElementById(id).classList.add('active');
+btn.classList.add('active');
+  }
+function checkPw() {
+const err = document.getElementById('pw-error');
+err.classList.add('show');
+setTimeout(() => err.classList.remove('show'), 2000);
+  }
+</script>
+</body>
+</html>
