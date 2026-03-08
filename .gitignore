@@ -36,8 +36,10 @@ yarn-error.log*
 # vercel
 .vercel
 
-# claude code
-.claude/
+# claude code (ignore user-specific files, keep shared hooks and settings)
+.claude/*
+!.claude/hooks/
+!.claude/settings.json
 
 # typescript
 *.tsbuildinfo
