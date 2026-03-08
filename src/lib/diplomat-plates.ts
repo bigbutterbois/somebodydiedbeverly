@@ -1,5 +1,23 @@
 import { supabase, supabaseAdmin } from './supabase'
 
+export function normalizeCountryName(name: string): string {
+  if (!name) return ''
+  // Resolve pipe notation — take the last segment (e.g. 'Republic of Macedonia|Macedonia' → 'North Macedonia')
+  // Special case: known pipe aliases
+  let result = name
+  const pipeAliases: Record<string, string> = {
+    'Republic of Macedonia|Macedonia': 'North Macedonia',
+  }
+  if (pipeAliases[result]) return pipeAliases[result]
+  // For any remaining pipe notation, take the part after the last pipe
+  if (result.includes('|')) {
+    result = result.split('|').pop() ?? result
+  }
+  // Strip parenthetical suffixes like (DC only), (UN only), (Burma), etc.
+  result = result.replace(/\s*\([^)]*\)/g, '')
+  return result.trim()
+}
+
 export interface Country {
   id: string
   country_name: string
@@ -63,12 +81,25 @@ export async function getCountryChecklist(): Promise<CountryWithStatus[]> {
 
   const spottedIds = new Set((sightings ?? []).map((s: Record<string, string>) => s.country_id))
 
-  return (countries ?? []).map((c: Record<string, string>) => ({
-    id: c.id,
-    country_name: c.country_name,
-    country_code: c.country_code,
-    spotted: spottedIds.has(c.id),
-  }))
+  // Normalize names and deduplicate — two rows that collapse to the same name
+  // merge into one entry where spotted=true if either source row was spotted.
+  const seen = new Map<string, CountryWithStatus>()
+  for (const c of (countries ?? []) as Record<string, string>[]) {
+    const normalizedName = normalizeCountryName(c.country_name)
+    const isSpotted = spottedIds.has(c.id)
+    const existing = seen.get(normalizedName)
+    if (existing) {
+      if (isSpotted) existing.spotted = true
+    } else {
+      seen.set(normalizedName, {
+        id: c.id,
+        country_name: normalizedName,
+        country_code: c.country_code,
+        spotted: isSpotted,
+      })
+    }
+  }
+  return Array.from(seen.values())
 }
 
 export async function logSighting(params: {
