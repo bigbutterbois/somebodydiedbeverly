@@ -1,6 +1,6 @@
 import Link from 'next/link'
 import { auth } from '@/lib/auth'
-import { getSightings, getCountryChecklist } from '@/lib/diplomat-plates'
+import { getCountryChecklist } from '@/lib/diplomat-plates'
 import PageWrapper from '@/components/ui/PageWrapper'
 import DiplomatLookup from './DiplomatLookup'
 
@@ -8,7 +8,7 @@ export const dynamic = 'force-dynamic'
 
 export default async function DiplomatPlatesPage() {
   const session = await auth()
-  const [sightings, checklist] = await Promise.all([getSightings(), getCountryChecklist()])
+  const checklist = await getCountryChecklist()
 
   const spottedCount = checklist.filter((c) => c.spotted).length
   const totalCount = checklist.length
@@ -28,30 +28,6 @@ export default async function DiplomatPlatesPage() {
       </div>
 
       <DiplomatLookup />
-
-      {/* sightings log */}
-      {sightings.length > 0 && (
-        <div className="mt-16 flex flex-col gap-0">
-          <span className="text-[10.5px] tracking-[0.10em] text-light-muted mb-5">sightings</span>
-          <div className="flex flex-col">
-            {sightings.map((s, i) => (
-              <div
-                key={s.id}
-                className={`flex items-baseline justify-between gap-4 py-3 border-b border-border-light ${
-                  i === 0 ? 'border-t border-border-light' : ''
-                }`}
-              >
-                <span className="text-[13px] text-light-primary tracking-[0.01em]">
-                  {s.country_name}
-                </span>
-                <span className="text-[11px] text-light-muted tracking-[0.03em] flex-shrink-0">
-                  {s.date_spotted}
-                </span>
-              </div>
-            ))}
-          </div>
-        </div>
-      )}
 
       {/* country checklist */}
       {checklist.length > 0 && (

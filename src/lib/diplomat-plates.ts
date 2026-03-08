@@ -47,6 +47,15 @@ export async function getSightings(): Promise<Sighting[]> {
   }))
 }
 
+function normalizeCountryName(name: string): string {
+  return name
+    .replace(/\s*\(DC only\)/gi, '')
+    .replace(/\s*\(UN only\)/gi, '')
+    .replace(/Republic of Macedonia\|Macedonia/gi, 'North Macedonia')
+    .replace(/[^|]+\|(.+)/, '$1')
+    .trim()
+}
+
 export async function getCountryChecklist(): Promise<CountryWithStatus[]> {
   const { data: countries, error: cErr } = await supabase
     .from('countries')
@@ -63,12 +72,26 @@ export async function getCountryChecklist(): Promise<CountryWithStatus[]> {
 
   const spottedIds = new Set((sightings ?? []).map((s: Record<string, string>) => s.country_id))
 
-  return (countries ?? []).map((c: Record<string, string>) => ({
-    id: c.id,
-    country_name: c.country_name,
-    country_code: c.country_code,
-    spotted: spottedIds.has(c.id),
-  }))
+  // Normalize names and deduplicate (e.g. Iran DC + Iran UN → one Iran row)
+  const seen = new Map<string, CountryWithStatus>()
+  for (const c of (countries ?? []) as Record<string, string>[]) {
+    const normalizedName = normalizeCountryName(c.country_name)
+    const isSpotted = spottedIds.has(c.id)
+    if (seen.has(normalizedName)) {
+      if (isSpotted) seen.get(normalizedName)!.spotted = true
+    } else {
+      seen.set(normalizedName, {
+        id: c.id,
+        country_name: normalizedName,
+        country_code: c.country_code,
+        spotted: isSpotted,
+      })
+    }
+  }
+
+  return Array.from(seen.values()).sort((a, b) =>
+    a.country_name.localeCompare(b.country_name)
+  )
 }
 
 export async function logSighting(params: {
