@@ -40,6 +40,7 @@ yarn-error.log*
 .claude/*
 !.claude/hooks/
 !.claude/settings.json
+!.claude/launch.json
 
 # typescript
 *.tsbuildinfo
