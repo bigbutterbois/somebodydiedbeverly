@@ -45,9 +45,8 @@ Run `npm run lint` and `npm run build` before pushing; CI runs the same checks.
 
 - The schema lives in `supabase/migrations/`. To change it, add a new timestamped SQL file (`npx supabase migration new <name>`); never edit one that has already been applied.
 - Migrations are applied to production automatically when they merge to `main` (`.github/workflows/db-migrations.yml`).
-- Every table has row level security: the public can read published content, and only the signed-in owner can write. New tables need RLS enabled plus policies in the same migration; reuse `public.is_owner()` for write policies.
-- `posts.password` is hidden from the public role, so public queries on `posts` must list columns explicitly instead of `select('*')`.
-- Existing tables: `posts` (blog), `countries` and `plate_sightings` (diplomat plate tracker), `gallery` (art).
+- Every table has row level security: the public can read published content, and only the signed-in owner can write. New tables need RLS enabled plus policies in the same migration; reuse `public.is_owner()` for write policies and `public.set_updated_at()` for `updated_at` columns (see the foundation migration).
+- The database starts empty; each feature adds its own tables in its own migration.
 
 ## Workflow Instructions
 
