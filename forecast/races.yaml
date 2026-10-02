@@ -57,7 +57,7 @@ races:
   - { state: NE, name: Nebraska, region: plains, incumbent: R, pres_2024: -20.5, pres_2020: -19.1,
       rep: { name: Pete Ricketts }, opp: { name: Dan Osborn, party: I, caucus: none } }
   - { state: NH, name: New Hampshire, region: northeast, incumbent: none, pres_2024: 2.8, pres_2020: 7.4,
-      rep: { name: John E. Sununu }, opp: { name: Chris Pappas, party: D, caucus: D } }
+      rep: { name: John E. Sununu, match: "john( e\\.)? sununu" }, opp: { name: Chris Pappas, party: D, caucus: D } }
   - { state: NJ, name: New Jersey, region: northeast, incumbent: D, pres_2024: 5.9, pres_2020: 15.9,
       rep: { name: Justin Murphy }, opp: { name: Cory Booker, party: D, caucus: D } }
   - { state: NM, name: New Mexico, region: west, incumbent: D, pres_2024: 6.0, pres_2020: 10.8,
@@ -74,9 +74,10 @@ races:
   - { state: RI, name: Rhode Island, region: northeast, incumbent: D, pres_2024: 13.8, pres_2020: 20.8,
       rep: { name: Raymond McKay }, opp: { name: Jack Reed, party: D, caucus: D } }
   - { state: SC, name: South Carolina, region: south, incumbent: R, appointed: true, pres_2024: -18.2, pres_2020: -11.7,
-      rep: { name: Darline Graham }, opp: { name: Annie Andrews, party: D, caucus: D } }
+      rep: { name: Darline Graham, match: "darline" }, opp: { name: Annie Andrews, party: D, caucus: D } }
   - { state: SD, name: South Dakota, region: plains, incumbent: R, pres_2024: -29.2, pres_2020: -26.2,
-      rep: { name: Mike Rounds }, opp: { name: Brian Bengs, party: D, caucus: D } }
+      rep: { name: Mike Rounds }, opp: { name: Brian Bengs, party: I, caucus: none },
+      others: [ { name: Julian Beaudion, party: D } ] }
   - { state: TN, name: Tennessee, region: south, incumbent: R, pres_2024: -29.7, pres_2020: -23.2,
       rep: { name: Bill Hagerty }, opp: { name: Marquita Bradshaw, party: D, caucus: D } }
   - { state: TX, name: Texas, region: south, incumbent: none, pres_2024: -13.7, pres_2020: -5.6,

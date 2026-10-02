@@ -30,6 +30,7 @@ export default async function ForecastPage() {
   }
 
   const races = [...forecast.races].sort((a, b) => b.p_opp - a.p_opp || b.mean_margin - a.mean_margin);
+  const independents = races.filter((r) => r.opp.party === "I").map((r) => r.name).sort();
   const daysLeft = Math.round((Date.parse(forecast.election_day) - Date.parse(forecast.as_of)) / 86_400_000);
 
   return (
@@ -66,9 +67,11 @@ export default async function ForecastPage() {
             No race
           </li>
         </ul>
-        <p className="text-center text-xs text-muted">
-          Blue covers independents running as the main challenger (Nebraska, Idaho, Montana).
-        </p>
+        {independents.length > 0 && (
+          <p className="text-center text-xs text-muted">
+            Blue also covers independents running as the main challenger ({independents.join(", ")}).
+          </p>
+        )}
       </section>
 
       {history.length > 0 && (

@@ -128,10 +128,17 @@ def find_col(cols: list[str], pattern: re.Pattern) -> int | None:
     return hits[0] if len(hits) == 1 else None
 
 
-def read_tables(html: str) -> list[pd.DataFrame]:
+def read_tables(html: str, under_heading: str | None = None) -> list[pd.DataFrame]:
+    """Every wikitable on the page, optionally only those under a heading containing `under_heading`."""
     soup = BeautifulSoup(html, "lxml")
     out = []
     for table in soup.select("table.wikitable"):
+        if under_heading:
+            heading = table.find_previous(["h2", "h3", "h4"])
+            caption = table.find("caption")
+            text = norm((heading.get_text() if heading else "") + " " + (caption.get_text() if caption else ""))
+            if under_heading not in text:
+                continue
         for sup in table.select("sup.reference"):
             sup.decompose()
         try:
@@ -227,7 +234,7 @@ def scrape_generic_ballot(aggregators: list[str], default_year: int) -> list[dic
     titles = GENERIC_BALLOT_PAGES + search_titles("2026 House generic ballot opinion polling")
     for title in dict.fromkeys(titles):
         try:
-            tables = read_tables(fetch_html(title, retries=1))
+            tables = read_tables(fetch_html(title, retries=1), under_heading="generic")
         except RuntimeError:
             continue
         best = {}
@@ -235,7 +242,10 @@ def scrape_generic_ballot(aggregators: list[str], default_year: int) -> list[dic
             for poll in parse_rows(df, cols, idx, default_year, aggregators):
                 best.setdefault((norm(poll["pollster"]), poll["end_date"]), poll)
         if len(best) >= 5:
-            print(f"generic ballot: {len(best)} polls from {title}")
+            recent = sorted(best.values(), key=lambda p: p["end_date"])[-5:]
+            print(f"generic ballot: {len(best)} polls from {title}; latest:")
+            for p in recent:
+                print(f"    {p['end_date']} {p['pollster']}: D {p['opp']} R {p['rep']}")
             return [{"state": "US", **p, "others": [],
                      "source": f"https://en.wikipedia.org/wiki/{title}"} for p in best.values()]
     raise RuntimeError(f"no generic ballot table found in {', '.join(dict.fromkeys(titles))}")
