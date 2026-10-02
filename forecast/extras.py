@@ -65,7 +65,8 @@ def fetch_fundraising(races: list[dict], year: int) -> tuple[dict, list[str]]:
                 continue
             if first and first not in name:
                 continue
-            if party == "R" and pty != "REP" or party == "D" and pty not in DEM_CODES:
+            # Some filers have no party on record (UNK); the name match is enough for them.
+            if party == "R" and pty not in {"REP", "UNK"} or party == "D" and pty not in DEM_CODES | {"UNK"}:
                 continue
             if party == "I" and pty in DEM_CODES | {"REP"}:
                 continue
@@ -102,6 +103,8 @@ def scrape_approval(aggregators: list[str]) -> tuple[list[dict], list[str]]:
         best = {}
         headers = []
         for df, cols, idx in scrape.poll_tables(tables, required, {}):
+            if any("favorab" in c for c in cols):
+                continue  # favorability, not job approval
             headers.append(" | ".join(cols))
             for poll in scrape.parse_rows(df, cols, idx, year, aggregators):
                 best.setdefault((scrape.norm(poll["pollster"]), poll["end_date"]), poll)
