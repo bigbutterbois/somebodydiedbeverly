@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { favoriteLine, formatMargin, partyLetter, ratingInfo, type Race } from "@/lib/forecast";
 
 type Shape = { name: string; d: string; cx: number; cy: number };
@@ -21,17 +21,18 @@ export function SenateMap({
   height: number;
 }) {
   const byName = new Map(races.map((r) => [r.name, r]));
+  const boxRef = useRef<HTMLDivElement>(null);
   const [active, setActive] = useState<{ race: Race; x: number; y: number } | null>(null);
 
   function show(race: Race, e: React.PointerEvent | React.FocusEvent, shape: Shape) {
-    const box = (e.currentTarget.ownerSVGElement ?? e.currentTarget).getBoundingClientRect();
+    const box = boxRef.current!.getBoundingClientRect();
     const scale = box.width / width;
     if ("clientX" in e) setActive({ race, x: e.clientX - box.left, y: e.clientY - box.top });
     else setActive({ race, x: shape.cx * scale, y: shape.cy * scale });
   }
 
   return (
-    <div className="relative" onPointerLeave={() => setActive(null)}>
+    <div ref={boxRef} className="relative" onPointerLeave={() => setActive(null)}>
       <svg viewBox={`0 0 ${width} ${height}`} className="h-auto w-full" role="img" aria-label="Map of 2026 Senate races by rating">
         {shapes.map((s) => {
           const race = byName.get(s.name);

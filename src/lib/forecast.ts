@@ -2,7 +2,8 @@
 // GitHub Actions and publishes JSON to the forecast-data branch; the site
 // reads it from there and refreshes its copy every 15 minutes.
 
-const DATA_URL = "https://raw.githubusercontent.com/bigbutterbois/somebodydiedbeverly/forecast-data";
+const DATA_URL =
+  process.env.FORECAST_DATA_URL ?? "https://raw.githubusercontent.com/bigbutterbois/somebodydiedbeverly/forecast-data";
 
 export type Candidate = { name: string; party: string; caucus?: string };
 
