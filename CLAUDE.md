@@ -1,25 +1,25 @@
-# somebodydiedbeverly
+@AGENTS.md
 
-A personal website built with Next.js 16, React 19, TypeScript, and Tailwind CSS v4. Hosted at `somebodydiedbeverly.com`. The site includes a blog, art section, and a diplomat plate tracker.
+# somebodydiedbeverly (v2)
+
+Mike's personal website, hosted at `somebodydiedbeverly.com`. This is a fresh start: the previous site (blog, art gallery, diplomat plate tracker) is preserved on the `legacy-v1` branch for reference. Pull ideas or code from it deliberately; nothing from it is wired in here.
+
+## Tech Stack
+
+- **Framework**: Next.js 16 (App Router), React 19, TypeScript
+- **Styling**: Tailwind CSS v4
+- **Font**: Geist (via `next/font/google`)
+- **Hosting**: Vercel (deploys `main` to production; every PR gets a preview URL)
+- **Data** (when needed): Supabase (Postgres, storage, auth). Not wired in yet; add it only when a feature needs it.
+- **CI**: GitHub Actions runs lint and build on every PR (`.github/workflows/ci.yml`)
 
 ## Project Structure
 
 ```
-src/
-  app/           # Next.js App Router pages and layouts
-  components/
-    ui/          # Shared UI components (NavBar, PageWrapper)
-components/      # Root-level component directory
-public/          # Static assets
+src/app/   # App Router pages and layouts
 ```
 
-## Tech Stack
-
-- **Framework**: Next.js 16 (App Router)
-- **Language**: TypeScript
-- **Styling**: Tailwind CSS v4
-- **Font**: Geist (via `geist` package)
-- **Linting**: ESLint with `eslint-config-next`
+Add `src/components/` and `src/lib/` as they become needed.
 
 ## Dev Commands
 
@@ -29,6 +29,13 @@ npm run build    # Production build
 npm run start    # Start production server
 npm run lint     # Run ESLint
 ```
+
+Run `npm run lint` and `npm run build` before pushing; CI runs the same checks.
+
+## Conventions
+
+- Secrets live in Vercel environment variables (and a local `.env.local`, which is gitignored). Never commit them.
+- Work on a branch and open a PR; merging to `main` deploys to production.
 
 ## Workflow Instructions
 
