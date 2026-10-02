@@ -10,16 +10,28 @@ Mike's personal website, hosted at `somebodydiedbeverly.com`. This is a fresh st
 - **Styling**: Tailwind CSS v4
 - **Font**: Geist (via `next/font/google`)
 - **Hosting**: Vercel (deploys `main` to production; every PR gets a preview URL)
-- **Data** (when needed): Supabase (Postgres, storage, auth). Not wired in yet; add it only when a feature needs it.
+- **Data**: Supabase (Postgres, storage, auth) via `@supabase/ssr`. Server code uses `createClient` from `src/lib/supabase/server.ts`; client components use `src/lib/supabase/client.ts`.
+- **Access**: two gates, both enforced in `src/proxy.ts` and both remembered per device:
+  - **Public side** (everything outside `/admin`): one shared friends & family password (`SITE_PASSWORD` env var), entered at `/enter`. Sets a 400-day cookie derived from the password (`src/lib/site-access.ts`), so changing the password signs everyone out.
+  - **Private side** (`/admin`): owner-only Supabase email + password login at `/login`. Public sign-ups are off, so the only account is the owner's. The owner also gets past the public gate.
+- The whole site is `noindex` (robots.txt, meta tag and `X-Robots-Tag` header).
 - **CI**: GitHub Actions runs lint and build on every PR (`.github/workflows/ci.yml`)
 
 ## Project Structure
 
 ```
-src/app/   # App Router pages and layouts
+src/app/(site)/       # Public side, one folder per module: gallery, blog, forecast
+src/app/admin/        # Private side, one folder per tool: plates, blog, gallery
+src/app/enter/        # Friends & family password page
+src/app/login/        # Owner sign-in
+src/components/       # Shared UI (Nav, Placeholder)
+src/lib/supabase/     # Supabase clients (server and browser)
+src/lib/site-access.ts # Friends & family password cookie
+src/proxy.ts          # Both access gates + Supabase session refresh
+supabase/migrations/  # Database schema as SQL migrations
 ```
 
-Add `src/components/` and `src/lib/` as they become needed.
+To add a module, create its folder under `src/app/(site)/` or `src/app/admin/` and add it to the `MODULES` or `TOOLS` list in that folder's `layout.tsx`. Modules: gallery, blog and an election forecast (planned: a model that refreshes daily) on the public side; diplomat plate tracker and blog/gallery editors on the private side.
 
 ## Dev Commands
 
@@ -34,8 +46,15 @@ Run `npm run lint` and `npm run build` before pushing; CI runs the same checks.
 
 ## Conventions
 
-- Secrets live in Vercel environment variables (and a local `.env.local`, which is gitignored). Never commit them.
+- Secrets (Supabase keys, `SITE_PASSWORD`) live in Vercel environment variables (and a local `.env.local`, which is gitignored). Never commit them.
 - Work on a branch and open a PR; merging to `main` deploys to production.
+
+## Database
+
+- The schema lives in `supabase/migrations/`. To change it, add a new timestamped SQL file (`npx supabase migration new <name>`); never edit one that has already been applied.
+- Migrations are applied to production automatically when they merge to `main` (`.github/workflows/db-migrations.yml`).
+- Every table has row level security: the public can read published content, and only the signed-in owner can write. New tables need RLS enabled plus policies in the same migration; reuse `public.is_owner()` for write policies and `public.set_updated_at()` for `updated_at` columns (see the foundation migration).
+- The database starts empty; each feature adds its own tables in its own migration.
 
 ## Workflow Instructions
 
