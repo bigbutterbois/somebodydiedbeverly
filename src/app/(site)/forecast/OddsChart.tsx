@@ -1,11 +1,9 @@
 "use client";
 
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { DEM, REP, formatDay, type HistoryPoint } from "@/lib/forecast";
 
-const W = 720;
-const H = 260;
-const PAD = { top: 16, right: 92, bottom: 28, left: 40 };
+const PAD = { top: 16, right: 84, bottom: 28, left: 40 };
 
 const dayNumber = (iso: string) => Date.parse(`${iso}T00:00:00Z`) / 86_400_000;
 
@@ -13,6 +11,16 @@ const dayNumber = (iso: string) => Date.parse(`${iso}T00:00:00Z`) / 86_400_000;
 export function OddsChart({ history, electionDay }: { history: HistoryPoint[]; electionDay: string }) {
   const svgRef = useRef<SVGSVGElement>(null);
   const [hover, setHover] = useState<number | null>(null);
+  // Draw at the container's real width so text stays a readable size on phones.
+  const [W, setW] = useState(720);
+  const H = W < 500 ? 220 : 260;
+  useEffect(() => {
+    const el = svgRef.current?.parentElement;
+    if (!el) return;
+    const observer = new ResizeObserver(([entry]) => setW(Math.max(280, Math.round(entry.contentRect.width))));
+    observer.observe(el);
+    return () => observer.disconnect();
+  }, []);
 
   const start = dayNumber(history[0].date);
   const end = Math.max(dayNumber(electionDay), dayNumber(history[history.length - 1].date));

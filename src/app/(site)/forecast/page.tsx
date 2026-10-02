@@ -81,7 +81,7 @@ export default async function ForecastPage() {
       <section className="flex flex-col gap-4">
         <SectionTitle>Every race</SectionTitle>
         <div className="-mx-6 overflow-x-auto px-6">
-          <table className="w-full min-w-[34rem] text-sm tabular-nums">
+          <table className="w-full min-w-[30rem] text-sm tabular-nums">
             <thead>
               <tr className="border-b border-line text-left text-xs uppercase tracking-[0.12em] text-muted">
                 <th className="py-2 pr-3 font-normal">State</th>
@@ -100,7 +100,8 @@ export default async function ForecastPage() {
                 return (
                   <tr key={r.state} className="border-b border-line/60">
                     <td className="py-2.5 pr-3">
-                      {r.name}
+                      <span className="sm:hidden">{r.state}</span>
+                      <span className="hidden sm:inline">{r.name}</span>
                       {r.special && <span className="text-muted"> (special)</span>}
                     </td>
                     <td className="py-2.5 pr-3">
@@ -177,15 +178,14 @@ function Topline({ forecast }: { forecast: Forecast }) {
 }
 
 function ChanceBar({ pOpp }: { pOpp: number }) {
-  const opp = Math.round(pOpp * 100);
   return (
     <span className="flex items-center gap-2">
-      <span className="w-8 text-right">{opp}%</span>
+      <span className="w-9 text-right">{outOf100(pOpp)}%</span>
       <span className="flex h-1.5 w-20 overflow-hidden rounded-full" aria-hidden>
         <span style={{ width: `${pOpp * 100}%`, background: DEM }} />
         <span className="flex-1" style={{ background: REP }} />
       </span>
-      <span className="w-8 text-muted">{100 - opp}%</span>
+      <span className="w-9 text-muted">{outOf100(1 - pOpp)}%</span>
     </span>
   );
 }

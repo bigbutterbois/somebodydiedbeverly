@@ -1,7 +1,7 @@
 "use client";
 
 import { useRef, useState } from "react";
-import { favoriteLine, formatMargin, partyLetter, ratingInfo, type Race } from "@/lib/forecast";
+import { favoriteLine, formatMargin, outOf100, partyLetter, ratingInfo, type Race } from "@/lib/forecast";
 
 type Shape = { name: string; d: string; cx: number; cy: number };
 
@@ -92,9 +92,9 @@ function Tooltip({ race, x, y }: { race: Race; x: number; y: number }) {
         <dt>
           {race.opp.name} ({opp})
         </dt>
-        <dd className="text-right">{Math.round(race.p_opp * 100)}%</dd>
+        <dd className="text-right">{outOf100(race.p_opp)}%</dd>
         <dt>{race.rep.name} (R)</dt>
-        <dd className="text-right">{Math.round(race.p_rep * 100)}%</dd>
+        <dd className="text-right">{outOf100(race.p_rep)}%</dd>
         <dt>Forecast margin</dt>
         <dd className="text-right">{formatMargin(race.mean_margin, opp)}</dd>
         <dt>Polling average</dt>
