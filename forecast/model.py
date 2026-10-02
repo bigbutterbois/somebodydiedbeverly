@@ -1,0 +1,193 @@
+"""Polls-plus-fundamentals Senate model, run as correlated simulations.
+
+For each race: a weighted polling average and a fundamentals prior are blended
+into a mean margin (opposition minus Republican). Simulations add a shared
+national error, a regional error and a race error, then count seats.
+"""
+
+from __future__ import annotations
+
+import hashlib
+import math
+from datetime import date
+
+import numpy as np
+
+
+def config_version(config_text: str) -> str:
+    return hashlib.sha1(config_text.encode()).hexdigest()[:8]
+
+
+def poll_margin(p: dict) -> float:
+    return p["opp"] - p["rep"]
+
+
+def weighted_average(polls: list[dict], as_of: date, cfg: dict, half_life: float) -> tuple[float | None, float]:
+    """Weighted mean margin and total weight (in fresh full-size LV poll units)."""
+    pc = cfg["polls"]
+    excluded = {(e["state"], e["pollster"], str(e["end_date"])) for e in pc.get("exclude", [])}
+    rows = []
+    for p in polls:
+        end = date.fromisoformat(p["end_date"])
+        age = (as_of - end).days
+        if age < 0 or age > pc["max_age_days"]:
+            continue
+        if (p["state"], p["pollster"], p["end_date"]) in excluded:
+            continue
+        w = 0.5 ** (age / half_life)
+        n = p.get("n") or pc["sample_size_reference"] * 0.8
+        w *= min(math.sqrt(n / pc["sample_size_reference"]), pc["sample_size_cap"])
+        w *= pc["population_weights"].get(p.get("population") or "unknown", pc["population_weights"]["unknown"])
+        w *= pc["pollster_weights"].get(p["pollster"], 1.0)
+        m = poll_margin(p) - pc["house_effects"].get(p["pollster"], 0.0)
+        if p.get("sponsor_party") == "D":
+            w *= pc["partisan_weight"]
+            m -= pc["partisan_shift"]
+        elif p.get("sponsor_party") == "R":
+            w *= pc["partisan_weight"]
+            m += pc["partisan_shift"]
+        if w > 0:
+            rows.append((p["pollster"], w, m))
+    if not rows:
+        return None, 0.0
+    if pc.get("pollster_count_damping"):
+        counts: dict[str, int] = {}
+        for name, _, _ in rows:
+            counts[name] = counts.get(name, 0) + 1
+        rows = [(name, w / math.sqrt(counts[name]), m) for name, w, m in rows]
+    total = sum(w for _, w, _ in rows)
+    return sum(w * m for _, w, m in rows) / total, total
+
+
+def national_environment(polls: list[dict], as_of: date, cfg: dict) -> tuple[float, str]:
+    f = cfg["fundamentals"]
+    if f.get("national_environment_override") is not None:
+        return float(f["national_environment_override"]), "override"
+    us = [p for p in polls if p["state"] == "US"]
+    avg, weight = weighted_average(us, as_of, cfg, f["generic_ballot_half_life_days"])
+    if avg is None or weight < 1.0:
+        return float(f["generic_ballot_fallback"]), "fallback"
+    return avg, "generic ballot"
+
+
+def prior_margin(race: dict, facts: dict, env: float, cfg: dict) -> float:
+    f = cfg["fundamentals"]
+    lean = 0.0
+    for year, w in f["lean_weights"].items():
+        lean += w * (race[f"pres_{year}"] - facts[f"national_pres_{year}"])
+    margin = lean * f["lean_factor"] + env
+    inc = f["incumbency"] * (f["appointed_incumbency_factor"] if race.get("appointed") else 1.0)
+    if race["incumbent"] == "R":
+        margin -= inc
+    elif race["incumbent"] in ("D", "I") and race["opp"].get("party") in ("D", "I"):
+        margin += inc
+    margin += cfg["races"].get(race["state"], {}).get("candidate_quality", 0.0)
+    return margin
+
+
+def rating(p_opp: float, cfg: dict) -> int:
+    """-3 (Safe R) .. 0 (Toss-up) .. +3 (Safe opposition)."""
+    r = cfg["ratings"]
+    lead = max(p_opp, 1 - p_opp)
+    step = 0 if lead < r["tossup_below"] else 1 if lead < r["lean_below"] else 2 if lead < r["likely_below"] else 3
+    return step if p_opp >= 0.5 else -step
+
+
+def run(facts: dict, cfg: dict, polls: list[dict], as_of: date, seed: int | None = None) -> dict:
+    races = facts["races"]
+    election = facts["election_day"]
+    if isinstance(election, str):
+        election = date.fromisoformat(election)
+    days_left = max((election - as_of).days, 0)
+    env, env_source = national_environment(polls, as_of, cfg)
+    pc, ec = cfg["polls"], cfg["error"]
+
+    means, sds, rows = [], [], []
+    for race in races:
+        prior = prior_margin(race, facts, env, cfg)
+        avg, weight = weighted_average([p for p in polls if p["state"] == race["state"]], as_of, cfg, pc["half_life_days"])
+        k = cfg["fundamentals"]["prior_weight_in_polls"]
+        w_poll = weight / (weight + k) if avg is not None else 0.0
+        mean = w_poll * avg + (1 - w_poll) * prior if avg is not None else prior
+        override = cfg["races"].get(race["state"], {}).get("override_margin")
+        if override is not None:
+            mean = float(override)
+        sd = w_poll * ec["state_polled"] + (1 - w_poll) * ec["state_unpolled"] + ec["state_per_day"] * days_left
+        if race["opp"].get("party") == "I":
+            sd = math.hypot(sd, ec["independent_extra"])
+        n_polls = sum(
+            1 for p in polls
+            if p["state"] == race["state"] and 0 <= (as_of - date.fromisoformat(p["end_date"])).days <= pc["max_age_days"]
+        )
+        means.append(mean)
+        sds.append(sd)
+        rows.append({"race": race, "prior": prior, "poll_avg": avg, "poll_weight": w_poll, "n_polls": n_polls})
+
+    rng = np.random.default_rng(seed)
+    n_sims = cfg["simulations"]
+    df = ec["t_df"]
+    t_scale = math.sqrt((df - 2) / df)  # unit-variance t draws
+
+    def draws(shape):
+        return rng.standard_t(df, size=shape) * t_scale
+
+    regions = sorted({r["region"] for r in races})
+    region_idx = np.array([regions.index(r["region"]) for r in races])
+    national = draws(n_sims) * (ec["national"] + ec["national_per_day"] * days_left)
+    regional = draws((n_sims, len(regions))) * ec["regional"]
+    state = draws((n_sims, len(races))) * np.array(sds)
+    margins = np.array(means)[None, :] + national[:, None] + regional[:, region_idx] + state
+    opp_wins = margins > 0
+
+    caucus_d = np.array([
+        r["opp"].get("caucus") == "D" or cfg["control"]["independents_count_as"] == "D" for r in races
+    ])
+    dem_seats = facts["seats_not_up"]["D"] + (opp_wins & caucus_d).sum(axis=1)
+    rep_seats = facts["seats_not_up"]["R"] + (~opp_wins).sum(axis=1)
+    vp = cfg["control"]["vice_president_party"]
+    dem_control = (dem_seats >= 51) | ((dem_seats == 50) & (vp == "D"))
+    rep_control = (rep_seats >= 51) | ((rep_seats == 50) & (vp == "R"))
+
+    race_out = []
+    for i, row in enumerate(rows):
+        race = row["race"]
+        p_opp = float(opp_wins[:, i].mean())
+        lo, hi = np.percentile(margins[:, i], [10, 90])
+        race_out.append({
+            "state": race["state"],
+            "name": race["name"],
+            "special": bool(race.get("special")),
+            "rep": {"name": race["rep"]["name"], "party": "R"},
+            "opp": {"name": race["opp"]["name"], "party": race["opp"].get("party", "D"),
+                    "caucus": race["opp"].get("caucus", "D")},
+            "incumbent": race["incumbent"],
+            "p_opp": round(p_opp, 4),
+            "p_rep": round(1 - p_opp, 4),
+            "mean_margin": round(float(means[i]), 2),
+            "margin_10": round(float(lo), 2),
+            "margin_90": round(float(hi), 2),
+            "poll_avg": None if row["poll_avg"] is None else round(row["poll_avg"], 2),
+            "n_polls": row["n_polls"],
+            "poll_weight": round(row["poll_weight"], 3),
+            "prior_margin": round(row["prior"], 2),
+            "rating": rating(p_opp, cfg),
+        })
+
+    seat_hist = np.bincount(dem_seats, minlength=101)
+    lo_seat, hi_seat = int(dem_seats.min()), int(dem_seats.max())
+    return {
+        "as_of": as_of.isoformat(),
+        "election_day": election.isoformat(),
+        "simulations": n_sims,
+        "national_environment": round(env, 2),
+        "national_environment_source": env_source,
+        "p_dem_control": round(float(dem_control.mean()), 4),
+        "p_rep_control": round(float(rep_control.mean()), 4),
+        "p_no_majority": round(float(1 - dem_control.mean() - rep_control.mean()), 4),
+        "dem_seats_mean": round(float(dem_seats.mean()), 2),
+        "rep_seats_mean": round(float(rep_seats.mean()), 2),
+        "dem_seats_10": int(np.percentile(dem_seats, 10)),
+        "dem_seats_90": int(np.percentile(dem_seats, 90)),
+        "dem_seat_distribution": {str(s): round(float(seat_hist[s] / n_sims), 4) for s in range(lo_seat, hi_seat + 1)},
+        "races": race_out,
+    }

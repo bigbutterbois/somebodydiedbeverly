@@ -1,0 +1,100 @@
+# Senate forecast model settings. Edit, open a PR, merge: the next daily run
+# uses them. Every snapshot records the config version it was made with.
+# Margins are always in points, opposition (usually Dem) minus Republican.
+
+version: 1
+
+simulations: 20000
+
+# --- Polling average -------------------------------------------------------
+polls:
+  half_life_days: 21          # a poll's weight halves every N days after it ends
+  max_age_days: 120           # ignore polls older than this
+  sample_size_reference: 600  # a poll of this size gets weight 1 (scales with sqrt(n))
+  sample_size_cap: 1.6        # max sample-size weight, so one huge poll can't dominate
+  population_weights: { LV: 1.0, RV: 0.85, A: 0.6, V: 0.85, unknown: 0.8 }
+  # Polls sponsored by a party or campaign (marked (D) or (R) on Wikipedia):
+  partisan_weight: 0.6        # weight multiplier
+  partisan_shift: 2.0         # points moved against the sponsor's party
+  # Each pollster's polls in a race share weight 1/sqrt(count), so one
+  # firm polling weekly doesn't swamp the average.
+  pollster_count_damping: true
+  # Per-pollster weight multipliers (0 drops the pollster). Names as on Wikipedia.
+  pollster_weights:
+    "Trafalgar Group": 0.7
+    "Rasmussen Reports": 0.7
+    "Quantus Insights": 0.7
+    "ActiVote": 0.7
+  # House effects: points a pollster leans toward Dems (negative = leans R).
+  # Subtracted from that pollster's margins.
+  house_effects: {}
+  # Drop individual polls: { state: XX, pollster: "Name", end_date: 2026-09-01 }
+  exclude: []
+  # Rows on Wikipedia that are averages, not polls.
+  aggregators:
+    - race to the wh
+    - silver bulletin
+    - realclear
+    - 270towin
+    - decision desk
+    - fiftyplusone
+    - votehub
+    - the hill
+    - cook political
+    - 538
+    - average
+
+# --- Fundamentals ----------------------------------------------------------
+fundamentals:
+  # State partisan lean = state presidential margin minus the national margin,
+  # blended across years.
+  lean_weights: { "2024": 0.75, "2020": 0.25 }
+  # Senate races are a bit less partisan than presidential ones: lean is scaled by this.
+  lean_factor: 0.85
+  # National environment: Dem lead in the generic ballot average.
+  generic_ballot_half_life_days: 14
+  generic_ballot_fallback: 4.0    # used if the generic ballot scrape fails
+  national_environment_override: null  # set a number to force it
+  # Sitting senators running again get this many points.
+  incumbency: 2.0
+  appointed_incumbency_factor: 0.5   # appointed incumbents get half
+  # Polls vs. fundamentals: the fundamentals prior counts as this many fresh,
+  # full-weight polls. Lower = trust polls sooner.
+  prior_weight_in_polls: 2.0
+
+# --- Simulation error (standard deviations, points of margin) --------------
+error:
+  national: 2.5               # shared by every race (polling miss / late swing)
+  national_per_day: 0.02      # extra national error per day until the election
+  regional: 1.8               # shared within a region (south, midwest, ...)
+  state_polled: 4.5           # race-specific error when polls dominate
+  state_unpolled: 7.0         # race-specific error when only fundamentals
+  state_per_day: 0.02         # extra race error per day until the election
+  independent_extra: 3.0      # extra race error when the challenger is an independent
+  t_df: 5                     # degrees of freedom for fat-tailed draws (higher = more normal)
+
+# --- Senate control --------------------------------------------------------
+control:
+  vice_president_party: R     # breaks 50-50 ties
+  # How seats won by independents (caucus: none in races.yaml) count.
+  # neither: they count for no one; D: they count toward Dem control.
+  independents_count_as: neither
+
+# --- Map / table categories (chance the leading side wins) ------------------
+ratings:
+  tossup_below: 0.60   # under 60%: Toss-up
+  lean_below: 0.80     # 60-80%: Lean
+  likely_below: 0.95   # 80-95%: Likely; 95%+: Safe
+
+# --- Per-race adjustments ---------------------------------------------------
+# candidate_quality: points added to the opposition margin (negative helps the
+# Republican). override_margin: pin the race's mean margin. Keyed by state.
+races:
+  AK: { candidate_quality: 3.0, note: "Peltola won statewide in 2022 and 2024 House races" }
+  ME: { candidate_quality: -5.0, note: "Collins has run far ahead of the state's lean" }
+  NC: { candidate_quality: 2.0, note: "Cooper, two-term former governor" }
+  NE: { candidate_quality: 5.0, note: "Osborn ran 13 points ahead of Harris in 2024" }
+  OH: { candidate_quality: 3.0, note: "Brown, three-term former senator" }
+  TX: { candidate_quality: 2.5, note: "Paxton: impeachment, scandals" }
+  NH: { candidate_quality: -1.5, note: "Sununu, former senator and well-known name" }
+  MT: { candidate_quality: 0.0, note: "Bodnar (I) splits the anti-Alme vote with Bankhead (D)" }

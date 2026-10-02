@@ -1,0 +1,89 @@
+# Facts about each 2026 Senate race. Model knobs live in config.yaml.
+#
+# rep: the Republican candidate. opp: the main opposition candidate (usually
+# the Democrat; an independent where they are the real challenger).
+# caucus: who an opposition win counts toward: D, or none for independents
+# who haven't said they'd caucus with Democrats (see config.yaml).
+# pres_2024 / pres_2020: presidential margin in the state, Dem minus Rep, points.
+# region: used for correlated polling error.
+
+election_day: 2026-11-03
+# Seats not on the ballot this year (53 R - 22 up, 47 D/I caucus - 13 up).
+seats_not_up: { D: 34, R: 31 }
+national_pres_2024: -1.5
+national_pres_2020: 4.5
+
+races:
+  - { state: AL, name: Alabama, region: south, incumbent: none, pres_2024: -30.5, pres_2020: -25.5,
+      rep: { name: Barry Moore }, opp: { name: Everett Wess, party: D, caucus: D } }
+  - { state: AK, name: Alaska, region: west, incumbent: R, pres_2024: -13.1, pres_2020: -10.1,
+      rep: { name: Dan Sullivan }, opp: { name: Mary Peltola, party: D, caucus: D } }
+  - { state: AR, name: Arkansas, region: south, incumbent: R, pres_2024: -30.6, pres_2020: -27.6,
+      rep: { name: Tom Cotton }, opp: { name: Hallie Shoffner, party: D, caucus: D } }
+  - { state: CO, name: Colorado, region: west, incumbent: D, pres_2024: 11.0, pres_2020: 13.5,
+      rep: { name: Mark Baisley }, opp: { name: John Hickenlooper, party: D, caucus: D } }
+  - { state: DE, name: Delaware, region: northeast, incumbent: D, pres_2024: 14.7, pres_2020: 19.0,
+      rep: { name: Michael Katz }, opp: { name: Chris Coons, party: D, caucus: D } }
+  - { state: FL, name: Florida, special: true, region: south, incumbent: R, appointed: true, pres_2024: -13.1, pres_2020: -3.4,
+      wiki: 2026_United_States_Senate_special_election_in_Florida,
+      rep: { name: Ashley Moody }, opp: { name: Angie Nixon, party: D, caucus: D } }
+  - { state: GA, name: Georgia, region: south, incumbent: D, pres_2024: -2.2, pres_2020: 0.2,
+      rep: { name: Mike Collins }, opp: { name: Jon Ossoff, party: D, caucus: D } }
+  - { state: ID, name: Idaho, region: west, incumbent: R, pres_2024: -36.5, pres_2020: -30.8,
+      rep: { name: Jim Risch }, opp: { name: Todd Achilles, party: I, caucus: none } }
+  - { state: IL, name: Illinois, region: midwest, incumbent: none, pres_2024: 10.9, pres_2020: 17.0,
+      rep: { name: Don Tracy }, opp: { name: Juliana Stratton, party: D, caucus: D } }
+  - { state: IA, name: Iowa, region: midwest, incumbent: none, pres_2024: -13.2, pres_2020: -8.2,
+      rep: { name: Ashley Hinson }, opp: { name: Josh Turek, party: D, caucus: D } }
+  - { state: KS, name: Kansas, region: plains, incumbent: R, pres_2024: -16.1, pres_2020: -14.6,
+      rep: { name: Roger Marshall }, opp: { name: Adam Hamilton, party: D, caucus: D } }
+  - { state: KY, name: Kentucky, region: south, incumbent: none, pres_2024: -30.5, pres_2020: -25.9,
+      rep: { name: Andy Barr }, opp: { name: Charles Booker, party: D, caucus: D } }
+  - { state: LA, name: Louisiana, region: south, incumbent: none, pres_2024: -22.0, pres_2020: -18.6,
+      rep: { name: Julia Letlow }, opp: { name: Jamie Davis, party: D, caucus: D } }
+  - { state: ME, name: Maine, region: northeast, incumbent: R, pres_2024: 6.9, pres_2020: 9.1,
+      rep: { name: Susan Collins }, opp: { name: Troy Jackson, party: D, caucus: D } }
+  - { state: MA, name: Massachusetts, region: northeast, incumbent: D, pres_2024: 25.2, pres_2020: 33.5,
+      rep: { name: John Deaton }, opp: { name: Ed Markey, party: D, caucus: D } }
+  - { state: MI, name: Michigan, region: midwest, incumbent: none, pres_2024: -1.4, pres_2020: 2.8,
+      rep: { name: Mike Rogers }, opp: { name: Abdul El-Sayed, party: D, caucus: D } }
+  - { state: MN, name: Minnesota, region: midwest, incumbent: none, pres_2024: 4.2, pres_2020: 7.1,
+      rep: { name: Michele Tafoya }, opp: { name: Peggy Flanagan, party: D, caucus: D } }
+  - { state: MS, name: Mississippi, region: south, incumbent: R, pres_2024: -22.9, pres_2020: -16.5,
+      rep: { name: Cindy Hyde-Smith }, opp: { name: Scott Colom, party: D, caucus: D } }
+  - { state: MT, name: Montana, region: west, incumbent: none, pres_2024: -19.9, pres_2020: -16.4,
+      rep: { name: Kurt Alme }, opp: { name: Seth Bodnar, party: I, caucus: none },
+      others: [ { name: Alani Bankhead, party: D } ] }
+  - { state: NE, name: Nebraska, region: plains, incumbent: R, pres_2024: -20.5, pres_2020: -19.1,
+      rep: { name: Pete Ricketts }, opp: { name: Dan Osborn, party: I, caucus: none } }
+  - { state: NH, name: New Hampshire, region: northeast, incumbent: none, pres_2024: 2.8, pres_2020: 7.4,
+      rep: { name: John E. Sununu }, opp: { name: Chris Pappas, party: D, caucus: D } }
+  - { state: NJ, name: New Jersey, region: northeast, incumbent: D, pres_2024: 5.9, pres_2020: 15.9,
+      rep: { name: Justin Murphy }, opp: { name: Cory Booker, party: D, caucus: D } }
+  - { state: NM, name: New Mexico, region: west, incumbent: D, pres_2024: 6.0, pres_2020: 10.8,
+      rep: { name: Larry Marker }, opp: { name: Ben Ray Luján, party: D, caucus: D } }
+  - { state: NC, name: North Carolina, region: south, incumbent: none, pres_2024: -3.2, pres_2020: -1.3,
+      rep: { name: Michael Whatley }, opp: { name: Roy Cooper, party: D, caucus: D } }
+  - { state: OH, name: Ohio, special: true, region: midwest, incumbent: R, appointed: true, pres_2024: -11.2, pres_2020: -8.0,
+      wiki: 2026_United_States_Senate_special_election_in_Ohio,
+      rep: { name: Jon Husted }, opp: { name: Sherrod Brown, party: D, caucus: D } }
+  - { state: OK, name: Oklahoma, region: plains, incumbent: none, pres_2024: -34.3, pres_2020: -33.1,
+      rep: { name: Kevin Hern }, opp: { name: "N'Kiyla Thomas", party: D, caucus: D } }
+  - { state: OR, name: Oregon, region: west, incumbent: D, pres_2024: 14.3, pres_2020: 16.1,
+      rep: { name: David Brock Smith }, opp: { name: Jeff Merkley, party: D, caucus: D } }
+  - { state: RI, name: Rhode Island, region: northeast, incumbent: D, pres_2024: 13.8, pres_2020: 20.8,
+      rep: { name: Raymond McKay }, opp: { name: Jack Reed, party: D, caucus: D } }
+  - { state: SC, name: South Carolina, region: south, incumbent: R, appointed: true, pres_2024: -18.2, pres_2020: -11.7,
+      rep: { name: Darline Graham }, opp: { name: Annie Andrews, party: D, caucus: D } }
+  - { state: SD, name: South Dakota, region: plains, incumbent: R, pres_2024: -29.2, pres_2020: -26.2,
+      rep: { name: Mike Rounds }, opp: { name: Brian Bengs, party: D, caucus: D } }
+  - { state: TN, name: Tennessee, region: south, incumbent: R, pres_2024: -29.7, pres_2020: -23.2,
+      rep: { name: Bill Hagerty }, opp: { name: Marquita Bradshaw, party: D, caucus: D } }
+  - { state: TX, name: Texas, region: south, incumbent: none, pres_2024: -13.7, pres_2020: -5.6,
+      rep: { name: Ken Paxton }, opp: { name: James Talarico, party: D, caucus: D } }
+  - { state: VA, name: Virginia, region: south, incumbent: D, pres_2024: 5.8, pres_2020: 10.1,
+      rep: { name: Bert Mizusawa }, opp: { name: Mark Warner, party: D, caucus: D } }
+  - { state: WV, name: West Virginia, region: south, incumbent: R, pres_2024: -41.9, pres_2020: -38.9,
+      rep: { name: Shelley Moore Capito }, opp: { name: Rachel Fetty Anderson, party: D, caucus: D } }
+  - { state: WY, name: Wyoming, region: west, incumbent: none, pres_2024: -45.8, pres_2020: -43.4,
+      rep: { name: Harriet Hageman }, opp: { name: James W. Byrd, party: D, caucus: D } }
