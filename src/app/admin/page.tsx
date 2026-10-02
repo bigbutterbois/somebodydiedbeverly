@@ -7,9 +7,9 @@ export default async function AdminPage() {
 
   return (
     <div className="flex flex-col gap-4">
-      <h1 className="text-3xl font-semibold tracking-tight">Admin</h1>
-      <p className="text-zinc-500">Signed in as {data?.claims.email}.</p>
-      <Link href="/" className="text-sm underline">
+      <h1 className="text-3xl font-normal tracking-tight">Admin</h1>
+      <p className="text-muted">Signed in as {data?.claims.email}.</p>
+      <Link href="/" className="text-sm text-accent hover:underline">
         View the public site
       </Link>
     </div>

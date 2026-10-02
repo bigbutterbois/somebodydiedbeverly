@@ -14,7 +14,7 @@ export function LoginForm() {
         placeholder="Email"
         autoComplete="email"
         required
-        className="rounded border border-zinc-300 bg-transparent px-3 py-2 dark:border-zinc-700"
+        className="rounded border border-line bg-surface px-3 py-2 placeholder:text-muted focus:border-accent focus:outline-none"
       />
       <input
         name="password"
@@ -22,16 +22,16 @@ export function LoginForm() {
         placeholder="Password"
         autoComplete="current-password"
         required
-        className="rounded border border-zinc-300 bg-transparent px-3 py-2 dark:border-zinc-700"
+        className="rounded border border-line bg-surface px-3 py-2 placeholder:text-muted focus:border-accent focus:outline-none"
       />
       <button
         type="submit"
         disabled={pending}
-        className="rounded bg-foreground px-3 py-2 text-background disabled:opacity-50"
+        className="rounded bg-accent px-3 py-2 font-medium text-background transition-opacity hover:opacity-90 disabled:opacity-50"
       >
         {pending ? "Signing in…" : "Sign in"}
       </button>
-      {state?.error && <p className="text-sm text-red-600">{state.error}</p>}
+      {state?.error && <p className="text-sm text-danger">{state.error}</p>}
     </form>
   );
 }

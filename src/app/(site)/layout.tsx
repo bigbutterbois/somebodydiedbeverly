@@ -1,3 +1,4 @@
+import { Monogram } from "@/components/Monogram";
 import { Nav } from "@/components/Nav";
 
 // Public side: unlocked by the friends & family password (see src/proxy.ts).
@@ -11,8 +12,8 @@ const MODULES = [
 export default function SiteLayout({ children }: LayoutProps<"/">) {
   return (
     <>
-      <Nav home={{ href: "/", label: "somebodydiedbeverly" }} links={MODULES} />
-      <main className="mx-auto flex w-full max-w-4xl flex-1 flex-col p-6">
+      <Nav home={{ href: "/", label: <Monogram className="text-sm" /> }} links={MODULES} />
+      <main className="mx-auto flex w-full max-w-5xl flex-1 flex-col p-6">
         {children}
       </main>
     </>
