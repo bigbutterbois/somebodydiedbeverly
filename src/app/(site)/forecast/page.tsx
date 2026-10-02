@@ -69,7 +69,7 @@ export default async function ForecastPage() {
         </ul>
         {independents.length > 0 && (
           <p className="text-center text-xs text-muted">
-            Blue also covers independents running as the main challenger ({independents.join(", ")}).
+            Blue also covers independents running as the main challenger ({independents.join(", ")}), and their wins count toward Democratic control.
           </p>
         )}
       </section>

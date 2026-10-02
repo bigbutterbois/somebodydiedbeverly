@@ -93,7 +93,7 @@ error:
 control:
   vice_president_party: R     # breaks 50-50 ties
   # How seats won by independents marked caucus: none in races.yaml count
-  # (Osborn is caucus: D there, so he always counts for Democrats).
+  # (all current independents are caucus: D there, so they count for Democrats).
   # neither: they count for no one; D: they count toward Dem control.
   independents_count_as: neither
 
