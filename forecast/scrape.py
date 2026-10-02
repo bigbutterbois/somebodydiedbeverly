@@ -22,7 +22,13 @@ from bs4 import BeautifulSoup
 
 API = "https://en.wikipedia.org/api/rest_v1/page/html/"
 HEADERS = {"User-Agent": "somebodydiedbeverly-forecast/1.0 (https://github.com/bigbutterbois/somebodydiedbeverly)"}
-GENERIC_BALLOT_PAGE = "Opinion_polling_for_the_2026_United_States_House_of_Representatives_elections"
+SEARCH_API = "https://en.wikipedia.org/w/api.php"
+# Where the generic ballot polls might live; the first page with a usable table wins.
+GENERIC_BALLOT_PAGES = [
+    "Opinion_polling_for_the_2026_United_States_House_of_Representatives_elections",
+    "Generic_ballot_polling_for_the_2026_United_States_House_of_Representatives_elections",
+    "2026_United_States_House_of_Representatives_elections",
+]
 
 MONTHS = {
     m: i + 1
@@ -48,13 +54,15 @@ def wiki_title(race: dict) -> str:
     return race.get("wiki") or f"2026_United_States_Senate_election_in_{race['name'].replace(' ', '_')}"
 
 
-def fetch_html(title: str) -> str:
-    for attempt in range(4):
+def fetch_html(title: str, retries: int = 4) -> str:
+    for attempt in range(retries):
         try:
             r = requests.get(API + title, headers=HEADERS, timeout=30)
             if r.status_code == 200:
                 return r.text
             print(f"  {title}: HTTP {r.status_code}", file=sys.stderr)
+            if r.status_code == 404:
+                break
         except requests.RequestException as e:
             print(f"  {title}: {e}", file=sys.stderr)
         time.sleep(2 ** attempt)
@@ -154,7 +162,7 @@ def parse_rows(df, cols, idx, default_year, aggregators):
         values = list(row.values)
         pollster_raw = str(values[pollster_col])
         pollster = re.sub(r"\[[^\]]*\]", "", pollster_raw).strip()
-        if not pollster or pollster.lower() == "nan" or any(a in norm(pollster) for a in aggregators):
+        if not pollster or pollster.lower() == "nan" or any(str(a) in norm(pollster) for a in aggregators):
             continue
         end = parse_end_date(str(values[date_col]), default_year)
         if not end:
@@ -189,6 +197,8 @@ def scrape_race(race: dict, aggregators: list[str], default_year: int) -> tuple[
             key = (norm(poll["pollster"]), poll["end_date"])
             if key not in best or len(idx) > best[key][0]:
                 best[key] = (len(idx), poll)
+    if not headers:  # show what was there, to fix candidate name matching
+        headers = ["unmatched: " + " | ".join(c) for c in map(flatten_columns, tables) if any("date" in x for x in c)]
     polls = []
     for _, poll in best.values():
         others = [v for k, v in poll.items() if k.startswith("other")]
@@ -203,15 +213,32 @@ def scrape_race(race: dict, aggregators: list[str], default_year: int) -> tuple[
     return polls, headers
 
 
+def search_titles(query: str) -> list[str]:
+    try:
+        r = requests.get(SEARCH_API, headers=HEADERS, timeout=30, params={
+            "action": "query", "list": "search", "srsearch": query, "format": "json", "srlimit": 5})
+        return [hit["title"].replace(" ", "_") for hit in r.json()["query"]["search"]]
+    except Exception:
+        return []
+
+
 def scrape_generic_ballot(aggregators: list[str], default_year: int) -> list[dict]:
-    tables = read_tables(fetch_html(GENERIC_BALLOT_PAGE))
     required = {"opp": re.compile(r"\bdem"), "rep": re.compile(r"\brep")}
-    best = {}
-    for df, cols, idx in poll_tables(tables, required, {}):
-        for poll in parse_rows(df, cols, idx, default_year, aggregators):
-            best.setdefault((norm(poll["pollster"]), poll["end_date"]), poll)
-    return [{"state": "US", **p, "others": [],
-             "source": f"https://en.wikipedia.org/wiki/{GENERIC_BALLOT_PAGE}"} for p in best.values()]
+    titles = GENERIC_BALLOT_PAGES + search_titles("2026 House generic ballot opinion polling")
+    for title in dict.fromkeys(titles):
+        try:
+            tables = read_tables(fetch_html(title, retries=1))
+        except RuntimeError:
+            continue
+        best = {}
+        for df, cols, idx in poll_tables(tables, required, {}):
+            for poll in parse_rows(df, cols, idx, default_year, aggregators):
+                best.setdefault((norm(poll["pollster"]), poll["end_date"]), poll)
+        if len(best) >= 5:
+            print(f"generic ballot: {len(best)} polls from {title}")
+            return [{"state": "US", **p, "others": [],
+                     "source": f"https://en.wikipedia.org/wiki/{title}"} for p in best.values()]
+    raise RuntimeError(f"no generic ballot table found in {', '.join(dict.fromkeys(titles))}")
 
 
 def scrape_all(races: list[dict], aggregators: list[str], verbose: bool = False) -> tuple[list[dict], list[str]]:

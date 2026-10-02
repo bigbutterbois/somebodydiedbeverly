@@ -41,7 +41,7 @@ polls:
     - votehub
     - the hill
     - cook political
-    - 538
+    - "538"
     - average
 
 # --- Fundamentals ----------------------------------------------------------
@@ -53,7 +53,7 @@ fundamentals:
   lean_factor: 0.85
   # National environment: Dem lead in the generic ballot average.
   generic_ballot_half_life_days: 14
-  generic_ballot_fallback: 4.0    # used if the generic ballot scrape fails
+  generic_ballot_fallback: 4.5    # used if the generic ballot scrape fails
   national_environment_override: null  # set a number to force it
   # Sitting senators running again get this many points.
   incumbency: 2.0
