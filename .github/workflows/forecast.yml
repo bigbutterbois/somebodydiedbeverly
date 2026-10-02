@@ -3,8 +3,10 @@ name: Forecast
 # Runs the Senate forecast every morning at 6am US Eastern and publishes the
 # results to the forecast-data branch, which the site reads. Two cron times
 # cover daylight and standard time; the gate step skips the one that isn't
-# 6am (or a day that already has a forecast). On a pull request that touches
-# the model it does a dry run and prints the result instead.
+# 6am (or a day that already has a forecast). A model change merged to main
+# reruns it right away. The first run (no published history yet) also
+# backfills history from Sept 1. On a pull request that touches the model it
+# does a dry run and prints the result instead.
 
 on:
   schedule:
@@ -19,6 +21,11 @@ on:
         description: "Run even if today's forecast already exists"
         type: boolean
         default: false
+  push:
+    branches: [main]
+    paths:
+      - "forecast/**"
+      - ".github/workflows/forecast.yml"
   pull_request:
     paths:
       - "forecast/**"
@@ -74,6 +81,7 @@ jobs:
         if: github.event_name != 'pull_request' && steps.gate.outputs.run == 'true'
         run: |
           backfill="${{ inputs.backfill_from }}"
+          if [ -z "$backfill" ] && [ ! -f data/history.json ]; then backfill=2026-09-01; fi
           python forecast/run.py --data-dir data ${backfill:+--backfill-from "$backfill"}
 
       - name: Publish
