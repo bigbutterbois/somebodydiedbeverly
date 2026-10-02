@@ -80,8 +80,10 @@ def fetch_fundraising(races: list[dict], year: int) -> tuple[dict, list[str]]:
         if rep and opp:
             out[race["state"]] = {"rep": rep, "opp": opp}
         else:
+            in_state = sorted({f"{row[1]} ({row[4]})" for row in senate if row[18] == race["state"]})
             problems.append(f"fundraising: no FEC match for {race['state']} "
-                            f"({race['rep']['name'] if not rep else race['opp']['name']})")
+                            f"({race['rep']['name'] if not rep else race['opp']['name']}); "
+                            f"FEC has: {', '.join(in_state[:12])}")
     print(f"fundraising: {len(out)} of {len(races)} races matched")
     return out, problems
 
@@ -98,12 +100,18 @@ def scrape_approval(aggregators: list[str]) -> tuple[list[dict], list[str]]:
         except RuntimeError:
             continue
         best = {}
+        headers = []
         for df, cols, idx in scrape.poll_tables(tables, required, {}):
+            headers.append(" | ".join(cols))
             for poll in scrape.parse_rows(df, cols, idx, year, aggregators):
                 best.setdefault((scrape.norm(poll["pollster"]), poll["end_date"]), poll)
         recent = [p for p in best.values() if p["end_date"] >= f"{year}-01-01"]
         if len(recent) >= 5:
-            print(f"approval: {len(best)} polls from {title}")
+            print(f"approval: {len(best)} polls from {title}, tables:")
+            for h in dict.fromkeys(headers):
+                print(f"    {h}")
+            for p in sorted(recent, key=lambda p: p["end_date"])[-8:]:
+                print(f"    {p['end_date']} {p['pollster']}: approve {p['opp']} disapprove {p['rep']} ({p['population']})")
             return [{"state": "APPROVAL", **p, "others": [],
                      "source": f"https://en.wikipedia.org/wiki/{title}"} for p in best.values()], []
     return [], ["approval: no Trump approval table found"]
