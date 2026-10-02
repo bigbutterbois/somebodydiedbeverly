@@ -3,7 +3,10 @@
 # rep: the Republican candidate. opp: the main opposition candidate (usually
 # the Democrat; an independent where they are the real challenger).
 # caucus: who an opposition win counts toward: D, or none for independents
-# who haven't said they'd caucus with Democrats (see config.yaml).
+# who count for neither party (see config.yaml). Mike asked for Osborn to
+# count as a Democrat.
+# match: regex for the candidate's column on Wikipedia (default: last name).
+# fec_first: first name to require when matching FEC fundraising records.
 # pres_2024 / pres_2020: presidential margin in the state, Dem minus Rep, points.
 # region: used for correlated polling error.
 
@@ -55,7 +58,7 @@ races:
       rep: { name: Kurt Alme }, opp: { name: Seth Bodnar, party: I, caucus: none },
       others: [ { name: Alani Bankhead, party: D } ] }
   - { state: NE, name: Nebraska, region: plains, incumbent: R, pres_2024: -20.5, pres_2020: -19.1,
-      rep: { name: Pete Ricketts }, opp: { name: Dan Osborn, party: I, caucus: none } }
+      rep: { name: Pete Ricketts }, opp: { name: Dan Osborn, party: I, caucus: D } }
   - { state: NH, name: New Hampshire, region: northeast, incumbent: none, pres_2024: 2.8, pres_2020: 7.4,
       rep: { name: John E. Sununu, match: "john( e\\.)? sununu" }, opp: { name: Chris Pappas, party: D, caucus: D } }
   - { state: NJ, name: New Jersey, region: northeast, incumbent: D, pres_2024: 5.9, pres_2020: 15.9,
@@ -74,7 +77,7 @@ races:
   - { state: RI, name: Rhode Island, region: northeast, incumbent: D, pres_2024: 13.8, pres_2020: 20.8,
       rep: { name: Raymond McKay }, opp: { name: Jack Reed, party: D, caucus: D } }
   - { state: SC, name: South Carolina, region: south, incumbent: R, appointed: true, pres_2024: -18.2, pres_2020: -11.7,
-      rep: { name: Darline Graham, match: "darline" }, opp: { name: Annie Andrews, party: D, caucus: D } }
+      rep: { name: Darline Graham, match: "darline", fec_first: darline }, opp: { name: Annie Andrews, party: D, caucus: D } }
   - { state: SD, name: South Dakota, region: plains, incumbent: R, pres_2024: -29.2, pres_2020: -26.2,
       rep: { name: Mike Rounds }, opp: { name: Brian Bengs, party: I, caucus: none },
       others: [ { name: Julian Beaudion, party: D } ] }

@@ -5,8 +5,10 @@
     python forecast/run.py --data-dir data --no-scrape  # rerun on stored polls
     python forecast/run.py --dry-run                    # print a summary, write nothing
 
-The data dir holds polls.json (every poll ever scraped), latest.json (today's
-forecast) and history.json (one entry per day, for the odds-over-time chart).
+The data dir holds polls.json (every poll ever scraped, including generic
+ballot and Trump approval polls), extras.json (daily fundraising and weather
+snapshots), latest.json (today's forecast) and history.json (one entry per
+day, for the odds-over-time chart).
 """
 
 from __future__ import annotations
@@ -20,6 +22,7 @@ from zoneinfo import ZoneInfo
 
 import yaml
 
+import extras as extra_sources
 import model
 import scrape
 
@@ -50,18 +53,32 @@ def history_entry(result: dict) -> dict:
     }
 
 
+def extras_as_of(extras: dict, d: date) -> dict:
+    """Fundraising from the latest snapshot on or before d (else the earliest); weather from d only."""
+    out = {}
+    funds = extras.get("fundraising", {})
+    if funds:
+        earlier = [k for k in funds if k <= d.isoformat()]
+        out["fundraising"] = funds[max(earlier) if earlier else min(funds)]
+    if d.isoformat() in extras.get("weather", {}):
+        out["weather"] = extras["weather"][d.isoformat()]
+    return out
+
+
 def summarize(result: dict) -> None:
     print(
         f"\n{result['as_of']}: Dem control {result['p_dem_control']:.1%}, Rep {result['p_rep_control']:.1%}, "
         f"no majority {result['p_no_majority']:.1%}; Dem seats {result['dem_seats_mean']} "
-        f"(env {result['national_environment']:+.1f}, {result['national_environment_source']})"
+        f"(env {result['national_environment']:+.1f} from {result['national_environment_source']}: "
+        f"generic ballot {result['generic_ballot']}, Trump net approval {result['trump_net_approval']})"
     )
     for r in sorted(result["races"], key=lambda r: -r["p_opp"]):
         avg = "  -  " if r["poll_avg"] is None else f"{r['poll_avg']:+5.1f}"
         print(
             f"  {r['state']} {r['opp']['name'][:22]:22} vs {r['rep']['name'][:20]:20} "
             f"p_opp {r['p_opp']:6.1%}  mean {r['mean_margin']:+6.1f}  polls {avg} (n={r['n_polls']:2}, "
-            f"w={r['poll_weight']:.2f})  prior {r['prior_margin']:+6.1f}  rating {r['rating']:+d}"
+            f"w={r['poll_weight']:.2f})  prior {r['prior_margin']:+6.1f} (money {r['fundraising_shift']:+.1f}, "
+            f"rain {r['weather_shift']:+.1f})  rating {r['rating']:+d}"
         )
 
 
@@ -93,9 +110,24 @@ def main() -> int:
         if not scraped:
             print("scrape returned nothing; keeping the last published forecast", file=sys.stderr)
             return 1
-        polls = merge_polls(polls, scraped)
+        approval, approval_problems = extra_sources.scrape_approval(cfg["polls"]["aggregators"])
+        polls = merge_polls(polls, scraped + approval)
+        problems += approval_problems
 
     today = args.as_of or datetime.now(EASTERN).date()
+    extras = load_json(data / "extras.json", {"fundraising": {}, "weather": {}})
+    if not args.no_scrape:
+        election = facts["election_day"]
+        election = election if isinstance(election, date) else date.fromisoformat(election)
+        funds, fund_problems = extra_sources.fetch_fundraising(facts["races"], election.year)
+        weather, weather_problems = extra_sources.fetch_weather(election)
+        if funds:
+            extras["fundraising"][today.isoformat()] = funds
+        if weather:
+            extras["weather"][today.isoformat()] = weather
+        problems += fund_problems + weather_problems
+        for p in fund_problems + weather_problems + approval_problems:
+            print(f"  ! {p}")
     days = [today]
     if args.backfill_from:
         days = [args.backfill_from + timedelta(d) for d in range((today - args.backfill_from).days + 1)]
@@ -103,7 +135,7 @@ def main() -> int:
     history = {h["date"]: h for h in load_json(data / "history.json", [])}
     result = None
     for d in days:
-        result = model.run(facts, cfg, polls, d, seed=int(d.strftime("%Y%m%d")))
+        result = model.run(facts, cfg, polls, d, seed=int(d.strftime("%Y%m%d")), extras=extras_as_of(extras, d))
         history[d.isoformat()] = history_entry(result)
     assert result is not None
     result.update({
@@ -116,6 +148,7 @@ def main() -> int:
         return 0
 
     (data / "polls.json").write_text(json.dumps(polls, indent=1) + "\n")
+    (data / "extras.json").write_text(json.dumps(extras, indent=1) + "\n")
     (data / "latest.json").write_text(json.dumps(result, indent=1) + "\n")
     (data / "history.json").write_text(json.dumps([history[k] for k in sorted(history)], indent=1) + "\n")
     # The data branch has no app to build; tell Vercel not to deploy it.

@@ -176,6 +176,20 @@ function Topline({ forecast }: { forecast: Forecast }) {
         {neither &&
           ` In ${Math.round(forecast.p_no_majority * 100)}% of simulations neither side reaches a majority without an independent.`}
       </p>
+      <p className="text-sm text-muted">
+        National environment: <span className="text-foreground tabular-nums">{formatMargin(forecast.national_environment)}</span>
+        {forecast.generic_ballot != null && <> (generic ballot {formatMargin(forecast.generic_ballot)}</>}
+        {forecast.trump_net_approval != null && (
+          <>
+            {forecast.generic_ballot != null ? ", " : " ("}Trump net approval{" "}
+            <span className="tabular-nums">
+              {forecast.trump_net_approval > 0 ? "+" : "−"}
+              {Math.abs(forecast.trump_net_approval).toFixed(1)}
+            </span>
+          </>
+        )}
+        {(forecast.generic_ballot != null || forecast.trump_net_approval != null) && ")"}.
+      </p>
     </section>
   );
 }

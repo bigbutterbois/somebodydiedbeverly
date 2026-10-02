@@ -31,6 +31,8 @@ export type Forecast = {
   election_day: string;
   simulations: number;
   national_environment: number;
+  generic_ballot?: number | null;
+  trump_net_approval?: number | null;
   p_dem_control: number;
   p_rep_control: number;
   p_no_majority: number;

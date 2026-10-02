@@ -59,18 +59,49 @@ def weighted_average(polls: list[dict], as_of: date, cfg: dict, half_life: float
     return sum(w * m for _, w, m in rows) / total, total
 
 
-def national_environment(polls: list[dict], as_of: date, cfg: dict) -> tuple[float, str]:
+def national_environment(polls: list[dict], as_of: date, cfg: dict) -> dict:
+    """Dem national lead, blended from the generic ballot and Trump's net approval."""
     f = cfg["fundamentals"]
     if f.get("national_environment_override") is not None:
-        return float(f["national_environment_override"]), "override"
-    us = [p for p in polls if p["state"] == "US"]
-    avg, weight = weighted_average(us, as_of, cfg, f["generic_ballot_half_life_days"])
-    if avg is None or weight < 1.0:
-        return float(f["generic_ballot_fallback"]), "fallback"
-    return avg, "generic ballot"
+        return {"value": float(f["national_environment_override"]), "source": "override"}
+    gb, gb_w = weighted_average([p for p in polls if p["state"] == "US"], as_of, cfg, f["generic_ballot_half_life_days"])
+    net, net_w = weighted_average([p for p in polls if p["state"] == "APPROVAL"], as_of, cfg, f["approval_half_life_days"])
+    gb = gb if gb is not None and gb_w >= 1.0 else None
+    net = net if net is not None and net_w >= 1.0 else None
+    parts = []
+    if gb is not None:
+        parts.append((f["generic_ballot_weight"], gb))
+    if net is not None:
+        parts.append((f["approval_weight"], f["approval_intercept"] - f["approval_slope"] * net))
+    if not parts:
+        return {"value": float(f["generic_ballot_fallback"]), "source": "fallback"}
+    value = sum(w * v for w, v in parts) / sum(w for w, _ in parts)
+    return {
+        "value": value,
+        "source": " + ".join(n for n, x in (("generic ballot", gb), ("approval", net)) if x is not None),
+        "generic_ballot": None if gb is None else round(gb, 2),
+        "trump_net_approval": None if net is None else round(net, 2),
+    }
 
 
-def prior_margin(race: dict, facts: dict, env: float, cfg: dict) -> float:
+def fundraising_shift(state: str, extras: dict, cfg: dict) -> float:
+    money = extras.get("fundraising", {}).get(state)
+    if not money or money["rep"] <= 0 or money["opp"] <= 0:
+        return 0.0
+    f = cfg["fundamentals"]
+    shift = f["fundraising_points_per_doubling"] * math.log2(money["opp"] / money["rep"])
+    return max(-f["fundraising_cap"], min(f["fundraising_cap"], shift))
+
+
+def weather_shift(state: str, extras: dict, cfg: dict) -> float:
+    rain = extras.get("weather", {}).get(state)
+    if rain is None:
+        return 0.0
+    f = cfg["fundamentals"]
+    return -min(f["weather_cap"], f["weather_points_per_inch"] * rain)
+
+
+def prior_margin(race: dict, facts: dict, env: float, cfg: dict, extras: dict | None = None) -> float:
     f = cfg["fundamentals"]
     lean = 0.0
     for year, w in f["lean_weights"].items():
@@ -82,6 +113,8 @@ def prior_margin(race: dict, facts: dict, env: float, cfg: dict) -> float:
     elif race["incumbent"] in ("D", "I") and race["opp"].get("party") in ("D", "I"):
         margin += inc
     margin += cfg["races"].get(race["state"], {}).get("candidate_quality", 0.0)
+    if extras:
+        margin += fundraising_shift(race["state"], extras, cfg) + weather_shift(race["state"], extras, cfg)
     return margin
 
 
@@ -93,18 +126,22 @@ def rating(p_opp: float, cfg: dict) -> int:
     return step if p_opp >= 0.5 else -step
 
 
-def run(facts: dict, cfg: dict, polls: list[dict], as_of: date, seed: int | None = None) -> dict:
+def run(facts: dict, cfg: dict, polls: list[dict], as_of: date, seed: int | None = None,
+        extras: dict | None = None) -> dict:
+    """extras: {"fundraising": {state: {rep, opp}}, "weather": {state: inches}} as known on as_of."""
+    extras = extras or {}
     races = facts["races"]
     election = facts["election_day"]
     if isinstance(election, str):
         election = date.fromisoformat(election)
     days_left = max((election - as_of).days, 0)
-    env, env_source = national_environment(polls, as_of, cfg)
+    national = national_environment(polls, as_of, cfg)
+    env = national["value"]
     pc, ec = cfg["polls"], cfg["error"]
 
     means, sds, rows = [], [], []
     for race in races:
-        prior = prior_margin(race, facts, env, cfg)
+        prior = prior_margin(race, facts, env, cfg, extras)
         avg, weight = weighted_average([p for p in polls if p["state"] == race["state"]], as_of, cfg, pc["half_life_days"])
         k = cfg["fundamentals"]["prior_weight_in_polls"]
         w_poll = weight / (weight + k) if avg is not None else 0.0
@@ -133,10 +170,10 @@ def run(facts: dict, cfg: dict, polls: list[dict], as_of: date, seed: int | None
 
     regions = sorted({r["region"] for r in races})
     region_idx = np.array([regions.index(r["region"]) for r in races])
-    national = draws(n_sims) * (ec["national"] + ec["national_per_day"] * days_left)
+    national_err = draws(n_sims) * (ec["national"] + ec["national_per_day"] * days_left)
     regional = draws((n_sims, len(regions))) * ec["regional"]
     state = draws((n_sims, len(races))) * np.array(sds)
-    margins = np.array(means)[None, :] + national[:, None] + regional[:, region_idx] + state
+    margins = np.array(means)[None, :] + national_err[:, None] + regional[:, region_idx] + state
     opp_wins = margins > 0
 
     caucus_d = np.array([
@@ -170,6 +207,8 @@ def run(facts: dict, cfg: dict, polls: list[dict], as_of: date, seed: int | None
             "n_polls": row["n_polls"],
             "poll_weight": round(row["poll_weight"], 3),
             "prior_margin": round(row["prior"], 2),
+            "fundraising_shift": round(fundraising_shift(race["state"], extras, cfg), 2),
+            "weather_shift": round(weather_shift(race["state"], extras, cfg), 2),
             "rating": rating(p_opp, cfg),
         })
 
@@ -180,7 +219,9 @@ def run(facts: dict, cfg: dict, polls: list[dict], as_of: date, seed: int | None
         "election_day": election.isoformat(),
         "simulations": n_sims,
         "national_environment": round(env, 2),
-        "national_environment_source": env_source,
+        "national_environment_source": national["source"],
+        "generic_ballot": national.get("generic_ballot"),
+        "trump_net_approval": national.get("trump_net_approval"),
         "p_dem_control": round(float(dem_control.mean()), 4),
         "p_rep_control": round(float(rep_control.mean()), 4),
         "p_no_majority": round(float(1 - dem_control.mean() - rep_control.mean()), 4),

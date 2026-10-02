@@ -51,16 +51,32 @@ fundamentals:
   lean_weights: { "2024": 0.75, "2020": 0.25 }
   # Senate races are a bit less partisan than presidential ones: lean is scaled by this.
   lean_factor: 0.85
-  # National environment: Dem lead in the generic ballot average.
+  # National environment (Dem lead nationally), blended from two signals:
+  # the generic ballot average, and Trump's net approval translated into an
+  # expected Dem lead (intercept + slope x net disapproval).
   generic_ballot_half_life_days: 14
-  generic_ballot_fallback: 4.5    # used if the generic ballot scrape fails
+  generic_ballot_weight: 0.7
+  approval_weight: 0.3
+  approval_half_life_days: 14
+  approval_intercept: 1.0       # Dem lead when Trump's net approval is 0
+  approval_slope: 0.4           # extra Dem lead per point of net disapproval
+  generic_ballot_fallback: 4.5  # used if the generic ballot scrape fails
   national_environment_override: null  # set a number to force it
   # Sitting senators running again get this many points.
-  incumbency: 2.0
+  incumbency: 1.5
   appointed_incumbency_factor: 0.5   # appointed incumbents get half
   # Polls vs. fundamentals: the fundamentals prior counts as this many fresh,
   # full-weight polls. Lower = trust polls sooner.
   prior_weight_in_polls: 2.0
+  # Fundraising: individual contributions this cycle (FEC). Points per
+  # doubling of one side's haul over the other's, capped.
+  fundraising_points_per_doubling: 1.0
+  fundraising_cap: 3.0
+  # Election-day weather: rain is thought to cut turnout slightly in a way
+  # that helps Republicans. Points toward the GOP per inch of forecast rain
+  # in the state's biggest metro; kicks in once Nov 3 is within 16 days.
+  weather_points_per_inch: 1.0
+  weather_cap: 1.5
 
 # --- Simulation error (standard deviations, points of margin) --------------
 error:
@@ -76,7 +92,8 @@ error:
 # --- Senate control --------------------------------------------------------
 control:
   vice_president_party: R     # breaks 50-50 ties
-  # How seats won by independents (caucus: none in races.yaml) count.
+  # How seats won by independents marked caucus: none in races.yaml count
+  # (Osborn is caucus: D there, so he always counts for Democrats).
   # neither: they count for no one; D: they count toward Dem control.
   independents_count_as: neither
 
