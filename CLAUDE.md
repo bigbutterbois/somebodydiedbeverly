@@ -44,7 +44,7 @@ Run `npm run lint` and `npm run build` before pushing; CI runs the same checks.
 **This is a hard requirement. Do not skip it.**
 
 - **Planning / context-gathering**: ALWAYS switch to the **Opus** model (`claude-opus-4-6`) BEFORE exploring the codebase or writing a plan. This applies any time I ask for a plan, describe a feature, or otherwise seem to be in an exploratory/design phase — even if I don't explicitly invoke plan mode. Do NOT use Sonnet for planning under any circumstances.
-- **Execution**: Always use the **Sonnet** model (`claude-sonnet-4-6`) when implementing an approved plan.
+- **Execution**: Always use the **Sonnet** model (`claude-sonnet-4-6`) when implementing a plan.
 
 ### Default Task Flow
 
@@ -52,11 +52,10 @@ When I ask you to do a task, the default workflow is:
 
 1. **Switch to Opus** — before doing anything else, switch to `claude-opus-4-6`.
 2. **Plan** — use Opus to explore the codebase, gather context, and produce a concrete plan.
-3. **Present** — show me the plan and wait for my approval before writing any code.
-4. **Switch to Sonnet** — switch to `claude-sonnet-4-6` for implementation.
-5. **Execute** — implement the approved plan.
+3. **Switch to Sonnet** — switch to `claude-sonnet-4-6` for implementation.
+4. **Execute** — implement the plan without waiting for my approval, and summarize the plan alongside the result.
 
-Don't skip straight to implementation unless I explicitly say so.
+Only stop and ask me first for things that can't be undone (deleting data, changing DNS or production settings).
 
 ### Saving Notes
 
