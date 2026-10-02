@@ -20,7 +20,7 @@ Mike's personal website, hosted at `somebodydiedbeverly.com`. This is a fresh st
 ## Project Structure
 
 ```
-src/app/(site)/       # Public side, one folder per module: gallery, blog, forecast
+src/app/(site)/       # Public side, one folder per module: gallery, blog, forecast, plates
 src/app/admin/        # Private side, one folder per tool: plates, blog, gallery
 src/app/enter/        # Friends & family password page
 src/app/login/        # Owner sign-in
@@ -31,7 +31,7 @@ src/proxy.ts          # Both access gates + Supabase session refresh
 supabase/migrations/  # Database schema as SQL migrations
 ```
 
-To add a module, create its folder under `src/app/(site)/` or `src/app/admin/` and add it to the `MODULES` or `TOOLS` list in that folder's `layout.tsx`. Modules: gallery, blog and an election forecast (planned: a model that refreshes daily) on the public side; diplomat plate tracker and blog/gallery editors on the private side.
+To add a module, create its folder under `src/app/(site)/` or `src/app/admin/` and add it to the `MODULES` or `TOOLS` list in that folder's `layout.tsx`. Modules: gallery, blog, an election forecast (planned: a model that refreshes daily) and read-only plate tracker progress on the public side; diplomat plate tracker and blog/gallery editors on the private side.
 
 ## Dev Commands
 

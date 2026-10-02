@@ -9,9 +9,14 @@ export default async function AdminPage() {
     <div className="flex flex-col gap-4">
       <h1 className="text-3xl font-normal tracking-tight">Admin</h1>
       <p className="text-muted">Signed in as {data?.claims.email}.</p>
-      <Link href="/" className="text-sm text-accent hover:underline">
-        View the public site
-      </Link>
+      <div className="flex flex-col gap-2 text-sm">
+        <Link href="/admin/plates/log" className="text-accent hover:underline">
+          Log a plate
+        </Link>
+        <Link href="/" className="text-accent hover:underline">
+          View the public site
+        </Link>
+      </div>
     </div>
   );
 }
