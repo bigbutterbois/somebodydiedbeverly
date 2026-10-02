@@ -2,6 +2,7 @@ import Link from "next/link";
 import { EmptyPreview, HomeSection } from "@/components/HomeSection";
 import Image from "next/image";
 import { formatPostDate } from "@/lib/blog";
+import { DEM, REP, getForecast } from "@/lib/forecast";
 import { galleryImageUrl } from "@/lib/gallery";
 import { getGalleryItems } from "@/lib/supabase/gallery";
 import { createClient } from "@/lib/supabase/server";
@@ -10,7 +11,7 @@ import { createClient } from "@/lib/supabase/server";
 // replaces its empty state with real items once it has data.
 export default async function Home() {
   const supabase = await createClient();
-  const [{ count: totalCountries }, { data: sightings }, { data: posts }, pieces] = await Promise.all([
+  const [{ count: totalCountries }, { data: sightings }, { data: posts }, pieces, forecast] = await Promise.all([
     supabase.from("countries").select("id", { count: "exact", head: true }),
     supabase.from("plate_sightings").select("country_id"),
     supabase
@@ -20,6 +21,7 @@ export default async function Home() {
       .order("published_at", { ascending: false })
       .limit(3),
     getGalleryItems(3),
+    getForecast(),
   ]);
   const spotted = new Set(sightings?.map((s) => s.country_id)).size;
 
@@ -74,7 +76,23 @@ export default async function Home() {
         </HomeSection>
 
         <HomeSection title="Forecast" href="/forecast">
-          <EmptyPreview>The election model is still being built.</EmptyPreview>
+          {forecast ? (
+            <div className="flex flex-col gap-2 tabular-nums">
+              <p className="text-sm text-muted">Chance of winning the Senate</p>
+              <p className="flex gap-6">
+                <span>
+                  <span className="text-2xl" style={{ color: DEM }}>{Math.round(forecast.p_dem_control * 100)}%</span>
+                  <span className="text-muted"> Dem</span>
+                </span>
+                <span>
+                  <span className="text-2xl" style={{ color: REP }}>{Math.round(forecast.p_rep_control * 100)}%</span>
+                  <span className="text-muted"> Rep</span>
+                </span>
+              </p>
+            </div>
+          ) : (
+            <EmptyPreview>The first Senate forecast is on its way.</EmptyPreview>
+          )}
         </HomeSection>
 
         <HomeSection title="Diplomat plates" href="/plates">

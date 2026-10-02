@@ -1,0 +1,91 @@
+name: Forecast
+
+# Runs the Senate forecast every morning at 6am US Eastern and publishes the
+# results to the forecast-data branch, which the site reads. Two cron times
+# cover daylight and standard time; the gate step skips the one that isn't
+# 6am (or a day that already has a forecast). On a pull request that touches
+# the model it does a dry run and prints the result instead.
+
+on:
+  schedule:
+    - cron: "0 10 * * *" # 6am EDT
+    - cron: "0 11 * * *" # 6am EST
+  workflow_dispatch:
+    inputs:
+      backfill_from:
+        description: "Also rebuild history from this date (YYYY-MM-DD), optional"
+        required: false
+      force:
+        description: "Run even if today's forecast already exists"
+        type: boolean
+        default: false
+  pull_request:
+    paths:
+      - "forecast/**"
+      - ".github/workflows/forecast.yml"
+
+permissions:
+  contents: write
+
+concurrency: forecast
+
+jobs:
+  forecast:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Check out published data
+        if: github.event_name != 'pull_request'
+        uses: actions/checkout@v4
+        continue-on-error: true
+        with:
+          ref: forecast-data
+          path: data
+
+      - name: Decide whether to run
+        id: gate
+        run: |
+          today=$(TZ=America/New_York date +%F)
+          hour=$(TZ=America/New_York date +%-H)
+          last=$(jq -r '.as_of // ""' data/latest.json 2>/dev/null || true)
+          run=true
+          if [ "${{ github.event_name }}" = "schedule" ] && { [ "$hour" -lt 6 ] || [ "$last" = "$today" ]; }; then run=false; fi
+          if [ "${{ github.event_name }}" = "workflow_dispatch" ] && [ "$last" = "$today" ] \
+            && [ "${{ inputs.force }}" != "true" ] && [ -z "${{ inputs.backfill_from }}" ]; then run=false; fi
+          echo "Eastern $today ${hour}h, last forecast ${last:-none}, run=$run"
+          echo "run=$run" >> "$GITHUB_OUTPUT"
+
+      - uses: actions/setup-python@v5
+        if: steps.gate.outputs.run == 'true'
+        with:
+          python-version: "3.12"
+          cache: pip
+          cache-dependency-path: forecast/requirements.txt
+
+      - if: steps.gate.outputs.run == 'true'
+        run: pip install -r forecast/requirements.txt
+
+      - name: Dry run
+        if: github.event_name == 'pull_request'
+        run: python forecast/run.py --dry-run --verbose
+
+      - name: Run forecast
+        if: github.event_name != 'pull_request' && steps.gate.outputs.run == 'true'
+        run: |
+          backfill="${{ inputs.backfill_from }}"
+          python forecast/run.py --data-dir data ${backfill:+--backfill-from "$backfill"}
+
+      - name: Publish
+        if: github.event_name != 'pull_request' && steps.gate.outputs.run == 'true'
+        working-directory: data
+        run: |
+          if [ ! -d .git ]; then
+            git init -b forecast-data
+            git remote add origin "https://x-access-token:${{ github.token }}@github.com/${{ github.repository }}.git"
+          fi
+          git config user.name "forecast-bot"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A
+          git commit -m "Forecast for $(jq -r .as_of latest.json)" || { echo "nothing changed"; exit 0; }
+          git push origin HEAD:forecast-data

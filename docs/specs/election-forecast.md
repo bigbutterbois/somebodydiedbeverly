@@ -19,13 +19,13 @@ Election day is **2026-11-03**, about a month after these decisions. The model h
 2. **Average**: per race, a weighted polling average (recency, sample size, pollster rating, LV over RV), with optional house-effect adjustments.
 3. **Fundamentals prior**: per race, from partisan lean (past presidential results), incumbency, candidate quality flags, and the national environment (generic ballot). Blend with the polling average; the poll weight grows as polls accumulate and election day nears.
 4. **Simulate**: about 10,000+ runs with a shared national error plus correlated regional/demographic error plus per-state error. Count seats, including seats not up this cycle and the VP tiebreak, to get control odds.
-5. **Publish**: write one dated snapshot (topline, per-state odds, seat distribution) to Supabase. The site reads the latest snapshot plus history for the time chart.
+5. **Publish**: write `latest.json` (topline, per-state odds, seat distribution), `history.json` (one entry per day) and `polls.json` (every poll scraped) to the `forecast-data` branch. The site reads them from there (`src/lib/forecast.ts`) and refreshes every 15 minutes.
 
-Running the model in Python in GitHub Actions is the default (numpy is the natural fit, and it keeps heavy work off Vercel). If a run fails, the site keeps showing the last good snapshot.
+As built: Python in GitHub Actions (`.github/workflows/forecast.yml`, code in `forecast/`), at 6am US Eastern. Publishing to a git branch instead of Supabase means no database keys have to live in GitHub. If a run fails, the site keeps showing the last good forecast.
 
 ## Mike's control panel
 
-Model settings live in one versioned config (a YAML/JSON file in the repo to start, editable from `/admin/forecast` later): poll recency decay, pollster weights and house effects, fundamentals vs. polls blend, error sizes and correlation, per-race manual overrides (for example, exclude a poll or pin a candidate-quality adjustment). Every snapshot records which config version produced it.
+Model settings live in one versioned config, `forecast/config.yaml` (editable from `/admin/forecast` later); race facts (candidates, past presidential results) are in `forecast/races.yaml`: poll recency decay, pollster weights and house effects, fundamentals vs. polls blend, error sizes and correlation, per-race manual overrides (for example, exclude a poll or pin a candidate-quality adjustment). Every snapshot records which config version produced it.
 
 ## Public side (`src/app/(site)/forecast`)
 
@@ -36,11 +36,7 @@ Model settings live in one versioned config (a YAML/JSON file in the repo to sta
 
 ## Data
 
-- `forecast_polls`: raw scraped polls.
-- `forecast_runs`: one row per daily run (date, config version, status).
-- `forecast_race_results`: per run and state (probabilities, average, margin distribution).
-- `forecast_topline`: per run (control odds, seat distribution).
-- RLS: public read, owner/service-role write.
+All forecast data lives as JSON on the `forecast-data` branch (see Pipeline). There are no forecast tables in Supabase.
 
 ## Open items
 
