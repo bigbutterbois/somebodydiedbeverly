@@ -14,7 +14,7 @@ export function LoginForm() {
         placeholder="Email"
         autoComplete="email"
         required
-        className="rounded border border-line bg-surface px-3 py-2 placeholder:text-muted focus:border-accent focus:outline-none"
+        className="rounded-full border border-accent bg-transparent px-5 py-2.5 text-center placeholder:text-muted focus:outline-none"
       />
       <input
         name="password"
@@ -22,16 +22,19 @@ export function LoginForm() {
         placeholder="Password"
         autoComplete="current-password"
         required
-        className="rounded border border-line bg-surface px-3 py-2 placeholder:text-muted focus:border-accent focus:outline-none"
+        className="rounded-full border border-accent bg-transparent px-5 py-2.5 text-center placeholder:text-muted focus:outline-none"
       />
-      <button
-        type="submit"
-        disabled={pending}
-        className="rounded bg-accent px-3 py-2 font-medium text-background transition-opacity hover:opacity-90 disabled:opacity-50"
-      >
-        {pending ? "Signing in…" : "Sign in"}
+      {/* Enter submits; the button is only there for screen readers. */}
+      <button type="submit" disabled={pending} className="sr-only">
+        Sign in
       </button>
-      {state?.error && <p className="text-sm text-danger">{state.error}</p>}
+      <p aria-live="polite" className="min-h-5 text-center text-sm">
+        {pending ? (
+          <span className="text-muted">Signing in…</span>
+        ) : (
+          state?.error && <span className="text-danger">{state.error}</span>
+        )}
+      </p>
     </form>
   );
 }

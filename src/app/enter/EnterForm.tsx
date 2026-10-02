@@ -16,16 +16,19 @@ export function EnterForm({ next }: { next: string }) {
         autoComplete="current-password"
         autoFocus
         required
-        className="rounded border border-line bg-surface px-3 py-2 placeholder:text-muted focus:border-accent focus:outline-none"
+        className="rounded-full border border-accent bg-transparent px-5 py-2.5 text-center placeholder:text-muted focus:outline-none"
       />
-      <button
-        type="submit"
-        disabled={pending}
-        className="rounded bg-accent px-3 py-2 font-medium text-background transition-opacity hover:opacity-90 disabled:opacity-50"
-      >
-        {pending ? "Checking…" : "Enter"}
+      {/* Enter submits; the button is only there for screen readers. */}
+      <button type="submit" disabled={pending} className="sr-only">
+        Enter
       </button>
-      {state?.error && <p className="text-sm text-danger">{state.error}</p>}
+      <p aria-live="polite" className="min-h-5 text-center text-sm">
+        {pending ? (
+          <span className="text-muted">Checking…</span>
+        ) : (
+          state?.error && <span className="text-danger">{state.error}</span>
+        )}
+      </p>
     </form>
   );
 }
