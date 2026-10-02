@@ -1,13 +1,21 @@
+import Link from "next/link";
 import { EmptyPreview, HomeSection } from "@/components/HomeSection";
+import { formatPostDate } from "@/lib/blog";
 import { createClient } from "@/lib/supabase/server";
 
 // Homepage: a preview of the latest from every public module. Each module
 // replaces its empty state with real items once it has data.
 export default async function Home() {
   const supabase = await createClient();
-  const [{ count: totalCountries }, { data: sightings }] = await Promise.all([
+  const [{ count: totalCountries }, { data: sightings }, { data: posts }] = await Promise.all([
     supabase.from("countries").select("id", { count: "exact", head: true }),
     supabase.from("plate_sightings").select("country_id"),
+    supabase
+      .from("posts")
+      .select("id, title, slug, published_at")
+      .eq("status", "published")
+      .order("published_at", { ascending: false })
+      .limit(3),
   ]);
   const spotted = new Set(sightings?.map((s) => s.country_id)).size;
 
@@ -31,7 +39,22 @@ export default async function Home() {
 
       <div className="grid gap-14 md:grid-cols-2">
         <HomeSection title="Latest posts" href="/blog">
-          <EmptyPreview>No posts yet.</EmptyPreview>
+          {posts?.length ? (
+            <ul className="flex flex-col gap-3">
+              {posts.map((post) => (
+                <li key={post.id} className="flex flex-col">
+                  <Link href={`/blog/${post.slug}`} className="hover:text-accent">
+                    {post.title}
+                  </Link>
+                  <span className="text-xs text-muted tabular-nums">
+                    {formatPostDate(post.published_at)}
+                  </span>
+                </li>
+              ))}
+            </ul>
+          ) : (
+            <EmptyPreview>No posts yet.</EmptyPreview>
+          )}
         </HomeSection>
 
         <HomeSection title="Forecast" href="/forecast">
