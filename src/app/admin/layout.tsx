@@ -17,14 +17,13 @@ const TOOLS = [
 export default function AdminLayout({ children }: LayoutProps<"/admin">) {
   return (
     <>
-      <div className="flex items-baseline justify-between">
-        <Nav home={{ href: "/admin", label: "Admin" }} links={TOOLS} />
-        <form action={signOut} className="px-6">
-          <button type="submit" className="text-sm text-zinc-500 underline">
+      <Nav home={{ href: "/admin", label: "Admin" }} links={TOOLS}>
+        <form action={signOut}>
+          <button type="submit" className="text-sm text-muted underline hover:text-foreground">
             Sign out
           </button>
         </form>
-      </div>
+      </Nav>
       <main className="mx-auto flex w-full max-w-4xl flex-1 flex-col p-6">
         {children}
       </main>
