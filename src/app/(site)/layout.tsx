@@ -7,6 +7,7 @@ const MODULES = [
   { href: "/gallery", label: "Gallery" },
   { href: "/blog", label: "Blog" },
   { href: "/forecast", label: "Forecast" },
+  { href: "/plates", label: "Plates" },
 ];
 
 export default function SiteLayout({ children }: LayoutProps<"/">) {

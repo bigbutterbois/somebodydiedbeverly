@@ -1,8 +1,16 @@
 import { EmptyPreview, HomeSection } from "@/components/HomeSection";
+import { createClient } from "@/lib/supabase/server";
 
 // Homepage: a preview of the latest from every public module. Each module
 // replaces its empty state with real items once it has data.
-export default function Home() {
+export default async function Home() {
+  const supabase = await createClient();
+  const [{ count: totalCountries }, { data: sightings }] = await Promise.all([
+    supabase.from("countries").select("id", { count: "exact", head: true }),
+    supabase.from("plate_sightings").select("country_id"),
+  ]);
+  const spotted = new Set(sightings?.map((s) => s.country_id)).size;
+
   return (
     <div className="flex flex-col gap-14 py-6">
       <header className="flex flex-col gap-3">
@@ -28,6 +36,13 @@ export default function Home() {
 
         <HomeSection title="Forecast" href="/forecast">
           <EmptyPreview>The election model is still being built.</EmptyPreview>
+        </HomeSection>
+
+        <HomeSection title="Diplomat plates" href="/plates">
+          <p className="tabular-nums">
+            <span className="text-2xl">{spotted}</span>
+            <span className="text-muted"> of {totalCountries ?? 0} countries spotted</span>
+          </p>
         </HomeSection>
       </div>
     </div>
