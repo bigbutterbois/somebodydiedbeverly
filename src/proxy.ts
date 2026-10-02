@@ -1,8 +1,13 @@
 import { createServerClient } from "@supabase/ssr";
 import { NextResponse, type NextRequest } from "next/server";
+import { ACCESS_COOKIE, hasSiteAccess } from "@/lib/site-access";
 
-// Refreshes the Supabase session cookie on every request and keeps signed-out
-// visitors out of /admin.
+// Pages anyone can open: the two sign-in screens.
+const OPEN_PATHS = ["/enter", "/login"];
+
+// Runs before every page. Two gates:
+// - /admin needs the owner signed in (Supabase Auth).
+// - everything else needs the friends & family password, or the owner.
 export async function proxy(request: NextRequest) {
   let response = NextResponse.next({ request });
 
@@ -30,22 +35,37 @@ export async function proxy(request: NextRequest) {
     },
   );
 
+  // Also refreshes the owner's session cookie when it's close to expiring.
   const { data } = await supabase.auth.getClaims();
-  const signedIn = Boolean(data?.claims) && !data?.claims.is_anonymous;
+  const isOwner = Boolean(data?.claims) && !data?.claims.is_anonymous;
 
-  if (!signedIn && request.nextUrl.pathname.startsWith("/admin")) {
+  const { pathname, search } = request.nextUrl;
+  const redirectTo = (path: string) => {
     const url = request.nextUrl.clone();
-    url.pathname = "/login";
+    url.pathname = path;
     url.search = "";
-    return NextResponse.redirect(url);
+    if (path === "/enter") url.searchParams.set("next", pathname + search);
+    const redirect = NextResponse.redirect(url);
+    response.cookies.getAll().forEach((cookie) => redirect.cookies.set(cookie));
+    return redirect;
+  };
+
+  if (pathname.startsWith("/admin")) {
+    if (!isOwner) return redirectTo("/login");
+  } else if (!OPEN_PATHS.includes(pathname) && !isOwner) {
+    const allowed = await hasSiteAccess(
+      request.cookies.get(ACCESS_COOKIE)?.value,
+    );
+    if (!allowed) return redirectTo("/enter");
   }
 
+  response.headers.set("X-Robots-Tag", "noindex, nofollow");
   return response;
 }
 
 export const config = {
   matcher: [
     // Everything except static assets and image optimization.
-    "/((?!_next/static|_next/image|favicon.ico|.*\\.(?:svg|png|jpg|jpeg|gif|webp|ico)$).*)",
+    "/((?!_next/static|_next/image|favicon.ico|robots.txt|.*\\.(?:svg|png|jpg|jpeg|gif|webp|ico)$).*)",
   ],
 };

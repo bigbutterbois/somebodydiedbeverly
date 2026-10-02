@@ -13,8 +13,9 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "somebodydiedbeverly",
+  title: { template: "%s · somebodydiedbeverly", default: "somebodydiedbeverly" },
   description: "somebodydiedbeverly.com",
+  robots: { index: false, follow: false },
 };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
