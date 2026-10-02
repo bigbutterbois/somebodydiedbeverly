@@ -27,6 +27,7 @@ SEARCH_API = "https://en.wikipedia.org/w/api.php"
 GENERIC_BALLOT_PAGES = [
     "Opinion_polling_for_the_2026_United_States_House_of_Representatives_elections",
     "Generic_ballot_polling_for_the_2026_United_States_House_of_Representatives_elections",
+    "2026_United_States_elections",
     "2026_United_States_House_of_Representatives_elections",
 ]
 
@@ -230,11 +231,13 @@ def search_titles(query: str) -> list[str]:
 
 
 def scrape_generic_ballot(aggregators: list[str], default_year: int) -> list[dict]:
-    required = {"opp": re.compile(r"\bdem"), "rep": re.compile(r"\brep")}
-    titles = GENERIC_BALLOT_PAGES + search_titles("2026 House generic ballot opinion polling")
+    # Party columns ("Democratic", "Republican"), not candidate names.
+    required = {"opp": re.compile(r"^democrat"), "rep": re.compile(r"^republican")}
+    found = [t for t in search_titles("2026 generic congressional ballot opinion polling") if "2026" in t]
+    titles = GENERIC_BALLOT_PAGES + found
     for title in dict.fromkeys(titles):
         try:
-            tables = read_tables(fetch_html(title, retries=1), under_heading="generic")
+            tables = read_tables(fetch_html(title, retries=1))
         except RuntimeError:
             continue
         best = {}
