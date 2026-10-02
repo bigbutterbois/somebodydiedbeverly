@@ -1,27 +1,29 @@
-import type { Metadata } from 'next'
-import { GeistSans } from 'geist/font/sans'
-import Providers from './providers'
-import './globals.css'
+import type { Metadata } from "next";
+import { Geist, Geist_Mono } from "next/font/google";
+import "./globals.css";
+
+const geistSans = Geist({
+  variable: "--font-geist-sans",
+  subsets: ["latin"],
+});
+
+const geistMono = Geist_Mono({
+  variable: "--font-geist-mono",
+  subsets: ["latin"],
+});
 
 export const metadata: Metadata = {
-  title: 'somebody died beverly',
-  description: 'somebody died beverly',
-  openGraph: {
-    title: 'somebody died beverly',
-    url: 'https://somebodydiedbeverly.com',
-  },
-}
+  title: "somebodydiedbeverly",
+  description: "somebodydiedbeverly.com",
+};
 
-export default function RootLayout({
-  children,
-}: {
-  children: React.ReactNode
-}) {
+export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
-    <html lang="en" className={GeistSans.variable}>
-      <body>
-        <Providers>{children}</Providers>
-      </body>
+    <html
+      lang="en"
+      className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
+    >
+      <body className="min-h-full flex flex-col">{children}</body>
     </html>
-  )
+  );
 }
