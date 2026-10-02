@@ -5,7 +5,7 @@
 - **Election**: 2026 midterms, every Senate race on the ballot (regular plus any specials). No House, governors or presidential for now.
 - **Model**: polls plus fundamentals, run as simulations, in the spirit of Silver Bulletin. Mike wants a lot of control over the model, so its assumptions are explicit, editable settings rather than buried constants.
 - **Updates**: runs daily and publishes automatically, no review step.
-- **Poll data**: scraped automatically from public poll listings. Mike suggested RealClearPolling (RCP) or similar.
+- **Poll data**: scraped automatically. Wikipedia's per-race Senate polling tables are the primary source (openly licensed, easy to parse). RealClearPolling (RCP) is only a cross-check for missed polls, since its terms restrict automated scraping.
 - **Display**: Senate control odds, a state map, and odds over time. Per-race pages are not required.
 - **Methodology page**: none.
 
@@ -44,6 +44,5 @@ Model settings live in one versioned config (a YAML/JSON file in the repo to sta
 
 ## Open items
 
-- **Poll source**: RCP's terms of use restrict automated scraping, and its pages may block bots. Wikipedia's per-race polling tables are openly licensed and easy to parse, so they're the safer default, with RCP as a fallback or cross-check if Mike accepts that risk.
 - Seats not up in 2026 and the starting 53–47 split are fixed inputs in the config.
 - What the page shows after election day (freeze on the final forecast, or move on to 2028) is not decided.
