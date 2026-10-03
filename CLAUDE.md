@@ -47,7 +47,7 @@ Run `npm run lint` and `npm run build` before pushing; CI runs the same checks.
 
 ## Conventions
 
-- UI follows `docs/design.md`: dark only, theme color tokens (`text-muted`, `border-line`, `text-accent`…) instead of raw Tailwind palettes.
+- UI follows `docs/design.md`: dark by default, light when the device is in light mode; use the theme color tokens (`text-muted`, `border-line`, `text-accent`…) instead of raw Tailwind palettes.
 - Secrets (Supabase keys, `SITE_PASSWORD`) live in Vercel environment variables (and a local `.env.local`, which is gitignored). Never commit them.
 - Work on a branch and open a PR; merging to `main` deploys to production.
 
