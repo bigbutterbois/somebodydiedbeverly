@@ -3156,6 +3156,18 @@
   "source": "https://en.wikipedia.org/wiki/2026_United_States_Senate_election_in_Iowa"
  },
  {
+  "state": "IA",
+  "pollster": "New York Times/Siena University",
+  "sponsor_party": null,
+  "end_date": "2026-10-01",
+  "n": 606,
+  "population": "LV",
+  "rep": 48.0,
+  "opp": 47.0,
+  "others": [],
+  "source": "https://en.wikipedia.org/wiki/2026_United_States_Senate_election_in_Iowa"
+ },
+ {
   "state": "ID",
   "pollster": "Public Policy Polling",
   "sponsor_party": null,
@@ -3344,6 +3356,18 @@
   "population": "LV",
   "rep": 48.0,
   "opp": 50.0,
+  "others": [],
+  "source": "https://en.wikipedia.org/wiki/2026_United_States_Senate_election_in_Kansas"
+ },
+ {
+  "state": "KS",
+  "pollster": "New York Times/Siena University",
+  "sponsor_party": null,
+  "end_date": "2026-09-30",
+  "n": 605,
+  "population": "LV",
+  "rep": 45.0,
+  "opp": 45.0,
   "others": [],
   "source": "https://en.wikipedia.org/wiki/2026_United_States_Senate_election_in_Kansas"
  },
@@ -3740,6 +3764,18 @@
   "population": "LV",
   "rep": 48.0,
   "opp": 46.0,
+  "others": [],
+  "source": "https://en.wikipedia.org/wiki/2026_United_States_Senate_election_in_Maine"
+ },
+ {
+  "state": "ME",
+  "pollster": "CBS News/YouGov",
+  "sponsor_party": null,
+  "end_date": "2026-10-01",
+  "n": 1136,
+  "population": "LV",
+  "rep": 50.0,
+  "opp": 50.0,
   "others": [],
   "source": "https://en.wikipedia.org/wiki/2026_United_States_Senate_election_in_Maine"
  },
@@ -5832,6 +5868,18 @@
   "source": "https://en.wikipedia.org/wiki/2026_United_States_Senate_special_election_in_Ohio"
  },
  {
+  "state": "OH",
+  "pollster": "New York Times/Siena University",
+  "sponsor_party": null,
+  "end_date": "2026-10-01",
+  "n": 616,
+  "population": "LV",
+  "rep": 46.0,
+  "opp": 49.0,
+  "others": [],
+  "source": "https://en.wikipedia.org/wiki/2026_United_States_Senate_special_election_in_Ohio"
+ },
+ {
   "state": "OK",
   "pollster": "CHS & Associates",
   "sponsor_party": null,
@@ -6604,12 +6652,24 @@
  {
   "state": "TX",
   "pollster": "Rasmussen Reports",
-  "sponsor_party": null,
+  "sponsor_party": "R",
   "end_date": "2026-09-29",
   "n": 1128,
   "population": "LV",
   "rep": 45.0,
   "opp": 46.0,
+  "others": [],
+  "source": "https://en.wikipedia.org/wiki/2026_United_States_Senate_election_in_Texas"
+ },
+ {
+  "state": "TX",
+  "pollster": "New York Times/Siena University",
+  "sponsor_party": null,
+  "end_date": "2026-09-30",
+  "n": 615,
+  "population": "LV",
+  "rep": 45.0,
+  "opp": 51.0,
   "others": [],
   "source": "https://en.wikipedia.org/wiki/2026_United_States_Senate_election_in_Texas"
  },
@@ -12322,6 +12382,18 @@
   "population": "RV",
   "opp": 51.0,
   "rep": 39.0,
+  "others": [],
+  "source": "https://en.wikipedia.org/wiki/2026_United_States_elections"
+ },
+ {
+  "state": "US",
+  "pollster": "AlphaROC/The Independent Center",
+  "sponsor_party": null,
+  "end_date": "2026-09-28",
+  "n": 1000,
+  "population": "A",
+  "opp": 43.0,
+  "rep": 37.0,
   "others": [],
   "source": "https://en.wikipedia.org/wiki/2026_United_States_elections"
  },
