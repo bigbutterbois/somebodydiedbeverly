@@ -77,6 +77,13 @@ jobs:
         if: github.event_name == 'pull_request'
         run: python forecast/run.py --dry-run --verbose
 
+      # Temporary: shows what RealClearPolling's pages look like while its parser is built.
+      - name: RealClearPolling probe
+        if: github.event_name == 'pull_request'
+        continue-on-error: true
+        working-directory: forecast
+        run: python rcp.py
+
       # Replays the 2022 Senate cycle with this PR's config and with the base
       # branch's, to compare how well calibrated each is. Informational only.
       - name: Backtest on 2022

@@ -42,6 +42,16 @@ STATE_POINTS = {
 
 DEM_CODES = {"DEM", "DFL"}
 
+STATE_NAMES = [
+    "alabama", "alaska", "arizona", "arkansas", "california", "colorado", "connecticut", "delaware",
+    "florida", "georgia", "hawaii", "idaho", "illinois", "indiana", "iowa", "kansas", "kentucky",
+    "louisiana", "maine", "maryland", "massachusetts", "michigan", "minnesota", "mississippi",
+    "missouri", "montana", "nebraska", "nevada", "new hampshire", "new jersey", "new mexico",
+    "new york", "north carolina", "north dakota", "ohio", "oklahoma", "oregon", "pennsylvania",
+    "rhode island", "south carolina", "south dakota", "tennessee", "texas", "utah", "vermont",
+    "virginia", "washington", "west virginia", "wisconsin", "wyoming", "state",
+]
+
 
 def fetch_fundraising(races: list[dict], year: int) -> tuple[dict, list[str]]:
     """Individual contributions per candidate this cycle, from the FEC's all-candidates file.
@@ -102,7 +112,8 @@ def scrape_approval(aggregators: list[str], year: int | None = None, pages: list
     year = year or date.today().year
     for title in dict.fromkeys((pages or APPROVAL_PAGES) + found):
         try:
-            tables = scrape.read_tables(scrape.fetch_html(title, retries=1))
+            # State-level approval polls sit on the same page; keep national ones only.
+            tables = scrape.read_tables(scrape.fetch_html(title, retries=1), skip_headings=STATE_NAMES)
         except RuntimeError:
             continue
         best = {}

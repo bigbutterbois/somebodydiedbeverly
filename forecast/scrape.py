@@ -129,16 +129,21 @@ def find_col(cols: list[str], pattern: re.Pattern) -> int | None:
     return hits[0] if len(hits) == 1 else None
 
 
-def read_tables(html: str, under_heading: str | None = None) -> list[pd.DataFrame]:
-    """Every wikitable on the page, optionally only those under a heading containing `under_heading`."""
+def read_tables(html: str, under_heading: str | None = None,
+                skip_headings: list[str] | None = None) -> list[pd.DataFrame]:
+    """Every wikitable on the page, optionally only those under a heading containing `under_heading`
+    and none of `skip_headings` (matched as whole words)."""
     soup = BeautifulSoup(html, "lxml")
     out = []
+    skip = re.compile(r"\b(" + "|".join(map(re.escape, skip_headings)) + r")\b") if skip_headings else None
     for table in soup.select("table.wikitable"):
-        if under_heading:
+        if under_heading or skip:
             heading = table.find_previous(["h2", "h3", "h4"])
             caption = table.find("caption")
             text = norm((heading.get_text() if heading else "") + " " + (caption.get_text() if caption else ""))
-            if under_heading not in text:
+            if under_heading and under_heading not in text:
+                continue
+            if skip and skip.search(text):
                 continue
         for sup in table.select("sup.reference"):
             sup.decompose()
