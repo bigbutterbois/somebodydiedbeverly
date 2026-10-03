@@ -15,6 +15,7 @@ from __future__ import annotations
 
 import argparse
 import json
+import re
 import sys
 from datetime import date, datetime, timedelta, timezone
 from pathlib import Path
@@ -40,6 +41,36 @@ def merge_polls(old: list[dict], new: list[dict]) -> list[dict]:
     merged = {key(p): p for p in old}
     merged.update({key(p): p for p in new})
     return sorted(merged.values(), key=lambda p: (p["state"], p["end_date"], p["pollster"]))
+
+
+# Words too common in pollster names to tell two pollsters apart.
+NAME_FILLER = {"the", "and", "research", "university", "college", "poll", "polling", "polls", "insights", "group",
+               "strategies", "associates", "public", "opinion", "center", "survey", "partners", "analytics", "co"}
+
+
+def pollster_words(name: str) -> set[str]:
+    return {w for w in re.findall(r"[a-z]+", scrape.norm(name)) if len(w) >= 3 and w not in NAME_FILLER}
+
+
+def drop_feed_duplicates(polls: list[dict]) -> list[dict]:
+    """Drop VoteHub rows for polls Wikipedia already lists: same race, end date within 3 days,
+    and a shared pollster name word or the same numbers. Wikipedia's row wins."""
+    wiki: dict[str, list[dict]] = {}
+    for p in polls:
+        if p.get("feed") != "votehub":
+            wiki.setdefault(p["state"], []).append(p)
+
+    def duplicate(p: dict) -> bool:
+        end = date.fromisoformat(p["end_date"])
+        words = pollster_words(p["pollster"])
+        for q in wiki.get(p["state"], []):
+            if abs((date.fromisoformat(q["end_date"]) - end).days) > 3:
+                continue
+            if words & pollster_words(q["pollster"]) or (abs(q["opp"] - p["opp"]) <= 1 and abs(q["rep"] - p["rep"]) <= 1):
+                return True
+        return False
+
+    return [p for p in polls if p.get("feed") != "votehub" or not duplicate(p)]
 
 
 def history_entry(result: dict) -> dict:
@@ -119,8 +150,20 @@ def main() -> int:
             print("scrape returned nothing; keeping the last published forecast", file=sys.stderr)
             return 1
         approval, approval_problems = extra_sources.scrape_approval(cfg["polls"]["aggregators"])
-        polls = merge_polls(polls, scraped + approval)
-        problems += approval_problems
+        election = facts["election_day"]
+        election = election if isinstance(election, date) else date.fromisoformat(election)
+        votehub, votehub_problems = extra_sources.fetch_votehub(
+            facts["races"], cfg["polls"]["aggregators"], election.year)
+        before = [p for p in merge_polls(polls, scraped + approval) if p.get("feed") != "votehub"]
+        # Wikipedia's rows go in last so a VoteHub row never replaces one.
+        polls = drop_feed_duplicates(merge_polls(merge_polls(polls, votehub), scraped + approval))
+        problems += approval_problems + votehub_problems
+        since = f"{election.year}-06-01"
+        count = lambda ps, s: sum(1 for p in ps if p["end_date"] >= since and s(p["state"]))  # noqa: E731
+        print(f"polls since {since} (Wikipedia only -> with VoteHub; {len(votehub)} VoteHub polls before dedupe):")
+        for label, s in (("approval", lambda x: x == "APPROVAL"), ("generic ballot", lambda x: x == "US"),
+                         ("senate races", lambda x: x not in ("APPROVAL", "US"))):
+            print(f"    {label}: {count(before, s)} -> {count(polls, s)}")
 
     today = args.as_of or datetime.now(EASTERN).date()
     extras = load_json(data / "extras.json", {"fundraising": {}, "weather": {}})
@@ -137,7 +180,7 @@ def main() -> int:
         for key, values in economy.items():  # whole daily series; the model only reads days up to as_of
             extras.setdefault("economy", {}).setdefault(key, {}).update(values)
         problems += fund_problems + weather_problems + economy_problems
-        for p in fund_problems + weather_problems + economy_problems + approval_problems:
+        for p in fund_problems + weather_problems + economy_problems + approval_problems + votehub_problems:
             print(f"  ! {p}")
     days = [today]
     if args.backfill_from:

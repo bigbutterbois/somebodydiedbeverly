@@ -25,7 +25,7 @@ polls:
   # Pollsters that match nothing get pollster_default_weight.
   pollster_default_weight: 0.85
   pollster_weights:
-    "times/siena": 1.5
+    "times/siena|siena.*times": 1.5
     "economist": 1.3
     "marist": 1.2
     "beacon|fox news": 1.2

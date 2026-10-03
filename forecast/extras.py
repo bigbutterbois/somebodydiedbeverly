@@ -26,6 +26,8 @@ FRED_CSV = "https://fred.stlouisfed.org/graph/fredgraph.csv"
 # Daily market series from FRED (no API key needed): S&P 500 close, 10-year
 # Treasury yield (percent) and Brent crude (dollars per barrel).
 ECONOMY_SERIES = {"sp500": "SP500", "yield_10y": "DGS10", "brent": "DCOILBRENTEU"}
+# VoteHub's open poll feed: a second source for polls Wikipedia hasn't listed (yet).
+VOTEHUB = "https://api.votehub.com/polls"
 
 # One point per state for the weather forecast: its largest metro area.
 STATE_POINTS = {
@@ -41,6 +43,16 @@ STATE_POINTS = {
 }
 
 DEM_CODES = {"DEM", "DFL"}
+
+STATE_NAMES = [
+    "alabama", "alaska", "arizona", "arkansas", "california", "colorado", "connecticut", "delaware",
+    "florida", "georgia", "hawaii", "idaho", "illinois", "indiana", "iowa", "kansas", "kentucky",
+    "louisiana", "maine", "maryland", "massachusetts", "michigan", "minnesota", "mississippi",
+    "missouri", "montana", "nebraska", "nevada", "new hampshire", "new jersey", "new mexico",
+    "new york", "north carolina", "north dakota", "ohio", "oklahoma", "oregon", "pennsylvania",
+    "rhode island", "south carolina", "south dakota", "tennessee", "texas", "utah", "vermont",
+    "virginia", "washington", "west virginia", "wisconsin", "wyoming", "state",
+]
 
 
 def fetch_fundraising(races: list[dict], year: int) -> tuple[dict, list[str]]:
@@ -102,7 +114,8 @@ def scrape_approval(aggregators: list[str], year: int | None = None, pages: list
     year = year or date.today().year
     for title in dict.fromkeys((pages or APPROVAL_PAGES) + found):
         try:
-            tables = scrape.read_tables(scrape.fetch_html(title, retries=1))
+            # State-level approval polls sit on the same page; keep national ones only.
+            tables = scrape.read_tables(scrape.fetch_html(title, retries=1), skip_headings=STATE_NAMES)
         except RuntimeError:
             continue
         best = {}
@@ -123,6 +136,61 @@ def scrape_approval(aggregators: list[str], year: int | None = None, pages: list
             return [{"state": "APPROVAL", **p, "others": [],
                      "source": f"https://en.wikipedia.org/wiki/{title}"} for p in best.values()], []
     return [], [f"approval: no {name.title()} approval table found"]
+
+
+def fetch_votehub(races: list[dict], aggregators: list[str], year: int) -> tuple[list[dict], list[str]]:
+    """Senate, generic ballot and Trump approval polls from VoteHub, in the same shape as the Wikipedia rows."""
+    try:
+        r = requests.get(VOTEHUB, headers=scrape.HEADERS, timeout=60)
+        r.raise_for_status()
+        feed = r.json()
+    except Exception as e:
+        return [], [f"votehub: {e}"]
+    by_name = {f"{year} {race['name']}".lower(): race for race in races}
+    best: dict[tuple, dict] = {}
+    for p in feed:
+        kind, subject = p.get("poll_type"), (p.get("subject") or "").lower()
+        shares = {scrape.norm(a["choice"]): a["pct"] for a in p.get("answers") or [] if a.get("pct") is not None}
+        if kind == "approval" and subject == "donald trump":
+            state, picks = "APPROVAL", {"opp": re.compile(r"^approv"), "rep": re.compile(r"^disapprov")}
+        elif kind == "generic-ballot" and subject == str(year):
+            state, picks = "US", {"opp": re.compile(r"^dem"), "rep": re.compile(r"^rep")}
+        elif kind == "us-senator" and subject in by_name:
+            race = by_name[subject]
+            state = race["state"]
+            picks = {"rep": scrape.candidate_pattern(race["rep"]), "opp": scrape.candidate_pattern(race["opp"]),
+                     **{f"other{i}": scrape.candidate_pattern(o) for i, o in enumerate(race.get("others", []))}}
+        else:
+            continue
+        found = {}
+        for key, pattern in picks.items():
+            hits = [v for c, v in shares.items() if pattern.search(c)]
+            if len(hits) == 1:
+                found[key] = hits[0]
+        if "rep" not in found or "opp" not in found or not p.get("end_date"):
+            continue
+        # Sponsors go in the name so pollster ratings match ("YouGov/The Economist").
+        pollster = "/".join([p.get("pollster") or "", *(p.get("sponsors") or [])]).strip("/")
+        if not pollster or any(str(a) in scrape.norm(pollster) for a in aggregators):
+            continue
+        population = (p.get("population") or "").upper() or None
+        poll = {
+            "state": state, "pollster": pollster,
+            "sponsor_party": {"REP": "R", "DEM": "D"}.get(p.get("partisan") or ""),
+            "end_date": p["end_date"], "n": p.get("sample_size"), "population": population,
+            "rep": found["rep"], "opp": found["opp"],
+            "others": [v for k, v in found.items() if k.startswith("other")],
+            "source": p.get("url") or VOTEHUB, "feed": "votehub",
+        }
+        # One version per poll: likely voters over registered voters over adults.
+        key = (state, scrape.norm(pollster), p["end_date"])
+        rank = {"LV": 0, "V": 1, "RV": 2, "A": 3}.get(population or "", 4)
+        if key not in best or rank < best[key][0]:
+            best[key] = (rank, poll)
+    polls = [poll for _, poll in best.values()]
+    if not polls:
+        return [], ["votehub: no usable polls in the feed"]
+    return polls, []
 
 
 def fetch_weather(election_day: date) -> tuple[dict, list[str]]:
