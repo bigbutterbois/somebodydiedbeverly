@@ -79,6 +79,17 @@ fundamentals:
   weather_points_per_inch: 1.0
   weather_cap: 1.5
 
+# --- Economy ---------------------------------------------------------------
+# Market moves over the lookback window, added to the national environment.
+# A better economy helps the president's party (now the GOP): a rising S&P 500
+# counts as better, rising 10-year yields and Brent crude as worse. Source: FRED.
+economy:
+  lookback_days: 90
+  sp500_points_per_10pct: 1.0   # S&P up 10% -> 1 pt toward the president's party
+  yield_points_per_point: 1.0   # 10-year yield up 1 percentage point -> 1 pt against
+  brent_points_per_10pct: 0.5   # Brent up 10% -> 0.5 pt against
+  cap: 2.0                      # total economy effect is capped at this many points
+
 # --- Simulation error (standard deviations, points of margin) --------------
 error:
   national: 2.5               # shared by every race (polling miss / late swing)

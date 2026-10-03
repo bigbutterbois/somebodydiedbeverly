@@ -62,6 +62,8 @@ def extras_as_of(extras: dict, d: date) -> dict:
         out["fundraising"] = funds[max(earlier) if earlier else min(funds)]
     if d.isoformat() in extras.get("weather", {}):
         out["weather"] = extras["weather"][d.isoformat()]
+    if extras.get("economy"):
+        out["economy"] = extras["economy"]
     return out
 
 
@@ -69,7 +71,8 @@ def summarize(result: dict) -> None:
     print(
         f"\n{result['as_of']}: Dem control {result['p_dem_control']:.1%}, Rep {result['p_rep_control']:.1%}, "
         f"no majority {result['p_no_majority']:.1%}; Dem seats {result['dem_seats_mean']} "
-        f"(env {result['national_environment']:+.1f} from {result['national_environment_source']}: "
+        f"(env {result['national_environment']:+.1f} from {result['national_environment_source']}, "
+        f"economy {result['economy_shift']:+.1f} {result['economy']}: "
         f"generic ballot {result['generic_ballot']}, Trump net approval {result['trump_net_approval']})"
     )
     for r in sorted(result["races"], key=lambda r: -r["p_opp"]):
@@ -121,12 +124,15 @@ def main() -> int:
         election = election if isinstance(election, date) else date.fromisoformat(election)
         funds, fund_problems = extra_sources.fetch_fundraising(facts["races"], election.year)
         weather, weather_problems = extra_sources.fetch_weather(election)
+        economy, economy_problems = extra_sources.fetch_economy(date(election.year - 1, 1, 1))
         if funds:
             extras["fundraising"][today.isoformat()] = funds
         if weather:
             extras["weather"][today.isoformat()] = weather
-        problems += fund_problems + weather_problems
-        for p in fund_problems + weather_problems + approval_problems:
+        for key, values in economy.items():  # whole daily series; the model only reads days up to as_of
+            extras.setdefault("economy", {}).setdefault(key, {}).update(values)
+        problems += fund_problems + weather_problems + economy_problems
+        for p in fund_problems + weather_problems + economy_problems + approval_problems:
             print(f"  ! {p}")
     days = [today]
     if args.backfill_from:

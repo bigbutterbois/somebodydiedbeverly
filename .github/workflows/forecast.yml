@@ -77,6 +77,16 @@ jobs:
         if: github.event_name == 'pull_request'
         run: python forecast/run.py --dry-run --verbose
 
+      # Replays the 2022 Senate cycle with this PR's config and with the base
+      # branch's, to compare how well calibrated each is. Informational only.
+      - name: Backtest on 2022
+        if: github.event_name == 'pull_request'
+        continue-on-error: true
+        run: |
+          git fetch -q --depth 1 origin "${{ github.base_ref }}"
+          git show FETCH_HEAD:forecast/config.yaml > "$RUNNER_TEMP/base-config.yaml"
+          python forecast/backtest.py --config forecast/config.yaml --config "$RUNNER_TEMP/base-config.yaml"
+
       - name: Run forecast
         if: github.event_name != 'pull_request' && steps.gate.outputs.run == 'true'
         run: |

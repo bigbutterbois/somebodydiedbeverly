@@ -230,11 +230,13 @@ def search_titles(query: str) -> list[str]:
         return []
 
 
-def scrape_generic_ballot(aggregators: list[str], default_year: int) -> list[dict]:
+def scrape_generic_ballot(aggregators: list[str], default_year: int, pages: list[str] | None = None,
+                          query: str | None = None) -> list[dict]:
     # Party columns ("Democratic", "Republican"), not candidate names.
     required = {"opp": re.compile(r"^democrat"), "rep": re.compile(r"^republican")}
-    found = [t for t in search_titles("2026 generic congressional ballot opinion polling") if "2026" in t]
-    titles = GENERIC_BALLOT_PAGES + found
+    query = query or f"{default_year} generic congressional ballot opinion polling"
+    found = [t for t in search_titles(query) if str(default_year) in t]
+    titles = (pages or GENERIC_BALLOT_PAGES) + found
     for title in dict.fromkeys(titles):
         try:
             tables = read_tables(fetch_html(title, retries=1))
@@ -254,8 +256,10 @@ def scrape_generic_ballot(aggregators: list[str], default_year: int) -> list[dic
     raise RuntimeError(f"no generic ballot table found in {', '.join(dict.fromkeys(titles))}")
 
 
-def scrape_all(races: list[dict], aggregators: list[str], verbose: bool = False) -> tuple[list[dict], list[str]]:
-    year = date.today().year
+def scrape_all(races: list[dict], aggregators: list[str], verbose: bool = False, year: int | None = None,
+               generic_ballot_pages: list[str] | None = None,
+               generic_ballot_search: str | None = None) -> tuple[list[dict], list[str]]:
+    year = year or date.today().year
     polls, problems = [], []
     for race in races:
         try:
@@ -269,7 +273,7 @@ def scrape_all(races: list[dict], aggregators: list[str], verbose: bool = False)
             for h in headers:
                 print(f"    {h}")
     try:
-        polls.extend(scrape_generic_ballot(aggregators, year))
+        polls.extend(scrape_generic_ballot(aggregators, year, generic_ballot_pages, generic_ballot_search))
     except Exception as e:
         problems.append(f"generic ballot: {e}")
     return polls, problems

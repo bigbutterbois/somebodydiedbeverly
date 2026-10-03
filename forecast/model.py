@@ -9,7 +9,7 @@ from __future__ import annotations
 
 import hashlib
 import math
-from datetime import date
+from datetime import date, timedelta
 
 import numpy as np
 
@@ -59,8 +59,12 @@ def weighted_average(polls: list[dict], as_of: date, cfg: dict, half_life: float
     return sum(w * m for _, w, m in rows) / total, total
 
 
-def national_environment(polls: list[dict], as_of: date, cfg: dict) -> dict:
-    """Dem national lead, blended from the generic ballot and Trump's net approval."""
+def national_environment(polls: list[dict], as_of: date, cfg: dict, president_party: str = "R") -> dict:
+    """Dem national lead, blended from the generic ballot and the president's net approval.
+
+    The approval formula gives the lead of the party out of the White House, so
+    it flips sign when the president is a Democrat (the 2022 backtest).
+    """
     f = cfg["fundamentals"]
     if f.get("national_environment_override") is not None:
         return {"value": float(f["national_environment_override"]), "source": "override"}
@@ -72,7 +76,8 @@ def national_environment(polls: list[dict], as_of: date, cfg: dict) -> dict:
     if gb is not None:
         parts.append((f["generic_ballot_weight"], gb))
     if net is not None:
-        parts.append((f["approval_weight"], f["approval_intercept"] - f["approval_slope"] * net))
+        out_party_lead = f["approval_intercept"] - f["approval_slope"] * net
+        parts.append((f["approval_weight"], out_party_lead if president_party == "R" else -out_party_lead))
     if not parts:
         return {"value": float(f["generic_ballot_fallback"]), "source": "fallback"}
     value = sum(w * v for w, v in parts) / sum(w for w, _ in parts)
@@ -100,6 +105,45 @@ def weather_shift(state: str, extras: dict, cfg: dict) -> float:
     f = cfg["fundamentals"]
     shift = f["weather_points_per_inch"] * rain
     return max(-f["weather_cap"], min(f["weather_cap"], shift))
+
+
+def economy_shift(extras: dict, as_of: date, cfg: dict, president_party: str = "R") -> dict:
+    """Points of Dem national lead from the markets' change over the lookback window.
+
+    A rising S&P 500 reads as a better economy; rising 10-year yields (borrowing
+    costs) and Brent crude (gas prices) read as a worse one. A better economy
+    helps the president's party, so with a Republican president it moves the
+    national environment toward the GOP.
+    """
+    ec = cfg.get("economy")
+    series = extras.get("economy")
+    if not ec or not series:
+        return {"shift": 0.0}
+
+    def change(key: str, relative: bool) -> float | None:
+        values = series.get(key) or {}
+        now = [d for d in values if d <= as_of.isoformat()]
+        then = [d for d in values if d <= (as_of - timedelta(ec["lookback_days"])).isoformat()]
+        if not now or not then:
+            return None
+        a, b = values[max(then)], values[max(now)]
+        return 100 * (b / a - 1) if relative else b - a
+
+    sp, yld, oil = change("sp500", True), change("yield_10y", False), change("brent", True)
+    good = 0.0  # points toward the president's party
+    if sp is not None:
+        good += ec["sp500_points_per_10pct"] * sp / 10
+    if yld is not None:
+        good -= ec["yield_points_per_point"] * yld
+    if oil is not None:
+        good -= ec["brent_points_per_10pct"] * oil / 10
+    good = max(-ec["cap"], min(ec["cap"], good))
+    return {
+        "shift": -good if president_party == "R" else good,
+        "sp500_change_pct": None if sp is None else round(sp, 2),
+        "yield_10y_change": None if yld is None else round(yld, 2),
+        "brent_change_pct": None if oil is None else round(oil, 2),
+    }
 
 
 def prior_margin(race: dict, facts: dict, env: float, cfg: dict, extras: dict | None = None) -> float:
@@ -136,8 +180,9 @@ def run(facts: dict, cfg: dict, polls: list[dict], as_of: date, seed: int | None
     if isinstance(election, str):
         election = date.fromisoformat(election)
     days_left = max((election - as_of).days, 0)
-    national = national_environment(polls, as_of, cfg)
-    env = national["value"]
+    national = national_environment(polls, as_of, cfg, facts.get("president_party", "R"))
+    economy = economy_shift(extras, as_of, cfg, facts.get("president_party", "R"))
+    env = national["value"] + economy["shift"]
     pc, ec = cfg["polls"], cfg["error"]
 
     means, sds, rows = [], [], []
@@ -221,6 +266,8 @@ def run(facts: dict, cfg: dict, polls: list[dict], as_of: date, seed: int | None
         "simulations": n_sims,
         "national_environment": round(env, 2),
         "national_environment_source": national["source"],
+        "economy_shift": round(economy["shift"], 2),
+        "economy": {k: v for k, v in economy.items() if k != "shift"},
         "generic_ballot": national.get("generic_ballot"),
         "trump_net_approval": national.get("trump_net_approval"),
         "p_dem_control": round(float(dem_control.mean()), 4),
