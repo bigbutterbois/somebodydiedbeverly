@@ -155,7 +155,8 @@ def main() -> int:
         votehub, votehub_problems = extra_sources.fetch_votehub(
             facts["races"], cfg["polls"]["aggregators"], election.year)
         before = [p for p in merge_polls(polls, scraped + approval) if p.get("feed") != "votehub"]
-        polls = drop_feed_duplicates(merge_polls(before, votehub))
+        # Wikipedia's rows go in last so a VoteHub row never replaces one.
+        polls = drop_feed_duplicates(merge_polls(merge_polls(polls, votehub), scraped + approval))
         problems += approval_problems + votehub_problems
         since = f"{election.year}-06-01"
         count = lambda ps, s: sum(1 for p in ps if p["end_date"] >= since and s(p["state"]))  # noqa: E731
