@@ -9,6 +9,7 @@ from __future__ import annotations
 
 import hashlib
 import math
+import re
 from datetime import date, timedelta
 
 import numpy as np
@@ -20,6 +21,21 @@ def config_version(config_text: str) -> str:
 
 def poll_margin(p: dict) -> float:
     return p["opp"] - p["rep"]
+
+
+def pollster_weight(name: str, pc: dict) -> float:
+    """First pollster_weights pattern (case-insensitive regex) found in the name, else the default."""
+    for pattern, weight in pc["pollster_weights"].items():
+        if re.search(pattern, name, re.I):
+            return weight
+    return pc.get("pollster_default_weight", 1.0)
+
+
+def sponsor_party(p: dict, pc: dict) -> str | None:
+    """A (D) or (R) tag, unless the name is a known bipartisan team (e.g. Fox News's Beacon/Shaw)."""
+    if any(re.search(pattern, p["pollster"], re.I) for pattern in pc.get("bipartisan", [])):
+        return None
+    return p.get("sponsor_party")
 
 
 def weighted_rows(polls: list[dict], as_of: date, cfg: dict, half_life: float) -> list[tuple[float, float, dict]]:
@@ -38,12 +54,13 @@ def weighted_rows(polls: list[dict], as_of: date, cfg: dict, half_life: float) -
         n = p.get("n") or pc["sample_size_reference"] * 0.8
         w *= min(math.sqrt(n / pc["sample_size_reference"]), pc["sample_size_cap"])
         w *= pc["population_weights"].get(p.get("population") or "unknown", pc["population_weights"]["unknown"])
-        w *= pc["pollster_weights"].get(p["pollster"], 1.0)
+        w *= pollster_weight(p["pollster"], pc)
         m = poll_margin(p) - pc["house_effects"].get(p["pollster"], 0.0)
-        if p.get("sponsor_party") == "D":
+        sponsor = sponsor_party(p, pc)
+        if sponsor == "D":
             w *= pc["partisan_weight"]
             m -= pc["partisan_shift"]
-        elif p.get("sponsor_party") == "R":
+        elif sponsor == "R":
             w *= pc["partisan_weight"]
             m += pc["partisan_shift"]
         if w > 0:
