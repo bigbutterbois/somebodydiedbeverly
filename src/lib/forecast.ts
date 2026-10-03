@@ -41,8 +41,12 @@ export type Forecast = {
   dem_seats_10: number;
   dem_seats_90: number;
   dem_seat_distribution: Record<string, number>;
+  sample_simulations?: SampleSimulation[];
   races: Race[];
 };
+
+/** One simulated election: Dem seats and, per race in `races` order, "D" or "R" for the winner. */
+export type SampleSimulation = { dem_seats: number; winners: string };
 
 export type HistoryPoint = {
   date: string;

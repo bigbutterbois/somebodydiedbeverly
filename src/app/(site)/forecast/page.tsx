@@ -50,7 +50,14 @@ export default async function ForecastPage() {
       {forecast.dem_seat_distribution && (
         <section className="flex flex-col gap-4">
           <SectionTitle>Democratic seats in 100 simulations</SectionTitle>
-          <SeatHistogram distribution={forecast.dem_seat_distribution} />
+          <p className="-mt-2 text-xs text-muted">Hover over or tap a dot to see that simulation&rsquo;s map.</p>
+          <SeatHistogram
+            distribution={forecast.dem_seat_distribution}
+            samples={forecast.sample_simulations}
+            raceNames={forecast.races.map((r) => r.name)}
+            shapes={stateShapes}
+            borders={stateBorders}
+          />
         </section>
       )}
 

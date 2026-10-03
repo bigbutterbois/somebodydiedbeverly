@@ -145,6 +145,21 @@ def rating(p_opp: float, cfg: dict) -> int:
     return step if p_opp >= 0.5 else -step
 
 
+def sample_simulations(dem_seats: np.ndarray, opp_wins: np.ndarray, rng: np.random.Generator,
+                       k: int = 100) -> list[dict]:
+    """k simulations whose seat counts match the overall distribution (largest-remainder rounding)."""
+    counts = np.bincount(dem_seats)
+    exact = counts / counts.sum() * k
+    n = np.floor(exact).astype(int)
+    for s in np.argsort(-(exact - n))[: k - n.sum()]:
+        n[s] += 1
+    out = []
+    for s in np.nonzero(n)[0]:
+        for i in rng.choice(np.nonzero(dem_seats == s)[0], size=n[s], replace=False):
+            out.append({"dem_seats": int(s), "winners": "".join("D" if w else "R" for w in opp_wins[i])})
+    return out
+
+
 def run(facts: dict, cfg: dict, polls: list[dict], as_of: date, seed: int | None = None,
         extras: dict | None = None) -> dict:
     """extras: {"fundraising": {state: {rep, opp}}, "weather": {state: inches}} as known on as_of."""
@@ -232,6 +247,7 @@ def run(facts: dict, cfg: dict, polls: list[dict], as_of: date, seed: int | None
         })
 
     seat_hist = np.bincount(dem_seats, minlength=101)
+    samples = sample_simulations(dem_seats, opp_wins, rng)
     lo_seat, hi_seat = int(dem_seats.min()), int(dem_seats.max())
     return {
         "as_of": as_of.isoformat(),
@@ -251,5 +267,8 @@ def run(facts: dict, cfg: dict, polls: list[dict], as_of: date, seed: int | None
         "dem_seats_10": int(np.percentile(dem_seats, 10)),
         "dem_seats_90": int(np.percentile(dem_seats, 90)),
         "dem_seat_distribution": {str(s): round(float(seat_hist[s] / n_sims), 4) for s in range(lo_seat, hi_seat + 1)},
+        # 100 representative simulations for the seat histogram: each one's Dem seats and,
+        # per race in "races" order, "D" if the opposition won or "R".
+        "sample_simulations": samples,
         "races": race_out,
     }

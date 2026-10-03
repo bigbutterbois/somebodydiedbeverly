@@ -1,16 +1,34 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { DEM, REP } from "@/lib/forecast";
+import { DEM, REP, type SampleSimulation } from "@/lib/forecast";
+
+type Shape = { name: string; d: string };
 
 const PAD = { top: 8, right: 8, bottom: 44, left: 8 };
 const DOTS = 100;
 
 // 100 representative simulations as dots, stacked by how many seats Democrats
-// win. Blue dots are outcomes where Democrats control the Senate.
-export function SeatHistogram({ distribution, total = 100 }: { distribution: Record<string, number>; total?: number }) {
+// win. Blue dots are outcomes where Democrats control the Senate. Hovering a dot
+// shows that simulation's map.
+export function SeatHistogram({
+  distribution,
+  samples,
+  raceNames,
+  shapes,
+  borders,
+  total = 100,
+}: {
+  distribution: Record<string, number>;
+  samples?: SampleSimulation[];
+  raceNames: string[];
+  shapes: Shape[];
+  borders: string;
+  total?: number;
+}) {
   const svgRef = useRef<SVGSVGElement>(null);
-  const [hover, setHover] = useState<number | null>(null);
+  const [hoverDot, setHoverDot] = useState<{ s: number; k: number } | null>(null);
+  const hover = hoverDot?.s ?? null;
   const [W, setW] = useState(720);
   useEffect(() => {
     const el = svgRef.current?.parentElement;
@@ -20,7 +38,16 @@ export function SeatHistogram({ distribution, total = 100 }: { distribution: Rec
     return () => observer.disconnect();
   }, []);
 
-  const counts = toDots(distribution);
+  // Simulations stacked by seat count, or plain dots from the distribution for older data.
+  const stacks = new Map<number, (SampleSimulation | null)[]>();
+  if (samples?.length) {
+    for (const sim of [...samples].sort((a, b) => a.dem_seats - b.dem_seats)) {
+      stacks.set(sim.dem_seats, [...(stacks.get(sim.dem_seats) ?? []), sim]);
+    }
+  } else {
+    for (const [s, n] of toDots(distribution)) stacks.set(s, Array(n).fill(null));
+  }
+  const counts = new Map([...stacks].map(([s, list]) => [s, list.length]));
   const seats = [...counts.keys()];
   const lo = Math.min(...seats, 50) - 1;
   const hi = Math.max(...seats, 51) + 1;
@@ -37,11 +64,16 @@ export function SeatHistogram({ distribution, total = 100 }: { distribution: Rec
   function onMove(e: React.PointerEvent) {
     const box = svgRef.current!.getBoundingClientRect();
     const px = ((e.clientX - box.left) / box.width) * W;
+    const py = ((e.clientY - box.top) / box.height) * H;
     const s = Math.round((px - PAD.left) / colW - 0.5) + lo;
-    setHover(counts.has(s) ? s : null);
+    const n = counts.get(s) ?? 0;
+    // Nearest dot in the column; below the axis or above the stack picks the closest end.
+    const k = Math.min(n - 1, Math.max(0, Math.floor((base - py) / (2 * r + 2))));
+    setHoverDot(n > 0 ? { s, k } : null);
   }
 
   const hoverCount = hover === null ? 0 : counts.get(hover)!;
+  const sim = hoverDot ? stacks.get(hoverDot.s)?.[hoverDot.k] ?? null : null;
 
   return (
     <div className="relative">
@@ -51,7 +83,7 @@ export function SeatHistogram({ distribution, total = 100 }: { distribution: Rec
         className="h-auto w-full touch-none select-none"
         onPointerMove={onMove}
         onPointerDown={onMove}
-        onPointerLeave={() => setHover(null)}
+        onPointerLeave={() => setHoverDot(null)}
         role="img"
         aria-label={`Democratic seats in 100 simulations: ${seats.map((s) => `${s} seats in ${counts.get(s)}`).join(", ")}.`}
       >
@@ -67,6 +99,8 @@ export function SeatHistogram({ distribution, total = 100 }: { distribution: Rec
               r={r}
               fill={controls(s) ? DEM : REP}
               opacity={hover === null || hover === s ? 1 : 0.35}
+              stroke={hoverDot?.s === s && hoverDot.k === k ? "var(--foreground)" : "none"}
+              strokeWidth={2}
             />
           )),
         )}
@@ -94,20 +128,46 @@ export function SeatHistogram({ distribution, total = 100 }: { distribution: Rec
       {hover !== null && (
         <div
           className="pointer-events-none absolute top-0 rounded border border-line bg-background/95 px-3 py-2 text-xs tabular-nums shadow-lg"
-          style={{
-            left: `${(cx(hover) / W) * 100}%`,
-            transform: cx(hover) > W / 2 ? "translateX(calc(-100% - 12px))" : "translateX(12px)",
-          }}
+          style={
+            W < 500
+              ? { left: "50%", transform: "translateX(-50%)" } // too narrow to sit beside the column
+              : {
+                  left: `${(cx(hover) / W) * 100}%`,
+                  transform: cx(hover) > W / 2 ? "translateX(calc(-100% - 12px))" : "translateX(12px)",
+                }
+          }
         >
           <p>
             <span style={{ color: DEM }}>{hover} D</span> · <span style={{ color: REP }}>{total - hover} R</span>
           </p>
-          <p className="text-muted">
-            {hoverCount} of 100 simulations
-          </p>
+          <p className="text-muted">{hoverCount} of 100 simulations</p>
+          {sim && <MiniMap sim={sim} raceNames={raceNames} shapes={shapes} borders={borders} />}
         </div>
       )}
     </div>
+  );
+}
+
+function MiniMap({
+  sim,
+  raceNames,
+  shapes,
+  borders,
+}: {
+  sim: SampleSimulation;
+  raceNames: string[];
+  shapes: Shape[];
+  borders: string;
+}) {
+  const winner = new Map(raceNames.map((name, i) => [name, sim.winners[i]]));
+  return (
+    <svg viewBox="0 0 975 610" className="mt-2 h-auto w-56" aria-hidden>
+      {shapes.map((s) => {
+        const w = winner.get(s.name);
+        return <path key={s.name} d={s.d} fill={w === "D" ? DEM : w === "R" ? REP : "var(--line)"} />;
+      })}
+      <path d={borders} fill="none" stroke="var(--background)" strokeWidth={2} strokeLinejoin="round" />
+    </svg>
   );
 }
 
