@@ -20,11 +20,11 @@
   "opp": 34.73,
   "rep": 63.07
  },
- "p_dem_control": 0.7662,
- "p_rep_control": 0.2338,
+ "p_dem_control": 0.7625,
+ "p_rep_control": 0.2374,
  "p_no_majority": 0.0,
- "dem_seats_mean": 52.49,
- "rep_seats_mean": 47.51,
+ "dem_seats_mean": 52.47,
+ "rep_seats_mean": 47.53,
  "dem_seats_10": 49,
  "dem_seats_90": 56,
  "dem_seat_distribution": {
@@ -36,20 +36,20 @@
   "40": 0.0001,
   "41": 0.0003,
   "42": 0.0006,
-  "43": 0.0013,
+  "43": 0.0014,
   "44": 0.004,
-  "45": 0.0064,
-  "46": 0.0118,
-  "47": 0.0208,
-  "48": 0.038,
-  "49": 0.0607,
-  "50": 0.0897,
-  "51": 0.1177,
-  "52": 0.1346,
-  "53": 0.1449,
-  "54": 0.1306,
-  "55": 0.1003,
-  "56": 0.0678,
+  "45": 0.0068,
+  "46": 0.0121,
+  "47": 0.0217,
+  "48": 0.0383,
+  "49": 0.0614,
+  "50": 0.0907,
+  "51": 0.1169,
+  "52": 0.1341,
+  "53": 0.1444,
+  "54": 0.1298,
+  "55": 0.0998,
+  "56": 0.0672,
   "57": 0.0365,
   "58": 0.0182,
   "59": 0.0092,
@@ -70,19 +70,19 @@
   },
   {
    "dem_seats": 46,
-   "winners": "RDRDDRRRDRRRRRDRRRRRDDDDRRDDRRRRDRR"
+   "winners": "RRRDDRRRDRRRRDDRRRRRDDDDRRDDRRRRDRR"
   },
   {
    "dem_seats": 47,
-   "winners": "RRRDDRRRDRRRRRDDDRRRDDDDRRDDRRRRDRR"
+   "winners": "RRRDDRRRDRRRRDDRDRRRDDDDRRDDRRRRDRR"
   },
   {
    "dem_seats": 47,
-   "winners": "RRRDDRDRDRRRRDDDDRRRDRRDRRDDRRRRDRR"
+   "winners": "RRRDDRDRDRRRRRDRDRRRRDDDRRDDRRRDDRR"
   },
   {
    "dem_seats": 48,
-   "winners": "RRRDDDRRDRRRRRDRDRRRDDDDRRDDRRRDDRR"
+   "winners": "RDRDDRDRDRRRRRDDRRRRDDDRRRDDRRRDDRR"
   },
   {
    "dem_seats": 48,
@@ -98,119 +98,119 @@
   },
   {
    "dem_seats": 49,
-   "winners": "RDRDDRDRDRRRRDDRDRRRDDDDRRDDRRRRDRR"
+   "winners": "RRRDDRDRDRRRRRDDDRRRDDDDRRDDRRRDDRR"
   },
   {
    "dem_seats": 49,
-   "winners": "RRRDDRDRDRRRRRDRDRRDDDDDDRDDRRRRDRR"
+   "winners": "RDRDDRDRDRRRRDDRDRRRRDDDDRDDRRRRDRR"
   },
   {
    "dem_seats": 49,
-   "winners": "RRRDDRDRDRDRRRDDRRRRDDDDDRDDRRRRDRR"
+   "winners": "RRRDDRDRDRDRRRDDDRRRDDDDRRDDRRRRDRR"
   },
   {
    "dem_seats": 49,
-   "winners": "RRRDDRDRDDRRRDDDDRRRRDDRDRDDRRRRDRR"
+   "winners": "RRRDDRDRDRRRRRDDRRRRDDDDDRDDRRRDDRR"
   },
   {
    "dem_seats": 49,
-   "winners": "RRRDDRDRDRRRRRDDDRRRDDDDDRDDRRRRDRR"
+   "winners": "RRRDDDDRDRRRRRDDDRRRDDDDRRDDRRRRDRR"
   },
   {
    "dem_seats": 49,
-   "winners": "RRRDDRDRDRRRRDDDDRRRDDDDRRDDRRRRDRR"
+   "winners": "RRRDDRDRDDRRRRDDRRRRDDDDRRDDRRRDDRR"
   },
   {
    "dem_seats": 50,
-   "winners": "RRRDDRDRDRRRRRDDDDRRDDDDRRDDRRRDDRR"
+   "winners": "RRRDDDDRDRRRRRDDRRRRDDDDDRDDDRRRDRR"
   },
   {
    "dem_seats": 50,
-   "winners": "RRRDDRDRDDRRRRDDDRRDDDDDRRDDRRRRDRR"
+   "winners": "RDRDDRDRDRRRRRDRDRRRDDDDRRDDDRRDDRR"
   },
   {
    "dem_seats": 50,
-   "winners": "RRRDDRDRDRDRRRDDDRRRDDDDDRDDRRRRDRR"
+   "winners": "RRRDDRDRDDDRRRDDRRRRDDDRDRDDRRRDDRR"
   },
   {
    "dem_seats": 50,
-   "winners": "RRRDDRDRDDRRRDDDRRRRDDDDRRDDRRRDDRR"
+   "winners": "RDRDDRDRDRRRRRDDRRRRDDDDDRDDRRRDDRR"
   },
   {
    "dem_seats": 50,
-   "winners": "RRRDDRDRDRRRRDDRDRRDDDDDRRDDRRRDDRR"
+   "winners": "RRRDDRDRDRRRRDDDDRRRDDDDDRDDRRRRDRR"
   },
   {
    "dem_seats": 50,
-   "winners": "RRRDDRDRDRRRRDDDRRRRDDDDDRDDRDRRDRR"
+   "winners": "RRRDDRDRDDRRRRDDDRRRDDDRDRDDRRRDDRR"
   },
   {
    "dem_seats": 50,
-   "winners": "RRRDDRDRDRRRRRDDDRRDDDDDDRDDRRRRDRR"
+   "winners": "RDRDDRDRDRRRRRDDDRRRDDDDRRDDRRRDDRR"
   },
   {
    "dem_seats": 50,
-   "winners": "RRRDDRRRDRRRRDDDDRRDDDDDDRDDRRRRDRR"
+   "winners": "RRRDDRDRDDRRRRDDDRRRDDDRDRDDRRRDDRR"
   },
   {
    "dem_seats": 50,
-   "winners": "RDRDDRDRDRRRRDDDRRRRDDDDRRDDRRRDDRR"
+   "winners": "RRRDDRDRDDRRRDDDDRRRDDDDRRDDRRRRDRR"
   },
   {
    "dem_seats": 51,
-   "winners": "RRRDDDRRDDRRRRDDDRRRDDDDDRRDDRRDDRR"
+   "winners": "RRRDDRDRDRRRRDDDRRRRDDDDDRDDDRRDDRR"
   },
   {
    "dem_seats": 51,
-   "winners": "RDRDDDDRDRRRRDDDRRRRDDDDDRDDRRRRDRR"
+   "winners": "RDRDDRDRDDRRRDDRRRRRDDDDDRDDRRRDDRR"
   },
   {
    "dem_seats": 51,
-   "winners": "RDRDDRDRDRRRRDDDDRRRDDDDRRDDDRRRDRR"
+   "winners": "RRRDDRDRDDRRRDDDDRRRDDDDDRDDRRRRDRR"
   },
   {
    "dem_seats": 51,
-   "winners": "RDRDDRDRDRRRRDDDDRRRDDDDRRDDRRRDDRR"
+   "winners": "RRRDDDDRDRRRRDDRDRRRDDDDDRDDDRRRDRR"
   },
   {
    "dem_seats": 51,
-   "winners": "RRRDDDDRDDRRRDDRDRRRRDDDDRDDRRRDDRR"
+   "winners": "RDRDDRDRDDRRRDDDDRRRDDDDRRDDRRRRDRR"
   },
   {
    "dem_seats": 51,
-   "winners": "RRRDDRDRDRDRRDDDRRRDDDDDDRDDRRRRDRR"
+   "winners": "RRRDDRDRDRDRRDDRDRRDDDDDRRDDRRRDDRR"
   },
   {
    "dem_seats": 51,
-   "winners": "RDRDRRDRDRDRRDDRDRRDDDDDDRDDRRRRDRR"
+   "winners": "RRRDDRDRDRRRRDDRDRRRDDDDDRDDDRRDDRR"
   },
   {
    "dem_seats": 51,
-   "winners": "RRRDDRDRDRRRRDDDDRRRDDDDDRDDRRRDDRR"
+   "winners": "RRRDDRDRDDRRRDDRDRRRDDDDDRDDDRRRDRR"
   },
   {
    "dem_seats": 51,
-   "winners": "RDRDDRDRDRRRRDDDDRRRDDDRRRDDDRRDDRR"
+   "winners": "RDRDDRDRDDRRRDDRDRRRRDDDDRDDDRRRDRR"
   },
   {
    "dem_seats": 51,
-   "winners": "RDRDDRDRDDRDRRDDDRRRRDDDDRDDRRRRDRR"
+   "winners": "RRRDDRDRDDRRRRDDDRRDRDDDDRDDRRRDDRR"
   },
   {
    "dem_seats": 51,
-   "winners": "RRRDDDDRDDRRRDDDRRRRDDDRDRDDRRRDDRR"
+   "winners": "RRRDDRDRDDRRRDDDDRRRDDDDDRDDRRRRDRR"
   },
   {
    "dem_seats": 51,
-   "winners": "RRRDDRDRDRRRRDDDDRRRDDDDDRDDRRRDDRR"
+   "winners": "RRRDDRDRDDRRRRDDRRRDDDDDDRDDRRRDDRR"
   },
   {
    "dem_seats": 52,
-   "winners": "RDRDDRDRDDRRRRDDRRRRDDDDDRDDDRRDDRR"
+   "winners": "RRRDDRDRDRRRRDDDDRRRDDDDDRDDDRRDDRR"
   },
   {
    "dem_seats": 52,
-   "winners": "RRRDDRRRDDDRRDDDDRRRDDDDDRDDRRRDDRR"
+   "winners": "RRRDDRDRDDDRRDDDRRRRDDDDDRDDRRRDDRR"
   },
   {
    "dem_seats": 52,
@@ -218,43 +218,75 @@
   },
   {
    "dem_seats": 52,
-   "winners": "RDRDDRDRDRDRRRDRDRRDDDDDRRDDDRRDDRR"
+   "winners": "RDRDDRDRDRRRRDDDDRRRDDDDDRDDRRRDDRR"
   },
   {
    "dem_seats": 52,
-   "winners": "RDRDDRDRDDRRRRDRDRRRDDDDDRDDDRRDDRR"
+   "winners": "RRRDDDDRDRDRRRDRDRRRDDDDDRDDDRRDDRR"
   },
   {
    "dem_seats": 52,
-   "winners": "RRRDDRDRRDRRRDDDDRRDDDDDDRDDRRRDDRR"
+   "winners": "RDRDDRDRDDDRRRDDDRRRDDDDDRDDRRRRDRR"
   },
   {
    "dem_seats": 52,
-   "winners": "RDRDDRDRDRRRRDDDRRRDDDDDDRDDDRRRDRR"
-  },
-  {
-   "dem_seats": 52,
-   "winners": "RRRDDRDRDDRRRDDDRRRRDDDDDRDDDRRDDRR"
-  },
-  {
-   "dem_seats": 52,
-   "winners": "RDRDDRDRDDRRRRDDDRRRDDDDDRDDRRRDDRR"
-  },
-  {
-   "dem_seats": 52,
-   "winners": "RRRDDDDRDRRRRDDDDRRRDDDDDRDDRRRDDRR"
-  },
-  {
-   "dem_seats": 52,
-   "winners": "RRRDDRDRDRDRRDDDDRRRDDDDDRDDRRRDDRR"
-  },
-  {
-   "dem_seats": 52,
-   "winners": "RDRDDRRRDRDRRDDDRRRDDDDRDRDDDRRDDRR"
+   "winners": "RDRDDRRRDDRRRDDDDRRRDDDDDRDDRRRDDRR"
   },
   {
    "dem_seats": 52,
    "winners": "RRRDDRDRDDRRRDDDDRRRDDDDDRDDRRRDDRR"
+  },
+  {
+   "dem_seats": 52,
+   "winners": "RDRDDRDRDDRRRDDRDRRRDDDDDRDDRRRDDRR"
+  },
+  {
+   "dem_seats": 52,
+   "winners": "RDRDDRDRDDRRRDDDDRRRDDDDDRDDRRRRDRR"
+  },
+  {
+   "dem_seats": 52,
+   "winners": "RDRDDRDRDDDRDDDRDRRRDDDDRRDDRRRRDRR"
+  },
+  {
+   "dem_seats": 52,
+   "winners": "RRRDDRDRDRRRRDDDDRRDDDDDDRDDRRRDDRR"
+  },
+  {
+   "dem_seats": 52,
+   "winners": "RRRDDRDRDDDRRRDDRRRDDDDDDRDDDRRRDRR"
+  },
+  {
+   "dem_seats": 53,
+   "winners": "RRRDDRDRDDRRRDDDRRRDDDDDDRDDDRRDDRR"
+  },
+  {
+   "dem_seats": 53,
+   "winners": "RDRDDRDRDDRRRDDRDRRDDDDDRRDDDRRDDRR"
+  },
+  {
+   "dem_seats": 53,
+   "winners": "RDRDDRDRDRRRRDDRDRRDDDDDDRDDDRRDDRR"
+  },
+  {
+   "dem_seats": 53,
+   "winners": "RDRDDDDRDDRRDRDRDRRRDDDDDRDDRRRDDRR"
+  },
+  {
+   "dem_seats": 53,
+   "winners": "RDRDDRDRDDRRDDDDDRRRDDDDRRDDRRRDDRR"
+  },
+  {
+   "dem_seats": 53,
+   "winners": "RDRDDRDRDDDRRDDDDRRRDDDDDRDDRRRRDRR"
+  },
+  {
+   "dem_seats": 53,
+   "winners": "RDRDDDDRDRDRDRDDDDRRDDDDRRDDRRRRDRR"
+  },
+  {
+   "dem_seats": 53,
+   "winners": "RRRDDDDRDRRRRDDRDRDRDDDDDRDDRDRDDRR"
   },
   {
    "dem_seats": 53,
@@ -262,63 +294,47 @@
   },
   {
    "dem_seats": 53,
-   "winners": "RRRDDDDRDRDRRDDDRRRRDDDDDRDDDRRDDRR"
+   "winners": "RDRDDRDDDRDRDRDRRDRRDDDDDRDDRRRDDRR"
   },
   {
    "dem_seats": 53,
-   "winners": "RRRDDDDRDDRRDDDDDDRRDDRDDRDDRRRRDRR"
+   "winners": "RRRDDRDRDDDRRRDDDRRRDDDDDRDDDRRDDRR"
   },
   {
    "dem_seats": 53,
-   "winners": "RDRDDRDRDDRRRRDDDRRRDDDDDRDDDRRDDRR"
+   "winners": "RRRDDRDRDDDRRDDDDRRRDDDDDRDDRRRDDRR"
   },
   {
    "dem_seats": 53,
-   "winners": "RRRDDDDRDDDRRRDDDRRRDDDDDRDDDRRRDRR"
+   "winners": "RDRDDDDRDRDRRDDRDRRRDDDDDRDDRRRDDRR"
   },
   {
    "dem_seats": 53,
-   "winners": "RDRDDRDRDDRRDRDRDRRRDDDDDRDDDRRDDRR"
+   "winners": "RRRDDDDRDDRRRDDDDRRDDDDDDRDDRRRRDRR"
   },
   {
    "dem_seats": 53,
-   "winners": "RRRDDRDRDDDRRDDDDRRRDDDDDRDDDRRRDRR"
-  },
-  {
-   "dem_seats": 53,
-   "winners": "RDRDDRDRDDRRRDDDDRRRDDDDDRDDRRRDDRR"
-  },
-  {
-   "dem_seats": 53,
-   "winners": "RRRDDRDRDDRRRDDDDRRRDDDDDRDDDRRDDRR"
-  },
-  {
-   "dem_seats": 53,
-   "winners": "RRRDDDDRDDRRRDDDDRRRDDDDDRDDRRDRDRR"
-  },
-  {
-   "dem_seats": 53,
-   "winners": "RDRDDRDRDRRRRDDDDRRDDDDDDRDDRRRDDRR"
-  },
-  {
-   "dem_seats": 53,
-   "winners": "RDRDDRDRDDRRRDDDRRRDDDDDDRDDRRRDDRR"
-  },
-  {
-   "dem_seats": 53,
-   "winners": "RDRDDRDRDDRRRDDDDRRRDDDDDRDDRRRDDRR"
-  },
-  {
-   "dem_seats": 53,
-   "winners": "RDRDDRDRDDRRRDDRDRRDDDDDDRDDRRRDDRR"
-  },
-  {
-   "dem_seats": 53,
-   "winners": "RRRDDRDRDDRRRDDDDRRRDDDDDRDDDRRDDRR"
+   "winners": "RDRDDDDRDRRRDDDRDRDRRDDDDRDDRRRDDRR"
   },
   {
    "dem_seats": 54,
-   "winners": "RRRDDRDDDDRRRDDDDRRRDDDDDRDDDRRDDRR"
+   "winners": "RDRDDRDRDDDRRDDDDRRRDDDDDRDDRRRDDRR"
+  },
+  {
+   "dem_seats": 54,
+   "winners": "RDRDDRDRDDRRRDDDDRRDDDDDDRDDRRRDDRR"
+  },
+  {
+   "dem_seats": 54,
+   "winners": "RDRDDRDRDRDRRDDDDRRDDDDDDRDDRRRDDRR"
+  },
+  {
+   "dem_seats": 54,
+   "winners": "RRRDDRDRDDDRRDDDDRRRDDDDDRDDRDRDDRR"
+  },
+  {
+   "dem_seats": 54,
+   "winners": "RRRDDRDRDDRRRDDDDRRRDDDDDRDDDDRDDRR"
   },
   {
    "dem_seats": 54,
@@ -326,51 +342,35 @@
   },
   {
    "dem_seats": 54,
-   "winners": "RDRDDRDRDRDDDDDDDRRRDDDDRRDDRRRDDRR"
+   "winners": "RDRDDRDRDDDRRRDDDDRRDDDDDRDDRRRDDRR"
   },
   {
    "dem_seats": 54,
-   "winners": "RDRDDDDRDDRRRDDDDRRRDDDDDRDDRRRDDRR"
+   "winners": "RDRDDDDRDDRRRDDDDRRRDDDDDRDDDRRRDRR"
   },
   {
    "dem_seats": 54,
-   "winners": "RRRDDDDRDRDRRDDDDRRRDDDDDRDDDRRDDRR"
+   "winners": "RRRDDDRRDDDRRDDDDRRDDDDDDRDDRRRDDRR"
   },
   {
    "dem_seats": 54,
-   "winners": "RRRDDDDRDDDRRDDDDRRRDDDDDRDDRRRDDRR"
+   "winners": "RDRDDDDRDDDRRRDDDRRRDDDDRRDDDRRDDRR"
   },
   {
    "dem_seats": 54,
-   "winners": "RRRDDRDRDDDRRDDDDRRDDDDDDRDDDRRRDRR"
+   "winners": "RRRDDRDRDDDRRDDDDRRRDDDDDRDDDRRDDRR"
   },
   {
    "dem_seats": 54,
-   "winners": "RDRDDRDRDDDRRDDRDRRDDDDDDRDDRRRDDRR"
+   "winners": "RDRDDDDRDRRRRDDDDRRDDDDDRRDDDRRDDRR"
   },
   {
    "dem_seats": 54,
-   "winners": "RRRDDDDRDDDRRDDDDRRRDDDDDRDDRRRDDRR"
-  },
-  {
-   "dem_seats": 54,
-   "winners": "RRRDDRDRDDDRRDDDDRRDRDDDDRDDDRRDDRR"
-  },
-  {
-   "dem_seats": 54,
-   "winners": "RDRDDRDRDRRRRDDDDRRDDDDDDRDDDRRDDRR"
-  },
-  {
-   "dem_seats": 54,
-   "winners": "RDRDDDDRDRRRRDDDDRRDDDDDDRDDDRRRDRR"
-  },
-  {
-   "dem_seats": 54,
-   "winners": "RRRDDRDRDDRRRDDDDRRDDDDDDRDDDRRDDRR"
+   "winners": "RDRDDRDRDDDRRDDDRRRDDDDDDRDDRRRDDRR"
   },
   {
    "dem_seats": 55,
-   "winners": "RDRDDRDRDDDRRDDDDRRDDDDDRRDDRDRDDRR"
+   "winners": "RDRDDDDRDDRRRDDDDRRRDDDDDRDDDRRDDRR"
   },
   {
    "dem_seats": 55,
@@ -378,15 +378,15 @@
   },
   {
    "dem_seats": 55,
-   "winners": "RDRDDRDRDRDRRDDDDRRDDDDDDRDDRDRDDRR"
+   "winners": "RDRDDRDRDDDRRDDDDRRRDDDDDRDDDRRDDRR"
   },
   {
    "dem_seats": 55,
-   "winners": "RDRDDRDRDDDRRDDDDRRDRDDDDRDDDRRDDRR"
+   "winners": "RDRDDRDRDDRRRDDDDRRDDDDDDRDDDRRDDRR"
   },
   {
    "dem_seats": 55,
-   "winners": "RRRDDDDRDDRRDDDDDRRRDDDDDRDDDRRDDRR"
+   "winners": "RRRDDRDRDRDRDDDDDRRRDDDDDRDDDRDDDRR"
   },
   {
    "dem_seats": 55,
@@ -394,19 +394,19 @@
   },
   {
    "dem_seats": 55,
-   "winners": "RDRDDDDRDRDRRDDDDRRRDDDDDRDDDRRDDRR"
+   "winners": "RDRDDRDRDRDRRDDDDRRRDDDDDRDDDRDDDRR"
   },
   {
    "dem_seats": 55,
-   "winners": "RDRDDRDRDDDRRDDDDRRRDDDDDDDDRRRDDRR"
+   "winners": "RRRDDRDDDDDRRDDDDRRDDDDDDRDDRRRDDRR"
   },
   {
    "dem_seats": 55,
-   "winners": "RDRDDRDRDDRRRDDDDDRRDDDDDRDDDRRDDRR"
+   "winners": "RDRDDDDRDDRRRDDDDRRDDDDDDRDDRRRDDRR"
   },
   {
    "dem_seats": 55,
-   "winners": "RDRDDDDRDDDRRDDDRRRDDDDDRRDDDRRDDRR"
+   "winners": "RDRDDRDRDDDRRDDDDRRDDDDDDRDDRRRDDRR"
   },
   {
    "dem_seats": 56,
@@ -414,15 +414,15 @@
   },
   {
    "dem_seats": 56,
-   "winners": "RDRDDDDRDDDRRDDDDRRDDDDDDRDDRRRDDRR"
+   "winners": "RDRDDRDRDDDRRDDDDRRDDDDDDRDDDRRDDRR"
   },
   {
    "dem_seats": 56,
-   "winners": "RDRDDDDRDRDRDDDDDRRRDDDDDRDDDRRDDRR"
+   "winners": "RDRDDDDRDDDRRDDDDDRDRDDDDRDDRRRDDRR"
   },
   {
    "dem_seats": 56,
-   "winners": "RDRDDRDRDDDDRDDDDRRDRDDDDRDDDRRDDRR"
+   "winners": "RDRDDDDRDDRRRDDDDRRDDDDDDRDDDRRDDRR"
   },
   {
    "dem_seats": 56,
@@ -438,11 +438,11 @@
   },
   {
    "dem_seats": 57,
-   "winners": "RDDDDRDRDDDRRDDDDRDRDDDDDRDDDRRDDRR"
+   "winners": "RDRDDDDRDDDRRDDDDRDRDDDDDRDDDRRDDRR"
   },
   {
    "dem_seats": 57,
-   "winners": "RDRDDDDRDDRRDDDDDRRDDDDDDRDDDRRDDRR"
+   "winners": "RDRDDRDRDDDRRDDDDDRDDDDDDRDDDRRDDRR"
   },
   {
    "dem_seats": 57,
@@ -458,7 +458,7 @@
   },
   {
    "dem_seats": 58,
-   "winners": "RDRDDDDRDDDRDDDDDRRRDDDDDRDDDDRDDRR"
+   "winners": "RDRDDDDRDDDRDDDDDRRDDDDDDRDDRDRDDRR"
   },
   {
    "dem_seats": 59,
@@ -912,14 +912,14 @@
     "caucus": "D"
    },
    "incumbent": "none",
-   "p_opp": 0.8606,
-   "p_rep": 0.1394,
-   "mean_margin": 6.84,
-   "margin_10": -1.46,
-   "margin_90": 15.04,
-   "poll_avg": 3.06,
-   "n_polls": 7,
-   "poll_weight": 0.692,
+   "p_opp": 0.8397,
+   "p_rep": 0.1603,
+   "mean_margin": 6.14,
+   "margin_10": -2.05,
+   "margin_90": 14.22,
+   "poll_avg": 2.85,
+   "n_polls": 8,
+   "poll_weight": 0.737,
    "prior_margin": 15.33,
    "fundraising_shift": 0.2,
    "weather_shift": 0.0,
@@ -1412,7 +1412,7 @@
    "rating": -3
   }
  ],
- "generated_at": "2026-10-03T19:05:50+00:00",
+ "generated_at": "2026-10-03T19:41:21+00:00",
  "config_version": "f32bccd1",
  "problems": [
   "fundraising: no FEC match for ME (Troy Jackson); FEC has: BELLOWS, SHENNA (DEM), CALABRESE, CARMEM VINCENT MR. (REP), CALABRESE, CARMEN VINCENT MR. (REP), COLLINS, SUSAN M. (REP), COSTELLO, DAVID (DEM), EVANS, DAVID ALAN (IND), FAVREAU, TUCKER (DEM), GIDEON, SARA (DEM), KING, ANGUS S. JR. (IND), KLEBAN, DAN (DEM), LAFLAMME, ANDREA (DEM), LOUD, PAIGE (DEM)"

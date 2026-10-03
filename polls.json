@@ -13269,6 +13269,18 @@
   "source": "https://en.wikipedia.org/wiki/2026_United_States_Senate_election_in_Minnesota"
  },
  {
+  "state": "MN",
+  "pollster": "Big Data Poll",
+  "sponsor_party": null,
+  "end_date": "2026-09-30",
+  "n": 622,
+  "population": "LV",
+  "rep": 38.0,
+  "opp": 40.0,
+  "others": [],
+  "source": "https://en.wikipedia.org/wiki/2026_United_States_Senate_election_in_Minnesota"
+ },
+ {
   "state": "MS",
   "pollster": "Impact Research",
   "sponsor_party": "D",
