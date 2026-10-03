@@ -1,6 +1,7 @@
 @import "tailwindcss";
 
-/* Dark-only "gallery wall" theme. See docs/design.md before adding colors. */
+/* "Gallery wall" theme: dark by default, light when the visitor's device is
+   set to light mode. See docs/design.md before adding colors. */
 :root {
   --background: #121315;
   --surface: #1a1c1f;
@@ -10,6 +11,19 @@
   --accent: #3fbfb2;
   --danger: #f07a6e;
   color-scheme: dark;
+}
+
+@media (prefers-color-scheme: light) {
+  :root {
+    --background: #fafaf8;
+    --surface: #efefec;
+    --foreground: #1b1c1f;
+    --muted: #63666c;
+    --line: #dddcd8;
+    --accent: #0f7c73;
+    --danger: #c0392b;
+    color-scheme: light;
+  }
 }
 
 @theme inline {
