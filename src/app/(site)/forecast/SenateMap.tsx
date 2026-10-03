@@ -36,7 +36,7 @@ export function SenateMap({
       <svg viewBox={`0 0 ${width} ${height}`} className="h-auto w-full" role="img" aria-label="Map of 2026 Senate races by rating">
         {shapes.map((s) => {
           const race = byName.get(s.name);
-          if (!race) return <path key={s.name} d={s.d} fill="var(--surface)" />;
+          if (!race) return <path key={s.name} d={s.d} fill="var(--line)" />;
           return (
             <path
               key={s.name}
@@ -72,6 +72,8 @@ export function SenateMap({
 function Tooltip({ race, x, y }: { race: Race; x: number; y: number }) {
   const rating = ratingInfo(race.rating);
   const opp = partyLetter(race.opp);
+  const repFavored = race.p_rep >= race.p_opp;
+  const underdog = repFavored ? race.opp : race.rep;
   return (
     <div
       className="pointer-events-none absolute z-10 w-64 -translate-x-1/2 rounded border border-line bg-background/95 p-3 text-sm shadow-lg"
@@ -90,17 +92,11 @@ function Tooltip({ race, x, y }: { race: Race; x: number; y: number }) {
       <p className="mt-2">{favoriteLine(race)}</p>
       <dl className="mt-2 grid grid-cols-[1fr_auto] gap-x-3 gap-y-0.5 text-xs text-muted tabular-nums">
         <dt>
-          {race.opp.name} ({opp})
+          {underdog.name} ({partyLetter(underdog)})
         </dt>
-        <dd className="text-right">{outOf100(race.p_opp)}%</dd>
-        <dt>{race.rep.name} (R)</dt>
-        <dd className="text-right">{outOf100(race.p_rep)}%</dd>
+        <dd className="text-right">{outOf100(repFavored ? race.p_opp : race.p_rep)}%</dd>
         <dt>Forecast margin</dt>
         <dd className="text-right">{formatMargin(race.mean_margin, opp)}</dd>
-        <dt>Polling average</dt>
-        <dd className="text-right">
-          {race.poll_avg === null ? "No polls" : formatMargin(race.poll_avg, opp)}
-        </dd>
       </dl>
     </div>
   );

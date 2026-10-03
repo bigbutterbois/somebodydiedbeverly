@@ -22,8 +22,8 @@ def poll_margin(p: dict) -> float:
     return p["opp"] - p["rep"]
 
 
-def weighted_average(polls: list[dict], as_of: date, cfg: dict, half_life: float) -> tuple[float | None, float]:
-    """Weighted mean margin and total weight (in fresh full-size LV poll units)."""
+def weighted_rows(polls: list[dict], as_of: date, cfg: dict, half_life: float) -> list[tuple[float, float, dict]]:
+    """(weight, adjusted margin, poll) for each usable poll, weighted in fresh full-size LV poll units."""
     pc = cfg["polls"]
     excluded = {(e["state"], e["pollster"], str(e["end_date"])) for e in pc.get("exclude", [])}
     rows = []
@@ -47,16 +47,31 @@ def weighted_average(polls: list[dict], as_of: date, cfg: dict, half_life: float
             w *= pc["partisan_weight"]
             m += pc["partisan_shift"]
         if w > 0:
-            rows.append((p["pollster"], w, m))
-    if not rows:
-        return None, 0.0
+            rows.append((w, m, p))
     if pc.get("pollster_count_damping"):
         counts: dict[str, int] = {}
-        for name, _, _ in rows:
-            counts[name] = counts.get(name, 0) + 1
-        rows = [(name, w / math.sqrt(counts[name]), m) for name, w, m in rows]
-    total = sum(w for _, w, _ in rows)
-    return sum(w * m for _, w, m in rows) / total, total
+        for _, _, p in rows:
+            counts[p["pollster"]] = counts.get(p["pollster"], 0) + 1
+        rows = [(w / math.sqrt(counts[p["pollster"]]), m, p) for w, m, p in rows]
+    return rows
+
+
+def weighted_average(polls: list[dict], as_of: date, cfg: dict, half_life: float) -> tuple[float | None, float]:
+    """Weighted mean margin and total weight (in fresh full-size LV poll units)."""
+    rows = weighted_rows(polls, as_of, cfg, half_life)
+    if not rows:
+        return None, 0.0
+    total = sum(w for w, _, _ in rows)
+    return sum(w * m for w, m, _ in rows) / total, total
+
+
+def poll_levels(polls: list[dict], as_of: date, cfg: dict, half_life: float) -> dict | None:
+    """Weighted average share for each side ({"opp": %, "rep": %}), for the trend charts."""
+    rows = weighted_rows(polls, as_of, cfg, half_life)
+    total = sum(w for w, _, _ in rows)
+    if total < 1.0:
+        return None
+    return {k: round(sum(w * p[k] for w, _, p in rows) / total, 2) for k in ("opp", "rep")}
 
 
 def national_environment(polls: list[dict], as_of: date, cfg: dict) -> dict:
@@ -78,6 +93,10 @@ def national_environment(polls: list[dict], as_of: date, cfg: dict) -> dict:
     value = sum(w * v for w, v in parts) / sum(w for w, _ in parts)
     return {
         "value": value,
+        "generic_ballot_levels": poll_levels([p for p in polls if p["state"] == "US"], as_of, cfg,
+                                             f["generic_ballot_half_life_days"]),
+        "approval_levels": poll_levels([p for p in polls if p["state"] == "APPROVAL"], as_of, cfg,
+                                       f["approval_half_life_days"]),
         "source": " + ".join(n for n, x in (("generic ballot", gb), ("approval", net)) if x is not None),
         "generic_ballot": None if gb is None else round(gb, 2),
         "trump_net_approval": None if net is None else round(net, 2),
@@ -124,6 +143,21 @@ def rating(p_opp: float, cfg: dict) -> int:
     lead = max(p_opp, 1 - p_opp)
     step = 0 if lead < r["tossup_below"] else 1 if lead < r["lean_below"] else 2 if lead < r["likely_below"] else 3
     return step if p_opp >= 0.5 else -step
+
+
+def sample_simulations(dem_seats: np.ndarray, opp_wins: np.ndarray, rng: np.random.Generator,
+                       k: int = 100) -> list[dict]:
+    """k simulations whose seat counts match the overall distribution (largest-remainder rounding)."""
+    counts = np.bincount(dem_seats)
+    exact = counts / counts.sum() * k
+    n = np.floor(exact).astype(int)
+    for s in np.argsort(-(exact - n))[: k - n.sum()]:
+        n[s] += 1
+    out = []
+    for s in np.nonzero(n)[0]:
+        for i in rng.choice(np.nonzero(dem_seats == s)[0], size=n[s], replace=False):
+            out.append({"dem_seats": int(s), "winners": "".join("D" if w else "R" for w in opp_wins[i])})
+    return out
 
 
 def run(facts: dict, cfg: dict, polls: list[dict], as_of: date, seed: int | None = None,
@@ -213,6 +247,7 @@ def run(facts: dict, cfg: dict, polls: list[dict], as_of: date, seed: int | None
         })
 
     seat_hist = np.bincount(dem_seats, minlength=101)
+    samples = sample_simulations(dem_seats, opp_wins, rng)
     lo_seat, hi_seat = int(dem_seats.min()), int(dem_seats.max())
     return {
         "as_of": as_of.isoformat(),
@@ -222,6 +257,8 @@ def run(facts: dict, cfg: dict, polls: list[dict], as_of: date, seed: int | None
         "national_environment_source": national["source"],
         "generic_ballot": national.get("generic_ballot"),
         "trump_net_approval": national.get("trump_net_approval"),
+        "generic_ballot_levels": national.get("generic_ballot_levels"),
+        "approval_levels": national.get("approval_levels"),
         "p_dem_control": round(float(dem_control.mean()), 4),
         "p_rep_control": round(float(rep_control.mean()), 4),
         "p_no_majority": round(float(1 - dem_control.mean() - rep_control.mean()), 4),
@@ -230,5 +267,8 @@ def run(facts: dict, cfg: dict, polls: list[dict], as_of: date, seed: int | None
         "dem_seats_10": int(np.percentile(dem_seats, 10)),
         "dem_seats_90": int(np.percentile(dem_seats, 90)),
         "dem_seat_distribution": {str(s): round(float(seat_hist[s] / n_sims), 4) for s in range(lo_seat, hi_seat + 1)},
+        # 100 representative simulations for the seat histogram: each one's Dem seats and,
+        # per race in "races" order, "D" if the opposition won or "R".
+        "sample_simulations": samples,
         "races": race_out,
     }
