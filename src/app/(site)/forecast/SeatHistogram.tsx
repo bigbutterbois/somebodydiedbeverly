@@ -72,7 +72,6 @@ export function SeatHistogram({
     setHoverDot(n > 0 ? { s, k } : null);
   }
 
-  const hoverCount = hover === null ? 0 : counts.get(hover)!;
   const sim = hoverDot ? stacks.get(hoverDot.s)?.[hoverDot.k] ?? null : null;
 
   return (
@@ -140,7 +139,6 @@ export function SeatHistogram({
           <p>
             <span style={{ color: DEM }}>{hover} D</span> · <span style={{ color: REP }}>{total - hover} R</span>
           </p>
-          <p className="text-muted">{hoverCount} of 100 simulations</p>
           {sim && <MiniMap sim={sim} raceNames={raceNames} shapes={shapes} borders={borders} />}
         </div>
       )}
