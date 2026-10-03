@@ -78,12 +78,6 @@ jobs:
         run: python forecast/run.py --dry-run --verbose
 
       # Temporary: checks which public poll feeds answer from Actions.
-      - name: Poll source probe
-        if: github.event_name == 'pull_request'
-        continue-on-error: true
-        working-directory: forecast
-        run: python probe_sources.py
-
       # Replays the 2022 Senate cycle with this PR's config and with the base
       # branch's, to compare how well calibrated each is. Informational only.
       - name: Backtest on 2022
