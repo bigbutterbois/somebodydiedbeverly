@@ -49,6 +49,11 @@ def history_entry(result: dict) -> dict:
         "p_rep_control": result["p_rep_control"],
         "p_no_majority": result["p_no_majority"],
         "dem_seats_mean": result["dem_seats_mean"],
+        # Polling averages for the trend charts (D/R generic ballot, approve/disapprove).
+        "generic_ballot": result.get("generic_ballot_levels") and {
+            "dem": result["generic_ballot_levels"]["opp"], "rep": result["generic_ballot_levels"]["rep"]},
+        "approval": result.get("approval_levels") and {
+            "approve": result["approval_levels"]["opp"], "disapprove": result["approval_levels"]["rep"]},
         "races": {r["state"]: r["p_opp"] for r in result["races"]},
     }
 
@@ -139,6 +144,10 @@ def main() -> int:
         days = [args.backfill_from + timedelta(d) for d in range((today - args.backfill_from).days + 1)]
 
     history = {h["date"]: h for h in load_json(data / "history.json", [])}
+    # Days saved before a field was added get rebuilt so every chart covers the whole history.
+    if not args.backfill_from and history and any("approval" not in h for h in history.values()):
+        days = [date.fromisoformat(min(history)) + timedelta(d)
+                for d in range((today - date.fromisoformat(min(history))).days + 1)]
     result = None
     for d in days:
         result = model.run(facts, cfg, polls, d, seed=int(d.strftime("%Y%m%d")), extras=extras_as_of(extras, d))
