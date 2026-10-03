@@ -17,6 +17,18 @@ generic_ballot_pages:
   - Opinion_polling_for_the_2022_United_States_House_of_Representatives_elections
   - 2022_United_States_House_of_Representatives_elections
 generic_ballot_search: 2022 generic congressional ballot opinion polling
+# Wikipedia has no 2022 generic ballot poll table, so the backtest falls back to
+# these points from FiveThirtyEight's generic ballot average (Dem minus Rep,
+# approximate, read off its chart).
+generic_ballot_average:
+  - { date: 2022-08-01, margin: 0.0 }
+  - { date: 2022-08-15, margin: 0.5 }
+  - { date: 2022-09-01, margin: 1.2 }
+  - { date: 2022-09-15, margin: 1.5 }
+  - { date: 2022-10-01, margin: 1.0 }
+  - { date: 2022-10-15, margin: -0.5 }
+  - { date: 2022-11-01, margin: -1.0 }
+  - { date: 2022-11-07, margin: -1.2 }
 approval_pages:
   - Opinion_polling_on_the_Joe_Biden_administration
 approval_search: Opinion polling on the Joe Biden administration 2022 approval

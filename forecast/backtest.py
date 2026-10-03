@@ -55,6 +55,13 @@ def gather(facts: dict, cfg: dict, cache: Path | None) -> tuple[list[dict], dict
     approval, approval_problems = extra_sources.scrape_approval(
         aggregators, year, facts.get("approval_pages"), facts.get("approval_search", ""), facts.get("approval_name", ""))
     polls += approval
+    if not any(p["state"] == "US" for p in polls) and facts.get("generic_ballot_average"):
+        # Wikipedia has no 2022 generic ballot table; stand in with the published average.
+        problems.append("generic ballot: using generic_ballot_average from the facts file")
+        polls += [{"state": "US", "pollster": f"average {g['date']}", "sponsor_party": None,
+                   "end_date": str(g["date"]), "n": 5000, "population": "LV",
+                   "opp": 50 + g["margin"] / 2, "rep": 50 - g["margin"] / 2, "others": []}
+                  for g in facts["generic_ballot_average"]]
     problems += approval_problems
     # FEC files are keyed by two-letter state; a second race in a state (OK-S) is looked up on its own.
     funds: dict = {}

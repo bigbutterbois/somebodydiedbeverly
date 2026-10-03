@@ -51,8 +51,8 @@ def norm(text: str) -> str:
     return re.sub(r"\s+", " ", text).strip().lower()
 
 
-def wiki_title(race: dict) -> str:
-    return race.get("wiki") or f"2026_United_States_Senate_election_in_{race['name'].replace(' ', '_')}"
+def wiki_title(race: dict, year: int = 2026) -> str:
+    return race.get("wiki") or f"{year}_United_States_Senate_election_in_{race['name'].replace(' ', '_')}"
 
 
 def fetch_html(title: str, retries: int = 4) -> str:
@@ -191,7 +191,7 @@ def parse_rows(df, cols, idx, default_year, aggregators):
 
 
 def scrape_race(race: dict, aggregators: list[str], default_year: int) -> tuple[list[dict], list[str]]:
-    title = wiki_title(race)
+    title = wiki_title(race, default_year)
     tables = read_tables(fetch_html(title))
     required = {"rep": candidate_pattern(race["rep"]), "opp": candidate_pattern(race["opp"])}
     optional = {f"other{i}": candidate_pattern(o) for i, o in enumerate(race.get("others", []))}
