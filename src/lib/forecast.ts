@@ -40,6 +40,7 @@ export type Forecast = {
   rep_seats_mean: number;
   dem_seats_10: number;
   dem_seats_90: number;
+  dem_seat_distribution: Record<string, number>;
   races: Race[];
 };
 
@@ -49,6 +50,8 @@ export type HistoryPoint = {
   p_rep_control: number;
   p_no_majority: number;
   dem_seats_mean: number;
+  generic_ballot?: { dem: number; rep: number } | null;
+  approval?: { approve: number; disapprove: number } | null;
 };
 
 async function getJson<T>(file: string): Promise<T | null> {
@@ -67,6 +70,9 @@ export const getHistory = async () => (await getJson<HistoryPoint[]>("history.js
 // party colors rather than the site accent (docs/design.md).
 export const DEM = "#4a86e8";
 export const REP = "#e5534b";
+// Trump approval chart lines.
+export const APPROVE = "#d9a13b";
+export const DISAPPROVE = "#9b8fd6";
 
 export const RATINGS = [
   { value: 3, label: "Safe D", color: "#2a62c9" },
@@ -91,6 +97,11 @@ export function favoriteLine(race: Race) {
   const repFavored = race.p_rep >= race.p_opp;
   const c = repFavored ? race.rep : race.opp;
   return `${c.name} (${partyLetter(c)}) wins ${outOf100(repFavored ? race.p_rep : race.p_opp)} of 100 times`;
+}
+
+/** Whether this candidate holds the seat now. */
+export function isIncumbent(race: Race, side: "rep" | "opp") {
+  return side === "rep" ? race.incumbent === "R" : race.incumbent === "D" || race.incumbent === "I";
 }
 
 /** A probability as a whole count out of 100, never rounding a possibility to 0 or 100. */

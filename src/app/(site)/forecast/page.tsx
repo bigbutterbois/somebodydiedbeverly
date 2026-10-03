@@ -6,12 +6,14 @@ import {
   formatMargin,
   getForecast,
   getHistory,
+  isIncumbent,
   outOf100,
   partyLetter,
-  ratingInfo,
   type Forecast,
+  type Race,
 } from "@/lib/forecast";
-import { OddsChart } from "./OddsChart";
+import { OddsChart, PollingChart } from "./OddsChart";
+import { SeatHistogram } from "./SeatHistogram";
 import { SenateMap } from "./SenateMap";
 import { MAP_HEIGHT, MAP_WIDTH, stateBorders, stateShapes } from "./shapes";
 
@@ -40,11 +42,17 @@ export default async function ForecastPage() {
         <p className="text-sm text-muted">
           Updated {formatDay(forecast.as_of, { weekday: "long", month: "long", day: "numeric" })}
           {daysLeft > 0 && ` · ${daysLeft} days to Election Day`}
-          {` · ${forecast.simulations.toLocaleString()} simulations each morning`}
         </p>
       </header>
 
       <Topline forecast={forecast} />
+
+      {forecast.dem_seat_distribution && (
+        <section className="flex flex-col gap-4">
+          <SectionTitle>Democratic seats in 100 simulations</SectionTitle>
+          <SeatHistogram distribution={forecast.dem_seat_distribution} />
+        </section>
+      )}
 
       <section className="flex flex-col gap-4">
         <SectionTitle>The map</SectionTitle>
@@ -63,13 +71,13 @@ export default async function ForecastPage() {
             </li>
           ))}
           <li className="flex items-center gap-1.5">
-            <span className="inline-block size-3 rounded-sm border border-line bg-surface" />
+            <span className="inline-block size-3 rounded-sm bg-line" />
             No race
           </li>
         </ul>
         {independents.length > 0 && (
           <p className="text-center text-xs text-muted">
-            Blue also covers independents running as the main challenger ({independents.join(", ")}), and their wins count toward Democratic control.
+            Independents running as the main challenger ({independents.join(", ")}) count toward Democratic control.
           </p>
         )}
       </section>
@@ -82,63 +90,67 @@ export default async function ForecastPage() {
       )}
 
       <section className="flex flex-col gap-4">
-        <SectionTitle>Every race</SectionTitle>
         <div className="-mx-6 overflow-x-auto px-6">
-          <table className="w-full min-w-[30rem] text-sm tabular-nums">
+          <table className="w-full min-w-[22rem] text-sm tabular-nums">
             <thead>
               <tr className="border-b border-line text-left text-xs uppercase tracking-[0.12em] text-muted">
                 <th className="py-2 pr-3 font-normal">State</th>
-                <th className="py-2 pr-3 font-normal">Democrat / challenger</th>
+                <th className="py-2 pr-3 font-normal">Democrat</th>
                 <th className="py-2 pr-3 font-normal">Republican</th>
                 <th className="py-2 pr-3 font-normal">Win chance</th>
-                <th className="hidden py-2 pr-3 font-normal sm:table-cell">Polls</th>
-                <th className="hidden py-2 pr-3 font-normal md:table-cell">Forecast</th>
-                <th className="py-2 font-normal">Rating</th>
+                <th className="hidden py-2 font-normal md:table-cell">Forecast</th>
               </tr>
             </thead>
             <tbody>
-              {races.map((r) => {
-                const rating = ratingInfo(r.rating);
-                const opp = partyLetter(r.opp);
-                return (
-                  <tr key={r.state} className="border-b border-line/60">
-                    <td className="py-2.5 pr-3">
-                      <span className="sm:hidden">{r.state}</span>
-                      <span className="hidden sm:inline">{r.name}</span>
-                      {r.special && <span className="text-muted"> (special)</span>}
-                    </td>
-                    <td className="py-2.5 pr-3">
-                      {r.opp.name} <span className="text-muted">({opp})</span>
-                    </td>
-                    <td className="py-2.5 pr-3">
-                      {r.rep.name} <span className="text-muted">(R)</span>
-                    </td>
-                    <td className="py-2.5 pr-3">
-                      <ChanceBar pOpp={r.p_opp} />
-                    </td>
-                    <td className="hidden py-2.5 pr-3 text-muted sm:table-cell">
-                      {r.poll_avg === null ? "None" : formatMargin(r.poll_avg, opp)}
-                      {r.n_polls > 0 && <span className="text-xs"> ({r.n_polls})</span>}
-                    </td>
-                    <td className="hidden py-2.5 pr-3 md:table-cell">{formatMargin(r.mean_margin, opp)}</td>
-                    <td className="py-2.5">
-                      <span className="flex items-center gap-1.5 whitespace-nowrap">
-                        <span className="inline-block size-2.5 rounded-sm" style={{ background: rating.color }} />
-                        {rating.label}
-                      </span>
-                    </td>
-                  </tr>
-                );
-              })}
+              {races.map((r) => (
+                <tr key={r.state} className="border-b border-line/60">
+                  <td className="py-2.5 pr-3">
+                    {r.state}
+                    {r.special && <span className="text-muted"> (special)</span>}
+                  </td>
+                  <td className="py-2.5 pr-3">
+                    <CandidateName race={r} side="opp" />
+                  </td>
+                  <td className="py-2.5 pr-3">
+                    <CandidateName race={r} side="rep" />
+                  </td>
+                  <td className="py-2.5 pr-3">
+                    <ChanceBar pOpp={r.p_opp} />
+                  </td>
+                  <td className="hidden py-2.5 md:table-cell">{formatMargin(r.mean_margin, partyLetter(r.opp))}</td>
+                </tr>
+              ))}
             </tbody>
           </table>
         </div>
-        <p className="text-xs text-muted">
-          Ranked from most to least Democratic-favored. Polls is the weighted polling average (number of polls in the last
-          four months); Forecast blends it with fundamentals.
-        </p>
+        <p className="text-xs text-muted">(I) = incumbent · * = independent</p>
       </section>
+
+      {history.some((h) => h.generic_ballot) && (
+        <section className="flex flex-col gap-4">
+          <SectionTitle>Generic ballot polling average</SectionTitle>
+          <PollingChart history={history} electionDay={forecast.election_day} kind="generic_ballot" />
+        </section>
+      )}
+
+      {history.some((h) => h.approval) && (
+        <section className="flex flex-col gap-4">
+          <SectionTitle>Trump approval polling average</SectionTitle>
+          <PollingChart history={history} electionDay={forecast.election_day} kind="approval" />
+        </section>
+      )}
     </div>
+  );
+}
+
+function CandidateName({ race, side }: { race: Race; side: "rep" | "opp" }) {
+  const c = race[side];
+  return (
+    <>
+      {c.name}
+      {c.party === "I" && "*"}
+      {isIncumbent(race, side) && <span className="text-muted"> (I)</span>}
+    </>
   );
 }
 
@@ -154,14 +166,12 @@ function Topline({ forecast }: { forecast: Forecast }) {
           <span className="text-5xl font-light tabular-nums" style={{ color: DEM }}>
             {dem}%
           </span>
-          <span className="text-sm text-muted">win the Senate in {outOf100(forecast.p_dem_control)} of 100 simulations</span>
         </div>
         <div className="flex flex-col items-end gap-1 text-right">
           <span className="text-xs uppercase tracking-[0.12em] text-muted">Republicans</span>
           <span className="text-5xl font-light tabular-nums" style={{ color: REP }}>
             {rep}%
           </span>
-          <span className="text-sm text-muted">keep it in {outOf100(forecast.p_rep_control)} of 100</span>
         </div>
       </div>
       <div className="flex h-2 overflow-hidden rounded-full bg-surface" aria-hidden>
@@ -170,25 +180,9 @@ function Topline({ forecast }: { forecast: Forecast }) {
         <div style={{ width: `${forecast.p_rep_control * 100}%`, background: REP }} />
       </div>
       <p className="text-sm text-muted">
-        Democrats average <span className="text-foreground tabular-nums">{forecast.dem_seats_mean.toFixed(1)}</span> seats
-        (80% range {forecast.dem_seats_10}–{forecast.dem_seats_90}); they need 51, since Vice President Vance breaks a
-        50–50 tie.
+        Democrats need 51 seats, since Vice President Vance breaks a 50–50 tie.
         {neither &&
           ` In ${Math.round(forecast.p_no_majority * 100)}% of simulations neither side reaches a majority without an independent.`}
-      </p>
-      <p className="text-sm text-muted">
-        National environment: <span className="text-foreground tabular-nums">{formatMargin(forecast.national_environment)}</span>
-        {forecast.generic_ballot != null && <> (generic ballot {formatMargin(forecast.generic_ballot)}</>}
-        {forecast.trump_net_approval != null && (
-          <>
-            {forecast.generic_ballot != null ? ", " : " ("}Trump net approval{" "}
-            <span className="tabular-nums">
-              {forecast.trump_net_approval > 0 ? "+" : "−"}
-              {Math.abs(forecast.trump_net_approval).toFixed(1)}
-            </span>
-          </>
-        )}
-        {(forecast.generic_ballot != null || forecast.trump_net_approval != null) && ")"}.
       </p>
     </section>
   );
