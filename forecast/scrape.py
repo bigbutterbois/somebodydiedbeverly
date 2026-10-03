@@ -51,8 +51,8 @@ def norm(text: str) -> str:
     return re.sub(r"\s+", " ", text).strip().lower()
 
 
-def wiki_title(race: dict) -> str:
-    return race.get("wiki") or f"2026_United_States_Senate_election_in_{race['name'].replace(' ', '_')}"
+def wiki_title(race: dict, year: int = 2026) -> str:
+    return race.get("wiki") or f"{year}_United_States_Senate_election_in_{race['name'].replace(' ', '_')}"
 
 
 def fetch_html(title: str, retries: int = 4) -> str:
@@ -191,7 +191,7 @@ def parse_rows(df, cols, idx, default_year, aggregators):
 
 
 def scrape_race(race: dict, aggregators: list[str], default_year: int) -> tuple[list[dict], list[str]]:
-    title = wiki_title(race)
+    title = wiki_title(race, default_year)
     tables = read_tables(fetch_html(title))
     required = {"rep": candidate_pattern(race["rep"]), "opp": candidate_pattern(race["opp"])}
     optional = {f"other{i}": candidate_pattern(o) for i, o in enumerate(race.get("others", []))}
@@ -230,11 +230,13 @@ def search_titles(query: str) -> list[str]:
         return []
 
 
-def scrape_generic_ballot(aggregators: list[str], default_year: int) -> list[dict]:
+def scrape_generic_ballot(aggregators: list[str], default_year: int, pages: list[str] | None = None,
+                          query: str | None = None) -> list[dict]:
     # Party columns ("Democratic", "Republican"), not candidate names.
     required = {"opp": re.compile(r"^democrat"), "rep": re.compile(r"^republican")}
-    found = [t for t in search_titles("2026 generic congressional ballot opinion polling") if "2026" in t]
-    titles = GENERIC_BALLOT_PAGES + found
+    query = query or f"{default_year} generic congressional ballot opinion polling"
+    found = [t for t in search_titles(query) if str(default_year) in t]
+    titles = (pages or GENERIC_BALLOT_PAGES) + found
     for title in dict.fromkeys(titles):
         try:
             tables = read_tables(fetch_html(title, retries=1))
@@ -254,8 +256,10 @@ def scrape_generic_ballot(aggregators: list[str], default_year: int) -> list[dic
     raise RuntimeError(f"no generic ballot table found in {', '.join(dict.fromkeys(titles))}")
 
 
-def scrape_all(races: list[dict], aggregators: list[str], verbose: bool = False) -> tuple[list[dict], list[str]]:
-    year = date.today().year
+def scrape_all(races: list[dict], aggregators: list[str], verbose: bool = False, year: int | None = None,
+               generic_ballot_pages: list[str] | None = None,
+               generic_ballot_search: str | None = None) -> tuple[list[dict], list[str]]:
+    year = year or date.today().year
     polls, problems = [], []
     for race in races:
         try:
@@ -269,7 +273,7 @@ def scrape_all(races: list[dict], aggregators: list[str], verbose: bool = False)
             for h in headers:
                 print(f"    {h}")
     try:
-        polls.extend(scrape_generic_ballot(aggregators, year))
+        polls.extend(scrape_generic_ballot(aggregators, year, generic_ballot_pages, generic_ballot_search))
     except Exception as e:
         problems.append(f"generic ballot: {e}")
     return polls, problems

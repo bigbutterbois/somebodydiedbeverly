@@ -19,12 +19,42 @@ polls:
   # Each pollster's polls in a race share weight 1/sqrt(count), so one
   # firm polling weekly doesn't swamp the average.
   pollster_count_damping: true
-  # Per-pollster weight multipliers (0 drops the pollster). Names as on Wikipedia.
+  # Pollster ratings (Mike signed off 2026-10-03): weight multipliers keyed by
+  # a case-insensitive pattern searched for in the pollster name as on
+  # Wikipedia; the first match wins, so order matters. 0 drops a pollster.
+  # Pollsters that match nothing get pollster_default_weight.
+  pollster_default_weight: 0.85
   pollster_weights:
-    "Trafalgar Group": 0.7
-    "Rasmussen Reports": 0.7
-    "Quantus Insights": 0.7
-    "ActiVote": 0.7
+    "times/siena": 1.5
+    "economist": 1.3
+    "marist": 1.2
+    "beacon|fox news": 1.2
+    "emerson": 1.15
+    "echelon": 1.1
+    "yougov": 1.1                 # YouGov polls for other sponsors (CBS, Yahoo...)
+    "quinnipiac": 1.0
+    "ipsos": 1.0
+    "cygnal": 1.0
+    "trafalgar": 0.6              # before InsiderAdvantage, for their joint polls
+    "insider ?advantage": 0.95
+    "morning consult": 0.9
+    "university of new hampshire": 0.9
+    "co/?efficient": 0.9
+    "change research": 0.85
+    "abacus": 0.85
+    "global strategy": 0.8
+    "wedgewood": 0.7
+    "activote": 0.7
+    "big data poll": 0.6
+    "quantus": 0.6
+    "rasmussen": 0.5
+  # Bipartisan polling teams: a (D) or (R) tag on one partner doesn't make the
+  # poll partisan (Fox News, NBC News, AARP polls).
+  bipartisan:
+    - "beacon.*shaw"
+    - "hart research.*public opinion strategies"
+    - "fabrizio.*impact"
+    - "cygnal.*beacon"
   # House effects: points a pollster leans toward Dems (negative = leans R).
   # Subtracted from that pollster's margins.
   house_effects: {}
@@ -50,16 +80,16 @@ fundamentals:
   # blended across years.
   lean_weights: { "2024": 0.75, "2020": 0.25 }
   # Senate races are a bit less partisan than presidential ones: lean is scaled by this.
-  lean_factor: 0.85
+  lean_factor: 0.95
   # National environment (Dem lead nationally), blended from two signals:
   # the generic ballot average, and Trump's net approval translated into an
   # expected Dem lead (intercept + slope x net disapproval).
   generic_ballot_half_life_days: 14
-  generic_ballot_weight: 0.7
-  approval_weight: 0.3
+  generic_ballot_weight: 0.8
+  approval_weight: 0.2
   approval_half_life_days: 14
   approval_intercept: 1.0       # Dem lead when Trump's net approval is 0
-  approval_slope: 0.4           # extra Dem lead per point of net disapproval
+  approval_slope: 0.3           # extra Dem lead per point of net disapproval
   generic_ballot_fallback: 4.5  # used if the generic ballot scrape fails
   national_environment_override: null  # set a number to force it
   # Sitting senators running again get this many points.
@@ -67,16 +97,28 @@ fundamentals:
   appointed_incumbency_factor: 0.5   # appointed incumbents get half
   # Polls vs. fundamentals: the fundamentals prior counts as this many fresh,
   # full-weight polls. Lower = trust polls sooner.
-  prior_weight_in_polls: 2.0
+  prior_weight_in_polls: 1.0
   # Fundraising: individual contributions this cycle (FEC). Points per
   # doubling of one side's haul over the other's, capped.
-  fundraising_points_per_doubling: 1.0
-  fundraising_cap: 3.0
-  # Election-day weather: rain is thought to cut turnout slightly in a way
-  # that helps Republicans. Points toward the GOP per inch of forecast rain
-  # in the state's biggest metro; kicks in once Nov 3 is within 16 days.
+  fundraising_points_per_doubling: 0.5
+  fundraising_cap: 2.0
+  # Election-day weather: Mike's call is that rain helps Democrats. Points
+  # toward the opposition (usually Dem) per inch of forecast rain in the
+  # state's biggest metro; negative flips it toward the GOP. Kicks in once
+  # Nov 3 is within 16 days.
   weather_points_per_inch: 1.0
   weather_cap: 1.5
+
+# --- Economy ---------------------------------------------------------------
+# Market moves over the lookback window, added to the national environment.
+# A better economy helps the president's party (now the GOP): a rising S&P 500
+# counts as better, rising 10-year yields and Brent crude as worse. Source: FRED.
+economy:
+  lookback_days: 90
+  sp500_points_per_10pct: 1.0   # S&P up 10% -> 1 pt toward the president's party
+  yield_points_per_point: 1.0   # 10-year yield up 1 percentage point -> 1 pt against
+  brent_points_per_10pct: 0.5   # Brent up 10% -> 0.5 pt against
+  cap: 2.0                      # total economy effect is capped at this many points
 
 # --- Simulation error (standard deviations, points of margin) --------------
 error:

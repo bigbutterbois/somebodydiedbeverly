@@ -1,4 +1,4 @@
-"""Extra fundamentals: FEC fundraising, Trump approval polls, election-day weather.
+"""Extra fundamentals: FEC fundraising, approval polls, election-day weather, the economy.
 
 Each fetcher returns plain data and never raises: a source that fails just
 contributes nothing that day, and the run says so in its problems list.
@@ -22,6 +22,10 @@ APPROVAL_PAGES = [
     "Opinion_polling_on_the_second_Donald_Trump_administration",
 ]
 OPEN_METEO = "https://api.open-meteo.com/v1/forecast"
+FRED_CSV = "https://fred.stlouisfed.org/graph/fredgraph.csv"
+# Daily market series from FRED (no API key needed): S&P 500 close, 10-year
+# Treasury yield (percent) and Brent crude (dollars per barrel).
+ECONOMY_SERIES = {"sp500": "SP500", "yield_10y": "DGS10", "brent": "DCOILBRENTEU"}
 
 # One point per state for the weather forecast: its largest metro area.
 STATE_POINTS = {
@@ -89,13 +93,14 @@ def fetch_fundraising(races: list[dict], year: int) -> tuple[dict, list[str]]:
     return out, problems
 
 
-def scrape_approval(aggregators: list[str]) -> tuple[list[dict], list[str]]:
-    """Trump approval polls, stored as polls with state APPROVAL (opp = approve, rep = disapprove)."""
+def scrape_approval(aggregators: list[str], year: int | None = None, pages: list[str] | None = None,
+                    query: str = "Opinion polling on the second Trump presidency approval",
+                    name: str = "trump") -> tuple[list[dict], list[str]]:
+    """Presidential approval polls, stored as polls with state APPROVAL (opp = approve, rep = disapprove)."""
     required = {"opp": re.compile(r"^approv"), "rep": re.compile(r"^disapprov")}
-    found = [t for t in scrape.search_titles("Opinion polling on the second Trump presidency approval")
-             if "trump" in t.lower()]
-    year = date.today().year
-    for title in dict.fromkeys(APPROVAL_PAGES + found):
+    found = [t for t in scrape.search_titles(query) if name in t.lower()]
+    year = year or date.today().year
+    for title in dict.fromkeys((pages or APPROVAL_PAGES) + found):
         try:
             tables = scrape.read_tables(scrape.fetch_html(title, retries=1))
         except RuntimeError:
@@ -117,7 +122,7 @@ def scrape_approval(aggregators: list[str]) -> tuple[list[dict], list[str]]:
                 print(f"    {p['end_date']} {p['pollster']}: approve {p['opp']} disapprove {p['rep']} ({p['population']})")
             return [{"state": "APPROVAL", **p, "others": [],
                      "source": f"https://en.wikipedia.org/wiki/{title}"} for p in best.values()], []
-    return [], ["approval: no Trump approval table found"]
+    return [], [f"approval: no {name.title()} approval table found"]
 
 
 def fetch_weather(election_day: date) -> tuple[dict, list[str]]:
@@ -139,3 +144,23 @@ def fetch_weather(election_day: date) -> tuple[dict, list[str]]:
         return {}, [f"weather: {e}"]
     print(f"weather: election-day rain forecast for {len(out)} states")
     return out, []
+
+
+def fetch_economy(start: date) -> tuple[dict, list[str]]:
+    """Daily values since `start`: {"sp500": {date: value}, "yield_10y": {...}, "brent": {...}}."""
+    out, problems = {}, []
+    for key, series in ECONOMY_SERIES.items():
+        try:
+            r = requests.get(FRED_CSV, headers=scrape.HEADERS, timeout=60,
+                             params={"id": series, "cosd": start.isoformat()})
+            r.raise_for_status()
+            rows = list(csv.reader(io.StringIO(r.text)))[1:]
+            values = {d: float(v) for d, v, *_ in rows if v not in ("", ".")}
+            if not values:
+                raise ValueError("no data")
+            out[key] = values
+            last = max(values)
+            print(f"economy: {key} ({series}) {len(values)} days, latest {last} = {values[last]}")
+        except Exception as e:
+            problems.append(f"economy: {series}: {e}")
+    return out, problems

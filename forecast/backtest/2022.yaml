@@ -1,0 +1,106 @@
+# The 2022 Senate elections, for backtesting the model (forecast/backtest.py).
+# Same shape as races.yaml, with the two prior presidential results (2020 and
+# 2016) standing in for 2024 and 2020, plus each race's actual result.
+# result: final margin, opposition (Dem, or McMullin in Utah) minus Republican, points.
+# Alaska (Murkowski vs Tshibaka, both Republicans) is left out and counted as a
+# Republican seat not up. Georgia uses the Nov 8 first round (Warnock led, then
+# won the runoff).
+
+election_day: 2022-11-08
+president_party: D
+seats_not_up: { D: 36, R: 30 }
+national_pres_2020: 4.5
+national_pres_2016: 2.1
+actual_dem_seats: 51
+generic_ballot_pages:
+  - Nationwide_opinion_polling_for_the_2022_United_States_House_of_Representatives_elections
+  - Opinion_polling_for_the_2022_United_States_House_of_Representatives_elections
+  - 2022_United_States_House_of_Representatives_elections
+generic_ballot_search: 2022 generic congressional ballot opinion polling
+# Wikipedia has no 2022 generic ballot poll table, so the backtest falls back to
+# these points from FiveThirtyEight's generic ballot average (Dem minus Rep,
+# approximate, read off its chart).
+generic_ballot_average:
+  - { date: 2022-08-01, margin: 0.0 }
+  - { date: 2022-08-15, margin: 0.5 }
+  - { date: 2022-09-01, margin: 1.2 }
+  - { date: 2022-09-15, margin: 1.5 }
+  - { date: 2022-10-01, margin: 1.0 }
+  - { date: 2022-10-15, margin: -0.5 }
+  - { date: 2022-11-01, margin: -1.0 }
+  - { date: 2022-11-07, margin: -1.2 }
+approval_pages:
+  - Opinion_polling_on_the_Joe_Biden_administration
+approval_search: Opinion polling on the Joe Biden administration 2022 approval
+approval_name: biden
+
+races:
+  - { state: AL, name: Alabama, region: south, incumbent: none, pres_2020: -25.5, pres_2016: -27.7, result: -35.7,
+      rep: { name: Katie Britt }, opp: { name: Will Boyd, party: D, caucus: D } }
+  - { state: AZ, name: Arizona, region: west, incumbent: D, pres_2020: 0.3, pres_2016: -3.5, result: 4.9,
+      rep: { name: Blake Masters }, opp: { name: Mark Kelly, party: D, caucus: D } }
+  - { state: AR, name: Arkansas, region: south, incumbent: R, pres_2020: -27.6, pres_2016: -26.9, result: -34.7,
+      rep: { name: John Boozman }, opp: { name: Natalie James, party: D, caucus: D } }
+  - { state: CA, name: California, region: west, incumbent: D, appointed: true, pres_2020: 29.2, pres_2016: 30.1, result: 22.2,
+      rep: { name: Mark Meuser }, opp: { name: Alex Padilla, party: D, caucus: D } }
+  - { state: CO, name: Colorado, region: west, incumbent: D, pres_2020: 13.5, pres_2016: 4.9, result: 14.6,
+      rep: { name: Joe O'Dea, match: "o.?dea" }, opp: { name: Michael Bennet, party: D, caucus: D } }
+  - { state: CT, name: Connecticut, region: northeast, incumbent: D, pres_2020: 20.1, pres_2016: 13.6, result: 14.9,
+      rep: { name: Leora Levy }, opp: { name: Richard Blumenthal, party: D, caucus: D } }
+  - { state: FL, name: Florida, region: south, incumbent: R, pres_2020: -3.4, pres_2016: -1.2, result: -16.4,
+      rep: { name: Marco Rubio }, opp: { name: Val Demings, party: D, caucus: D } }
+  - { state: GA, name: Georgia, region: south, incumbent: D, pres_2020: 0.2, pres_2016: -5.1, result: 0.9,
+      rep: { name: Herschel Walker }, opp: { name: Raphael Warnock, party: D, caucus: D } }
+  - { state: HI, name: Hawaii, region: west, incumbent: D, pres_2020: 29.5, pres_2016: 32.2, result: 45.2,
+      rep: { name: Bob McDermott }, opp: { name: Brian Schatz, party: D, caucus: D } }
+  - { state: ID, name: Idaho, region: west, incumbent: R, pres_2020: -30.8, pres_2016: -31.8, result: -32.0,
+      rep: { name: Mike Crapo }, opp: { name: David Roth, party: D, caucus: D } }
+  - { state: IL, name: Illinois, region: midwest, incumbent: D, pres_2020: 17.0, pres_2016: 17.1, result: 14.4,
+      rep: { name: Kathy Salvi }, opp: { name: Tammy Duckworth, party: D, caucus: D } }
+  - { state: IN, name: Indiana, region: midwest, incumbent: R, pres_2020: -16.1, pres_2016: -19.2, result: -20.7,
+      rep: { name: Todd Young }, opp: { name: Thomas McDermott, party: D, caucus: D } }
+  - { state: IA, name: Iowa, region: midwest, incumbent: R, pres_2020: -8.2, pres_2016: -9.4, result: -12.1,
+      rep: { name: Chuck Grassley }, opp: { name: Mike Franken, party: D, caucus: D } }
+  - { state: KS, name: Kansas, region: plains, incumbent: R, pres_2020: -14.6, pres_2016: -20.4, result: -23.0,
+      rep: { name: Jerry Moran }, opp: { name: Mark Holland, party: D, caucus: D } }
+  - { state: KY, name: Kentucky, region: south, incumbent: R, pres_2020: -25.9, pres_2016: -29.8, result: -23.6,
+      rep: { name: Rand Paul }, opp: { name: Charles Booker, party: D, caucus: D } }
+  - { state: LA, name: Louisiana, region: south, incumbent: R, pres_2020: -18.6, pres_2016: -19.6, result: -43.7,
+      rep: { name: John Kennedy }, opp: { name: Gary Chambers, party: D, caucus: D } }
+  - { state: MD, name: Maryland, region: northeast, incumbent: D, pres_2020: 33.2, pres_2016: 26.4, result: 31.7,
+      rep: { name: Chris Chaffee }, opp: { name: Chris Van Hollen, party: D, caucus: D } }
+  - { state: MO, name: Missouri, region: midwest, incumbent: none, pres_2020: -15.4, pres_2016: -18.6, result: -13.2,
+      rep: { name: Eric Schmitt }, opp: { name: Trudy Busch Valentine, party: D, caucus: D } }
+  - { state: NV, name: Nevada, region: west, incumbent: D, pres_2020: 2.4, pres_2016: 2.4, result: 0.8,
+      rep: { name: Adam Laxalt }, opp: { name: Catherine Cortez Masto, party: D, caucus: D } }
+  - { state: NH, name: New Hampshire, region: northeast, incumbent: D, pres_2020: 7.4, pres_2016: 0.4, result: 9.1,
+      rep: { name: Don Bolduc }, opp: { name: Maggie Hassan, party: D, caucus: D } }
+  - { state: NY, name: New York, region: northeast, incumbent: D, pres_2020: 23.1, pres_2016: 22.5, result: 14.1,
+      rep: { name: Joe Pinion }, opp: { name: Chuck Schumer, party: D, caucus: D } }
+  - { state: NC, name: North Carolina, region: south, incumbent: none, pres_2020: -1.3, pres_2016: -3.7, result: -3.2,
+      rep: { name: Ted Budd }, opp: { name: Cheri Beasley, party: D, caucus: D } }
+  - { state: ND, name: North Dakota, region: plains, incumbent: R, pres_2020: -33.3, pres_2016: -35.7, result: -31.4,
+      rep: { name: John Hoeven }, opp: { name: Katrina Christiansen, party: D, caucus: D } }
+  - { state: OH, name: Ohio, region: midwest, incumbent: none, pres_2020: -8.0, pres_2016: -8.1, result: -6.1,
+      rep: { name: JD Vance }, opp: { name: Tim Ryan, party: D, caucus: D } }
+  - { state: OK, name: Oklahoma, region: plains, incumbent: R, pres_2020: -33.1, pres_2016: -36.4, result: -32.2,
+      rep: { name: James Lankford }, opp: { name: Madison Horn, party: D, caucus: D, fec_first: MADISON } }
+  - { state: OK-S, name: Oklahoma (special), region: plains, incumbent: none, pres_2020: -33.1, pres_2016: -36.4, result: -26.6,
+      wiki: 2022_United_States_Senate_special_election_in_Oklahoma,
+      rep: { name: Markwayne Mullin }, opp: { name: Kendra Horn, party: D, caucus: D, fec_first: KENDRA } }
+  - { state: OR, name: Oregon, region: west, incumbent: D, pres_2020: 16.1, pres_2016: 11.0, result: 15.7,
+      rep: { name: Jo Rae Perkins }, opp: { name: Ron Wyden, party: D, caucus: D } }
+  - { state: PA, name: Pennsylvania, region: northeast, incumbent: none, pres_2020: 1.2, pres_2016: -0.7, result: 4.9,
+      rep: { name: Mehmet Oz }, opp: { name: John Fetterman, party: D, caucus: D } }
+  - { state: SC, name: South Carolina, region: south, incumbent: R, pres_2020: -11.7, pres_2016: -14.3, result: -25.9,
+      rep: { name: Tim Scott }, opp: { name: Catherine Fleming Bruce, party: D, caucus: D } }
+  - { state: SD, name: South Dakota, region: plains, incumbent: R, pres_2020: -26.2, pres_2016: -29.8, result: -43.4,
+      rep: { name: John Thune }, opp: { name: Brian Bengs, party: D, caucus: D } }
+  - { state: UT, name: Utah, region: west, incumbent: R, pres_2020: -20.5, pres_2016: -18.1, result: -10.4,
+      rep: { name: Mike Lee }, opp: { name: Evan McMullin, party: I, caucus: none } }
+  - { state: VT, name: Vermont, region: northeast, incumbent: none, pres_2020: 35.4, pres_2016: 26.4, result: 40.5,
+      rep: { name: Gerald Malloy }, opp: { name: Peter Welch, party: D, caucus: D } }
+  - { state: WA, name: Washington, region: west, incumbent: D, pres_2020: 19.2, pres_2016: 15.7, result: 14.5,
+      rep: { name: Tiffany Smiley }, opp: { name: Patty Murray, party: D, caucus: D } }
+  - { state: WI, name: Wisconsin, region: midwest, incumbent: R, pres_2020: 0.6, pres_2016: -0.8, result: -1.0,
+      rep: { name: Ron Johnson }, opp: { name: Mandela Barnes, party: D, caucus: D } }
