@@ -98,7 +98,8 @@ def weather_shift(state: str, extras: dict, cfg: dict) -> float:
     if rain is None:
         return 0.0
     f = cfg["fundamentals"]
-    return -min(f["weather_cap"], f["weather_points_per_inch"] * rain)
+    shift = f["weather_points_per_inch"] * rain
+    return max(-f["weather_cap"], min(f["weather_cap"], shift))
 
 
 def prior_margin(race: dict, facts: dict, env: float, cfg: dict, extras: dict | None = None) -> float:
