@@ -187,8 +187,9 @@ def main() -> int:
         days = [args.backfill_from + timedelta(d) for d in range((today - args.backfill_from).days + 1)]
 
     history = {h["date"]: h for h in load_json(data / "history.json", [])}
-    # Days saved before a field was added get rebuilt so every chart covers the whole history.
-    if not args.backfill_from and history and any("approval" not in h for h in history.values()):
+    # Every saved day is rebuilt from all the polls known now, so polls that are
+    # published or found late (or a new field) fill in the charts going back.
+    if not args.backfill_from and history:
         days = [date.fromisoformat(min(history)) + timedelta(d)
                 for d in range((today - date.fromisoformat(min(history))).days + 1)]
     result = None
