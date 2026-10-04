@@ -1,12 +1,11 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { DEM, REP, type SampleSimulation } from "@/lib/forecast";
+import { DEM, REP, seatDots, type SampleSimulation } from "@/lib/forecast";
 
 type Shape = { name: string; d: string };
 
 const PAD = { top: 8, right: 8, bottom: 44, left: 8 };
-const DOTS = 100;
 
 // 100 representative simulations as dots, stacked by how many seats Democrats
 // win. Blue dots are outcomes where Democrats control the Senate. Hovering a dot
@@ -45,7 +44,7 @@ export function SeatHistogram({
       stacks.set(sim.dem_seats, [...(stacks.get(sim.dem_seats) ?? []), sim]);
     }
   } else {
-    for (const [s, n] of toDots(distribution)) stacks.set(s, Array(n).fill(null));
+    for (const [s, n] of seatDots(distribution)) stacks.set(s, Array(n).fill(null));
   }
   const counts = new Map([...stacks].map(([s, list]) => [s, list.length]));
   const seats = [...counts.keys()];
@@ -167,16 +166,4 @@ function MiniMap({
       <path d={borders} fill="none" stroke="var(--background)" strokeWidth={2} strokeLinejoin="round" />
     </svg>
   );
-}
-
-/** Round the seat distribution to 100 dots (largest remainder), keyed by Democratic seats. */
-function toDots(distribution: Record<string, number>) {
-  const entries = Object.entries(distribution).map(([s, p]) => ({ s: Number(s), exact: p * DOTS }));
-  const base = entries.map((e) => ({ ...e, n: Math.floor(e.exact) }));
-  let left = DOTS - base.reduce((sum, e) => sum + e.n, 0);
-  for (const e of [...base].sort((a, b) => b.exact - b.n - (a.exact - a.n))) {
-    if (left-- <= 0) break;
-    e.n += 1;
-  }
-  return new Map(base.filter((e) => e.n > 0).sort((a, b) => a.s - b.s).map((e) => [e.s, e.n]));
 }
