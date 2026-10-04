@@ -127,6 +127,7 @@ export default async function ForecastPage() {
                   <td className="py-2.5 pr-2">
                     {r.state}
                     {r.special && <span className="hidden text-muted sm:inline"> (special)</span>}
+                    {tipping && <span className="block text-[10px] leading-tight text-muted">Tipping point</span>}
                   </td>
                   <td className="py-2.5 pr-2">
                     <CandidateName race={r} side="opp" />
