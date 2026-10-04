@@ -30,7 +30,8 @@ for name, url in URLS.items():
         hits = NUM.findall(re.sub(r"<[^>]+>", " ", text))
         print(f"{r.status_code} {name}: {len(text)} bytes, {len(items)} feed items, {len(hits)} approval numbers")
         for t, d in items[:6]:
-            print(f"    {d[:16]} | {re.sub(r'<!\\[CDATA\\[|\\]\\]>', '', t)[:110]}")
+            title = t.replace("<![CDATA[", "").replace("]]>", "")
+            print(f"    {d[:16]} | {title[:110]}")
         if hits:
             print(f"    numbers: {hits[:6]}")
     except Exception as e:
