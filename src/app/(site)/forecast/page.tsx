@@ -123,11 +123,15 @@ export default async function ForecastPage() {
               // The tipping-point race: whichever party wins it and every race on its side controls the Senate.
               const tipping = i === needed - 1;
               return (
-                <tr key={r.state} className={`border-b border-line/60 align-top ${tipping ? "bg-surface" : ""}`}>
-                  <td className="py-2.5 pr-2">
+                <tr key={r.state} className={`border-b border-line/60 align-top ${tipping ? "bg-accent/10" : ""}`}>
+                  <td className={`relative py-2.5 pr-2 ${tipping ? "pl-2 shadow-[inset_2px_0_0_var(--accent)]" : ""}`}>
+                    {tipping && (
+                      <span className="absolute -top-2 left-2 rounded-sm bg-accent px-1.5 text-[9px] leading-4 font-medium tracking-wider whitespace-nowrap text-background uppercase">
+                        Tipping point
+                      </span>
+                    )}
                     {r.state}
                     {r.special && <span className="hidden text-muted sm:inline"> (special)</span>}
-                    {tipping && <span className="block text-[10px] leading-tight text-muted">Tipping point</span>}
                   </td>
                   <td className="py-2.5 pr-2">
                     <CandidateName race={r} side="opp" />
@@ -147,8 +151,8 @@ export default async function ForecastPage() {
           </tbody>
         </table>
         <p className="text-xs text-muted">
-          Chance is the favorite&rsquo;s chance of winning; margin is the projected vote margin. The shaded row is
-          the tipping-point race: the party that wins it and every race on its side of the table controls the
+          Chance is the favorite&rsquo;s chance of winning; margin is the projected vote margin. The tipping-point
+          race: the party that wins it and every race on its side of the table controls the
           Senate. (I) = incumbent · * =
           independent
         </p>
