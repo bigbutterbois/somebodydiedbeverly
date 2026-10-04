@@ -14,7 +14,7 @@ export default async function EditSightingPage({ params }: PageProps<"/admin/pla
   const [{ data: sighting }, countries] = await Promise.all([
     supabase
       .from("plate_sightings")
-      .select("id, country_id, date_spotted, note")
+      .select("id, country_id")
       .eq("id", id)
       .maybeSingle(),
     getCountries(),
@@ -34,8 +34,6 @@ export default async function EditSightingPage({ params }: PageProps<"/admin/pla
         action={updateSighting.bind(null, sighting.id)}
         initial={{
           country: countries.find((c) => c.id === sighting.country_id),
-          date: sighting.date_spotted,
-          note: sighting.note ?? undefined,
         }}
         submitLabel="Save changes"
       />

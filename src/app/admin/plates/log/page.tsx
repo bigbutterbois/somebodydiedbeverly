@@ -1,6 +1,5 @@
 import Link from "next/link";
 import { getCountries } from "@/lib/supabase/countries";
-import { todayInDC } from "@/lib/plates";
 import { logSighting } from "../actions";
 import { SightingForm } from "../SightingForm";
 
@@ -20,7 +19,6 @@ export default async function LogPlatePage() {
       <SightingForm
         countries={countries}
         action={logSighting}
-        initial={{ date: todayInDC() }}
         submitLabel="Save sighting"
         autoFocus
       />

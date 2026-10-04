@@ -1,11 +1,9 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
-import { formatDate, type Country } from "@/lib/plates";
+import type { Country } from "@/lib/plates";
 
-type Row = Country & {
-  plate_sightings: { id: string; date_spotted: string; note: string | null }[];
-};
+type Row = Country & { plate_sightings: { id: string }[] };
 
 // How a country code shows up on each kind of plate.
 const PLATE_FORMATS = [
@@ -19,9 +17,8 @@ async function getCountry(slug: string) {
   const supabase = await createClient();
   const { data } = await supabase
     .from("countries")
-    .select("id, name, slug, plate_codes, plate_sightings(id, date_spotted, note)")
+    .select("id, name, slug, plate_codes, plate_sightings(id)")
     .eq("slug", slug)
-    .order("date_spotted", { referencedTable: "plate_sightings", ascending: false })
     .maybeSingle()
     .overrideTypes<Row, { merge: false }>();
   return data;
@@ -65,23 +62,6 @@ export default async function CountryPlatesPage({ params }: PageProps<"/plates/[
         </dl>
       </section>
 
-      {sightings.length > 0 && (
-        <section className="flex flex-col gap-3">
-          <h2 className="border-b border-line pb-2 text-xs uppercase tracking-[0.12em] text-muted">
-            Sightings
-          </h2>
-          <ul className="flex flex-col divide-y divide-line">
-            {sightings.map((s) => (
-              <li key={s.id} className="flex flex-wrap gap-x-4 gap-y-1 py-2">
-                <span className="w-28 shrink-0 text-sm text-muted tabular-nums">
-                  {formatDate(s.date_spotted)}
-                </span>
-                {s.note && <span>{s.note}</span>}
-              </li>
-            ))}
-          </ul>
-        </section>
-      )}
     </div>
   );
 }
