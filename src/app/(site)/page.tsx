@@ -4,6 +4,7 @@ import Image from "next/image";
 import { formatPostDate } from "@/lib/blog";
 import { DEM, REP, getForecast } from "@/lib/forecast";
 import { galleryImageUrl } from "@/lib/gallery";
+import { SeatHistogramPreview } from "./forecast/SeatHistogramPreview";
 import { getGalleryItems } from "@/lib/supabase/gallery";
 import { createClient } from "@/lib/supabase/server";
 
@@ -29,12 +30,54 @@ export default async function Home() {
     <div className="flex flex-col gap-14 py-6">
       <header className="flex flex-col gap-3">
         <h1 className="max-w-2xl text-4xl font-light tracking-tight text-balance sm:text-5xl">
-          Paintings, notes, and the occasional election model.
+          Election forecasting and other silly projects
         </h1>
-        <p className="text-muted">A small site for friends and family.</p>
+        <p className="text-muted">Published stuff here</p>
       </header>
 
-      <HomeSection title="Recent work" href="/gallery">
+      <HomeSection title="2026 Senate election forecast" href="/forecast">
+        {forecast ? (
+          <Link href="/forecast" className="flex flex-col gap-4 tabular-nums">
+            <div className="flex flex-col gap-2">
+              <p className="text-sm text-muted">Chance of winning the Senate</p>
+              <p className="flex gap-6">
+                <span>
+                  <span className="text-2xl" style={{ color: DEM }}>{Math.round(forecast.p_dem_control * 100)}%</span>
+                  <span className="text-muted"> Dem</span>
+                </span>
+                <span>
+                  <span className="text-2xl" style={{ color: REP }}>{Math.round(forecast.p_rep_control * 100)}%</span>
+                  <span className="text-muted"> Rep</span>
+                </span>
+              </p>
+            </div>
+            {forecast.dem_seat_distribution && <SeatHistogramPreview forecast={forecast} />}
+          </Link>
+        ) : (
+          <EmptyPreview>The first Senate forecast is on its way.</EmptyPreview>
+        )}
+      </HomeSection>
+
+      <HomeSection title="Blog: latest posts" href="/blog">
+        {posts?.length ? (
+          <ul className="flex flex-col gap-3">
+            {posts.map((post) => (
+              <li key={post.id} className="flex flex-col">
+                <Link href={`/blog/${post.slug}`} className="hover:text-accent">
+                  {post.title}
+                </Link>
+                <span className="text-xs text-muted tabular-nums">
+                  {formatPostDate(post.published_at)}
+                </span>
+              </li>
+            ))}
+          </ul>
+        ) : (
+          <EmptyPreview>No posts yet.</EmptyPreview>
+        )}
+      </HomeSection>
+
+      <HomeSection title="Gallery" href="/gallery">
         <div className="grid grid-cols-3 gap-3">
           {[0, 1, 2].map((i) =>
             pieces[i] ? (
@@ -55,53 +98,12 @@ export default async function Home() {
         {pieces.length === 0 && <EmptyPreview>New pieces will show up here.</EmptyPreview>}
       </HomeSection>
 
-      <div className="grid gap-14 md:grid-cols-2">
-        <HomeSection title="Latest posts" href="/blog">
-          {posts?.length ? (
-            <ul className="flex flex-col gap-3">
-              {posts.map((post) => (
-                <li key={post.id} className="flex flex-col">
-                  <Link href={`/blog/${post.slug}`} className="hover:text-accent">
-                    {post.title}
-                  </Link>
-                  <span className="text-xs text-muted tabular-nums">
-                    {formatPostDate(post.published_at)}
-                  </span>
-                </li>
-              ))}
-            </ul>
-          ) : (
-            <EmptyPreview>No posts yet.</EmptyPreview>
-          )}
-        </HomeSection>
-
-        <HomeSection title="Forecast" href="/forecast">
-          {forecast ? (
-            <div className="flex flex-col gap-2 tabular-nums">
-              <p className="text-sm text-muted">Chance of winning the Senate</p>
-              <p className="flex gap-6">
-                <span>
-                  <span className="text-2xl" style={{ color: DEM }}>{Math.round(forecast.p_dem_control * 100)}%</span>
-                  <span className="text-muted"> Dem</span>
-                </span>
-                <span>
-                  <span className="text-2xl" style={{ color: REP }}>{Math.round(forecast.p_rep_control * 100)}%</span>
-                  <span className="text-muted"> Rep</span>
-                </span>
-              </p>
-            </div>
-          ) : (
-            <EmptyPreview>The first Senate forecast is on its way.</EmptyPreview>
-          )}
-        </HomeSection>
-
-        <HomeSection title="Diplomat plates" href="/plates">
-          <p className="tabular-nums">
-            <span className="text-2xl">{spotted}</span>
-            <span className="text-muted"> of {totalCountries ?? 0} countries spotted</span>
-          </p>
-        </HomeSection>
-      </div>
+      <HomeSection title="Diplomat plate sightings" href="/plates">
+        <p className="tabular-nums">
+          <span className="text-2xl">{spotted}</span>
+          <span className="text-muted"> of {totalCountries ?? 0} countries spotted</span>
+        </p>
+      </HomeSection>
     </div>
   );
 }

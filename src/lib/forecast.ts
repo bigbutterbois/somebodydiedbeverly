@@ -126,3 +126,15 @@ export function formatMargin(m: number | null, opp: "D" | "I" | "R" = "D") {
 export function formatDay(iso: string, opts: Intl.DateTimeFormatOptions = { month: "long", day: "numeric" }) {
   return new Date(`${iso}T12:00:00Z`).toLocaleDateString("en-US", { ...opts, timeZone: "UTC" });
 }
+
+/** Round the seat distribution to 100 dots (largest remainder), keyed by Democratic seats. */
+export function seatDots(distribution: Record<string, number>, dots = 100) {
+  const entries = Object.entries(distribution).map(([s, p]) => ({ s: Number(s), exact: p * dots }));
+  const base = entries.map((e) => ({ ...e, n: Math.floor(e.exact) }));
+  let left = dots - base.reduce((sum, e) => sum + e.n, 0);
+  for (const e of [...base].sort((a, b) => b.exact - b.n - (a.exact - a.n))) {
+    if (left-- <= 0) break;
+    e.n += 1;
+  }
+  return new Map(base.filter((e) => e.n > 0).sort((a, b) => a.s - b.s).map((e) => [e.s, e.n]));
+}
