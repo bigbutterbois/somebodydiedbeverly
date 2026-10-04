@@ -104,12 +104,23 @@ def national_environment(polls: list[dict], as_of: date, cfg: dict, president_pa
     net, net_w = weighted_average([p for p in polls if p["state"] == "APPROVAL"], as_of, cfg, f["approval_half_life_days"])
     gb = gb if gb is not None and gb_w >= 1.0 else None
     net = net if net is not None and net_w >= 1.0 else None
+    # When approval polling dries up, fade it out instead of leaning on old polls:
+    # full weight up to approval_stale_days since the newest poll, then down to
+    # zero over the next approval_fade_days.
+    approval_weight = f["approval_weight"]
+    dates = [p["end_date"] for p in polls if p["state"] == "APPROVAL" and p["end_date"] <= as_of.isoformat()]
+    if net is not None and dates and f.get("approval_stale_days") is not None:
+        quiet = (as_of - date.fromisoformat(max(dates))).days - f["approval_stale_days"]
+        if quiet > 0:
+            approval_weight *= max(0.0, 1 - quiet / f.get("approval_fade_days", 14))
+    if approval_weight <= 0:
+        net = None
     parts = []
     if gb is not None:
         parts.append((f["generic_ballot_weight"], gb))
     if net is not None:
         out_party_lead = f["approval_intercept"] - f["approval_slope"] * net
-        parts.append((f["approval_weight"], out_party_lead if president_party == "R" else -out_party_lead))
+        parts.append((approval_weight, out_party_lead if president_party == "R" else -out_party_lead))
     if not parts:
         return {"value": float(f["generic_ballot_fallback"]), "source": "fallback"}
     value = sum(w * v for w, v in parts) / sum(w for w, _ in parts)
