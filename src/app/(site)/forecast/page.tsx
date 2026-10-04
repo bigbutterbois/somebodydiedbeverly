@@ -142,7 +142,13 @@ export default async function ForecastPage() {
                   <td className="py-2.5 pr-2 text-right" style={{ color: demFavored ? DEM : REP }}>
                     {outOf100(demFavored ? r.p_opp : r.p_rep)}%
                   </td>
-                  <td className="py-2.5 text-right" style={{ color: r.mean_margin >= 0 ? DEM : REP }}>
+                  <td
+                    className={`py-2.5 text-right ${
+                      // On phones the tint runs through the page gutter to the right edge of the screen.
+                      tipping ? "relative max-sm:after:absolute max-sm:after:inset-y-0 max-sm:after:left-full max-sm:after:w-6 max-sm:after:bg-accent/10" : ""
+                    }`}
+                    style={{ color: r.mean_margin >= 0 ? DEM : REP }}
+                  >
                     {formatMargin(r.mean_margin, partyLetter(r.opp))}
                   </td>
                 </tr>
