@@ -1,4 +1,3 @@
-import { Fragment } from "react";
 import {
   DEM,
   RATINGS,
@@ -121,42 +120,35 @@ export default async function ForecastPage() {
           <tbody>
             {races.map((r, i) => {
               const demFavored = r.p_opp >= 0.5;
-              const pivotal = i === needed - 1 || i === needed - 2;
+              // The tipping-point race: whichever party wins it and every race on its side controls the Senate.
+              const tipping = i === needed - 1;
               return (
-                <Fragment key={r.state}>
-                  <tr className={`border-b border-line/60 align-top ${pivotal ? "bg-surface" : ""}`}>
-                    <td className="py-2.5 pr-2">
-                      {r.state}
-                      {r.special && <span className="hidden text-muted sm:inline"> (special)</span>}
-                    </td>
-                    <td className="py-2.5 pr-2">
-                      <CandidateName race={r} side="opp" />
-                    </td>
-                    <td className="py-2.5 pr-2">
-                      <CandidateName race={r} side="rep" />
-                    </td>
-                    <td className="py-2.5 pr-2 text-right" style={{ color: demFavored ? DEM : REP }}>
-                      {outOf100(demFavored ? r.p_opp : r.p_rep)}%
-                    </td>
-                    <td className="py-2.5 text-right" style={{ color: r.mean_margin >= 0 ? DEM : REP }}>
-                      {formatMargin(r.mean_margin, partyLetter(r.opp))}
-                    </td>
-                  </tr>
-                  {i === needed - 1 && (
-                    <tr>
-                      <td colSpan={5} className="border-t-2 border-foreground pt-1 pb-2 text-xs text-muted">
-                        ▲ Democrats win control if they take every race above this line (51 seats)
-                      </td>
-                    </tr>
-                  )}
-                </Fragment>
+                <tr key={r.state} className={`border-b border-line/60 align-top ${tipping ? "bg-surface" : ""}`}>
+                  <td className="py-2.5 pr-2">
+                    {r.state}
+                    {r.special && <span className="hidden text-muted sm:inline"> (special)</span>}
+                  </td>
+                  <td className="py-2.5 pr-2">
+                    <CandidateName race={r} side="opp" />
+                  </td>
+                  <td className="py-2.5 pr-2">
+                    <CandidateName race={r} side="rep" />
+                  </td>
+                  <td className="py-2.5 pr-2 text-right" style={{ color: demFavored ? DEM : REP }}>
+                    {outOf100(demFavored ? r.p_opp : r.p_rep)}%
+                  </td>
+                  <td className="py-2.5 text-right" style={{ color: r.mean_margin >= 0 ? DEM : REP }}>
+                    {formatMargin(r.mean_margin, partyLetter(r.opp))}
+                  </td>
+                </tr>
               );
             })}
           </tbody>
         </table>
         <p className="text-xs text-muted">
-          Chance is the favorite&rsquo;s chance of winning; margin is the projected vote margin. Shaded rows are the
-          two races that decide control: the 50th and 51st Democratic seats. (I) = incumbent · * =
+          Chance is the favorite&rsquo;s chance of winning; margin is the projected vote margin. The shaded row is
+          the tipping-point race: the party that wins it and every race on its side of the table controls the
+          Senate. (I) = incumbent · * =
           independent
         </p>
       </section>
