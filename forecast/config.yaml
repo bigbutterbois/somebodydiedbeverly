@@ -90,6 +90,8 @@ fundamentals:
   approval_half_life_days: 14
   approval_intercept: 1.0       # Dem lead when Trump's net approval is 0
   approval_slope: 0.3           # extra Dem lead per point of net disapproval
+  approval_stale_days: 14       # no new approval poll for this long: start fading approval out
+  approval_fade_days: 14        # ...reaching zero weight this many days later (generic ballot only)
   generic_ballot_fallback: 4.5  # used if the generic ballot scrape fails
   national_environment_override: null  # set a number to force it
   # Sitting senators running again get this many points.
