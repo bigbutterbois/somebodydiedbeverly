@@ -36,6 +36,7 @@ export type Forecast = {
   p_dem_control: number;
   p_rep_control: number;
   p_no_majority: number;
+  dem_seats_not_up?: number;
   dem_seats_mean: number;
   rep_seats_mean: number;
   dem_seats_10: number;
