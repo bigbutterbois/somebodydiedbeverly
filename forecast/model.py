@@ -338,6 +338,7 @@ def run(facts: dict, cfg: dict, polls: list[dict], as_of: date, seed: int | None
         "p_dem_control": round(float(dem_control.mean()), 4),
         "p_rep_control": round(float(rep_control.mean()), 4),
         "p_no_majority": round(float(1 - dem_control.mean() - rep_control.mean()), 4),
+        "dem_seats_not_up": facts["seats_not_up"]["D"],
         "dem_seats_mean": round(float(dem_seats.mean()), 2),
         "rep_seats_mean": round(float(rep_seats.mean()), 2),
         "dem_seats_10": int(np.percentile(dem_seats, 10)),

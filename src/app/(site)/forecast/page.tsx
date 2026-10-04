@@ -1,3 +1,4 @@
+import { Fragment } from "react";
 import {
   DEM,
   RATINGS,
@@ -31,6 +32,9 @@ export default async function ForecastPage() {
     );
   }
 
+  // Rows (from the most Democratic-favored) Democrats must sweep to reach 51 seats; the
+  // last of them is the race that decides control, the one before it a 50-50 Senate.
+  const needed = 51 - (forecast.dem_seats_not_up ?? 34);
   const races = [...forecast.races].sort((a, b) => b.p_opp - a.p_opp || b.mean_margin - a.mean_margin);
   const independents = races.filter((r) => r.opp.party === "I").map((r) => r.name).sort();
   const daysLeft = Math.round((Date.parse(forecast.election_day) - Date.parse(forecast.as_of)) / 86_400_000);
@@ -115,33 +119,44 @@ export default async function ForecastPage() {
             </tr>
           </thead>
           <tbody>
-            {races.map((r) => {
+            {races.map((r, i) => {
               const demFavored = r.p_opp >= 0.5;
+              const pivotal = i === needed - 1 || i === needed - 2;
               return (
-                <tr key={r.state} className="border-b border-line/60 align-top">
-                  <td className="py-2.5 pr-2">
-                    {r.state}
-                    {r.special && <span className="hidden text-muted sm:inline"> (special)</span>}
-                  </td>
-                  <td className="py-2.5 pr-2">
-                    <CandidateName race={r} side="opp" />
-                  </td>
-                  <td className="py-2.5 pr-2">
-                    <CandidateName race={r} side="rep" />
-                  </td>
-                  <td className="py-2.5 pr-2 text-right" style={{ color: demFavored ? DEM : REP }}>
-                    {outOf100(demFavored ? r.p_opp : r.p_rep)}%
-                  </td>
-                  <td className="py-2.5 text-right" style={{ color: r.mean_margin >= 0 ? DEM : REP }}>
-                    {formatMargin(r.mean_margin, partyLetter(r.opp))}
-                  </td>
-                </tr>
+                <Fragment key={r.state}>
+                  <tr className={`border-b border-line/60 align-top ${pivotal ? "bg-surface" : ""}`}>
+                    <td className="py-2.5 pr-2">
+                      {r.state}
+                      {r.special && <span className="hidden text-muted sm:inline"> (special)</span>}
+                    </td>
+                    <td className="py-2.5 pr-2">
+                      <CandidateName race={r} side="opp" />
+                    </td>
+                    <td className="py-2.5 pr-2">
+                      <CandidateName race={r} side="rep" />
+                    </td>
+                    <td className="py-2.5 pr-2 text-right" style={{ color: demFavored ? DEM : REP }}>
+                      {outOf100(demFavored ? r.p_opp : r.p_rep)}%
+                    </td>
+                    <td className="py-2.5 text-right" style={{ color: r.mean_margin >= 0 ? DEM : REP }}>
+                      {formatMargin(r.mean_margin, partyLetter(r.opp))}
+                    </td>
+                  </tr>
+                  {i === needed - 1 && (
+                    <tr>
+                      <td colSpan={5} className="border-t-2 border-foreground pt-1 pb-2 text-xs text-muted">
+                        ▲ Democrats win control if they take every race above this line (51 seats)
+                      </td>
+                    </tr>
+                  )}
+                </Fragment>
               );
             })}
           </tbody>
         </table>
         <p className="text-xs text-muted">
-          Chance is the favorite&rsquo;s chance of winning; margin is the projected vote margin. (I) = incumbent · * =
+          Chance is the favorite&rsquo;s chance of winning; margin is the projected vote margin. Shaded rows are the
+          two races that decide control: the 50th and 51st Democratic seats. (I) = incumbent · * =
           independent
         </p>
       </section>
