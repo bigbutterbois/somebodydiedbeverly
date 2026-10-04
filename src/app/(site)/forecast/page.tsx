@@ -97,40 +97,53 @@ export default async function ForecastPage() {
       )}
 
       <section className="flex flex-col gap-4">
-        <div className="-mx-6 overflow-x-auto px-6">
-          <table className="w-full min-w-[22rem] text-sm tabular-nums">
-            <thead>
-              <tr className="border-b border-line text-left text-xs uppercase tracking-[0.12em] text-muted">
-                <th className="py-2 pr-3 font-normal">State</th>
-                <th className="py-2 pr-3 font-normal">Democrat</th>
-                <th className="py-2 pr-3 font-normal">Republican</th>
-                <th className="py-2 pr-3 font-normal">Win chance</th>
-                <th className="hidden py-2 font-normal md:table-cell">Forecast</th>
-              </tr>
-            </thead>
-            <tbody>
-              {races.map((r) => (
-                <tr key={r.state} className="border-b border-line/60">
-                  <td className="py-2.5 pr-3">
+        <table className="w-full table-fixed text-[13px] tabular-nums sm:text-sm">
+          <colgroup>
+            <col className="w-[13%] sm:w-[16%]" />
+            <col />
+            <col />
+            <col className="w-[15%] sm:w-[13%]" />
+            <col className="w-[17%] sm:w-[13%]" />
+          </colgroup>
+          <thead>
+            <tr className="border-b border-line text-left text-[11px] uppercase tracking-[0.1em] text-muted sm:text-xs">
+              <th className="py-2 pr-2 font-normal">State</th>
+              <th className="py-2 pr-2 font-normal">Democrat</th>
+              <th className="py-2 pr-2 font-normal">Republican</th>
+              <th className="py-2 pr-2 text-right font-normal">Chance</th>
+              <th className="py-2 text-right font-normal">Margin</th>
+            </tr>
+          </thead>
+          <tbody>
+            {races.map((r) => {
+              const demFavored = r.p_opp >= 0.5;
+              return (
+                <tr key={r.state} className="border-b border-line/60 align-top">
+                  <td className="py-2.5 pr-2">
                     {r.state}
-                    {r.special && <span className="text-muted"> (special)</span>}
+                    {r.special && <span className="hidden text-muted sm:inline"> (special)</span>}
                   </td>
-                  <td className="py-2.5 pr-3">
+                  <td className="py-2.5 pr-2">
                     <CandidateName race={r} side="opp" />
                   </td>
-                  <td className="py-2.5 pr-3">
+                  <td className="py-2.5 pr-2">
                     <CandidateName race={r} side="rep" />
                   </td>
-                  <td className="py-2.5 pr-3">
-                    <ChanceBar pOpp={r.p_opp} />
+                  <td className="py-2.5 pr-2 text-right" style={{ color: demFavored ? DEM : REP }}>
+                    {outOf100(demFavored ? r.p_opp : r.p_rep)}%
                   </td>
-                  <td className="hidden py-2.5 md:table-cell">{formatMargin(r.mean_margin, partyLetter(r.opp))}</td>
+                  <td className="py-2.5 text-right" style={{ color: r.mean_margin >= 0 ? DEM : REP }}>
+                    {formatMargin(r.mean_margin, partyLetter(r.opp))}
+                  </td>
                 </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-        <p className="text-xs text-muted">(I) = incumbent · * = independent</p>
+              );
+            })}
+          </tbody>
+        </table>
+        <p className="text-xs text-muted">
+          Chance is the favorite&rsquo;s chance of winning; margin is the projected vote margin. (I) = incumbent · * =
+          independent
+        </p>
       </section>
 
       {history.some((h) => h.generic_ballot) && (
@@ -152,9 +165,11 @@ export default async function ForecastPage() {
 
 function CandidateName({ race, side }: { race: Race; side: "rep" | "opp" }) {
   const c = race[side];
+  // First initial only, to keep the table narrow on phones: "Susan Collins" → "S. Collins".
+  const [first, ...rest] = c.name.split(" ");
   return (
     <>
-      {c.name}
+      {rest.length ? `${first[0]}. ${rest.join(" ")}` : c.name}
       {c.party === "I" && "*"}
       {isIncumbent(race, side) && <span className="text-muted"> (I)</span>}
     </>
@@ -192,19 +207,6 @@ function Topline({ forecast }: { forecast: Forecast }) {
           ` In ${Math.round(forecast.p_no_majority * 100)}% of simulations neither side reaches a majority without an independent.`}
       </p>
     </section>
-  );
-}
-
-function ChanceBar({ pOpp }: { pOpp: number }) {
-  return (
-    <span className="flex items-center gap-2">
-      <span className="w-9 text-right">{outOf100(pOpp)}%</span>
-      <span className="flex h-1.5 w-20 overflow-hidden rounded-full" aria-hidden>
-        <span style={{ width: `${pOpp * 100}%`, background: DEM }} />
-        <span className="flex-1" style={{ background: REP }} />
-      </span>
-      <span className="w-9 text-muted">{outOf100(1 - pOpp)}%</span>
-    </span>
   );
 }
 
