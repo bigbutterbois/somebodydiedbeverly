@@ -51,18 +51,3 @@ export function searchCountries(query: string, countries: Country[]): Country[] 
 
   return [...new Set([...byPlate, ...startsWith, ...contains])];
 }
-
-// "2026-10-02" → "Oct 2, 2026". Dates are calendar days, so no time zone shift.
-export function formatDate(date: string): string {
-  return new Date(`${date}T00:00:00Z`).toLocaleDateString("en-US", {
-    timeZone: "UTC",
-    month: "short",
-    day: "numeric",
-    year: "numeric",
-  });
-}
-
-// Today's date in Washington, where the plates are, as YYYY-MM-DD.
-export function todayInDC(): string {
-  return new Date().toLocaleDateString("en-CA", { timeZone: "America/New_York" });
-}

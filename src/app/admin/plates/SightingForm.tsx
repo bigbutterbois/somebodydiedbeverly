@@ -7,8 +7,8 @@ import type { LogState } from "./actions";
 const inputClass =
   "w-full rounded border border-line bg-surface px-3 py-3 text-base placeholder:text-muted focus:border-accent focus:outline-none";
 
-// Log or edit one sighting: country type-ahead (by name or plate code), date,
-// optional note. Sized for a phone.
+// Log or edit one sighting: just the country, picked by type-ahead (name or
+// plate code). Sized for a phone.
 export function SightingForm({
   countries,
   action,
@@ -18,7 +18,7 @@ export function SightingForm({
 }: {
   countries: Country[];
   action: (prev: LogState, formData: FormData) => Promise<LogState>;
-  initial: { country?: Country; date: string; note?: string };
+  initial?: { country?: Country };
   submitLabel: string;
   autoFocus?: boolean;
 }) {
@@ -33,27 +33,7 @@ export function SightingForm({
       )}
       {/* A fresh key after each save clears the form for the next plate. */}
       <form key={state?.at ?? 0} action={formAction} className="flex flex-col gap-4">
-        <CountryPicker countries={countries} initial={initial.country} autoFocus={autoFocus} />
-        <label className="flex flex-col gap-1">
-          <span className="text-xs uppercase tracking-[0.12em] text-muted">Date</span>
-          <input
-            name="date_spotted"
-            type="date"
-            defaultValue={initial.date}
-            required
-            className={inputClass}
-          />
-        </label>
-        <label className="flex flex-col gap-1">
-          <span className="text-xs uppercase tracking-[0.12em] text-muted">Note</span>
-          <textarea
-            name="note"
-            rows={2}
-            defaultValue={initial.note}
-            placeholder="Optional"
-            className={inputClass}
-          />
-        </label>
+        <CountryPicker countries={countries} initial={initial?.country} autoFocus={autoFocus} />
         <button
           type="submit"
           disabled={pending}

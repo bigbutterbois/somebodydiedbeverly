@@ -1,14 +1,11 @@
 import Link from "next/link";
 import { createClient } from "@/lib/supabase/server";
-import { formatDate } from "@/lib/plates";
 
 export const metadata = { title: "Plate tracker" };
 
 type Row = {
   id: string;
   country_id: string;
-  date_spotted: string;
-  note: string | null;
   countries: { name: string } | null;
 };
 
@@ -17,8 +14,7 @@ export default async function PlatesAdminPage() {
   const [{ data: sightings }, { count: total }] = await Promise.all([
     supabase
       .from("plate_sightings")
-      .select("id, date_spotted, note, country_id, countries(name)")
-      .order("date_spotted", { ascending: false })
+      .select("id, country_id, countries(name)")
       .order("created_at", { ascending: false })
       .overrideTypes<Row[], { merge: false }>(),
     supabase.from("countries").select("id", { count: "exact", head: true }),
@@ -51,13 +47,9 @@ export default async function PlatesAdminPage() {
             <li key={s.id}>
               <Link
                 href={`/admin/plates/${s.id}`}
-                className="flex flex-wrap items-baseline gap-x-4 gap-y-1 py-3 hover:text-accent"
+                className="block py-3 hover:text-accent"
               >
-                <span className="w-28 shrink-0 text-sm text-muted tabular-nums">
-                  {formatDate(s.date_spotted)}
-                </span>
-                <span>{s.countries?.name}</span>
-                {s.note && <span className="text-sm text-muted">{s.note}</span>}
+                {s.countries?.name}
               </Link>
             </li>
           ))}

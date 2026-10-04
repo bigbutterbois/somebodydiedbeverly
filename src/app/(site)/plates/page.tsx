@@ -1,24 +1,23 @@
 import Link from "next/link";
 import { createClient } from "@/lib/supabase/server";
-import { formatDate, type Country } from "@/lib/plates";
+import type { Country } from "@/lib/plates";
 import { PlateLookup } from "./PlateLookup";
 
 export const metadata = { title: "Diplomat plates" };
 
-type Row = Country & { plate_sightings: { date_spotted: string }[] };
+type Row = Country & { plate_sightings: { id: string }[] };
 
 export default async function PlatesPage() {
   const supabase = await createClient();
   const { data } = await supabase
     .from("countries")
-    .select("id, name, slug, plate_codes, plate_sightings(date_spotted)")
+    .select("id, name, slug, plate_codes, plate_sightings(id)")
     .order("name")
     .overrideTypes<Row[], { merge: false }>();
 
   const countries = (data ?? []).map(({ plate_sightings, ...country }) => ({
     ...country,
     sightings: plate_sightings.length,
-    first: plate_sightings.map((s) => s.date_spotted).sort()[0],
   }));
   const spotted = countries.filter((c) => c.sightings > 0).length;
   const percent = countries.length ? (spotted / countries.length) * 100 : 0;
@@ -58,10 +57,9 @@ export default async function PlatesPage() {
                   {c.sightings ? "●" : "○"}
                 </span>
                 <span className={c.sightings ? "" : "text-muted"}>{c.name}</span>
-                {c.first && (
+                {c.sightings > 1 && (
                   <span className="ml-auto shrink-0 text-xs text-muted tabular-nums">
-                    {formatDate(c.first)}
-                    {c.sightings > 1 && ` · ${c.sightings}×`}
+                    {c.sightings}×
                   </span>
                 )}
               </Link>
