@@ -24,9 +24,13 @@ export function LoginForm() {
         required
         className="rounded-full border border-accent bg-transparent px-5 py-2.5 text-center placeholder:text-muted focus:outline-none"
       />
-      {/* Enter submits; the button is only there for screen readers. */}
-      <button type="submit" disabled={pending} className="sr-only">
-        Sign in
+      {/* Enter in either field submits too. */}
+      <button
+        type="submit"
+        disabled={pending}
+        className="rounded-full bg-accent px-5 py-2.5 font-medium text-background transition-opacity hover:opacity-90 disabled:opacity-50"
+      >
+        Log In
       </button>
       <p aria-live="polite" className="min-h-5 text-center text-sm">
         {pending ? (
