@@ -18,7 +18,10 @@ export async function enterSite(
   const password = process.env.SITE_PASSWORD;
   if (!password) return { error: "The site password hasn't been set up yet." };
 
-  if (!safeEqual(String(formData.get("password") ?? ""), password)) {
+  // Case-insensitive, so "Beverly" and "beverly" both work. The cookie is still
+  // derived from SITE_PASSWORD exactly as set, so devices already in stay in.
+  const entered = String(formData.get("password") ?? "");
+  if (!safeEqual(entered.toLowerCase(), password.toLowerCase())) {
     await logVisit("bad_password", "/enter");
     return { error: "That's not the password." };
   }
