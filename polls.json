@@ -12622,6 +12622,18 @@
  },
  {
   "state": "ME",
+  "pollster": "Maine People's Resource Center",
+  "sponsor_party": null,
+  "end_date": "2026-09-29",
+  "n": 684,
+  "population": "LV",
+  "rep": 47.0,
+  "opp": 49.0,
+  "others": [],
+  "source": "https://en.wikipedia.org/wiki/2026_United_States_Senate_election_in_Maine"
+ },
+ {
+  "state": "ME",
   "pollster": "co/efficient",
   "sponsor_party": "R",
   "end_date": "2026-09-30",
@@ -21895,6 +21907,30 @@
   "population": "LV",
   "opp": 53.0,
   "rep": 38.0,
+  "others": [],
+  "source": "https://en.wikipedia.org/wiki/2026_United_States_elections"
+ },
+ {
+  "state": "US",
+  "pollster": "ActiVote",
+  "sponsor_party": null,
+  "end_date": "2026-10-02",
+  "n": 1000,
+  "population": "LV",
+  "opp": 52.0,
+  "rep": 48.0,
+  "others": [],
+  "source": "https://en.wikipedia.org/wiki/2026_United_States_elections"
+ },
+ {
+  "state": "US",
+  "pollster": "CBS News/YouGov",
+  "sponsor_party": null,
+  "end_date": "2026-10-02",
+  "n": 1572,
+  "population": "LV",
+  "opp": 54.0,
+  "rep": 45.0,
   "others": [],
   "source": "https://en.wikipedia.org/wiki/2026_United_States_elections"
  },
