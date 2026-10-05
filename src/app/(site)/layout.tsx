@@ -2,6 +2,7 @@ import Link from "next/link";
 import { Monogram } from "@/components/Monogram";
 import { Nav } from "@/components/Nav";
 import { createClient } from "@/lib/supabase/server";
+import { VisitTracker } from "./VisitTracker";
 
 // Public side: unlocked by the friends & family password (see src/proxy.ts).
 // Add a module by creating its folder here and linking it below.
@@ -30,6 +31,7 @@ export default async function SiteLayout({ children }: LayoutProps<"/">) {
       <main className="mx-auto flex w-full max-w-5xl flex-1 flex-col p-6">
         {children}
       </main>
+      {!isOwner && <VisitTracker />}
     </>
   );
 }

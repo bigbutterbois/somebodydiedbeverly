@@ -9,6 +9,7 @@ import {
   safeEqual,
   safeNextPath,
 } from "@/lib/site-access";
+import { logVisit } from "@/lib/visits";
 
 export async function enterSite(
   _prev: { error: string } | null,
@@ -18,6 +19,7 @@ export async function enterSite(
   if (!password) return { error: "The site password hasn't been set up yet." };
 
   if (!safeEqual(String(formData.get("password") ?? ""), password)) {
+    await logVisit("bad_password", "/enter");
     return { error: "That's not the password." };
   }
 
