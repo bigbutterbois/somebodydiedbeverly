@@ -20,8 +20,8 @@ Mike's personal website, hosted at `somebodydiedbeverly.com`. This is a fresh st
 ## Project Structure
 
 ```
-src/app/(site)/       # Public side, one folder per module: gallery, blog, forecast, plates
-src/app/admin/        # Private side, one folder per tool: plates, blog, gallery, visitors, forecast (Both / Senate / House sub-tabs; House hex map from scripts/district-tiles.mjs)
+src/app/(site)/       # Public side, one folder per module: gallery, blog, forecast (Both / Senate / House sub-tabs; House hex map from scripts/district-tiles.mjs, to-scale map from scripts/district-shapes.mjs), plates
+src/app/admin/        # Private side, one folder per tool: plates, blog, gallery, visitors
 src/app/enter/        # Friends & family password page
 src/app/login/        # Owner sign-in
 src/components/       # Shared UI (Nav, Placeholder)
@@ -32,7 +32,7 @@ supabase/migrations/  # Database schema as SQL migrations
 forecast/             # Senate + House forecast model (Python): config.yaml, races.yaml, house.yaml, scrape, house, model, run
 ```
 
-To add a module, create its folder under `src/app/(site)/` or `src/app/admin/` and add it to the `MODULES` or `TOOLS` list in that folder's `layout.tsx`. Modules: gallery, blog, a 2026 Senate forecast (Python model in `forecast/`, the House's 435 districts scraped from Wikipedia each run, run daily at 6am Eastern by `.github/workflows/forecast.yml`, published as JSON to the `forecast-data` branch) and read-only plate tracker progress on the public side; diplomat plate tracker, blog/gallery editors, visitor stats (`src/lib/visits.ts`, no IPs stored) and the forecast with both chambers (`/admin/forecast`: a Both summary tab first, the public Senate page and the House forecast, kept private) on the private side.
+To add a module, create its folder under `src/app/(site)/` or `src/app/admin/` and add it to the `MODULES` or `TOOLS` list in that folder's `layout.tsx`. Modules: gallery, blog, the 2026 midterms forecast at `/forecast` (a Both summary tab first, then Senate and House; Python model in `forecast/`, the House's 435 districts scraped from Wikipedia each run, run daily at 6am Eastern by `.github/workflows/forecast.yml`, published as JSON to the `forecast-data` branch) and read-only plate tracker progress on the public side; diplomat plate tracker, blog/gallery editors and visitor stats (`src/lib/visits.ts`, no IPs stored) on the private side.
 
 ## Dev Commands
 

@@ -16,7 +16,9 @@ export function isPreviewBot(userAgent: string | null): boolean {
 }
 
 const SECTIONS: [prefix: string, title: string][] = [
-  ["/forecast", "2026 Senate forecast"],
+  ["/forecast/senate", "2026 Senate forecast"],
+  ["/forecast/house", "2026 House forecast"],
+  ["/forecast", "2026 midterms forecast"],
   ["/blog", "Blog"],
   ["/gallery", "Gallery"],
   ["/plates", "Diplomat plates"],
