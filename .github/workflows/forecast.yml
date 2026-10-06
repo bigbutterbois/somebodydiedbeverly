@@ -5,7 +5,10 @@ name: Forecast
 # times from 6am Eastern on cover daylight and standard time and late or
 # dropped GitHub schedules; the gate step skips any before 6am or on a day
 # that already has a forecast. A model change merged to main
-# reruns it right away. The first run (no published history yet) also
+# reruns it right away. Because GitHub's schedule is unreliable, a daily
+# Claude routine also checks at 6:05am Eastern and, if today's forecast isn't
+# out yet, creates a forecast-kick/<date> branch, which starts a run at once
+# (the run deletes the branch). The first run (no published history yet) also
 # backfills history from Sept 1. On a pull request that touches the model it
 # does a dry run and prints the result instead.
 
@@ -17,6 +20,7 @@ on:
     # the gate runs only the first.
     - cron: "17,47 10-17 * * *"
     - cron: "17 18-23 * * *"
+  create:
   workflow_dispatch:
     inputs:
       backfill_from:
@@ -43,6 +47,8 @@ concurrency: forecast
 
 jobs:
   forecast:
+    # Other new branches and tags aren't a request for a forecast.
+    if: github.event_name != 'create' || startsWith(github.ref, 'refs/heads/forecast-kick/')
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -63,6 +69,7 @@ jobs:
           last=$(jq -r '.as_of // ""' data/latest.json 2>/dev/null || true)
           run=true
           if [ "${{ github.event_name }}" = "schedule" ] && { [ "$hour" -lt 6 ] || [ "$last" = "$today" ]; }; then run=false; fi
+          if [ "${{ github.event_name }}" = "create" ] && [ "$last" = "$today" ]; then run=false; fi
           if [ "${{ github.event_name }}" = "workflow_dispatch" ] && [ "$last" = "$today" ] \
             && [ "${{ inputs.force }}" != "true" ] && [ -z "${{ inputs.backfill_from }}" ]; then run=false; fi
           echo "Eastern $today ${hour}h, last forecast ${last:-none}, run=$run"
@@ -118,3 +125,9 @@ jobs:
           git add -A
           git commit -m "Forecast for $(jq -r .as_of latest.json)" || { echo "nothing changed"; exit 0; }
           git push origin HEAD:forecast-data
+
+      - name: Delete the kick branches
+        if: always() && github.event_name == 'create'
+        run: |
+          git ls-remote --heads origin 'forecast-kick/*' | awk '{print $2}' \
+            | xargs -r -n1 git push origin --delete || true
