@@ -17,17 +17,18 @@ import { OddsChart, PollingChart } from "../OddsChart";
 import { SeatHistogram } from "../SeatHistogram";
 import { SenateMap } from "../SenateMap";
 import { MAP_HEIGHT, MAP_WIDTH, stateBorders, stateShapes } from "../shapes";
+import { getSiteText } from "@/lib/supabase/site-text";
 
 export const metadata = { title: "Senate forecast" };
 
 export default async function ForecastPage() {
-  const forecast = await getForecast();
+  const [forecast, t] = await Promise.all([getForecast(), getSiteText()]);
 
   if (!forecast) {
     return (
       <div className="flex flex-col gap-2 py-6">
-        <h1 className="text-4xl font-light tracking-tight">2026 Senate forecast</h1>
-        <p className="text-muted">The first forecast is on its way. It updates every morning at 6am Eastern.</p>
+        <h1 className="text-4xl font-light tracking-tight">{t("forecast.senate.title")}</h1>
+        <p className="text-muted">{t("forecast.senate.empty")}</p>
       </div>
     );
   }
@@ -43,7 +44,7 @@ export default async function ForecastPage() {
   return (
     <div className="flex flex-col gap-14 py-6">
       <header className="flex flex-col gap-3">
-        <h1 className="text-4xl font-light tracking-tight">2026 Senate forecast</h1>
+        <h1 className="text-4xl font-light tracking-tight">{t("forecast.senate.title")}</h1>
         <p className="text-sm text-muted">
           Updated{" "}
           {forecast.generated_at
@@ -53,12 +54,12 @@ export default async function ForecastPage() {
         </p>
       </header>
 
-      <Topline forecast={forecast} />
+      <Topline forecast={forecast} note={t("forecast.senate.topline")} />
 
       {forecast.dem_seat_distribution && (
         <section className="flex flex-col gap-4">
-          <SectionTitle>Democratic seats in 100 simulations</SectionTitle>
-          <p className="-mt-2 text-xs text-muted">Hover over or tap a dot to see that simulation&rsquo;s map.</p>
+          <SectionTitle>{t("forecast.senate.simulations")}</SectionTitle>
+          <p className="-mt-2 text-xs text-muted">{t("forecast.senate.simulationsHint")}</p>
           <SeatHistogram
             distribution={forecast.dem_seat_distribution}
             samples={forecast.sample_simulations}
@@ -70,7 +71,7 @@ export default async function ForecastPage() {
       )}
 
       <section className="flex flex-col gap-4">
-        <SectionTitle>The map</SectionTitle>
+        <SectionTitle>{t("forecast.map")}</SectionTitle>
         <SenateMap
           shapes={stateShapes}
           borders={stateBorders}
@@ -92,14 +93,14 @@ export default async function ForecastPage() {
         </ul>
         {independents.length > 0 && (
           <p className="text-center text-xs text-muted">
-            Independents running as the main challenger ({independents.join(", ")}) count toward Democratic control.
+            {t("forecast.senate.independents", { names: independents.join(", ") })}
           </p>
         )}
       </section>
 
       {history.length > 0 && (
         <section className="flex flex-col gap-4">
-          <SectionTitle>Chance of controlling the Senate, by day</SectionTitle>
+          <SectionTitle>{t("forecast.senate.byDay")}</SectionTitle>
           <OddsChart history={history} electionDay={forecast.election_day} />
         </section>
       )}
@@ -161,24 +162,19 @@ export default async function ForecastPage() {
             })}
           </tbody>
         </table>
-        <p className="text-xs text-muted">
-          Chance is the favorite&rsquo;s chance of winning; margin is the projected vote margin. The tipping-point
-          race: the party that wins it and every race on its side of the table controls the
-          Senate. (I) = incumbent · * =
-          independent
-        </p>
+        <p className="text-xs text-muted">{t("forecast.senate.tableNote")}</p>
       </section>
 
       {history.some((h) => h.generic_ballot) && (
         <section className="flex flex-col gap-4">
-          <SectionTitle>Generic ballot polling average</SectionTitle>
+          <SectionTitle>{t("forecast.genericBallot")}</SectionTitle>
           <PollingChart history={history} electionDay={forecast.election_day} kind="generic_ballot" />
         </section>
       )}
 
       {history.some((h) => h.approval) && (
         <section className="flex flex-col gap-4">
-          <SectionTitle>Trump approval polling average</SectionTitle>
+          <SectionTitle>{t("forecast.approval")}</SectionTitle>
           <PollingChart history={history} electionDay={forecast.election_day} kind="approval" />
         </section>
       )}
@@ -199,7 +195,7 @@ function CandidateName({ race, side }: { race: Race; side: "rep" | "opp" }) {
   );
 }
 
-function Topline({ forecast }: { forecast: Forecast }) {
+function Topline({ forecast, note }: { forecast: Forecast; note: string }) {
   const dem = Math.round(forecast.p_dem_control * 100);
   const rep = Math.round(forecast.p_rep_control * 100);
   const neither = forecast.p_no_majority >= 0.005;
@@ -225,7 +221,7 @@ function Topline({ forecast }: { forecast: Forecast }) {
         <div style={{ width: `${forecast.p_rep_control * 100}%`, background: REP }} />
       </div>
       <p className="text-sm text-muted">
-        Democrats need 51 seats, since Vice President Vance breaks a 50–50 tie.
+        {note}
         {neither &&
           ` In ${Math.round(forecast.p_no_majority * 100)}% of simulations neither side reaches a majority without an independent.`}
       </p>

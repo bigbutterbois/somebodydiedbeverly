@@ -15,6 +15,8 @@ import { ControlChart } from "./ControlChart";
 import { CircleGrid } from "./CircleGrid";
 import { OUTCOMES, outcomeOdds } from "./outcomes";
 import { SectionTitle } from "./parts";
+import { Notes } from "@/components/Notes";
+import { getSiteText } from "@/lib/supabase/site-text";
 
 export const metadata = { title: "Forecast" };
 
@@ -22,12 +24,12 @@ export const metadata = { title: "Forecast" };
 // (the two models share their national swing, so these come from the same
 // simulations), and the national polling averages both models lean on.
 export default async function BothForecastPage() {
-  const [senate, house] = await Promise.all([getForecast(), getHouseForecast()]);
+  const [senate, house, t] = await Promise.all([getForecast(), getHouseForecast(), getSiteText()]);
   if (!senate || !house) {
     return (
       <div className="flex flex-col gap-2 py-6">
-        <h1 className="text-4xl font-light tracking-tight">2026 midterms</h1>
-        <p className="text-muted">The first House forecast is on its way. It updates every morning at 6am Eastern.</p>
+        <h1 className="text-4xl font-light tracking-tight">{t("forecast.both.title")}</h1>
+        <p className="text-muted">{t("forecast.both.empty")}</p>
       </div>
     );
   }
@@ -38,7 +40,7 @@ export default async function BothForecastPage() {
   return (
     <div className="flex flex-col gap-14 py-6">
       <header className="flex flex-col gap-3">
-        <h1 className="text-4xl font-light tracking-tight">2026 midterms</h1>
+        <h1 className="text-4xl font-light tracking-tight">{t("forecast.both.title")}</h1>
         <p className="text-sm text-muted">
           Updated{" "}
           {house.generated_at
@@ -46,35 +48,32 @@ export default async function BothForecastPage() {
             : formatDay(house.as_of, { weekday: "long", month: "long", day: "numeric" })}
           {daysLeft > 0 && ` · ${daysLeft} days to Election Day`}
         </p>
-        <div className="flex flex-col gap-2 border-l-2 border-accent pl-3 text-sm text-muted">
-          <p className="text-foreground">Introducing the 2026 Midterms House Election Forecast!</p>
-          <p>And a few model updates&hellip;</p>
-          <ul className="flex list-disc flex-col gap-1 pl-4">
-            <li>
-              <strong className="font-medium text-foreground">Trump approval:</strong> Fixed bug in data scraping to
-              include more polls.
-            </li>
-            <li>
-              <strong className="font-medium text-foreground">Super PAC spending:</strong> Outside spending by super
-              PACs now counts toward each race&rsquo;s fundraising total in the fundamentals.
-            </li>
-            <li>
-              <strong className="font-medium text-foreground">Polling weights (biggest model change):</strong> Polls
-              are now partially adjusted to account for historical errors. This shifted most polling averages in
-              Republicans&rsquo; favor compared to previous model runs.
-            </li>
-          </ul>
-        </div>
+        <Notes
+          text={t("forecast.patchNotes")}
+          className="flex flex-col gap-2 border-l-2 border-accent pl-3 text-sm text-muted [&>p:first-child]:text-foreground"
+        />
       </header>
 
       <section className="grid gap-6 sm:grid-cols-2">
-        <Chamber name="Senate" href="/forecast/senate" forecast={senate} total={100} />
-        <Chamber name="House" href="/forecast/house" forecast={house} total={house.races.length} />
+        <Chamber
+          name="Senate"
+          href="/forecast/senate"
+          details={t("forecast.both.details")}
+          forecast={senate}
+          seats={t("forecast.both.seats", { seats: senate.dem_seats_mean.toFixed(0), total: 100 })}
+        />
+        <Chamber
+          name="House"
+          href="/forecast/house"
+          details={t("forecast.both.details")}
+          forecast={house}
+          seats={t("forecast.both.seats", { seats: house.dem_seats_mean.toFixed(0), total: house.races.length })}
+        />
       </section>
 
       {today && (
         <section className="flex flex-col gap-4">
-          <SectionTitle>Who controls Congress</SectionTitle>
+          <SectionTitle>{t("forecast.both.control")}</SectionTitle>
           <div className="flex flex-col items-center gap-6 sm:flex-row sm:items-start">
             <CircleGrid odds={today} />
             <ul className="flex w-full flex-col gap-3">
@@ -89,30 +88,27 @@ export default async function BothForecastPage() {
               ))}
             </ul>
           </div>
-          <p className="text-xs text-muted">
-            Both forecasts run on the same simulated national swing, so a good night for Democrats in one chamber
-            usually means a good night in the other.
-          </p>
+          <p className="text-xs text-muted">{t("forecast.both.controlNote")}</p>
         </section>
       )}
 
       {houseHistory.some((h) => h.p_dem_both != null) && (
         <section className="flex flex-col gap-4">
-          <SectionTitle>Control of Congress, by day</SectionTitle>
+          <SectionTitle>{t("forecast.both.byDay")}</SectionTitle>
           <ControlChart senate={senateHistory} house={houseHistory} electionDay={house.election_day} />
         </section>
       )}
 
       {senateHistory.some((h) => h.generic_ballot) && (
         <section className="flex flex-col gap-4">
-          <SectionTitle>Generic ballot polling average</SectionTitle>
+          <SectionTitle>{t("forecast.genericBallot")}</SectionTitle>
           <PollingChart history={senateHistory} electionDay={senate.election_day} kind="generic_ballot" />
         </section>
       )}
 
       {senateHistory.some((h) => h.approval) && (
         <section className="flex flex-col gap-4">
-          <SectionTitle>Trump approval polling average</SectionTitle>
+          <SectionTitle>{t("forecast.approval")}</SectionTitle>
           <PollingChart history={senateHistory} electionDay={senate.election_day} kind="approval" />
         </section>
       )}
@@ -120,12 +116,24 @@ export default async function BothForecastPage() {
   );
 }
 
-function Chamber({ name, href, forecast, total }: { name: string; href: string; forecast: Forecast; total: number }) {
+function Chamber({
+  name,
+  href,
+  details,
+  forecast,
+  seats,
+}: {
+  name: string;
+  href: string;
+  details: string;
+  forecast: Forecast;
+  seats: string;
+}) {
   return (
     <Link href={href} className="group flex flex-col gap-3 rounded border border-line p-4 hover:border-accent">
       <span className="flex items-baseline justify-between text-xs uppercase tracking-[0.12em] text-muted">
         {name}
-        <span className="normal-case tracking-normal group-hover:text-accent">Details →</span>
+        <span className="normal-case tracking-normal group-hover:text-accent">{details}</span>
       </span>
       <div className="flex items-baseline justify-between">
         <span className="text-4xl font-light tabular-nums" style={{ color: DEM }}>
@@ -140,9 +148,7 @@ function Chamber({ name, href, forecast, total }: { name: string; href: string; 
         <div className="flex-1" />
         <div style={{ width: `${forecast.p_rep_control * 100}%`, background: REP }} />
       </div>
-      <p className="text-sm text-muted">
-        Democrats win {forecast.dem_seats_mean.toFixed(0)} of {total} seats on average.
-      </p>
+      <p className="text-sm text-muted">{seats}</p>
     </Link>
   );
 }

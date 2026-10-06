@@ -6,10 +6,13 @@ import type { ReactNode } from "react";
 export function HomeSection({
   title,
   href,
+  more,
   children,
 }: {
   title: string;
   href: string;
+  /** The "see all" link's wording. */
+  more: string;
   children: ReactNode;
 }) {
   return (
@@ -17,7 +20,7 @@ export function HomeSection({
       <div className="flex items-baseline justify-between gap-4 border-b border-line pb-2">
         <h2 className="text-xs uppercase tracking-[0.12em] text-muted">{title}</h2>
         <Link href={href} className="text-sm text-accent hover:underline">
-          See all →
+          {more}
         </Link>
       </div>
       {children}

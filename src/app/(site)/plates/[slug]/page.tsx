@@ -2,6 +2,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { contentClient } from "@/lib/supabase/content";
 import type { Country } from "@/lib/plates";
+import { getSiteText } from "@/lib/supabase/site-text";
 
 type Row = Country & { plate_sightings: { id: string }[] };
 
@@ -32,25 +33,26 @@ export async function generateMetadata({ params }: PageProps<"/plates/[slug]">) 
 export default async function CountryPlatesPage({ params }: PageProps<"/plates/[slug]">) {
   const country = await getCountry((await params).slug);
   if (!country) notFound();
+  const t = await getSiteText();
   const sightings = country.plate_sightings;
 
   return (
     <div className="flex flex-col gap-8 py-6">
       <Link href="/plates" className="text-sm text-muted hover:text-foreground">
-        ← All countries
+        {t("plates.back")}
       </Link>
       <header className="flex flex-col gap-2">
         <h1 className="text-4xl font-light tracking-tight">{country.name}</h1>
         <p className="text-muted">
           {sightings.length === 0
-            ? "Not spotted yet."
+            ? t("plates.notSpotted")
             : `Spotted ${sightings.length} ${sightings.length === 1 ? "time" : "times"}.`}
         </p>
       </header>
 
       <section className="flex flex-col gap-3">
         <h2 className="border-b border-line pb-2 text-xs uppercase tracking-[0.12em] text-muted">
-          Plate codes
+          {t("plates.codes")}
         </h2>
         <dl className="grid grid-cols-[auto_1fr] gap-x-6 gap-y-1 tabular-nums">
           {PLATE_FORMATS.map(({ label, plate }) => (

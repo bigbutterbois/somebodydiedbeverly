@@ -8,12 +8,13 @@ import { CircleGrid } from "./forecast/CircleGrid";
 import { OUTCOMES, outcomeOdds } from "./forecast/outcomes";
 import { getGalleryItems } from "@/lib/supabase/gallery";
 import { contentClient } from "@/lib/supabase/content";
+import { getSiteText } from "@/lib/supabase/site-text";
 
 // Homepage: a preview of the latest from every public module. Each module
 // replaces its empty state with real items once it has data.
 export default async function Home() {
   const supabase = await contentClient();
-  const [{ count: totalCountries }, { data: sightings }, { data: posts }, pieces, senate, house] = await Promise.all([
+  const [{ count: totalCountries }, { data: sightings }, { data: posts }, pieces, senate, house, t] = await Promise.all([
     supabase.from("countries").select("id", { count: "exact", head: true }),
     supabase.from("plate_sightings").select("country_id"),
     supabase
@@ -25,6 +26,7 @@ export default async function Home() {
     getGalleryItems(3),
     getForecast(),
     getHouseForecast(),
+    getSiteText(),
   ]);
   const spotted = new Set(sightings?.map((s) => s.country_id)).size;
   const split = senate && house ? outcomeOdds(senate.p_dem_control, house.p_dem_control, house.p_dem_both ?? null) : null;
@@ -33,17 +35,17 @@ export default async function Home() {
     <div className="flex flex-col gap-14 py-6">
       <header className="flex flex-col gap-3">
         <h1 className="max-w-2xl text-4xl font-light tracking-tight text-balance sm:text-5xl">
-          Election forecasting and other silly projects
+          {t("home.title")}
         </h1>
-        <p className="text-muted">Published stuff here</p>
+        <p className="text-muted">{t("home.intro")}</p>
       </header>
 
-      <HomeSection title="2026 midterms forecast" href="/forecast">
+      <HomeSection title={t("home.forecast.title")} href="/forecast" more={t("home.seeAll")}>
         {senate && house ? (
           <Link href="/forecast" className="flex flex-col gap-6 tabular-nums">
             <div className="flex flex-wrap gap-x-10 gap-y-4">
-              <ChamberOdds name="Senate" forecast={senate} />
-              <ChamberOdds name="House" forecast={house} />
+              <ChamberOdds label={t("home.forecast.chance", { chamber: "Senate" })} forecast={senate} />
+              <ChamberOdds label={t("home.forecast.chance", { chamber: "House" })} forecast={house} />
             </div>
             {split && (
               <div className="flex flex-col items-center gap-5 sm:flex-row">
@@ -61,11 +63,11 @@ export default async function Home() {
             )}
           </Link>
         ) : (
-          <EmptyPreview>The first forecast is on its way.</EmptyPreview>
+          <EmptyPreview>{t("home.forecast.empty")}</EmptyPreview>
         )}
       </HomeSection>
 
-      <HomeSection title="Blog: latest posts" href="/blog">
+      <HomeSection title={t("home.blog.title")} href="/blog" more={t("home.seeAll")}>
         {posts?.length ? (
           <ul className="flex flex-col gap-3">
             {posts.map((post) => (
@@ -80,11 +82,11 @@ export default async function Home() {
             ))}
           </ul>
         ) : (
-          <EmptyPreview>No posts yet.</EmptyPreview>
+          <EmptyPreview>{t("home.blog.empty")}</EmptyPreview>
         )}
       </HomeSection>
 
-      <HomeSection title="Gallery" href="/gallery">
+      <HomeSection title={t("home.gallery.title")} href="/gallery" more={t("home.seeAll")}>
         <div className="grid grid-cols-3 gap-3">
           {[0, 1, 2].map((i) =>
             pieces[i] ? (
@@ -102,23 +104,23 @@ export default async function Home() {
             ),
           )}
         </div>
-        {pieces.length === 0 && <EmptyPreview>New pieces will show up here.</EmptyPreview>}
+        {pieces.length === 0 && <EmptyPreview>{t("home.gallery.empty")}</EmptyPreview>}
       </HomeSection>
 
-      <HomeSection title="Diplomat plate sightings" href="/plates">
+      <HomeSection title={t("home.plates.title")} href="/plates" more={t("home.seeAll")}>
         <p className="tabular-nums">
           <span className="text-2xl">{spotted}</span>
-          <span className="text-muted"> of {totalCountries ?? 0} countries spotted</span>
+          <span className="text-muted"> {t("home.plates.count", { total: totalCountries ?? 0 })}</span>
         </p>
       </HomeSection>
     </div>
   );
 }
 
-function ChamberOdds({ name, forecast }: { name: string; forecast: Forecast }) {
+function ChamberOdds({ label, forecast }: { label: string; forecast: Forecast }) {
   return (
     <div className="flex flex-col gap-2">
-      <p className="text-sm text-muted">Chance of winning the {name}</p>
+      <p className="text-sm text-muted">{label}</p>
       <p className="flex gap-6">
         <span>
           <span className="text-2xl" style={{ color: DEM }}>{Math.round(forecast.p_dem_control * 100)}%</span>
