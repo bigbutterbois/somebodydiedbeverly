@@ -128,6 +128,14 @@ export function formatDay(iso: string, opts: Intl.DateTimeFormatOptions = { mont
   return new Date(`${iso}T12:00:00Z`).toLocaleDateString("en-US", { ...opts, timeZone: "UTC" });
 }
 
+/** When a forecast run finished, in Eastern time: "Monday, October 5 at 3:01 PM ET". */
+export function formatUpdated(iso: string) {
+  const at = new Date(iso);
+  const day = at.toLocaleDateString("en-US", { weekday: "long", month: "long", day: "numeric", timeZone: "America/New_York" });
+  const time = at.toLocaleTimeString("en-US", { hour: "numeric", minute: "2-digit", timeZone: "America/New_York" });
+  return `${day} at ${time} ET`;
+}
+
 /** Round the seat distribution to 100 dots (largest remainder), keyed by Democratic seats. */
 export function seatDots(distribution: Record<string, number>, dots = 100) {
   const entries = Object.entries(distribution).map(([s, p]) => ({ s: Number(s), exact: p * dots }));

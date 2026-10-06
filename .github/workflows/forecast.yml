@@ -1,7 +1,7 @@
 name: Forecast
 
 # Runs the Senate forecast every morning at 6am US Eastern and publishes the
-# results to the forecast-data branch, which the site reads. Hourly cron
+# results to the forecast-data branch, which the site reads. Repeated cron
 # times from 6am Eastern on cover daylight and standard time and late or
 # dropped GitHub schedules; the gate step skips any before 6am or on a day
 # that already has a forecast. A model change merged to main
@@ -11,9 +11,12 @@ name: Forecast
 
 on:
   schedule:
-    # GitHub often starts scheduled runs hours late or drops them, so there's a
-    # backup start every hour until 1pm Eastern; the gate runs only the first.
-    - cron: "0 10-18 * * *"
+    # GitHub often starts scheduled runs hours late or drops them, worst at
+    # the top of the hour (Oct 5's first start came at 3pm Eastern), so starts
+    # sit at :17 and :47 through the morning, then hourly into the evening;
+    # the gate runs only the first.
+    - cron: "17,47 10-17 * * *"
+    - cron: "17 18-23 * * *"
   workflow_dispatch:
     inputs:
       backfill_from:
