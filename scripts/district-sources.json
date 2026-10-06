@@ -1,0 +1,17 @@
+{
+  "_comment": "Boundaries for the to-scale House map (scripts/district-shapes.mjs). Every state starts from the Census 119th Congress file (the 2024 lines); states that redrew for 2026 are replaced from the sources below. A source is a zipped shapefile or an ArcGIS layer (FeatureServer/MapServer). Check each new source in the workflow log: the script says when a 'new' map matches the 2024 lines.",
+  "base": "https://www2.census.gov/geo/tiger/GENZ2024/shp/cb_2024_us_cd119_500k.zip",
+  "states": {
+    "AL": { "url": "https://services7.arcgis.com/jF2q3LPxL7PETdYk/arcgis/rest/services/2023_CONG_LEGISLATIVE_PLAN/FeatureServer", "note": "Legislature's 2023 plan, back in effect for 2026" },
+    "CA": { "url": "https://services6.arcgis.com/VAYhpnTznyOkqxfz/arcgis/rest/services/CD_AB604/FeatureServer", "note": "AB 604, enacted by Prop. 50 (Nov. 2025)" },
+    "FL": { "url": "https://services9.arcgis.com/Gh9awoU677aKree0/arcgis/rest/services/FL_Congressional_Districts_May_2026/FeatureServer", "note": "May 2026 plan" },
+    "LA": { "url": "https://services5.arcgis.com/NaE1rjvJf3JdTAkI/arcgis/rest/services/Louisiana_Congressional_Districts_(2026_Plan)/FeatureServer", "note": "2026 plan" },
+    "MO": { "url": "https://services2.arcgis.com/kNS2ppBA4rwAQQZy/arcgis/rest/services/HB1_Missouri_Congressional_Districts_2025/FeatureServer", "note": "HB 1 (2025), via MSDIS" },
+    "NC": { "url": "https://webservices.ncleg.gov/ViewBillDocument/2025/7667/0/SL%202025-95%20-%20Shapefile", "note": "SL 2025-95 (S.B. 249)" },
+    "OH": { "url": "https://services6.arcgis.com/FhJ42byMw3LmPYCN/arcgis/rest/services/Ohio_Congressional_Districts_11_3_2025/FeatureServer", "note": "Redistricting Commission plan, Oct. 2025" },
+    "TN": { "url": "https://tnmap.tn.gov/arcgis/rest/services/ADMINISTRATIVE_BOUNDARIES/LEGISLATIVE_DISTRICTS/MapServer/2", "note": "May 2026 plan, via TN state GIS" },
+    "TX": { "url": "https://data.capitol.texas.gov/dataset/748c952b-e926-4f44-8d01-a738884b3ec8/resource/5712ebe1-d777-4d4a-b836-0534e17bca01/download/planc2333.zip", "note": "PLANC2333 (2025)" },
+    "UT": { "url": "https://services1.arcgis.com/99lidPhWCzftIe9K/ArcGIS/rest/services/political_us_congress_districts_2026_to_2032/FeatureServer/0", "note": "Court-adopted map, via Utah SGID" },
+    "VA": { "url": "https://services6.arcgis.com/H5GyF8uLALiNSuAd/arcgis/rest/services/Shapefile_and_Block_Equivalency_File_for_the_Proposed_2026_Virginia_Congressional_Map/FeatureServer", "note": "2026 map approved with the April 2026 amendment" }
+  }
+}

@@ -1,0 +1,35 @@
+# Rebuilds public/house-districts.json (the to-scale House map) when its script or
+# sources change on a branch, and commits the result back to that branch.
+# See scripts/district-shapes.mjs.
+name: District shapes
+
+on:
+  push:
+    branches-ignore: [main, forecast-data]
+    paths:
+      - scripts/district-shapes.mjs
+      - scripts/district-sources.json
+      - .github/workflows/district-shapes.yml
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - name: Build district shapes
+        run: node scripts/district-shapes.mjs
+      - name: Commit
+        run: |
+          git add public/house-districts.json
+          if git diff --cached --quiet; then echo "No change"; exit 0; fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git commit -m "District shapes: rebuild public/house-districts.json"
+          git push

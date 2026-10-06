@@ -30,6 +30,7 @@ export function ControlChart({
       domain={[0, 100]}
       yTicks={[0, 25, 50, 75, 100]}
       format={(v) => `${Math.round(v)}%`}
+      labelWidth={190}
     />
   );
 }

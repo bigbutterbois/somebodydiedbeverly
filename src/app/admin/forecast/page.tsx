@@ -12,7 +12,7 @@ import {
   type Forecast,
 } from "@/lib/forecast";
 import { ControlChart } from "./ControlChart";
-import { OUTCOMES, outcomeOdds } from "./outcomes";
+import { OUTCOMES, circleCounts, outcomeOdds } from "./outcomes";
 import { SectionTitle } from "./parts";
 
 export const metadata = { title: "Forecast" };
@@ -55,15 +55,19 @@ export default async function BothForecastPage() {
       {today && (
         <section className="flex flex-col gap-4">
           <SectionTitle>Who controls Congress</SectionTitle>
-          <div className="grid grid-cols-2 gap-px overflow-hidden rounded border border-line bg-line">
-            {OUTCOMES.map((o, i) => (
-              <div key={o.label} className="flex flex-col gap-1 bg-background p-4">
-                <span className="text-3xl font-light tabular-nums" style={{ color: o.color }}>
-                  {outOf100(today[i])}%
-                </span>
-                <span className="text-sm text-muted">{o.label}</span>
-              </div>
-            ))}
+          <div className="flex flex-col items-center gap-6 sm:flex-row sm:items-start">
+            <CircleGrid odds={today} />
+            <ul className="flex w-full flex-col gap-3">
+              {OUTCOMES.map((o, i) => (
+                <li key={o.label} className="flex items-baseline gap-3 border-b border-line/60 pb-3">
+                  <span className="inline-block size-3 shrink-0 rounded-full" style={{ background: o.color }} />
+                  <span className="flex-1 text-sm">{o.label}</span>
+                  <span className="text-2xl font-light tabular-nums" style={{ color: o.color }}>
+                    {outOf100(today[i])}%
+                  </span>
+                </li>
+              ))}
+            </ul>
           </div>
           <p className="text-xs text-muted">
             Both forecasts run on the same simulated national swing, so a good night for Democrats in one chamber
@@ -121,5 +125,22 @@ function Chamber({ name, href, forecast, total }: { name: string; href: string; 
         {forecast.dem_seats_10}–{forecast.dem_seats_90}).
       </p>
     </Link>
+  );
+}
+
+/** 100 circles colored in proportion to each outcome's odds, read row by row. */
+function CircleGrid({ odds }: { odds: number[] }) {
+  const colors = circleCounts(odds).flatMap((n, i) => Array<string>(n).fill(OUTCOMES[i].color));
+  return (
+    <svg
+      viewBox="0 0 100 100"
+      className="w-56 shrink-0"
+      role="img"
+      aria-label={`100 simulations: ${OUTCOMES.map((o, i) => `${o.label} ${circleCounts(odds)[i]}`).join(", ")}`}
+    >
+      {colors.map((c, k) => (
+        <circle key={k} cx={5 + (k % 10) * 10} cy={5 + Math.floor(k / 10) * 10} r={4.1} fill={c} />
+      ))}
+    </svg>
   );
 }
