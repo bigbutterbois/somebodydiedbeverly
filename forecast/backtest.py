@@ -73,12 +73,14 @@ def gather(facts: dict, cfg: dict, cache: Path | None) -> tuple[list[dict], dict
             if r["state"][:2] in found:
                 funds[r["state"]] = found[r["state"][:2]]
         problems += fund_problems
+    pacs, pac_problems = extra_sources.fetch_super_pacs([r for r in facts["races"] if len(r["state"]) == 2], year)
+    problems += pac_problems
     economy, economy_problems = extra_sources.fetch_economy(date(year - 1, 1, 1))
     problems += economy_problems
     print(f"\n{len(polls)} polls; {len(problems)} problems")
     for p in problems:
         print(f"  ! {p}")
-    extras = {"fundraising": funds, "economy": economy}
+    extras = {"fundraising": funds, "super_pacs": pacs, "economy": economy}
     if cache:
         cache.mkdir(parents=True, exist_ok=True)
         (cache / "polls.json").write_text(json.dumps(polls, indent=1) + "\n")

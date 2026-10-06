@@ -7,12 +7,17 @@ national error, a regional error and a race error, then count seats.
 
 from __future__ import annotations
 
+import functools
 import hashlib
 import math
 import re
 from datetime import date, timedelta
+from pathlib import Path
 
 import numpy as np
+import yaml
+
+POLLING_MISS_FILE = Path(__file__).parent / "polling_miss.yaml"
 
 
 def config_version(config_text: str) -> str:
@@ -91,7 +96,42 @@ def poll_levels(polls: list[dict], as_of: date, cfg: dict, half_life: float) -> 
     return {k: round(sum(w * p[k] for w, _, p in rows) / total, 2) for k in ("opp", "rep")}
 
 
-def national_environment(polls: list[dict], as_of: date, cfg: dict, president_party: str = "R") -> dict:
+@functools.cache
+def polling_miss_history() -> dict:
+    return yaml.safe_load(POLLING_MISS_FILE.read_text()) if POLLING_MISS_FILE.exists() else {}
+
+
+def polling_miss(cfg: dict, election_year: int) -> dict:
+    """Points to take off poll margins for how polls missed in past cycles (positive = polls
+    overstated Democrats), already scaled by the correction setting.
+
+    Uses the configured cycles before election_year: "state_races" applies to every race's
+    polls, "states" adds each state's own miss beyond that (shrunk toward zero when the
+    state had few races), and "generic_ballot" applies to the generic ballot average.
+    """
+    mc = cfg.get("polling_miss") or {}
+    history = polling_miss_history()
+    cycles = [history[c] for c in mc.get("cycles", []) if c < election_year and c in history]
+    k = mc.get("correction", 0.0)
+    if not cycles or not k:
+        return {"state_races": 0.0, "generic_ballot": 0.0, "states": {}}
+    gb = [c["generic_ballot"] for c in cycles if c.get("generic_ballot") is not None]
+    sums: dict[str, list[float]] = {}
+    for c in cycles:
+        for st, (total, n) in (c.get("states") or {}).items():
+            acc = sums.setdefault(st, [0.0, 0])
+            acc[0] += total
+            acc[1] += n
+    shrink = mc.get("state_shrinkage", 3)
+    return {
+        "state_races": k * sum(c["state_races"] for c in cycles) / len(cycles),
+        "generic_ballot": k * sum(gb) / len(gb) if gb else 0.0,
+        "states": {st: k * total / (n + shrink) for st, (total, n) in sums.items()},
+    }
+
+
+def national_environment(polls: list[dict], as_of: date, cfg: dict, president_party: str = "R",
+                         generic_ballot_miss: float = 0.0) -> dict:
     """Dem national lead, blended from the generic ballot and the president's net approval.
 
     The approval formula gives the lead of the party out of the White House, so
@@ -102,7 +142,7 @@ def national_environment(polls: list[dict], as_of: date, cfg: dict, president_pa
         return {"value": float(f["national_environment_override"]), "source": "override"}
     gb, gb_w = weighted_average([p for p in polls if p["state"] == "US"], as_of, cfg, f["generic_ballot_half_life_days"])
     net, net_w = weighted_average([p for p in polls if p["state"] == "APPROVAL"], as_of, cfg, f["approval_half_life_days"])
-    gb = gb if gb is not None and gb_w >= 1.0 else None
+    gb = gb - generic_ballot_miss if gb is not None and gb_w >= 1.0 else None
     net = net if net is not None and net_w >= 1.0 else None
     # When approval polling dries up, fade it out instead of leaning on old polls:
     # full weight up to approval_stale_days since the newest poll, then down to
@@ -141,7 +181,12 @@ def fundraising_shift(state: str, extras: dict, cfg: dict) -> float:
     if not money or money["rep"] <= 0 or money["opp"] <= 0:
         return 0.0
     f = cfg["fundamentals"]
-    shift = f["fundraising_points_per_doubling"] * math.log2(money["opp"] / money["rep"])
+    rep, opp = money["rep"], money["opp"]
+    pacs = extras.get("super_pacs", {}).get(state)
+    if pacs:
+        rep += f.get("super_pac_weight", 0.0) * pacs["rep"]
+        opp += f.get("super_pac_weight", 0.0) * pacs["opp"]
+    shift = f["fundraising_points_per_doubling"] * math.log2(opp / rep)
     return max(-f["fundraising_cap"], min(f["fundraising_cap"], shift))
 
 
@@ -210,6 +255,18 @@ def prior_margin(race: dict, facts: dict, env: float, cfg: dict, extras: dict | 
     return margin
 
 
+def prior_weight(cfg: dict, days_left: int) -> float:
+    """The fundamentals prior's weight, in polls: full until prior_fade_start_days before the
+    election, then down in a straight line to prior_weight_floor of that on Election Day."""
+    f = cfg["fundamentals"]
+    k = f["prior_weight_in_polls"]
+    start = f.get("prior_fade_start_days")
+    if not start:
+        return k
+    floor = f.get("prior_weight_floor", 1.0)
+    return k * (floor + (1 - floor) * min(days_left / start, 1.0))
+
+
 def rating(p_opp: float, cfg: dict) -> int:
     """-3 (Safe R) .. 0 (Toss-up) .. +3 (Safe opposition)."""
     r = cfg["ratings"]
@@ -242,17 +299,22 @@ def run(facts: dict, cfg: dict, polls: list[dict], as_of: date, seed: int | None
     if isinstance(election, str):
         election = date.fromisoformat(election)
     days_left = max((election - as_of).days, 0)
-    national = national_environment(polls, as_of, cfg, facts.get("president_party", "R"))
+    miss = polling_miss(cfg, election.year)
+    national = national_environment(polls, as_of, cfg, facts.get("president_party", "R"), miss["generic_ballot"])
     economy = economy_shift(extras, as_of, cfg, facts.get("president_party", "R"))
     env = national["value"] + economy["shift"]
     pc, ec = cfg["polls"], cfg["error"]
 
+    prior_k = prior_weight(cfg, days_left)
     means, sds, rows = [], [], []
     for race in races:
         prior = prior_margin(race, facts, env, cfg, extras)
         avg, weight = weighted_average([p for p in polls if p["state"] == race["state"]], as_of, cfg, pc["half_life_days"])
-        k = cfg["fundamentals"]["prior_weight_in_polls"]
-        w_poll = weight / (weight + k) if avg is not None else 0.0
+        # Polls never get more than max_poll_share of the say, so fundamentals always count some.
+        w_poll = min(weight / (weight + prior_k), cfg["fundamentals"].get("max_poll_share", 1.0)) if avg is not None else 0.0
+        miss_adj = miss["state_races"] + miss["states"].get(race["state"][:2], 0.0)
+        if avg is not None:
+            avg -= miss_adj
         mean = w_poll * avg + (1 - w_poll) * prior if avg is not None else prior
         override = cfg["races"].get(race["state"], {}).get("override_margin")
         if override is not None:
@@ -266,7 +328,8 @@ def run(facts: dict, cfg: dict, polls: list[dict], as_of: date, seed: int | None
         )
         means.append(mean)
         sds.append(sd)
-        rows.append({"race": race, "prior": prior, "poll_avg": avg, "poll_weight": w_poll, "n_polls": n_polls})
+        rows.append({"race": race, "prior": prior, "poll_avg": avg, "poll_weight": w_poll, "n_polls": n_polls,
+                     "miss_adj": miss_adj})
 
     rng = np.random.default_rng(seed)
     n_sims = cfg["simulations"]
@@ -314,6 +377,7 @@ def run(facts: dict, cfg: dict, polls: list[dict], as_of: date, seed: int | None
             "poll_avg": None if row["poll_avg"] is None else round(row["poll_avg"], 2),
             "n_polls": row["n_polls"],
             "poll_weight": round(row["poll_weight"], 3),
+            "poll_miss_adjustment": round(-row["miss_adj"], 2) if row["poll_avg"] is not None else 0.0,
             "prior_margin": round(row["prior"], 2),
             "fundraising_shift": round(fundraising_shift(race["state"], extras, cfg), 2),
             "weather_shift": round(weather_shift(race["state"], extras, cfg), 2),
@@ -328,6 +392,8 @@ def run(facts: dict, cfg: dict, polls: list[dict], as_of: date, seed: int | None
         "election_day": election.isoformat(),
         "simulations": n_sims,
         "national_environment": round(env, 2),
+        "prior_weight_in_polls": round(prior_k, 3),
+        "generic_ballot_miss_adjustment": round(-miss["generic_ballot"], 2),
         "national_environment_source": national["source"],
         "economy_shift": round(economy["shift"], 2),
         "economy": {k: v for k, v in economy.items() if k != "shift"},

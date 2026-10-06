@@ -100,16 +100,41 @@ fundamentals:
   # Polls vs. fundamentals: the fundamentals prior counts as this many fresh,
   # full-weight polls. Lower = trust polls sooner.
   prior_weight_in_polls: 1.0
+  # ...and it fades as Election Day nears, like Silver's model: full weight
+  # until prior_fade_start_days out, then down in a straight line to
+  # prior_weight_floor times that weight on Election Day (Mike: never below 30%).
+  prior_fade_start_days: 120
+  prior_weight_floor: 0.3
+  # Polls never get more than this share of a race's expected margin, so the
+  # fundamentals always count for at least 15% (Mike, 2026-10-06).
+  max_poll_share: 0.85
   # Fundraising: individual contributions this cycle (FEC). Points per
   # doubling of one side's haul over the other's, capped.
   fundraising_points_per_doubling: 0.5
   fundraising_cap: 2.0
+  # Big super PACs (Senate Leadership Fund, MAGA Inc. and America PAC for the
+  # GOP; Senate Majority PAC and its WinSenate for Democrats): what each
+  # spends in a race's general election, backing its side or attacking the other,
+  # is added to its side's haul at this rate per dollar. Under 1 because candidates
+  # get the lowest TV ad rates by law and super PACs pay market rates.
+  super_pac_weight: 0.5
   # Election-day weather: Mike's call is that rain helps Democrats. Points
   # toward the opposition (usually Dem) per inch of forecast rain in the
   # state's biggest metro; negative flips it toward the GOP. Kicks in once
   # Nov 3 is within 16 days.
   weather_points_per_inch: 1.0
   weather_cap: 1.5
+
+# --- Historical polling miss ----------------------------------------------
+# Polls have tended to miss in the same direction cycle after cycle. This takes
+# a share of the average past miss back off: off the generic ballot (national)
+# and off every race's polling average (the national miss plus that state's own
+# extra miss). The miss history is forecast/polling_miss.yaml, built from 538's
+# archive of final-three-week polls by forecast/polling_miss.py.
+polling_miss:
+  correction: 0.5      # share of the average past miss to undo (0 = off, 1 = all of it)
+  cycles: [2012, 2014, 2016, 2018, 2020, 2022, 2024]  # Mike, 2026-10-06; only cycles before the election are used
+  state_shrinkage: 3   # a state's own miss is averaged as if it had 3 extra races that missed by 0
 
 # --- Economy ---------------------------------------------------------------
 # Market moves over the lookback window, added to the national environment.
