@@ -21,7 +21,7 @@ import { MAP_HEIGHT, MAP_WIDTH, stateBorders, stateShapes } from "./shapes";
 export const metadata = { title: "Senate forecast" };
 
 export default async function ForecastPage() {
-  const [forecast, history] = await Promise.all([getForecast(), getHistory()]);
+  const forecast = await getForecast();
 
   if (!forecast) {
     return (
@@ -31,6 +31,7 @@ export default async function ForecastPage() {
       </div>
     );
   }
+  const history = await getHistory(forecast);
 
   // Rows (from the most Democratic-favored) Democrats must sweep to reach 51 seats; the
   // last of them is the race that decides control, the one before it a 50-50 Senate.
