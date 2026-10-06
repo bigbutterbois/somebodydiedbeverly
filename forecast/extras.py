@@ -21,6 +21,9 @@ FEC_IE = "https://www.fec.gov/files/bulk-downloads/{year}/independent_expenditur
 # Each party's flagship Senate super PAC, by FEC committee ID: Senate Leadership
 # Fund (filed as SLF PAC) for Republicans, Senate Majority PAC (SMP) for Democrats.
 SUPER_PACS = {"C00571703": "rep", "C00484642": "opp"}
+# Spending they route through affiliated super PACs, matched by spender name:
+# Senate Majority PAC's ads run through WinSenate.
+SUPER_PAC_NAMES = {"winsenate": "opp"}
 APPROVAL_PAGES = [
     "Opinion_polling_on_the_second_Trump_presidency",
     "Opinion_polling_on_the_second_Donald_Trump_administration",
@@ -120,8 +123,8 @@ def fetch_super_pacs(races: list[dict], year: int) -> tuple[dict, list[str]]:
     Returns {state: {"rep": dollars, "opp": dollars}}.
     """
     states = {r["state"] for r in races}
-    running: dict[tuple[str, str, str], float] = {}  # (state, side, candidate id) -> largest running total
-    summed: dict[tuple[str, str, str], float] = {}   # same key -> sum of distinct expenditures
+    running: dict[tuple[str, ...], float] = {}  # (state, side, candidate id, spender id) -> largest running total
+    summed: dict[tuple[str, ...], float] = {}   # same key -> sum of distinct expenditures
     seen: set[tuple[str, ...]] = set()
     others: dict[str, float] = {}  # other spenders in these races, for the log
     try:
@@ -133,7 +136,9 @@ def fetch_super_pacs(races: list[dict], year: int) -> tuple[dict, list[str]]:
             # exp_amo, exp_date, agg_amo, sup_opp, purpose, payee, file_num, amndt_ind, tran_id, ...
             if len(row) < 18 or row[7] != "S" or row[5] not in states or not row[4].upper().startswith("G"):
                 continue  # only Senate general elections in this cycle's races (no primaries or runoffs)
-            if row[2] not in SUPER_PACS:
+            side = SUPER_PACS.get(row[2]) or next(
+                (v for k, v in SUPER_PAC_NAMES.items() if k in re.sub(r"[^a-z]", "", row[3].lower())), None)
+            if side is None:
                 try:
                     others[row[3]] = others.get(row[3], 0.0) + float(row[9] or 0)
                 except ValueError:
@@ -143,7 +148,7 @@ def fetch_super_pacs(races: list[dict], year: int) -> tuple[dict, list[str]]:
                 amount, agg = float(row[9] or 0), float(row[11] or 0)
             except ValueError:
                 continue
-            key = (row[5], SUPER_PACS[row[2]], row[0])
+            key = (row[5], side, row[0], row[2])
             running[key] = max(running.get(key, 0.0), agg)
             tran = (row[2], row[17]) if row[17] else tuple(row[:15])
             if tran not in seen:
@@ -153,9 +158,9 @@ def fetch_super_pacs(races: list[dict], year: int) -> tuple[dict, list[str]]:
         return {}, [f"super PACs: {e}"]
     totals = {key: running.get(key) or summed.get(key, 0.0) for key in running.keys() | summed.keys()}
     out: dict[str, dict[str, float]] = {}
-    for (state, side, _), dollars in totals.items():
+    for (state, side, _, _), dollars in totals.items():
         out.setdefault(state, {"rep": 0.0, "opp": 0.0})[side] += dollars
-    print("super PACs (SLF / SMP, $M): " + ", ".join(
+    print("super PACs (SLF / SMP + WinSenate, $M): " + ", ".join(
         f"{s} {v['rep'] / 1e6:.1f}/{v['opp'] / 1e6:.1f}" for s, v in sorted(out.items())))
     print("other big outside spenders in these races ($M): " + ", ".join(
         f"{name} {dollars / 1e6:.1f}" for name, dollars in sorted(others.items(), key=lambda kv: -kv[1])[:12]))
