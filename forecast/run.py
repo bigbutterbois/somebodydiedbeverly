@@ -11,6 +11,10 @@ snapshots), latest.json (today's forecast) and history.json (one entry per
 day). latest.json also carries the chart fields of every history day, so the
 site reads today's numbers and the by-day charts from one file and they can't
 come from two different runs.
+
+The House forecast is made in the same run, on the same polls file and the same
+national and regional draws, into house/latest.json and house/history.json;
+house/districts.json keeps the last good scrape of the 435 districts.
 """
 
 from __future__ import annotations
@@ -26,6 +30,7 @@ from zoneinfo import ZoneInfo
 import yaml
 
 import extras as extra_sources
+import house
 import model
 import scrape
 
@@ -89,6 +94,7 @@ def history_entry(result: dict) -> dict:
         "p_rep_control": result["p_rep_control"],
         "p_no_majority": result["p_no_majority"],
         "dem_seats_mean": result["dem_seats_mean"],
+        "p_dem_both": result.get("p_dem_both"),
         # Polling averages for the trend charts (D/R generic ballot, approve/disapprove).
         "generic_ballot": result.get("generic_ballot_levels") and {
             "dem": result["generic_ballot_levels"]["opp"], "rep": result["generic_ballot_levels"]["rep"]},
@@ -132,6 +138,21 @@ def summarize(result: dict) -> None:
         )
 
 
+def summarize_house(result: dict) -> None:
+    print(
+        f"\nHouse {result['as_of']}: Dem control {result['p_dem_control']:.1%}; Dem seats {result['dem_seats_mean']} "
+        f"({result['dem_seats_10']}-{result['dem_seats_90']}); both chambers {result.get('p_dem_both', 0):.1%}"
+    )
+    close = sorted(result["races"], key=lambda r: abs(r["p_opp"] - 0.5))[:40]
+    for r in sorted(close, key=lambda r: -r["p_opp"]):
+        avg = "  -  " if r["poll_avg"] is None else f"{r['poll_avg']:+5.1f}"
+        print(
+            f"  {r['state']:5} {r['opp']['name'][:20]:20} vs {r['rep']['name'][:20]:20} p_opp {r['p_opp']:6.1%} "
+            f"mean {r['mean_margin']:+6.1f}  lean {r['lean']:+5.1f}  inc {r['incumbent']:4}  over {r['overperformance_shift']:+.1f}  "
+            f"polls {avg} (n={r['n_polls']:2})  money {r['fundraising_shift']:+.1f}{'  new lines' if r['new_lines'] else ''}"
+        )
+
+
 def main() -> int:
     ap = argparse.ArgumentParser()
     ap.add_argument("--data-dir", type=Path, default=HERE / "out")
@@ -147,13 +168,35 @@ def main() -> int:
     cfg.setdefault("races", {})
     facts = yaml.safe_load((HERE / "races.yaml").read_text())
     version = model.config_version(config_text)
+    house_facts = house.load_facts(HERE / "house.yaml")
+    house_cfg = house.config(cfg)
 
     data = args.data_dir
     data.mkdir(parents=True, exist_ok=True)
+    (data / "house").mkdir(exist_ok=True)
     polls = load_json(data / "polls.json", [])
+    districts = load_json(data / "house" / "districts.json", [])
     problems: list[str] = []
+    house_problems: list[str] = []
+    if not args.no_scrape:
+        try:
+            scraped_districts, house_problems = house.fetch_districts(house_facts, verbose=args.verbose)
+            if len(scraped_districts) >= 400:  # a broken scrape keeps the last good list
+                districts = scraped_districts
+            else:
+                house_problems.append(f"house: only {len(scraped_districts)} districts parsed; keeping the last list")
+        except Exception as e:
+            house_problems.append(f"house districts: {e}")
+        for p in house_problems:
+            print(f"  ! {p}")
+    house_facts["races"] = districts
     if not args.no_scrape:
         scraped, problems = scrape.scrape_all(facts["races"], cfg["polls"]["aggregators"], verbose=args.verbose)
+        if districts:
+            house_polls, house_poll_problems = house.scrape_polls(
+                districts, cfg["polls"]["aggregators"], house_facts["election_day"].year, verbose=args.verbose)
+            scraped += house_polls
+            house_problems += house_poll_problems
         print(f"scraped {len(scraped)} polls; {len(problems)} problems")
         for p in problems:
             print(f"  ! {p}")
@@ -176,7 +219,8 @@ def main() -> int:
         print(f"polls since {since} (Wikipedia only -> with RCP and VoteHub; {len(votehub)} VoteHub polls "
               f"before dedupe):")
         for label, s in (("approval", lambda x: x == "APPROVAL"), ("generic ballot", lambda x: x == "US"),
-                         ("senate races", lambda x: x not in ("APPROVAL", "US"))):
+                         ("senate races", lambda x: x not in ("APPROVAL", "US") and "-" not in x),
+                         ("house districts", lambda x: "-" in x)):
             print(f"    {label}: {count(before, s)} -> {count(polls, s)}")
 
     today = args.as_of or datetime.now(EASTERN).date()
@@ -187,6 +231,11 @@ def main() -> int:
         funds, fund_problems = extra_sources.fetch_fundraising(facts["races"], election.year)
         pacs, pac_problems = extra_sources.fetch_super_pacs(facts["races"], election.year)
         fund_problems += pac_problems
+        if districts:
+            house_funds, house_fund_problems = extra_sources.fetch_fundraising(districts, election.year, "H")
+            house_pacs, house_pac_problems = extra_sources.fetch_super_pacs(districts, election.year, "H")
+            funds, pacs = {**funds, **house_funds}, {**pacs, **house_pacs}
+            house_problems += house_fund_problems + house_pac_problems
         weather, weather_problems = extra_sources.fetch_weather(election)
         economy, economy_problems = extra_sources.fetch_economy(date(election.year - 1, 1, 1))
         if funds:
@@ -205,14 +254,24 @@ def main() -> int:
         days = [args.backfill_from + timedelta(d) for d in range((today - args.backfill_from).days + 1)]
 
     history = {h["date"]: h for h in load_json(data / "history.json", [])}
+    house_history = {h["date"]: h for h in load_json(data / "house" / "history.json", [])}
     # Every saved day is rebuilt from all the polls known now, so polls that are
     # published or found late (or a new field) fill in the charts going back.
     if not args.backfill_from and history:
         days = [date.fromisoformat(min(history)) + timedelta(d)
                 for d in range((today - date.fromisoformat(min(history))).days + 1)]
-    result = None
+    result = house_result = None
     for d in days:
-        result = model.run(facts, cfg, polls, d, seed=int(d.strftime("%Y%m%d")), extras=extras_as_of(extras, d))
+        seed = int(d.strftime("%Y%m%d"))
+        day_extras = extras_as_of(extras, d)
+        result, sims = model.simulate(facts, cfg, polls, d, seed=seed, extras=day_extras)
+        if districts:
+            # Same national and regional draws as the Senate, so the chambers swing together.
+            house_result, house_sims = model.simulate(house_facts, house_cfg, polls, d, seed=seed,
+                                                      extras=day_extras, shocks=sims)
+            both = round(float((sims["dem_control"] & house_sims["dem_control"]).mean()), 4)
+            result["p_dem_both"] = house_result["p_dem_both"] = both
+            house_history[d.isoformat()] = history_entry(house_result)
         history[d.isoformat()] = history_entry(result)
     assert result is not None
     result.update({
@@ -223,6 +282,14 @@ def main() -> int:
         "history": [{k: v for k, v in history[day].items() if k != "races"} for day in sorted(history)],
     })
     summarize(result)
+    if house_result is not None:
+        house_result.update({
+            "generated_at": result["generated_at"],
+            "config_version": version,
+            "problems": house_problems,
+            "history": [{k: v for k, v in house_history[day].items() if k != "races"} for day in sorted(house_history)],
+        })
+        summarize_house(house_result)
     if args.dry_run:
         return 0
 
@@ -230,6 +297,11 @@ def main() -> int:
     (data / "extras.json").write_text(json.dumps(extras, indent=1) + "\n")
     (data / "latest.json").write_text(json.dumps(result, indent=1) + "\n")
     (data / "history.json").write_text(json.dumps([history[k] for k in sorted(history)], indent=1) + "\n")
+    if house_result is not None:
+        (data / "house" / "districts.json").write_text(json.dumps(districts, indent=1) + "\n")
+        (data / "house" / "latest.json").write_text(json.dumps(house_result, indent=1) + "\n")
+        (data / "house" / "history.json").write_text(
+            json.dumps([house_history[k] for k in sorted(house_history)], indent=1) + "\n")
     # The data branch has no app to build; tell Vercel not to deploy it.
     (data / "vercel.json").write_text(json.dumps({"git": {"deploymentEnabled": False}}) + "\n")
     print(f"wrote {data}")

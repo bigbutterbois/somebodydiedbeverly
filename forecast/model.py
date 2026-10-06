@@ -1,8 +1,10 @@
-"""Polls-plus-fundamentals Senate model, run as correlated simulations.
+"""Polls-plus-fundamentals model for the Senate and the House, run as correlated simulations.
 
 For each race: a weighted polling average and a fundamentals prior are blended
 into a mean margin (opposition minus Republican). Simulations add a shared
-national error, a regional error and a race error, then count seats.
+national error, a regional error, a state error (House) and a race error, then
+count seats. The House runs on the Senate's national and regional draws, so the
+two chambers swing together in each simulation.
 """
 
 from __future__ import annotations
@@ -240,9 +242,12 @@ def economy_shift(extras: dict, as_of: date, cfg: dict, president_party: str = "
 
 def prior_margin(race: dict, facts: dict, env: float, cfg: dict, extras: dict | None = None) -> float:
     f = cfg["fundamentals"]
-    lean = 0.0
-    for year, w in f["lean_weights"].items():
-        lean += w * (race[f"pres_{year}"] - facts[f"national_pres_{year}"])
+    if "lean" in race:  # House districts carry their blended lean already (from Cook PVI)
+        lean = race["lean"]
+    else:
+        lean = 0.0
+        for year, w in f["lean_weights"].items():
+            lean += w * (race[f"pres_{year}"] - facts[f"national_pres_{year}"])
     margin = lean * f["lean_factor"] + env
     inc = f["incumbency"] * (f["appointed_incumbency_factor"] if race.get("appointed") else 1.0)
     if race["incumbent"] == "R":
@@ -250,9 +255,20 @@ def prior_margin(race: dict, facts: dict, env: float, cfg: dict, extras: dict | 
     elif race["incumbent"] in ("D", "I") and race["opp"].get("party") in ("D", "I"):
         margin += inc
     margin += cfg["races"].get(race["state"], {}).get("candidate_quality", 0.0)
+    margin += overperformance_shift(race, cfg)
     if extras:
-        margin += fundraising_shift(race["state"], extras, cfg) + weather_shift(race["state"], extras, cfg)
+        margin += fundraising_shift(race["state"], extras, cfg) + weather_shift(race["state"][:2], extras, cfg)
     return margin
+
+
+def overperformance_shift(race: dict, cfg: dict) -> float:
+    """House incumbents: a share of how far they ran ahead of their district last time, capped."""
+    f = cfg["fundamentals"]
+    over = race.get("overperformance")
+    if over is None or not f.get("overperformance_factor"):
+        return 0.0
+    cap = f.get("overperformance_cap", 4.0)
+    return max(-cap, min(cap, f["overperformance_factor"] * over))
 
 
 def prior_weight(cfg: dict, days_left: int) -> float:
@@ -293,6 +309,17 @@ def sample_simulations(dem_seats: np.ndarray, opp_wins: np.ndarray, rng: np.rand
 def run(facts: dict, cfg: dict, polls: list[dict], as_of: date, seed: int | None = None,
         extras: dict | None = None) -> dict:
     """extras: {"fundraising": {state: {rep, opp}}, "weather": {state: inches}} as known on as_of."""
+    return simulate(facts, cfg, polls, as_of, seed, extras)[0]
+
+
+def simulate(facts: dict, cfg: dict, polls: list[dict], as_of: date, seed: int | None = None,
+             extras: dict | None = None, shocks: dict | None = None) -> tuple[dict, dict]:
+    """The forecast, plus the simulations' shared draws and who won control in each:
+    {"national": array, "regional": {region: array}, "dem_control": array}.
+
+    Pass another chamber's shocks to reuse its national and regional draws, so both
+    chambers move together (they need the same number of simulations).
+    """
     extras = extras or {}
     races = facts["races"]
     election = facts["election_day"]
@@ -306,10 +333,14 @@ def run(facts: dict, cfg: dict, polls: list[dict], as_of: date, seed: int | None
     pc, ec = cfg["polls"], cfg["error"]
 
     prior_k = prior_weight(cfg, days_left)
+    by_race: dict[str, list[dict]] = {}
+    for p in polls:
+        by_race.setdefault(p["state"], []).append(p)
     means, sds, rows = [], [], []
     for race in races:
         prior = prior_margin(race, facts, env, cfg, extras)
-        avg, weight = weighted_average([p for p in polls if p["state"] == race["state"]], as_of, cfg, pc["half_life_days"])
+        race_polls = by_race.get(race["state"], [])
+        avg, weight = weighted_average(race_polls, as_of, cfg, pc["half_life_days"])
         # Polls never get more than max_poll_share of the say, so fundamentals always count some.
         w_poll = min(weight / (weight + prior_k), cfg["fundamentals"].get("max_poll_share", 1.0)) if avg is not None else 0.0
         miss_adj = miss["state_races"] + miss["states"].get(race["state"][:2], 0.0)
@@ -319,12 +350,13 @@ def run(facts: dict, cfg: dict, polls: list[dict], as_of: date, seed: int | None
         override = cfg["races"].get(race["state"], {}).get("override_margin")
         if override is not None:
             mean = float(override)
+        if race.get("uncontested"):  # no major-party opponent: decided before the simulations
+            mean = -60.0 if race["uncontested"] == "R" else 60.0
         sd = w_poll * ec["state_polled"] + (1 - w_poll) * ec["state_unpolled"] + ec["state_per_day"] * days_left
         if race["opp"].get("party") == "I":
             sd = math.hypot(sd, ec["independent_extra"])
         n_polls = sum(
-            1 for p in polls
-            if p["state"] == race["state"] and 0 <= (as_of - date.fromisoformat(p["end_date"])).days <= pc["max_age_days"]
+            1 for p in race_polls if 0 <= (as_of - date.fromisoformat(p["end_date"])).days <= pc["max_age_days"]
         )
         means.append(mean)
         sds.append(sd)
@@ -341,10 +373,19 @@ def run(facts: dict, cfg: dict, polls: list[dict], as_of: date, seed: int | None
 
     regions = sorted({r["region"] for r in races})
     region_idx = np.array([regions.index(r["region"]) for r in races])
-    national_err = draws(n_sims) * (ec["national"] + ec["national_per_day"] * days_left)
-    regional = draws((n_sims, len(regions))) * ec["regional"]
-    state = draws((n_sims, len(races))) * np.array(sds)
-    margins = np.array(means)[None, :] + national_err[:, None] + regional[:, region_idx] + state
+    if shocks is None:
+        national_err = draws(n_sims) * (ec["national"] + ec["national_per_day"] * days_left)
+        regional = draws((n_sims, len(regions))) * ec["regional"]
+    else:
+        national_err = shocks["national"]
+        regional = np.column_stack([
+            shocks["regional"][g] if g in shocks["regional"] else draws(n_sims) * ec["regional"] for g in regions])
+    margins = np.array(means)[None, :] + national_err[:, None] + regional[:, region_idx]
+    if ec.get("state"):  # shared by races in the same state (House districts)
+        states = sorted({r["state"][:2] for r in races})
+        state_idx = np.array([states.index(r["state"][:2]) for r in races])
+        margins += (draws((n_sims, len(states))) * ec["state"])[:, state_idx]
+    margins += draws((n_sims, len(races))) * np.array(sds)
     opp_wins = margins > 0
 
     caucus_d = np.array([
@@ -352,15 +393,18 @@ def run(facts: dict, cfg: dict, polls: list[dict], as_of: date, seed: int | None
     ])
     dem_seats = facts["seats_not_up"]["D"] + (opp_wins & caucus_d).sum(axis=1)
     rep_seats = facts["seats_not_up"]["R"] + (~opp_wins).sum(axis=1)
-    vp = cfg["control"]["vice_president_party"]
-    dem_control = (dem_seats >= 51) | ((dem_seats == 50) & (vp == "D"))
-    rep_control = (rep_seats >= 51) | ((rep_seats == 50) & (vp == "R"))
+    majority = facts.get("majority", 51)
+    vp = cfg["control"]["vice_president_party"] if facts.get("tiebreak", True) else None
+    dem_control = (dem_seats >= majority) | ((dem_seats == majority - 1) & (vp == "D"))
+    rep_control = (rep_seats >= majority) | ((rep_seats == majority - 1) & (vp == "R"))
 
     race_out = []
+    p_opps = opp_wins.mean(axis=0)
+    lows, highs = np.percentile(margins, [10, 90], axis=0)
     for i, row in enumerate(rows):
         race = row["race"]
-        p_opp = float(opp_wins[:, i].mean())
-        lo, hi = np.percentile(margins[:, i], [10, 90])
+        p_opp = float(p_opps[i])
+        lo, hi = lows[i], highs[i]
         race_out.append({
             "state": race["state"],
             "name": race["name"],
@@ -382,11 +426,17 @@ def run(facts: dict, cfg: dict, polls: list[dict], as_of: date, seed: int | None
             "fundraising_shift": round(fundraising_shift(race["state"], extras, cfg), 2),
             "weather_shift": round(weather_shift(race["state"], extras, cfg), 2),
             "rating": rating(p_opp, cfg),
+            **({"lean": round(race["lean"] * cfg["fundamentals"]["lean_factor"], 1),
+                "overperformance_shift": round(overperformance_shift(race, cfg), 2),
+                "new_lines": bool(race.get("new_lines")),
+                "uncontested": race.get("uncontested")} if "lean" in race else {}),
         })
 
     seat_hist = np.bincount(dem_seats, minlength=101)
     samples = sample_simulations(dem_seats, opp_wins, rng)
     lo_seat, hi_seat = int(dem_seats.min()), int(dem_seats.max())
+    sims = {"national": national_err, "regional": {g: regional[:, i] for i, g in enumerate(regions)},
+            "dem_control": dem_control}
     return {
         "as_of": as_of.isoformat(),
         "election_day": election.isoformat(),
@@ -404,6 +454,7 @@ def run(facts: dict, cfg: dict, polls: list[dict], as_of: date, seed: int | None
         "p_dem_control": round(float(dem_control.mean()), 4),
         "p_rep_control": round(float(rep_control.mean()), 4),
         "p_no_majority": round(float(1 - dem_control.mean() - rep_control.mean()), 4),
+        "majority": majority,
         "dem_seats_not_up": facts["seats_not_up"]["D"],
         "dem_seats_mean": round(float(dem_seats.mean()), 2),
         "rep_seats_mean": round(float(rep_seats.mean()), 2),
@@ -414,4 +465,4 @@ def run(facts: dict, cfg: dict, polls: list[dict], as_of: date, seed: int | None
         # per race in "races" order, "D" if the opposition won or "R".
         "sample_simulations": samples,
         "races": race_out,
-    }
+    }, sims
