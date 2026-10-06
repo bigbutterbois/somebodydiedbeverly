@@ -44,10 +44,20 @@ async function load(name, url) {
       if (!poly) throw new Error(`${url}: no layers (${JSON.stringify(info).slice(0, 200)})`);
       layer = `${layer}/${poly.id}`;
     }
-    const q = `${layer}/query?where=1%3D1&outFields=*&returnGeometry=true&outSR=4326&f=geojson`;
-    const json = await (await fetch(q)).json();
+    const q = `${layer}/query?where=1%3D1&outFields=*&returnGeometry=true&outSR=4326`;
+    const geojson = await fetch(`${q}&f=geojson`).then((r) => r.json()).catch(() => null);
+    if (geojson?.features) return geojson.features;
+    // Some servers only speak Esri JSON: convert its rings (outer rings clockwise, holes not).
+    const json = await (await fetch(`${q}&f=json`)).json();
     if (!json.features) throw new Error(`${q}: ${JSON.stringify(json).slice(0, 300)}`);
-    return json.features;
+    return json.features.map((f) => {
+      const polys = [];
+      for (const ring of f.geometry?.rings ?? []) {
+        if (ringArea(ring) < 0 || !polys.length) polys.push([ring]);
+        else polys[polys.length - 1].push(ring);
+      }
+      return { type: "Feature", properties: f.attributes, geometry: polys.length ? { type: "MultiPolygon", coordinates: polys } : null };
+    });
   }
   const zip = `${TMP}/${name}.zip`;
   await download(url, zip);
@@ -56,10 +66,12 @@ async function load(name, url) {
   return JSON.parse(readFileSync(out, "utf8")).features;
 }
 
-/** The property that numbers the districts 1..n (or the at-large district). */
+/** The property that numbers the districts 1..n, preferring one named like a district. */
 function districtNumbers(features, n) {
   const keys = Object.keys(features[0]?.properties ?? {});
-  for (const key of keys) {
+  const named = (k) => /dist|^cd|^cong/i.test(k);
+  const ids = (k) => /^(o?fid|objectid|id)$/i.test(k);
+  for (const key of [...keys.filter(named), ...keys.filter((k) => !named(k) && !ids(k))]) {
     const nums = features.map((f) => parseInt(String(f.properties[key] ?? "").replace(/^\D+/, ""), 10));
     if (nums.some(Number.isNaN)) continue;
     const set = new Set(nums);

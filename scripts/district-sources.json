@@ -8,7 +8,7 @@
     "LA": { "url": "https://services5.arcgis.com/NaE1rjvJf3JdTAkI/arcgis/rest/services/Louisiana_Congressional_Districts_(2026_Plan)/FeatureServer", "note": "2026 plan" },
     "MO": { "url": "https://services2.arcgis.com/kNS2ppBA4rwAQQZy/arcgis/rest/services/HB1_Missouri_Congressional_Districts_2025/FeatureServer", "note": "HB 1 (2025), via MSDIS" },
     "NC": { "url": "https://webservices.ncleg.gov/ViewBillDocument/2025/7667/0/SL%202025-95%20-%20Shapefile", "note": "SL 2025-95 (S.B. 249)" },
-    "OH": { "url": "https://services6.arcgis.com/FhJ42byMw3LmPYCN/arcgis/rest/services/Ohio_Congressional_Districts_11_3_2025/FeatureServer", "note": "Redistricting Commission plan, Oct. 2025" },
+    "OH": { "url": "https://maps.ohio.gov/arcgis/rest/services/Hosted/Districts_2025_11_03_SHP/FeatureServer", "note": "Redistricting Commission plan (Oct. 2025), via Ohio OGRIP" },
     "TN": { "url": "https://tnmap.tn.gov/arcgis/rest/services/ADMINISTRATIVE_BOUNDARIES/LEGISLATIVE_DISTRICTS/MapServer/2", "note": "May 2026 plan, via TN state GIS" },
     "TX": { "url": "https://data.capitol.texas.gov/dataset/748c952b-e926-4f44-8d01-a738884b3ec8/resource/5712ebe1-d777-4d4a-b836-0534e17bca01/download/planc2333.zip", "note": "PLANC2333 (2025)" },
     "UT": { "url": "https://services1.arcgis.com/99lidPhWCzftIe9K/ArcGIS/rest/services/political_us_congress_districts_2026_to_2032/FeatureServer/0", "note": "Court-adopted map, via Utah SGID" },
