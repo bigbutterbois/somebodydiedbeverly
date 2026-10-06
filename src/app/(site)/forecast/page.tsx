@@ -50,11 +50,24 @@ export default async function ForecastPage() {
             : formatDay(forecast.as_of, { weekday: "long", month: "long", day: "numeric" })}
           {daysLeft > 0 && ` · ${daysLeft} days to Election Day`}
         </p>
-        <p className="border-l-2 border-accent pl-3 text-sm text-muted">
-          <span className="text-foreground">Patch notes, Oct 6.</span> Trump approval data is fixed and
-          more complete. Super PAC spending now counts toward fundraising in each race&rsquo;s fundamentals. The
-          biggest change: polls are now partially adjusted for their historical errors.
-        </p>
+        <div className="flex flex-col gap-2 border-l-2 border-accent pl-3 text-sm text-muted">
+          <p className="text-foreground">Patch notes, Oct. 6</p>
+          <ul className="flex list-disc flex-col gap-1 pl-4">
+            <li>
+              <strong className="font-medium text-foreground">Trump approval:</strong> Fixed bug in data scraping to
+              include more polls.
+            </li>
+            <li>
+              <strong className="font-medium text-foreground">Super PAC spending:</strong> Outside spending by super
+              PACs now counts toward each race&rsquo;s fundraising total in the fundamentals.
+            </li>
+            <li>
+              <strong className="font-medium text-foreground">Polling weights (biggest change):</strong> Polls are now
+              partially adjusted to account for historical errors. This shifted most polling averages in
+              Republicans&rsquo; favor compared to previous model runs.
+            </li>
+          </ul>
+        </div>
       </header>
 
       <Topline forecast={forecast} />
