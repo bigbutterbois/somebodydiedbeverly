@@ -8,8 +8,8 @@ type Shape = { name: string; d: string };
 const PAD = { top: 8, right: 8, bottom: 44, left: 8 };
 
 // 100 representative simulations as dots, stacked by how many seats Democrats
-// win. Blue dots are outcomes where Democrats control the Senate. Hovering a dot
-// shows that simulation's map.
+// win. Blue dots are outcomes where Democrats control the chamber. Hovering a dot
+// shows that simulation's map (when there are map shapes for its races).
 export function SeatHistogram({
   distribution,
   samples,
@@ -17,13 +17,16 @@ export function SeatHistogram({
   shapes,
   borders,
   total = 100,
+  majority = 51,
 }: {
   distribution: Record<string, number>;
   samples?: SampleSimulation[];
-  raceNames: string[];
-  shapes: Shape[];
-  borders: string;
+  raceNames?: string[];
+  shapes?: Shape[];
+  borders?: string;
   total?: number;
+  /** Seats Democrats need for control (the Senate's 51 counts Vance's 50-50 tiebreak). */
+  majority?: number;
 }) {
   const svgRef = useRef<SVGSVGElement>(null);
   const [hoverDot, setHoverDot] = useState<{ s: number; k: number } | null>(null);
@@ -48,8 +51,8 @@ export function SeatHistogram({
   }
   const counts = new Map([...stacks].map(([s, list]) => [s, list.length]));
   const seats = [...counts.keys()];
-  const lo = Math.min(...seats, 50) - 1;
-  const hi = Math.max(...seats, 51) + 1;
+  const lo = Math.min(...seats, majority - 1) - 1;
+  const hi = Math.max(...seats, majority) + 1;
   const cols = hi - lo + 1;
   const colW = (W - PAD.left - PAD.right) / cols;
   const r = Math.max(2.5, Math.min(7, colW / 2 - 1.5));
@@ -57,8 +60,9 @@ export function SeatHistogram({
   const H = PAD.top + maxStack * (2 * r + 2) + PAD.bottom;
   const cx = (s: number) => PAD.left + (s - lo + 0.5) * colW;
   const base = H - PAD.bottom;
-  const labelEvery = colW < 22 ? 2 : 1;
-  const controls = (s: number) => s >= 51; // Vance breaks a 50-50 tie for Republicans
+  const labelEvery = colW < 11 ? 4 : colW < 22 ? 2 : 1;
+  const controls = (s: number) => s >= majority;
+  const line = majority - 0.5;
 
   function onMove(e: React.PointerEvent) {
     const box = svgRef.current!.getBoundingClientRect();
@@ -85,8 +89,8 @@ export function SeatHistogram({
         role="img"
         aria-label={`Democratic seats in 100 simulations: ${seats.map((s) => `${s} seats in ${counts.get(s)}`).join(", ")}.`}
       >
-        {/* Control line between 50 and 51 Democratic seats. */}
-        <line x1={cx(50.5)} x2={cx(50.5)} y1={PAD.top} y2={base + 6} stroke="var(--muted)" strokeDasharray="3 3" />
+        {/* Control line between a majority and one seat short. */}
+        <line x1={cx(line)} x2={cx(line)} y1={PAD.top} y2={base + 6} stroke="var(--muted)" strokeDasharray="3 3" />
         <line x1={PAD.left} x2={W - PAD.right} y1={base + 0.5} y2={base + 0.5} stroke="var(--line)" />
         {seats.map((s) =>
           Array.from({ length: counts.get(s)! }, (_, k) => (
@@ -103,7 +107,7 @@ export function SeatHistogram({
           )),
         )}
         {Array.from({ length: cols }, (_, i) => lo + i)
-          .filter((s) => (s - 50) % labelEvery === 0 || s === hover)
+          .filter((s) => (s - majority) % labelEvery === 0 || s === hover)
           .map((s) => (
             <g key={s}>
               <text
@@ -116,10 +120,10 @@ export function SeatHistogram({
               </text>
             </g>
           ))}
-        <text x={cx(50.5) - 6} y={base + 34} textAnchor="end" className="fill-muted text-[11px]">
+        <text x={cx(line) - 6} y={base + 34} textAnchor="end" className="fill-muted text-[11px]">
           ← Republican control
         </text>
-        <text x={cx(50.5) + 6} y={base + 34} className="fill-muted text-[11px]">
+        <text x={cx(line) + 6} y={base + 34} className="fill-muted text-[11px]">
           Democratic control →
         </text>
       </svg>
@@ -138,7 +142,9 @@ export function SeatHistogram({
           <p>
             <span style={{ color: DEM }}>{hover} D</span> · <span style={{ color: REP }}>{total - hover} R</span>
           </p>
-          {sim && <MiniMap sim={sim} raceNames={raceNames} shapes={shapes} borders={borders} />}
+          {sim && raceNames && shapes && borders && (
+            <MiniMap sim={sim} raceNames={raceNames} shapes={shapes} borders={borders} />
+          )}
         </div>
       )}
     </div>

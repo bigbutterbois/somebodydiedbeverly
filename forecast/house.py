@@ -88,7 +88,9 @@ def parse_candidates(cell) -> list[dict]:
         [s for s in cell.get_text("\n", strip=True).split("\n") if "(" in s]
     out = []
     for text in items:
-        text = re.sub(r"\[[^\]]*\]", "", text).strip()
+        # Drop footnotes and the leading party color box (and winner check) Wikipedia puts before names.
+        text = re.sub(r"\[[^\]]*\]", "", text)
+        text = re.sub(r"^[^\w(]+", "", text).strip()
         m = re.match(r"^(?:[✓YN]\s+)?(.+?)\s*\(([^)]+)\)\s*(\d+(?:\.\d+)?)?\s*%?", text)
         if not m:
             continue
@@ -105,8 +107,8 @@ def district_rows(html: str) -> list[dict]:
     soup = BeautifulSoup(html, "lxml")
     rows = []
     for table in soup.select("table.wikitable"):
-        header = [scrape.norm(th.get_text(" ")) for th in table.select("tr")[0].find_all(["th", "td"])] \
-            if table.select("tr") else []
+        # The header can take two rows: District | Incumbent | Candidates over Location | PVI | Member ...
+        header = [scrape.norm(c.get_text(" ")) for tr in table.select("tr")[:2] for c in tr.find_all("th")]
         if not any("candidates" in h for h in header) or not any("pvi" in h for h in header):
             continue
         for sup in table.select("sup.reference"):
