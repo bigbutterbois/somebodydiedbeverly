@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Work_Sans } from "next/font/google";
+import { PREVIEW_DESCRIPTION, SITE_NAME } from "@/lib/link-preview";
 import "./globals.css";
 
 const workSans = Work_Sans({
@@ -7,10 +8,23 @@ const workSans = Work_Sans({
   subsets: ["latin"],
 });
 
+const productionHost = process.env.VERCEL_PROJECT_PRODUCTION_URL ?? "www.somebodydiedbeverly.com";
+
+// The Open Graph tags matter for the password page, which is where any link
+// preview fetcher the proxy doesn't recognize ends up (see src/lib/link-preview.ts).
 export const metadata: Metadata = {
-  title: { template: "%s · somebodydiedbeverly", default: "somebodydiedbeverly" },
-  description: "somebodydiedbeverly.com",
+  metadataBase: new URL(`https://${productionHost}`),
+  title: { template: `%s · ${SITE_NAME}`, default: SITE_NAME },
+  description: PREVIEW_DESCRIPTION,
   robots: { index: false, follow: false },
+  openGraph: {
+    type: "website",
+    siteName: SITE_NAME,
+    title: SITE_NAME,
+    description: PREVIEW_DESCRIPTION,
+    images: [{ url: "/og.png", width: 1200, height: 630 }],
+  },
+  twitter: { card: "summary_large_image" },
 };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {

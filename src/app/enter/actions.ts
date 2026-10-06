@@ -9,6 +9,7 @@ import {
   safeEqual,
   safeNextPath,
 } from "@/lib/site-access";
+import { recordWrongGuess, tooManyGuesses } from "@/lib/password-guesses";
 import { logVisit } from "@/lib/visits";
 
 export async function enterSite(
@@ -18,11 +19,15 @@ export async function enterSite(
   const password = process.env.SITE_PASSWORD;
   if (!password) return { error: "The site password hasn't been set up yet." };
 
+  if (await tooManyGuesses(password)) {
+    return { error: "Too many tries. Wait an hour and try again." };
+  }
+
   // Case-insensitive, so "Beverly" and "beverly" both work. The cookie is still
   // derived from SITE_PASSWORD exactly as set, so devices already in stay in.
   const entered = String(formData.get("password") ?? "");
   if (!safeEqual(entered.toLowerCase(), password.toLowerCase())) {
-    await logVisit("bad_password", "/enter");
+    await Promise.all([logVisit("bad_password", "/enter"), recordWrongGuess(password)]);
     return { error: "That's not the password." };
   }
 
