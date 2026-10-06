@@ -100,6 +100,11 @@ fundamentals:
   # Polls vs. fundamentals: the fundamentals prior counts as this many fresh,
   # full-weight polls. Lower = trust polls sooner.
   prior_weight_in_polls: 1.0
+  # ...and it fades as Election Day nears, like Silver's model: full weight
+  # until prior_fade_start_days out, then down in a straight line to
+  # prior_weight_floor times that weight on Election Day (Mike: never below 30%).
+  prior_fade_start_days: 120
+  prior_weight_floor: 0.3
   # Fundraising: individual contributions this cycle (FEC). Points per
   # doubling of one side's haul over the other's, capped.
   fundraising_points_per_doubling: 0.5

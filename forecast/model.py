@@ -210,6 +210,18 @@ def prior_margin(race: dict, facts: dict, env: float, cfg: dict, extras: dict | 
     return margin
 
 
+def prior_weight(cfg: dict, days_left: int) -> float:
+    """The fundamentals prior's weight, in polls: full until prior_fade_start_days before the
+    election, then down in a straight line to prior_weight_floor of that on Election Day."""
+    f = cfg["fundamentals"]
+    k = f["prior_weight_in_polls"]
+    start = f.get("prior_fade_start_days")
+    if not start:
+        return k
+    floor = f.get("prior_weight_floor", 1.0)
+    return k * (floor + (1 - floor) * min(days_left / start, 1.0))
+
+
 def rating(p_opp: float, cfg: dict) -> int:
     """-3 (Safe R) .. 0 (Toss-up) .. +3 (Safe opposition)."""
     r = cfg["ratings"]
@@ -247,12 +259,12 @@ def run(facts: dict, cfg: dict, polls: list[dict], as_of: date, seed: int | None
     env = national["value"] + economy["shift"]
     pc, ec = cfg["polls"], cfg["error"]
 
+    prior_k = prior_weight(cfg, days_left)
     means, sds, rows = [], [], []
     for race in races:
         prior = prior_margin(race, facts, env, cfg, extras)
         avg, weight = weighted_average([p for p in polls if p["state"] == race["state"]], as_of, cfg, pc["half_life_days"])
-        k = cfg["fundamentals"]["prior_weight_in_polls"]
-        w_poll = weight / (weight + k) if avg is not None else 0.0
+        w_poll = weight / (weight + prior_k) if avg is not None else 0.0
         mean = w_poll * avg + (1 - w_poll) * prior if avg is not None else prior
         override = cfg["races"].get(race["state"], {}).get("override_margin")
         if override is not None:
@@ -328,6 +340,7 @@ def run(facts: dict, cfg: dict, polls: list[dict], as_of: date, seed: int | None
         "election_day": election.isoformat(),
         "simulations": n_sims,
         "national_environment": round(env, 2),
+        "prior_weight_in_polls": round(prior_k, 3),
         "national_environment_source": national["source"],
         "economy_shift": round(economy["shift"], 2),
         "economy": {k: v for k, v in economy.items() if k != "shift"},
