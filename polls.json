@@ -13230,6 +13230,19 @@
   "source": "https://en.wikipedia.org/wiki/2026_United_States_House_of_Representatives_elections_in_Idaho"
  },
  {
+  "state": "IL",
+  "pollster": "Public Policy Polling/Chicago News Weekly",
+  "sponsor_party": "D",
+  "end_date": "2026-10-01",
+  "n": 569,
+  "population": "LV",
+  "rep": 36.0,
+  "opp": 49.0,
+  "others": [],
+  "source": "https://www.cnwmedia.com/article/cnw-poll-pritzker-leads-bailey-by-20-points-democrats-ahead-in-four-other-statewide-races",
+  "feed": "votehub"
+ },
+ {
   "state": "IL-04",
   "pollster": "Independent Center Voice",
   "sponsor_party": null,
@@ -16195,6 +16208,18 @@
   "population": "LV",
   "rep": 41.0,
   "opp": 47.0,
+  "others": [],
+  "source": "https://en.wikipedia.org/wiki/2026_United_States_Senate_election_in_New_Hampshire"
+ },
+ {
+  "state": "NH",
+  "pollster": "Saint Anselm College",
+  "sponsor_party": null,
+  "end_date": "2026-09-29",
+  "n": 1042,
+  "population": "LV",
+  "rep": 44.0,
+  "opp": 51.0,
   "others": [],
   "source": "https://en.wikipedia.org/wiki/2026_United_States_Senate_election_in_New_Hampshire"
  },

@@ -12689,7 +12689,7 @@
   "p_rep_control": 0.0554,
   "p_no_majority": 0.0,
   "dem_seats_mean": 240.97,
-  "p_dem_both": 0.6353,
+  "p_dem_both": 0.6357,
   "generic_ballot": {
    "dem": 49.79,
    "rep": 41.71
@@ -13142,7 +13142,7 @@
   "p_rep_control": 0.0572,
   "p_no_majority": 0.0,
   "dem_seats_mean": 240.71,
-  "p_dem_both": 0.6267,
+  "p_dem_both": 0.6271,
   "generic_ballot": {
    "dem": 49.77,
    "rep": 41.74
@@ -13595,7 +13595,7 @@
   "p_rep_control": 0.0551,
   "p_no_majority": 0.0,
   "dem_seats_mean": 240.63,
-  "p_dem_both": 0.6242,
+  "p_dem_both": 0.6237,
   "generic_ballot": {
    "dem": 49.77,
    "rep": 41.73
@@ -14048,7 +14048,7 @@
   "p_rep_control": 0.0522,
   "p_no_majority": 0.0,
   "dem_seats_mean": 240.42,
-  "p_dem_both": 0.6256,
+  "p_dem_both": 0.6252,
   "generic_ballot": {
    "dem": 50.08,
    "rep": 42.06
@@ -14501,7 +14501,7 @@
   "p_rep_control": 0.0563,
   "p_no_majority": 0.0,
   "dem_seats_mean": 240.33,
-  "p_dem_both": 0.6234,
+  "p_dem_both": 0.6237,
   "generic_ballot": {
    "dem": 50.07,
    "rep": 42.06
@@ -14954,7 +14954,7 @@
   "p_rep_control": 0.0554,
   "p_no_majority": 0.0,
   "dem_seats_mean": 240.3,
-  "p_dem_both": 0.6279,
+  "p_dem_both": 0.6274,
   "generic_ballot": {
    "dem": 50.08,
    "rep": 42.08
@@ -15407,7 +15407,7 @@
   "p_rep_control": 0.0554,
   "p_no_majority": 0.0,
   "dem_seats_mean": 240.08,
-  "p_dem_both": 0.6304,
+  "p_dem_both": 0.6301,
   "generic_ballot": {
    "dem": 49.9,
    "rep": 41.94
@@ -15860,7 +15860,7 @@
   "p_rep_control": 0.0535,
   "p_no_majority": -0.0,
   "dem_seats_mean": 238.98,
-  "p_dem_both": 0.6247,
+  "p_dem_both": 0.6241,
   "generic_ballot": {
    "dem": 49.9,
    "rep": 41.95
