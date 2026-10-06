@@ -184,3 +184,24 @@ races:
   TX: { candidate_quality: 2.5, note: "Paxton: impeachment, scandals" }
   NH: { candidate_quality: -1.5, note: "Sununu, former senator and well-known name" }
   MT: { candidate_quality: 0.0, note: "Bodnar (I) splits the anti-Alme vote with Bankhead (D)" }
+
+# --- House -----------------------------------------------------------------
+# The House forecast uses every setting above; these replace the ones that
+# differ for House races (same section and key names). Everything national
+# (environment, economy, polling miss, poll weighting) is shared on purpose, so
+# both forecasts always agree on the national picture.
+house:
+  fundamentals:
+    # Districts' lean is from Cook PVI (2024 weighted 75%, 2020 25%, like lean_weights).
+    # House races track the presidential vote closely, so it isn't scaled down.
+    lean_factor: 1.0
+    incumbency: 2.0
+    # Candidate quality, automatic (Mike, 2026-10-06): this share of how far each
+    # incumbent ran ahead of their district's lean plus the national House vote
+    # in 2024, capped. Not used in states with new lines.
+    overperformance_factor: 0.5
+    overperformance_cap: 4.0
+  error:
+    state: 1.5                # shared by districts in the same state
+  # Hand adjustments per district, like races: above, keyed by district id ("PA-07").
+  races: {}

@@ -92,6 +92,12 @@ jobs:
           git show FETCH_HEAD:forecast/config.yaml > "$RUNNER_TEMP/base-config.yaml"
           python forecast/backtest.py --config forecast/config.yaml --config "$RUNNER_TEMP/base-config.yaml"
 
+      # The same for the House model, every district of 2022.
+      - name: Backtest House on 2022
+        if: github.event_name == 'pull_request'
+        continue-on-error: true
+        run: python forecast/backtest.py --house --config forecast/config.yaml --config "$RUNNER_TEMP/base-config.yaml"
+
       - name: Run forecast
         if: github.event_name != 'pull_request' && steps.gate.outputs.run == 'true'
         run: |

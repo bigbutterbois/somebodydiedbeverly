@@ -5,11 +5,19 @@ import { TrendChart } from "./TrendChart";
 
 const pct = (v: number) => `${Math.round(v)}%`;
 
-// Chance of Senate control by day.
-export function OddsChart({ history, electionDay }: { history: HistoryPoint[]; electionDay: string }) {
+// Chance of control by day.
+export function OddsChart({
+  history,
+  electionDay,
+  chamber = "Senate",
+}: {
+  history: HistoryPoint[];
+  electionDay: string;
+  chamber?: "Senate" | "House";
+}) {
   return (
     <TrendChart
-      label="Chance of Senate control by day"
+      label={`Chance of ${chamber} control by day`}
       electionDay={electionDay}
       points={history.map((h) => ({
         date: h.date,

@@ -3,6 +3,7 @@
     python forecast/backtest.py                          # 2022, scraping Wikipedia, FEC and FRED
     python forecast/backtest.py --config other.yaml      # same, with different model settings
     python forecast/backtest.py --data backtest-data     # cache scraped data there, reuse it next time
+    python forecast/backtest.py --house                  # the House instead: every district of that year
 
 Runs the model as of several dates before the election with the current
 config.yaml (minus the hand-set 2026 candidate-quality nudges, which don't apply
@@ -22,6 +23,7 @@ import numpy as np
 import yaml
 
 import extras as extra_sources
+import house
 import model
 import scrape
 
@@ -90,7 +92,7 @@ def gather(facts: dict, cfg: dict, cache: Path | None) -> tuple[list[dict], dict
 
 def report(facts: dict, cfg: dict, polls: list[dict], extras: dict, label: str) -> None:
     election = facts["election_day"]
-    results = {r["state"]: r["result"] for r in facts["races"]}
+    results = {r["state"]: r["result"] for r in facts["races"] if "result" in r}
     print(f"\n=== {label} ===")
     print(f"{'as of':10} {'D control':>9} {'D seats':>8} {'Brier':>6} {'log loss':>8} {'misses':>6} "
           f"{'abs err':>7} {'D bias':>6} {'poll bias':>9} {'prior bias':>10}  env")
@@ -98,6 +100,8 @@ def report(facts: dict, cfg: dict, polls: list[dict], extras: dict, label: str) 
     for days_out in (68, 37, 24, 1):
         d = election - timedelta(days_out)
         r = model.run(facts, cfg, polls, d, seed=int(d.strftime("%Y%m%d")), extras=extras)
+        # Uncontested House seats are certain either way; leave them out of the scoring.
+        r["races"] = [x for x in r["races"] if not x.get("uncontested") and x["state"] in results]
         p = np.array([x["p_opp"] for x in r["races"]])
         won = np.array([results[x["state"]] > 0 for x in r["races"]])
         err = np.array([x["mean_margin"] - results[x["state"]] for x in r["races"]])
@@ -128,18 +132,51 @@ def report(facts: dict, cfg: dict, polls: list[dict], extras: dict, label: str) 
               f"(n={x['n_polls']:2})  prior {x['prior_margin']:+6.1f}  result {results[x['state']]:+6.1f}")
 
 
+def house_backtest(facts: dict, configs: list[Path], base: dict, polls: list[dict], extras: dict) -> int:
+    """Every district of the facts file's year, on the Senate backtest's national polls and economy.
+
+    Districts, nominees, results and the previous cycle's over-performance come from
+    Wikipedia like the live House forecast. Every state redrew after the 2020 census,
+    so over-performance is only used in states listed under house.unchanged_states.
+    """
+    h = facts["house"]
+    year = facts["election_day"].year
+    hfacts = {"election_day": facts["election_day"], "president_party": facts.get("president_party", "R"),
+              "majority": 218, "tiebreak": False, "seats_not_up": {"D": 0, "R": 0},
+              "national_house_margin_prev": h["national_house_margin_prev"],
+              "actual_dem_seats": h["actual_dem_seats"],
+              "redrawn_states": [s for s in house.STATES if s not in h.get("unchanged_states", [])]}
+    races, problems = house.fetch_districts(hfacts, verbose=True)
+    hfacts["races"] = [r for r in races if "result" in r or r.get("uncontested")]
+    district_polls, poll_problems = house.scrape_polls(hfacts["races"], base["polls"]["aggregators"], year)
+    for p in problems + poll_problems:
+        print(f"  ! {p}")
+    print(f"{len(hfacts['races'])} districts with a result; {len(district_polls)} district polls")
+    funds, _ = extra_sources.fetch_fundraising(hfacts["races"], year, "H")
+    pacs, _ = extra_sources.fetch_super_pacs(hfacts["races"], year, "H")
+    extras = {**extras, "fundraising": funds, "super_pacs": pacs}
+    for path in configs:
+        cfg = house.config(yaml.safe_load(path.read_text()))
+        cfg["races"] = {}
+        report(hfacts, cfg, polls + district_polls, extras, f"{year} House with {path}")
+    return 0
+
+
 def main() -> int:
     ap = argparse.ArgumentParser()
     ap.add_argument("--year", type=int, default=2022)
     ap.add_argument("--config", type=Path, action="append",
                     help="config file(s) to compare; default forecast/config.yaml")
     ap.add_argument("--data", type=Path, help="directory to cache scraped data in")
+    ap.add_argument("--house", action="store_true", help="backtest the House model instead of the Senate")
     args = ap.parse_args()
 
     facts = load_facts(args.year)
     configs = args.config or [HERE / "config.yaml"]
     base = yaml.safe_load(configs[0].read_text())
     polls, extras = gather(facts, base, args.data)
+    if args.house:
+        return house_backtest(facts, configs, base, polls, extras)
     for path in configs:
         cfg = yaml.safe_load(path.read_text())
         cfg["races"] = {}  # 2026 candidate-quality nudges don't apply to past races

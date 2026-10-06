@@ -1,0 +1,15 @@
+# Facts for the 2026 House forecast (forecast/house.py builds the 435 districts
+# from Wikipedia each run). Model knobs live in config.yaml under house:.
+
+election_day: 2026-11-03
+majority: 218
+seats_not_up: { D: 0, R: 0 }
+# No tiebreak: 435 seats can't split evenly.
+tiebreak: false
+# National House popular vote in the previous election, Dem minus Rep, points
+# (2024, approximate). Used to measure how far incumbents ran ahead of their
+# district's lean in 2024.
+national_house_margin_prev: -2.7
+# States with new district lines for 2026 (per Wikipedia, Oct 2026). Their
+# incumbents' 2024 over-performance isn't used, since the districts changed.
+redrawn_states: [AL, CA, FL, LA, MO, NC, OH, TN, TX, UT, VA]

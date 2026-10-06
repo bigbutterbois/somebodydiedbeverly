@@ -1,4 +1,4 @@
-// Senate forecast data. The model (forecast/ in the repo) runs every morning in
+// Senate and House forecast data. The model (forecast/ in the repo) runs every morning in
 // GitHub Actions and publishes JSON to the forecast-data branch; the site
 // reads it from there and refreshes its copy every 15 minutes. latest.json
 // carries the by-day history too, so the headline odds and the charts always
@@ -25,6 +25,10 @@ export type Race = {
   n_polls: number;
   prior_margin: number;
   rating: number; // -3 Safe R .. 0 Toss-up .. +3 Safe D/opposition
+  // House districts only:
+  lean?: number; // the district's partisan lean, opposition minus Republican, points
+  new_lines?: boolean; // redrawn for 2026
+  uncontested?: string | null; // the only major party on the ballot
 };
 
 export type Forecast = {
@@ -38,6 +42,8 @@ export type Forecast = {
   p_dem_control: number;
   p_rep_control: number;
   p_no_majority: number;
+  p_dem_both?: number; // Democrats win both chambers (same simulations for both)
+  majority?: number;
   dem_seats_not_up?: number;
   dem_seats_mean: number;
   rep_seats_mean: number;
@@ -58,6 +64,7 @@ export type HistoryPoint = {
   p_rep_control: number;
   p_no_majority: number;
   dem_seats_mean: number;
+  p_dem_both?: number | null;
   generic_ballot?: { dem: number; rep: number } | null;
   approval?: { approve: number; disapprove: number } | null;
 };
@@ -72,6 +79,7 @@ async function getJson<T>(file: string): Promise<T | null> {
 }
 
 export const getForecast = () => getJson<Forecast>("latest.json");
+export const getHouseForecast = () => getJson<Forecast>("house/latest.json");
 // From latest.json when it carries it; history.json only for files published before it did.
 export const getHistory = async (forecast: Forecast) =>
   forecast.history ?? (await getJson<HistoryPoint[]>("history.json")) ?? [];

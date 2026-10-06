@@ -13,6 +13,7 @@ const TOOLS = [
   { href: "/admin/blog", label: "Blog" },
   { href: "/admin/gallery", label: "Gallery" },
   { href: "/admin/visitors", label: "Visitors" },
+  { href: "/admin/forecast", label: "Forecast" },
 ];
 
 export default function AdminLayout({ children }: LayoutProps<"/admin">) {

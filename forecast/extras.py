@@ -25,6 +25,11 @@ SUPER_PACS = {"C00571703": "rep", "C00484642": "opp"}
 # Senate Majority PAC's ads run through WinSenate; Trump's MAGA Inc. and Musk's
 # America PAC count for Republicans.
 SUPER_PAC_NAMES = {"winsenate": "opp", "magainc": "rep", "makeamericagreatagaininc": "rep", "americapac": "rep"}
+# The House's flagship super PACs: Congressional Leadership Fund (GOP) and House
+# Majority PAC (Democrats, files as "HMP"), by committee ID and by name.
+HOUSE_SUPER_PACS = {"C00504530": "rep", "C00495861": "opp"}
+HOUSE_SUPER_PAC_NAMES = {"congressionalleadershipfund": "rep", "housemajoritypac": "opp", "hmp": "opp",
+                         "magainc": "rep", "makeamericagreatagaininc": "rep", "americapac": "rep"}
 APPROVAL_PAGES = [
     "Opinion_polling_on_the_second_Trump_presidency",
     "Opinion_polling_on_the_second_Donald_Trump_administration",
@@ -48,6 +53,11 @@ STATE_POINTS = {
     "OH": (39.96, -82.99), "OK": (35.47, -97.52), "OR": (45.52, -122.68), "RI": (41.82, -71.41),
     "SC": (34.00, -81.03), "SD": (43.54, -96.73), "TN": (36.16, -86.78), "TX": (29.76, -95.37),
     "VA": (37.54, -77.44), "WV": (38.35, -81.63), "WY": (41.14, -104.82),
+    # States with House races only.
+    "AZ": (33.45, -112.07), "CA": (34.05, -118.24), "CT": (41.76, -72.69), "HI": (21.31, -157.86),
+    "IN": (39.77, -86.16), "MD": (39.29, -76.61), "MO": (39.10, -94.58), "NV": (36.17, -115.14),
+    "NY": (40.71, -74.01), "ND": (46.88, -96.79), "PA": (39.95, -75.17), "UT": (40.76, -111.89),
+    "VT": (44.48, -73.21), "WA": (47.61, -122.33), "WI": (43.04, -87.91),
 }
 
 DEM_CODES = {"DEM", "DFL"}
@@ -63,10 +73,18 @@ STATE_NAMES = [
 ]
 
 
-def fetch_fundraising(races: list[dict], year: int) -> tuple[dict, list[str]]:
+def fec_district(race_id: str) -> str | None:
+    """'TX-28' -> '28', 'AK-AL' -> '00' (the FEC's at-large code); None for a Senate race."""
+    if len(race_id) < 4:
+        return None
+    return "00" if race_id.endswith("AL") else race_id[3:]
+
+
+def fetch_fundraising(races: list[dict], year: int, office: str = "S") -> tuple[dict, list[str]]:
     """Individual contributions per candidate this cycle, from the FEC's all-candidates file.
 
-    Returns {state: {"rep": dollars, "opp": dollars}} for races where both were found.
+    office "S" (Senate, races keyed by state) or "H" (House, keyed by district: "TX-28").
+    Returns {race key: {"rep": dollars, "opp": dollars}} for races where both were found.
     """
     problems = []
     try:
@@ -77,15 +95,18 @@ def fetch_fundraising(races: list[dict], year: int) -> tuple[dict, list[str]]:
     except Exception as e:
         return {}, [f"fundraising: {e}"]
 
-    senate = [row for row in csv.reader(io.StringIO(text), delimiter="|") if row and row[0].startswith("S")]
+    senate = [row for row in csv.reader(io.StringIO(text), delimiter="|") if row and row[0].startswith(office)]
 
-    def find(cand: dict, state: str, party: str) -> float | None:
+    def find(cand: dict, race_id: str, party: str) -> float | None:
+        state, district = race_id[:2], fec_district(race_id)
         last = scrape.norm(cand["name"]).split(" ")[-1].upper()
         first = cand.get("fec_first", "").upper()
         best = None
         for row in senate:
             name, pty, st = row[1].upper(), row[4], row[18]
             if st != state or not re.search(rf"\b{re.escape(last)}\b", name):
+                continue
+            if district is not None and (row[19] or "").zfill(2) != district:
                 continue
             if first and first not in name:
                 continue
@@ -99,12 +120,16 @@ def fetch_fundraising(races: list[dict], year: int) -> tuple[dict, list[str]]:
         return best
 
     out = {}
+    if office == "H":  # only contested districts with both nominees named
+        races = [r for r in races if not r.get("uncontested")]
     for race in races:
         rep = find(race["rep"], race["state"], "R")
         opp = find(race["opp"], race["state"], race["opp"].get("party", "D"))
         if rep and opp:
             out[race["state"]] = {"rep": rep, "opp": opp}
         else:
+            if office == "H":
+                continue  # hundreds of long-shot districts; summarized below
             in_state = sorted({f"{row[1]} ({row[4]})" for row in senate if row[18] == race["state"]})
             problems.append(f"fundraising: no FEC match for {race['state']} "
                             f"({race['rep']['name'] if not rep else race['opp']['name']}); "
@@ -113,7 +138,7 @@ def fetch_fundraising(races: list[dict], year: int) -> tuple[dict, list[str]]:
     return out, problems
 
 
-def fetch_super_pacs(races: list[dict], year: int) -> tuple[dict, list[str]]:
+def fetch_super_pacs(races: list[dict], year: int, office: str = "S") -> tuple[dict, list[str]]:
     """General-election spending this cycle by each side's flagship super PAC, per Senate race.
 
     From the FEC's independent expenditure file. Everything a PAC spends in a state's
@@ -121,9 +146,10 @@ def fetch_super_pacs(races: list[dict], year: int) -> tuple[dict, list[str]]:
     or attacks the other one. Filings carry the PAC's running total for each
     candidate, so the largest one is used (amended or re-reported spending isn't
     counted twice); without one, distinct expenditures are summed.
-    Returns {state: {"rep": dollars, "opp": dollars}}.
+    Returns {state: {"rep": dollars, "opp": dollars}}; for office "H", keyed by district ("TX-28").
     """
     states = {r["state"] for r in races}
+    ids, names = (HOUSE_SUPER_PACS, HOUSE_SUPER_PAC_NAMES) if office == "H" else (SUPER_PACS, SUPER_PAC_NAMES)
     running: dict[tuple[str, ...], float] = {}  # (state, side, candidate id, spender id) -> largest running total
     summed: dict[tuple[str, ...], float] = {}   # same key -> sum of distinct expenditures
     seen: set[tuple[str, ...]] = set()
@@ -135,9 +161,15 @@ def fetch_super_pacs(races: list[dict], year: int) -> tuple[dict, list[str]]:
         for row in csv.reader(lines):
             # cand_id, cand_name, spe_id, spe_nam, ele_type, state, district, office, party,
             # exp_amo, exp_date, agg_amo, sup_opp, purpose, payee, file_num, amndt_ind, tran_id, ...
-            if len(row) < 18 or row[7] != "S" or row[5] not in states or not row[4].upper().startswith("G"):
-                continue  # only Senate general elections in this cycle's races (no primaries or runoffs)
-            side = SUPER_PACS.get(row[2]) or SUPER_PAC_NAMES.get(re.sub(r"[^a-z]", "", row[3].lower()))
+            if len(row) < 18 or row[7] != office or not row[4].upper().startswith("G"):
+                continue  # only general elections for this chamber (no primaries or runoffs)
+            race = row[5]
+            if office == "H":
+                district = re.sub(r"\D", "", row[6] or "")
+                race = f"{row[5]}-AL" if district.strip("0") == "" else f"{row[5]}-{int(district):02d}"
+            if race not in states:
+                continue
+            side = ids.get(row[2]) or names.get(re.sub(r"[^a-z]", "", row[3].lower()))
             if side is None:
                 try:
                     others[row[3]] = others.get(row[3], 0.0) + float(row[9] or 0)
@@ -148,7 +180,7 @@ def fetch_super_pacs(races: list[dict], year: int) -> tuple[dict, list[str]]:
                 amount, agg = float(row[9] or 0), float(row[11] or 0)
             except ValueError:
                 continue
-            key = (row[5], side, row[0], row[2])
+            key = (race, side, row[0], row[2])
             running[key] = max(running.get(key, 0.0), agg)
             tran = (row[2], row[17]) if row[17] else tuple(row[:15])
             if tran not in seen:
