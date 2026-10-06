@@ -1,6 +1,8 @@
 // Senate forecast data. The model (forecast/ in the repo) runs every morning in
 // GitHub Actions and publishes JSON to the forecast-data branch; the site
-// reads it from there and refreshes its copy every 15 minutes.
+// reads it from there and refreshes its copy every 15 minutes. latest.json
+// carries the by-day history too, so the headline odds and the charts always
+// come from the same run (two files are cached separately and can disagree).
 
 const DATA_URL =
   process.env.FORECAST_DATA_URL ?? "https://raw.githubusercontent.com/bigbutterbois/somebodydiedbeverly/forecast-data";
@@ -44,6 +46,7 @@ export type Forecast = {
   dem_seat_distribution: Record<string, number>;
   sample_simulations?: SampleSimulation[];
   races: Race[];
+  history?: HistoryPoint[];
 };
 
 /** One simulated election: Dem seats and, per race in `races` order, "D" or "R" for the winner. */
@@ -69,7 +72,9 @@ async function getJson<T>(file: string): Promise<T | null> {
 }
 
 export const getForecast = () => getJson<Forecast>("latest.json");
-export const getHistory = async () => (await getJson<HistoryPoint[]>("history.json")) ?? [];
+// From latest.json when it carries it; history.json only for files published before it did.
+export const getHistory = async (forecast: Forecast) =>
+  forecast.history ?? (await getJson<HistoryPoint[]>("history.json")) ?? [];
 
 // Party colors for the map, legend and chart. Forecast charts use their own
 // party colors rather than the site accent (docs/design.md).

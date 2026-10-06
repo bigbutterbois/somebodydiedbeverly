@@ -8,7 +8,9 @@
 The data dir holds polls.json (every poll ever scraped, including generic
 ballot and Trump approval polls), extras.json (daily fundraising and weather
 snapshots), latest.json (today's forecast) and history.json (one entry per
-day, for the odds-over-time chart).
+day). latest.json also carries the chart fields of every history day, so the
+site reads today's numbers and the by-day charts from one file and they can't
+come from two different runs.
 """
 
 from __future__ import annotations
@@ -217,6 +219,8 @@ def main() -> int:
         "generated_at": datetime.now(timezone.utc).isoformat(timespec="seconds"),
         "config_version": version,
         "problems": problems,
+        # The by-day charts, minus per-race odds (only history.json keeps those).
+        "history": [{k: v for k, v in history[day].items() if k != "races"} for day in sorted(history)],
     })
     summarize(result)
     if args.dry_run:
