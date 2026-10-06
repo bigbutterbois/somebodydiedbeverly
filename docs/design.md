@@ -30,7 +30,7 @@ All sans: **Work Sans** (via `next/font/google`) for everything. Large headings 
 
 ## Logo
 
-The **WM half turn**: a W and the same W turned upside down (the M, in teal) inside a teal ring, with the W's right stroke and the M's left stroke running parallel side by side (`src/components/Monogram.tsx`). It is the home link in the public nav and the heading on the password page. The browser tab icon (`src/app/icon.svg`) is the same mark on a dark tile, and the link preview image (`public/og.png`) shows it above the domain. Options Mike chose from (2026-10-06, he picked E and asked for the teal M and parallel edges): https://claude.ai/artifact/XTz58PKuaVtvcUaicGm3L9
+The **WM half turn**: a W and the same W turned upside down (the M, in teal) inside a teal ring, with the W's right stroke and the M's left stroke running parallel and touching edge to edge (`src/components/Monogram.tsx`). It is the home link in the public nav and the heading on the password page. The browser tab icon (`src/app/icon.svg`) is the same mark on a dark tile, and the link preview image (`public/og.png`) shows it above the domain. Options Mike chose from (2026-10-06, he picked E0: E with a teal M and touching parallel edges): https://claude.ai/artifact/XTz58PKuaVtvcUaicGm3L9
 
 ## Homepage
 
