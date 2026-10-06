@@ -51,13 +51,9 @@ export default async function ForecastPage() {
           {daysLeft > 0 && ` · ${daysLeft} days to Election Day`}
         </p>
         <p className="border-l-2 border-accent pl-3 text-sm text-muted">
-          <span className="text-foreground">Patch notes, Oct 6.</span> Trump approval now draws on
-          RealClearPolling&rsquo;s full history (741 polls since January 2025), and the daily run starts on time.
-          Fundamentals now fade as Election Day nears, down to 30% of their old weight, and never count for less
-          than 15% of any race. Spending by each side&rsquo;s flagship super PACs (Senate Leadership Fund, MAGA
-          Inc. and America PAC for Republicans; Senate Majority PAC&rsquo;s WinSenate for Democrats) now counts
-          toward fundraising. Polls are also nudged against how they missed in every cycle from 2012 to 2024,
-          nationally and state by state, at half strength.
+          <span className="text-foreground">Patch notes, Oct 6.</span> Trump approval data is fixed and
+          more complete. Super PAC spending now counts toward fundraising in each race&rsquo;s fundamentals. The
+          biggest change: polls are now partially adjusted for their historical errors.
         </p>
       </header>
 
