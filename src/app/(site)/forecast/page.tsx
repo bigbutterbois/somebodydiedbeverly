@@ -4,6 +4,7 @@ import {
   REP,
   formatDay,
   formatMargin,
+  formatUpdated,
   getForecast,
   getHistory,
   isIncumbent,
@@ -43,7 +44,10 @@ export default async function ForecastPage() {
       <header className="flex flex-col gap-3">
         <h1 className="text-4xl font-light tracking-tight">2026 Senate forecast</h1>
         <p className="text-sm text-muted">
-          Updated {formatDay(forecast.as_of, { weekday: "long", month: "long", day: "numeric" })}
+          Updated{" "}
+          {forecast.generated_at
+            ? formatUpdated(forecast.generated_at)
+            : formatDay(forecast.as_of, { weekday: "long", month: "long", day: "numeric" })}
           {daysLeft > 0 && ` · ${daysLeft} days to Election Day`}
         </p>
       </header>

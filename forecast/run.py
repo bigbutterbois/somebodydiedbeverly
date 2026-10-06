@@ -52,25 +52,32 @@ def pollster_words(name: str) -> set[str]:
     return {w for w in re.findall(r"[a-z]+", scrape.norm(name)) if len(w) >= 3 and w not in NAME_FILLER}
 
 
+# Second-hand feeds, best first; Wikipedia's own rows (no feed) outrank them all.
+FEED_RANK = {"rcp": 1, "votehub": 2}
+
+
 def drop_feed_duplicates(polls: list[dict]) -> list[dict]:
-    """Drop VoteHub rows for polls Wikipedia already lists: same race, end date within 3 days,
-    and a shared pollster name word or the same numbers. Wikipedia's row wins."""
-    wiki: dict[str, list[dict]] = {}
-    for p in polls:
-        if p.get("feed") != "votehub":
-            wiki.setdefault(p["state"], []).append(p)
+    """Drop feed rows for polls a better source already lists: same race, end date within 3
+    days, and a shared pollster name word or the same numbers. Wikipedia's row wins, then RCP's."""
+    rank = lambda p: FEED_RANK.get(p.get("feed"), 0)  # noqa: E731
+    kept: dict[str, list[dict]] = {}
 
     def duplicate(p: dict) -> bool:
         end = date.fromisoformat(p["end_date"])
         words = pollster_words(p["pollster"])
-        for q in wiki.get(p["state"], []):
-            if abs((date.fromisoformat(q["end_date"]) - end).days) > 3:
+        for q in kept.get(p["state"], []):
+            if rank(q) >= rank(p) or abs((date.fromisoformat(q["end_date"]) - end).days) > 3:
                 continue
             if words & pollster_words(q["pollster"]) or (abs(q["opp"] - p["opp"]) <= 1 and abs(q["rep"] - p["rep"]) <= 1):
                 return True
         return False
 
-    return [p for p in polls if p.get("feed") != "votehub" or not duplicate(p)]
+    out = []
+    for p in sorted(polls, key=rank):
+        if rank(p) == 0 or not duplicate(p):
+            kept.setdefault(p["state"], []).append(p)
+            out.append(p)
+    return sorted(out, key=lambda p: (p["state"], p["end_date"], p["pollster"]))
 
 
 def history_entry(result: dict) -> dict:
@@ -154,13 +161,16 @@ def main() -> int:
         election = election if isinstance(election, date) else date.fromisoformat(election)
         votehub, votehub_problems = extra_sources.fetch_votehub(
             facts["races"], cfg["polls"]["aggregators"], election.year)
-        before = [p for p in merge_polls(polls, scraped + approval) if p.get("feed") != "votehub"]
-        # Wikipedia's rows go in last so a VoteHub row never replaces one.
-        polls = drop_feed_duplicates(merge_polls(merge_polls(polls, votehub), scraped + approval))
+        # RealClearPolling blocks scripts, so its approval table is a saved copy (Jan 2025 to Oct 5 2026).
+        rcp = json.loads((HERE / "rcp_approval.json").read_text())
+        before = [p for p in merge_polls(polls, scraped + approval) if p.get("feed") is None]
+        # Better sources go in later so their rows replace a weaker feed's on a key collision.
+        polls = drop_feed_duplicates(merge_polls(merge_polls(merge_polls(polls, votehub), rcp), scraped + approval))
         problems += approval_problems + votehub_problems
         since = f"{election.year}-06-01"
         count = lambda ps, s: sum(1 for p in ps if p["end_date"] >= since and s(p["state"]))  # noqa: E731
-        print(f"polls since {since} (Wikipedia only -> with VoteHub; {len(votehub)} VoteHub polls before dedupe):")
+        print(f"polls since {since} (Wikipedia only -> with RCP and VoteHub; {len(votehub)} VoteHub polls "
+              f"before dedupe):")
         for label, s in (("approval", lambda x: x == "APPROVAL"), ("generic ballot", lambda x: x == "US"),
                          ("senate races", lambda x: x not in ("APPROVAL", "US"))):
             print(f"    {label}: {count(before, s)} -> {count(polls, s)}")
