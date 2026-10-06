@@ -11,7 +11,7 @@ import {
   partyLetter,
   ratingInfo,
 } from "@/lib/forecast";
-import { OddsChart } from "@/app/(site)/forecast/OddsChart";
+import { OddsChart } from "../OddsChart";
 import { CandidateName, SectionTitle, Topline } from "../parts";
 import { DotHistogram } from "./DotHistogram";
 import { HouseMap } from "./HouseMap";
@@ -65,8 +65,7 @@ export default async function HouseForecastPage() {
           <SectionTitle>Democratic seats in 500 simulations</SectionTitle>
           <DotHistogram distribution={forecast.dem_seat_distribution} total={total} majority={majority} />
           <p className="text-xs text-muted">
-            On average Democrats win {forecast.dem_seats_mean.toFixed(0)} seats; 8 in 10 simulations land between{" "}
-            {forecast.dem_seats_10} and {forecast.dem_seats_90}.
+            On average Democrats win {forecast.dem_seats_mean.toFixed(0)} seats.
           </p>
         </section>
       )}

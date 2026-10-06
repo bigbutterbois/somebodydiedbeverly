@@ -4,9 +4,9 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 
 const TABS = [
-  { href: "/admin/forecast", label: "Both" },
-  { href: "/admin/forecast/senate", label: "Senate" },
-  { href: "/admin/forecast/house", label: "House" },
+  { href: "/forecast", label: "Both" },
+  { href: "/forecast/senate", label: "Senate" },
+  { href: "/forecast/house", label: "House" },
 ];
 
 /** Both / Senate / House switch at the top of every admin forecast page. */

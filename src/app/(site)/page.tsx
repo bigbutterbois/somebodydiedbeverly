@@ -35,9 +35,9 @@ export default async function Home() {
         <p className="text-muted">Published stuff here</p>
       </header>
 
-      <HomeSection title="2026 Senate election forecast" href="/forecast">
+      <HomeSection title="2026 Senate election forecast" href="/forecast/senate">
         {forecast ? (
-          <Link href="/forecast" className="flex flex-col gap-4 tabular-nums">
+          <Link href="/forecast/senate" className="flex flex-col gap-4 tabular-nums">
             <div className="flex flex-col gap-2">
               <p className="text-sm text-muted">Chance of winning the Senate</p>
               <p className="flex gap-6">

@@ -1,6 +1,6 @@
 "use client";
 
-import { TrendChart } from "@/app/(site)/forecast/TrendChart";
+import { TrendChart } from "./TrendChart";
 import type { HistoryPoint } from "@/lib/forecast";
 import { OUTCOMES, outcomeOdds } from "./outcomes";
 
