@@ -11,7 +11,7 @@ export default async function EnterPage({ searchParams }: PageProps<"/enter">) {
   return (
     <main className="flex flex-1 flex-col items-center justify-center gap-8 p-8">
       <h1>
-        <Monogram className="text-3xl" />
+        <Monogram className="text-5xl" />
       </h1>
       <EnterForm next={safeNextPath(next)} />
     </main>
