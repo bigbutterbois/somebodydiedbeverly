@@ -84,8 +84,9 @@ def parse_pvi(text: str) -> float | None:
 
 def parse_candidates(cell) -> list[dict]:
     """Candidates in a table cell: one per list item (or line), 'Name (Party) 52.1%'."""
+    # Without a list (a lone candidate), split the cell's text at the party color boxes.
     items = [li.get_text(" ", strip=True) for li in cell.select("li")] or \
-        [s for s in cell.get_text("\n", strip=True).split("\n") if "(" in s]
+        [s for s in cell.get_text(" ", strip=True).split("▌") if "(" in s]
     out = []
     for text in items:
         # Drop footnotes and the leading party color box (and winner check) Wikipedia puts before names.
@@ -239,7 +240,7 @@ def fetch_districts(facts: dict, verbose: bool = False) -> tuple[list[dict], lis
     if verbose:
         print(f"house: {len(races)} districts; {sum(1 for r in races if 'uncontested' in r)} uncontested; "
               f"{sum(1 for r in races if r['incumbent'] != 'none')} incumbents running; "
-              f"{sum(1 for r in races if 'overperformance' in r)} with 2024 over-performance")
+              f"{sum(1 for r in races if 'overperformance' in r)} with {year - 2} over-performance")
         for r in races[:6] + [r for r in races if r["state"] in ("TX-28", "NY-17", "PA-07", "CA-13")]:
             print(f"    {r['state']} lean {r['lean']:+.0f} inc {r['incumbent']} {r['opp']['name']} ({r['opp']['party']}) "
                   f"vs {r['rep']['name']} over {r.get('overperformance')} {r.get('uncontested', '')}")

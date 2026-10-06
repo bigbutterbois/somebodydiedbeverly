@@ -29,10 +29,10 @@ src/lib/supabase/     # Supabase clients (server and browser)
 src/lib/site-access.ts # Friends & family password cookie
 src/proxy.ts          # Both access gates + Supabase session refresh
 supabase/migrations/  # Database schema as SQL migrations
-forecast/             # Senate forecast model (Python): config.yaml, races.yaml, scrape, model, run
+forecast/             # Senate + House forecast model (Python): config.yaml, races.yaml, house.yaml, scrape, house, model, run
 ```
 
-To add a module, create its folder under `src/app/(site)/` or `src/app/admin/` and add it to the `MODULES` or `TOOLS` list in that folder's `layout.tsx`. Modules: gallery, blog, a 2026 Senate forecast (Python model in `forecast/`, run daily at 6am Eastern by `.github/workflows/forecast.yml`, published as JSON to the `forecast-data` branch) and read-only plate tracker progress on the public side; diplomat plate tracker, blog/gallery editors and visitor stats (`src/lib/visits.ts`, no IPs stored) on the private side.
+To add a module, create its folder under `src/app/(site)/` or `src/app/admin/` and add it to the `MODULES` or `TOOLS` list in that folder's `layout.tsx`. Modules: gallery, blog, 2026 Senate and House forecasts (Senate/House tabs on /forecast; Python model in `forecast/`, the House's 435 districts scraped from Wikipedia each run, run daily at 6am Eastern by `.github/workflows/forecast.yml`, published as JSON to the `forecast-data` branch) and read-only plate tracker progress on the public side; diplomat plate tracker, blog/gallery editors and visitor stats (`src/lib/visits.ts`, no IPs stored) on the private side.
 
 ## Dev Commands
 
