@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { formatPostDate } from "@/lib/blog";
 import { getCategories } from "@/lib/supabase/categories";
-import { createClient } from "@/lib/supabase/server";
+import { contentClient } from "@/lib/supabase/content";
 
 export const metadata = { title: "Blog" };
 
@@ -15,7 +15,7 @@ type Row = {
 
 export default async function BlogPage({ searchParams }: PageProps<"/blog">) {
   const { category } = await searchParams;
-  const supabase = await createClient();
+  const supabase = await contentClient();
   const categories = await getCategories();
   const current = categories.find((c) => c.slug === category);
 

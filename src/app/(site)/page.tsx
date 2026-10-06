@@ -6,12 +6,12 @@ import { DEM, REP, getForecast } from "@/lib/forecast";
 import { galleryImageUrl } from "@/lib/gallery";
 import { SeatHistogramPreview } from "./forecast/SeatHistogramPreview";
 import { getGalleryItems } from "@/lib/supabase/gallery";
-import { createClient } from "@/lib/supabase/server";
+import { contentClient } from "@/lib/supabase/content";
 
 // Homepage: a preview of the latest from every public module. Each module
 // replaces its empty state with real items once it has data.
 export default async function Home() {
-  const supabase = await createClient();
+  const supabase = await contentClient();
   const [{ count: totalCountries }, { data: sightings }, { data: posts }, pieces, forecast] = await Promise.all([
     supabase.from("countries").select("id", { count: "exact", head: true }),
     supabase.from("plate_sightings").select("country_id"),

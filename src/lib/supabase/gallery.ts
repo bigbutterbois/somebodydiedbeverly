@@ -1,9 +1,9 @@
 import { GALLERY_COLUMNS, type GalleryItem } from "@/lib/gallery";
-import { createClient } from "./server";
+import { contentClient } from "./content";
 
 // Every gallery piece in the order Mike set.
 export async function getGalleryItems(limit?: number): Promise<GalleryItem[]> {
-  const supabase = await createClient();
+  const supabase = await contentClient();
   let query = supabase
     .from("gallery_items")
     .select(GALLERY_COLUMNS)
