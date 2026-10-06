@@ -1,82 +1,96 @@
 {
- "as_of": "2026-10-05",
+ "as_of": "2026-10-06",
  "election_day": "2026-11-03",
  "simulations": 20000,
- "national_environment": 8.85,
- "prior_weight_in_polls": 0.469,
+ "national_environment": 8.84,
+ "prior_weight_in_polls": 0.463,
  "generic_ballot_miss_adjustment": -1.3,
  "national_environment_source": "generic ballot + approval",
  "economy_shift": 2.0,
  "economy": {
-  "sp500_change_pct": 3.6,
-  "yield_10y_change": 0.73,
-  "brent_change_pct": 58.76
+  "sp500_change_pct": 3.89,
+  "yield_10y_change": 0.72,
+  "brent_change_pct": 48.97
  },
- "generic_ballot": 6.68,
- "trump_net_approval": -21.8,
+ "generic_ballot": 6.67,
+ "trump_net_approval": -21.75,
  "generic_ballot_levels": {
   "opp": 49.9,
-  "rep": 41.94
+  "rep": 41.95
  },
  "approval_levels": {
-  "opp": 37.89,
-  "rep": 59.69
+  "opp": 37.91,
+  "rep": 59.66
  },
- "p_dem_control": 0.6286,
- "p_rep_control": 0.3715,
+ "p_dem_control": 0.6258,
+ "p_rep_control": 0.3743,
  "p_no_majority": -0.0,
+ "majority": 51,
  "dem_seats_not_up": 34,
  "dem_seats_mean": 51.38,
  "rep_seats_mean": 48.62,
  "dem_seats_10": 48,
  "dem_seats_90": 55,
  "dem_seat_distribution": {
+  "34": 0.0001,
+  "35": 0.0,
+  "36": 0.0,
+  "37": 0.0,
   "38": 0.0001,
-  "39": 0.0,
-  "40": 0.0002,
-  "41": 0.0006,
-  "42": 0.0009,
-  "43": 0.0033,
-  "44": 0.0054,
-  "45": 0.0125,
-  "46": 0.0231,
-  "47": 0.0427,
-  "48": 0.0663,
-  "49": 0.0911,
-  "50": 0.1253,
-  "51": 0.1409,
-  "52": 0.139,
-  "53": 0.1279,
-  "54": 0.0885,
-  "55": 0.0604,
-  "56": 0.0375,
-  "57": 0.0188,
-  "58": 0.0082,
-  "59": 0.0038,
-  "60": 0.0017,
-  "61": 0.0011,
-  "62": 0.0003,
-  "63": 0.0002,
-  "64": 0.0003,
+  "39": 0.0001,
+  "40": 0.0,
+  "41": 0.0001,
+  "42": 0.0006,
+  "43": 0.0029,
+  "44": 0.0062,
+  "45": 0.012,
+  "46": 0.0239,
+  "47": 0.0403,
+  "48": 0.0683,
+  "49": 0.0968,
+  "50": 0.123,
+  "51": 0.1363,
+  "52": 0.1416,
+  "53": 0.1192,
+  "54": 0.097,
+  "55": 0.0611,
+  "56": 0.0353,
+  "57": 0.0185,
+  "58": 0.0089,
+  "59": 0.0044,
+  "60": 0.0019,
+  "61": 0.0007,
+  "62": 0.0004,
+  "63": 0.0001,
+  "64": 0.0001,
   "65": 0.0001,
-  "66": 0.0001
+  "66": 0.0,
+  "67": 0.0001
  },
  "sample_simulations": [
   {
    "dem_seats": 44,
-   "winners": "RRRDDRDRRRRRRRDRRRRRDDDRRRDDRRRRDRR"
+   "winners": "RRRDDRRRDDRRRRDRRRRRRDDRRRDDRRRRDRR"
   },
   {
    "dem_seats": 45,
-   "winners": "RRRDDRRRDRRRRRDRRRRDRDDDRRDDRRRRDRR"
+   "winners": "RDRDDRDRDRRRRRDDRRRRRDRRRRDDRRRRDRR"
   },
   {
    "dem_seats": 46,
-   "winners": "RRRDDRRRDRRRRRDDDRRRDDDRRRDDRRRRDRR"
+   "winners": "RRRDDRDRDDRRRDDRRRRRRDDDRRDDRRRRRRR"
   },
   {
    "dem_seats": 46,
-   "winners": "RRRDRRDRDDRRRRDRDRRRRDDDRRDDRRRRDRR"
+   "winners": "RRRRDRDRDRRRRRDRRRRRDDDDDRDDRRRRDRR"
+  },
+  {
+   "dem_seats": 47,
+   "winners": "RRRDDRDRDDRRRRDRRRRRDDDDRRDDRRRRDRR"
+  },
+  {
+   "dem_seats": 47,
+   "winners": "RRRDDRDRDRRRRRDRRRRRRDDDDRDDDRRRDRR"
   },
   {
    "dem_seats": 47,
@@ -84,35 +98,7 @@
   },
   {
    "dem_seats": 47,
-   "winners": "RRRDDDRRRRRRRRDRDRRRDDDDDRDDDRRRRRR"
-  },
-  {
-   "dem_seats": 47,
-   "winners": "RRRDRRDRDDRRRRDDRRRDRDDDRRDDRRRRDRR"
-  },
-  {
-   "dem_seats": 47,
-   "winners": "RDRDDRDRDRRRRDDDRRRRRDDRRRDDRRRRDRR"
-  },
-  {
-   "dem_seats": 48,
-   "winners": "RRRDDRDRDRRRRRDRDRRRDDDDRRDDRRRDDRR"
-  },
-  {
-   "dem_seats": 48,
-   "winners": "RRRDDDDRDRRRRRDDRRRRDDDDRRDDRRRRDRR"
-  },
-  {
-   "dem_seats": 48,
-   "winners": "RRRDDRDDDRRRRRDRRRRRRDDDDRDDRRRDDRR"
-  },
-  {
-   "dem_seats": 48,
-   "winners": "RRRDDRDRDRRRRRDDDRRRRDDDDRDDRRRRDRR"
-  },
-  {
-   "dem_seats": 48,
-   "winners": "RRRDDRDRDRRRRRDDRRRRDDDDRRDDRRRDDRR"
+   "winners": "RRRDDRDRDDRRRDDRRRRRRDDDRRDDRRRRDRR"
   },
   {
    "dem_seats": 48,
@@ -120,107 +106,123 @@
   },
   {
    "dem_seats": 48,
-   "winners": "RRRDDRDRDRDRRRDRDRRRDDDDRRDDRRRRDRR"
+   "winners": "RDRDDDDRDRRRRDDRRRRDDRDRRRDDRRRRDRR"
+  },
+  {
+   "dem_seats": 48,
+   "winners": "RRRDDRDRDRRRRRDDDRRRDDDDRRDDRRRRDRR"
+  },
+  {
+   "dem_seats": 48,
+   "winners": "RRRDDRDRDRDRRRDRDRRRRDDDRRDDDRRRDRR"
+  },
+  {
+   "dem_seats": 48,
+   "winners": "RDRDDRDRDDRRRRDDRRRRDDDRRRDDRRRRDRR"
+  },
+  {
+   "dem_seats": 48,
+   "winners": "RRRDDRDRDRRRRRDDDRRRDDDDRRDDRRRDRRR"
+  },
+  {
+   "dem_seats": 48,
+   "winners": "RRRDDRDRDRRRRRDDDRRRDDDDRRDDRRRRDRR"
   },
   {
    "dem_seats": 49,
-   "winners": "RDRDDRDRDRRRRRDRDRRDDDDDRRDDRRRRDRR"
+   "winners": "RRRDDRDRDRRRRDDRDRRRDDDDDRDDRRRRDRR"
   },
   {
    "dem_seats": 49,
-   "winners": "RDRDDRDRDRRRRRDRDRRRDDDDRRDDRRRDDRR"
+   "winners": "RDRDDRRRDRRRRRDDDRRRDDDDDRDDRRRRDRR"
   },
   {
    "dem_seats": 49,
-   "winners": "RRRDDRDRDRRRRDDDDRRRRDDDRRDDRRRDDRR"
+   "winners": "RRRDDDDRDRRRRRDDDRRRRDDDRRDDRRRDDRR"
   },
   {
    "dem_seats": 49,
-   "winners": "RDRDDRDRDRRRRRDRDRRRDDDDRRDDRRRDDRR"
+   "winners": "RRRDDRDRDRRRRDDDDRRRRDDDDRDDRRRRDRR"
   },
   {
    "dem_seats": 49,
-   "winners": "RRRDDRDRDRRRRRDDDRRDRDDDRRDDRRRDDRR"
+   "winners": "RRRDDRRRDDRRRRDRDRRRDDDDDRDDRRRDDRR"
   },
   {
    "dem_seats": 49,
-   "winners": "RRRDDRDRDDRRRDDDRRRRDDDDRRDDRRRRDRR"
+   "winners": "RRRDDRDRDRRRRDDRDRRRDDDDDRDDRRRRDRR"
   },
   {
    "dem_seats": 49,
-   "winners": "RDRDDRDRDRRRRDDRDRRRRDDDRDDDRRRRDRR"
+   "winners": "RRRDDRDRDRRRRRDDDRRRDDDDDRDDRRRRDRR"
   },
   {
    "dem_seats": 49,
-   "winners": "RRRDDRDRDDDRRRDRDRRRDDDDRRDDRRRRDRR"
+   "winners": "RRRDDRDRDRRRRDDDDRRRDDDDRRDDRRRRDRR"
   },
   {
    "dem_seats": 49,
-   "winners": "RDRDDRDRDDRRRRDDRRRDRDDRRRDDRDRRDRR"
+   "winners": "RRRDDRDRDRRRRDDDRRRDRDDDDRDDRRRRDRR"
+  },
+  {
+   "dem_seats": 49,
+   "winners": "RRRDDRDRDRDRRRDDDRRDDDDRRRDDRRRRDRR"
   },
   {
    "dem_seats": 50,
-   "winners": "RRRDDRDRDRDRRDDDDRRRRDDDDRDDRRRRDRR"
+   "winners": "RDRDDRDRDRRRDDDRRRRRDDDDRRDDRRRDDRR"
   },
   {
    "dem_seats": 50,
-   "winners": "RRRDDRDRDRRRRDDDDRRDDRDDRRDDRRRDDRR"
+   "winners": "RDRDDRDRDRRRRDDDDRRRDRDDRRDDDRRRDRR"
   },
   {
    "dem_seats": 50,
-   "winners": "RRRDDRDRDRRRRRDDDRRRDDDDDRDDDRRRDRR"
+   "winners": "RDRDDRDRDRRRRDDDRRRRRDDDRRDDDRRDDRR"
   },
   {
    "dem_seats": 50,
-   "winners": "RRRDDRDRDRRRRRDDDRRRDDDDDRDDRRRDDRR"
+   "winners": "RDRDDRDRDRRRRDDDRRRRDDDDDRDDRRRRDRR"
   },
   {
    "dem_seats": 50,
-   "winners": "RRRDDDDRDRRRRRDDDRRRRDDDRRDDDRRDDRR"
+   "winners": "RDRDDRDRDRRRRDDDRRRRDDDDRRDDRRRDDRR"
   },
   {
    "dem_seats": 50,
-   "winners": "RRRDDRDRDDRRRDDDRRRRDDDDRRDDDRRRDRR"
+   "winners": "RDRDDRDRDDRRRRDDRRRRDDDDDRDDRRRRDRR"
   },
   {
    "dem_seats": 50,
-   "winners": "RDRDDRRRDRRRRDDDDRRRDDRDDRDDDRRRDRR"
+   "winners": "RRRDDDDRDDRRRRDRDRRRRDDDDRDDRRRDDRR"
   },
   {
    "dem_seats": 50,
-   "winners": "RRRDDRDRDRDRRDDDRRRRDDDDDRDDRRRRDRR"
+   "winners": "RRRDDRDRDRRRRDDDDRRRDDDDRRDDRRRDDRR"
   },
   {
    "dem_seats": 50,
-   "winners": "RDRDDRDRDRRRRDDDDRRRDDDDRRDDRRRRDRR"
+   "winners": "RRRDDRDRDDRRRRDDDRRRDDDRDRDDRRRDDRR"
   },
   {
    "dem_seats": 50,
-   "winners": "DRRDDRDRDRRRRDDRDRRRDDDDDRDDRRRRDRR"
+   "winners": "RRRDDRDRDRRRRDDDDRRRDDDDRRDDDRRRDRR"
   },
   {
    "dem_seats": 50,
-   "winners": "RRRDDRDRDRRRRRDDRRRDDDDDDRDDRRRDDRR"
+   "winners": "RRRDDRRRDDRRRDDDRRRRDDDDDRDDRRRDDRR"
   },
   {
    "dem_seats": 50,
-   "winners": "RRRDDRDRDRRRRDDRRRRDDDDDDRDDDRRRDRR"
-  },
-  {
-   "dem_seats": 50,
-   "winners": "RRRDDRRRDRRRRRDDDRRDDDDDDRDDRDRRDRR"
+   "winners": "RRRDDRDRDDRRRDDRDRRRDDDDDRDDRRRRDRR"
   },
   {
    "dem_seats": 51,
-   "winners": "RRRDDRDRDDRRRDDDDRRRDDDDDRDDRRRRDRR"
+   "winners": "RRRDDRDRDRRRRRDDDRRDDDDDDRDDRRRDDRR"
   },
   {
    "dem_seats": 51,
-   "winners": "RRRDDRDRDRDRRDDDDRRRDDDDDRDDRRRRDRR"
-  },
-  {
-   "dem_seats": 51,
-   "winners": "RDRDDRDRDRRRRDDDDRRRDDDDRRDDRRRDDRR"
+   "winners": "RRRDDRRRDRDRRDDDDRRRDDDDDRDDDRRRDRR"
   },
   {
    "dem_seats": 51,
@@ -228,75 +230,79 @@
   },
   {
    "dem_seats": 51,
-   "winners": "RRRDDRDRDRDRRRDDDDRDDDDDRRDDRRRRDRR"
+   "winners": "RDRDDRDRDRRRDRDDRRRRDDDDRRDDDRRDDRR"
   },
   {
    "dem_seats": 51,
-   "winners": "RRRDDRDRDRDRRDDDRRRDDDDDRRDDRRRDDRR"
+   "winners": "RRRDDRDRDRRRRRDDDRRRDDDDDRDDDRRDDRR"
   },
   {
    "dem_seats": 51,
-   "winners": "RRRDDDDRDDRRRDDDRRRRDDDDDRDDRRRRDRR"
+   "winners": "RDRDDDDRDRRRRRDDDRRDDDDDRRDDRRRRDRR"
   },
   {
    "dem_seats": 51,
-   "winners": "RRRDDRRRDDDRRDDDDRRRDDDDRRDDRRRDDRR"
+   "winners": "RDRDDDDRDDRRRDDRDRRRRDDDDRRDRRRDDRR"
   },
   {
    "dem_seats": 51,
-   "winners": "RRRDDRDRDRRRRDDDDRRRDDDDDRDDDRRRDRR"
+   "winners": "RDRDDRDRDRRRRDDRDRRDDDDDRRDDRRRDDRR"
   },
   {
    "dem_seats": 51,
-   "winners": "RDRDDRDRDRDRRRDDDRRRDDDDDRDDRRRRDRR"
+   "winners": "RDRDDRDRDDRRRRDDDRRRDDDDRRDDRRRDDRR"
   },
   {
    "dem_seats": 51,
-   "winners": "RDRDDRRRDDRRRDDDRRRDDDDDRRDDRRRDDRR"
+   "winners": "RRRDDRDRDRDRRDDDRRRRDDDDDRDDRRRDDRR"
   },
   {
    "dem_seats": 51,
-   "winners": "RRRDDDDRDRRRRDDDDRRRDDDRDRDDRRRDDRR"
+   "winners": "RRRDDRDRDRDRRDDRDRRRDDDDDRDDRRRDDRR"
   },
   {
    "dem_seats": 51,
-   "winners": "RRRDDRDRRDDRRDDDDRRRDDDDRRDDRRRDDRR"
+   "winners": "RDRDDRDRDRRRRDDDDRRRDDDDDRDDRRRRDRR"
   },
   {
    "dem_seats": 51,
-   "winners": "RDRDDRDRDRDRRRDRDRRRDRDDDRDDDRRDDRR"
+   "winners": "RRRDDRDRDRDRRDDDDRRRDDDDRRDDRRRDDRR"
+  },
+  {
+   "dem_seats": 51,
+   "winners": "RRDDDDDRDRRRRDDDRRRRDDDDRRDDDRRRDRR"
   },
   {
    "dem_seats": 52,
-   "winners": "RRRDDDDRDRRRRDDDRRRDDDDDDRDDRRRDDRR"
+   "winners": "RDRDDRDRDDDRRRDRDRRRDDDDDRDDRRRDDRR"
   },
   {
    "dem_seats": 52,
-   "winners": "RRRDDRDRDRDRRRDDDRRDDDDDRRDDDRRDDRR"
+   "winners": "RRRDDRDRDDRRRDDRDRRDDDDDRRDDDRRDDRR"
   },
   {
    "dem_seats": 52,
-   "winners": "RDRDDDDRDRDRRRDDRRRRDDDDDRDDDRRRDRR"
+   "winners": "RDRDDRDRDRDRRRDRDRDRDDDDDRDDRDRRDRR"
   },
   {
    "dem_seats": 52,
-   "winners": "RDRDDRDRDRRRRDDDDRRRDDDDDRDDDRRRDRR"
+   "winners": "RRRDDRDRDRRRDRDDDRRDDDDDDRDDRRRDDRR"
   },
   {
    "dem_seats": 52,
-   "winners": "RRRDDRDRDRDRDRDRDRRDDDDDDRDDRRRDDRR"
+   "winners": "RRRDDRDRDRRRRDDDDRRDDDDDRRDDDRRDDRR"
   },
   {
    "dem_seats": 52,
-   "winners": "RRRDDRDRDDRRRDDDDRRRDDDDDRDDRRRDDRR"
+   "winners": "RRRDDRDRDDDRRRDDDRRDDDDDRRDDDRRRDRR"
   },
   {
    "dem_seats": 52,
-   "winners": "RDRDDRDRDDRRRDDRDRRDDDDDDRDDRRRRDRR"
+   "winners": "RDRDDRDRDRDRDRDDDRRRDDDDDRDDRRRRDRR"
   },
   {
    "dem_seats": 52,
-   "winners": "RDRDDRRRDDRRRDDDDRRRDDDDDRDDRRRDDRR"
+   "winners": "RDRDDRDRDRDRRDDRDRRRDDDDDRDDRRRDDRR"
   },
   {
    "dem_seats": 52,
@@ -304,11 +310,7 @@
   },
   {
    "dem_seats": 52,
-   "winners": "RRRDDRDRDDRRRDDDDRRRDDDDDRDDRRRDDRR"
-  },
-  {
-   "dem_seats": 52,
-   "winners": "RRRDDRDRDDRRRDDRDRRRDDDDDRDDDRRDDRR"
+   "winners": "RDRDDRDRDRRRRDDDDRRRDDDDDRDDRRRDDRR"
   },
   {
    "dem_seats": 52,
@@ -316,35 +318,19 @@
   },
   {
    "dem_seats": 52,
-   "winners": "RRRDDRDRDDRRRRDDDRDRDDDDDRDDRRRDDRR"
+   "winners": "RDRDDRRRDDRRRDDDDRRRDDDDDRDDRRRDDRR"
   },
   {
    "dem_seats": 52,
-   "winners": "RDRDDRDRDDRRRDDRDRRDDDDDDRDDRRRRDRR"
+   "winners": "RRRDDRDRDRRRRDDDDRRRDDDDDRDDDRRDDRR"
+  },
+  {
+   "dem_seats": 52,
+   "winners": "RRRDDRDRDDRRRDDDDRRDDDDDRRDDRRRDDRR"
   },
   {
    "dem_seats": 53,
-   "winners": "RDRDDRDRDDRRRRDDDRRDDDDDDRDDRRRDDRR"
-  },
-  {
-   "dem_seats": 53,
-   "winners": "RRRDDRDRDDDRRDDDDRRDDDDDRRDDRRRDDRR"
-  },
-  {
-   "dem_seats": 53,
-   "winners": "RDRDDRDRDRRRRDDDDRRRDDDDDRDDDRRDDRR"
-  },
-  {
-   "dem_seats": 53,
-   "winners": "RDRDDDDRDDRRRRDDDRRRDDDDDRDDRRRDDRR"
-  },
-  {
-   "dem_seats": 53,
-   "winners": "RDRDDDDRDDRRRRDRDRRRDDDDDRDDDRRDDRR"
-  },
-  {
-   "dem_seats": 53,
-   "winners": "RDRDDRDRDRRRRDDDDRRRDDDDDRDDDRRDDRR"
+   "winners": "RDRDDRDRDDRRRRDDDDRRDDDDDRDDRRRDDRR"
   },
   {
    "dem_seats": 53,
@@ -352,39 +338,51 @@
   },
   {
    "dem_seats": 53,
-   "winners": "RRRDDDDRDDDRRDDDDRRRDDDDDRDDRRRRDRR"
+   "winners": "RDRDDRDRDDDRRDDDDRRRRDDDDRDDDRRRDRR"
   },
   {
    "dem_seats": 53,
-   "winners": "RRRDDRDRDDDRDDDDDRRRDDDDRRDDRRRDDRR"
+   "winners": "RDRDDDDRDRDRRDDDRRRDRDDDDRDDRRRDDRR"
   },
   {
    "dem_seats": 53,
-   "winners": "RDRDDRDRDRRRRDDDDRRRDDDDDRDDDRRDDRR"
+   "winners": "RDRDDRDRDDDRRDDDRRRRDDDDDRDDRRRDDRR"
   },
   {
    "dem_seats": 53,
-   "winners": "RRRDDRDRDDRRRDDDDRRRDDDDDRDDDRRDDRR"
+   "winners": "RDRDDRDRDRDRRDDDDRRRDDDDDRDDRRRDDRR"
   },
   {
    "dem_seats": 53,
-   "winners": "RDRDDRDRDRDRRRDDRRRDDDDDDRDDDRRDDRR"
+   "winners": "RRRDDRDRDDRRDDDDDRRRDDDDDRDDRRRDDRR"
   },
   {
    "dem_seats": 53,
-   "winners": "RDRDDRDDDDRRRDDDRRRDDDDDRRDDRRRDDRR"
+   "winners": "RDRDDRDRDDDRRDDDDRRRDDDDDRDDRRRRDRR"
+  },
+  {
+   "dem_seats": 53,
+   "winners": "RDRDDRDRDDDRRDDRDRRRDDDDRRDDDRRDDRR"
+  },
+  {
+   "dem_seats": 53,
+   "winners": "RRRDDRDRDDDRRDDDDRRRDDDDDRDDRRRDDRR"
+  },
+  {
+   "dem_seats": 53,
+   "winners": "RRRDDRDRDDDRRDDDDRRRDDDDDRDDRRRDDRR"
+  },
+  {
+   "dem_seats": 53,
+   "winners": "RDRDDRDRDDDRRDDRDRRRDDDDDRDDRRRDDRR"
   },
   {
    "dem_seats": 54,
-   "winners": "RDRDDRDRDRDRRDDDDRRDDDDDDRDDRRRDDRR"
+   "winners": "RDRDDRDRDDDRRDDDDRRRRDDDDRDDDRRDDRR"
   },
   {
    "dem_seats": 54,
-   "winners": "RDRDDDDRDDDRRDDDRRRRDDDDDRDDRRRDDRR"
-  },
-  {
-   "dem_seats": 54,
-   "winners": "RRRDDRDRDRRDRDDDDRRDDDDDDRDDDRRDDRR"
+   "winners": "RDRDDRDRDDDRRDDDDRRRDDDDDRDDRRRDDRR"
   },
   {
    "dem_seats": 54,
@@ -392,75 +390,83 @@
   },
   {
    "dem_seats": 54,
-   "winners": "DDRDDRDRDRRRRDDDDDRRDDDDRRDDDRRDDRR"
+   "winners": "RDRDDRDRDDRRRDDRDRRRDDDDDRDDDDRDDRR"
   },
   {
    "dem_seats": 54,
-   "winners": "RDRDDDDRDRDRRRDDDRRDDDDDDRDDRRRDDRR"
+   "winners": "RRRDDDDRDDDRRDDDDRRRDDDDDRDDDRRRDRR"
   },
   {
    "dem_seats": 54,
-   "winners": "RDRDDDDRDDRRRDDDDRRRDDDDDRDDRRRDDRR"
+   "winners": "RRRDDRDRDDDRRDDDRRRDDDDDDRDDRDRDDRR"
   },
   {
    "dem_seats": 54,
-   "winners": "RRRDDRDRDDDRRDDDDRRRDDDDDRDDDRRDDRR"
+   "winners": "RDRDDRDRDDRRRDDDDRRRDDDDDRDDDRRDDRR"
   },
   {
    "dem_seats": 54,
-   "winners": "RRRDDDDRDDDRDDDDDRRRDDDDRRDDRRRDDRR"
+   "winners": "RDRDDRDRDRDRDDDDDRRRDDDDDRDDRRRDDRR"
+  },
+  {
+   "dem_seats": 54,
+   "winners": "RDRDDRDRDRRRDRDDDRRDDDDDDRDDDRRDDRR"
+  },
+  {
+   "dem_seats": 54,
+   "winners": "RDDDDRDRDRDRRDDDDRRRDDDDDRDDRRRDDRR"
   },
   {
    "dem_seats": 55,
-   "winners": "RDRDDDDDDRDRRDDRDRRRDDDDDRDDDRRDDRR"
+   "winners": "RDRDDDDRDDDRRDDDRRRRDDDDDRDDDRRDDRR"
   },
   {
    "dem_seats": 55,
-   "winners": "RDRDDRDRDDDRDRDDDRRDRDDDDRDDDRRDDRR"
+   "winners": "RDRDDRDRDDRRDDDDDRRDDDDDDRDDRRRDDRR"
   },
   {
    "dem_seats": 55,
-   "winners": "RDRDDRDRDDDRDRDDDDRDDDDDRRDDRRRDDRR"
+   "winners": "RDRDDDDRDRDRRRDDDDDRDDDDDRDDRRRDDRR"
   },
   {
    "dem_seats": 55,
-   "winners": "RDRDDRDRDDDRRRDDDRRDDDDDDRDDDRRDDRR"
+   "winners": "RDRDDRDRDDDRRDDDDRRRDDDDDRDDDRRDDRR"
   },
   {
    "dem_seats": 55,
-   "winners": "RRRDDRDRDDDRDDDDDRDRDDDDDRDDDRRRDRR"
+   "winners": "RDRDDDDRRDRDRDDDDRRRDDDDDRDDDRRDDRR"
   },
   {
    "dem_seats": 55,
-   "winners": "RRRDDRDRDRDDRDDDDRRDDDDDDRDDDRRDDRR"
-  },
-  {
-   "dem_seats": 56,
-   "winners": "RDRDDDDRDDDRDDDDDRRDDDDDDRDDRRRRDRR"
-  },
-  {
-   "dem_seats": 56,
-   "winners": "RDDDDRDRDDDRRDDDDRRDDDDDDRDDRRRDDRR"
-  },
-  {
-   "dem_seats": 56,
-   "winners": "RDRDDDDRDRRRRDDDDRRDDDDDDRDDDDRDDRR"
+   "winners": "RRRDDDDRDDDRRDDDDRRRDDDDDRDDDRRDDRR"
   },
   {
    "dem_seats": 56,
    "winners": "RDRDDRDRDDDRRDDDDRRDDDDDDRDDDRRDDRR"
   },
   {
-   "dem_seats": 57,
-   "winners": "DDRDDDDRDDDRRDDDDRRRDDDDDRDDDRRDDRR"
+   "dem_seats": 56,
+   "winners": "RDRDDDDRDRDRRDDDDRRRDDDDDRDDDDRDDRR"
+  },
+  {
+   "dem_seats": 56,
+   "winners": "RDRDDDDRDDDRRDDDDRRRDDDDDRDDDRRDDRR"
+  },
+  {
+   "dem_seats": 56,
+   "winners": "RDRDDDDRDDDRRDDDDRRRDDDDDRDDDRRDDRR"
   },
   {
    "dem_seats": 57,
-   "winners": "RDRDDDDRDDDRRDDDDRDDDDDDDRDDRRRDDRR"
+   "winners": "RDRDDDDRDRDRRDDDDRDDDDDDDRDDDRRDDRR"
+  },
+  {
+   "dem_seats": 57,
+   "winners": "RRRDDDDRDDDRRDDDDRDRDDDDDRDDDDRDDRR"
   },
   {
    "dem_seats": 58,
-   "winners": "RDRDDDDRDDDRDDDDDRRDDDDDDRDDDRRDDRR"
+   "winners": "RDRDDDDRDRDRRDDDDDDDDDDDDRDDDRRDDRR"
   }
  ],
  "races": [
@@ -478,16 +484,16 @@
     "caucus": "D"
    },
    "incumbent": "none",
-   "p_opp": 0.0064,
-   "p_rep": 0.9936,
-   "mean_margin": -20.82,
-   "margin_10": -29.53,
-   "margin_90": -12.12,
+   "p_opp": 0.0059,
+   "p_rep": 0.9941,
+   "mean_margin": -20.83,
+   "margin_10": -29.55,
+   "margin_90": -11.98,
    "poll_avg": -20.68,
    "n_polls": 2,
-   "poll_weight": 0.466,
+   "poll_weight": 0.461,
    "poll_miss_adjustment": -2.17,
-   "prior_margin": -20.93,
+   "prior_margin": -20.95,
    "fundraising_shift": -2.0,
    "weather_shift": 0.0,
    "rating": -3
@@ -506,16 +512,16 @@
     "caucus": "D"
    },
    "incumbent": "R",
-   "p_opp": 0.4332,
-   "p_rep": 0.5668,
-   "mean_margin": -0.97,
-   "margin_10": -8.82,
-   "margin_90": 6.86,
-   "poll_avg": -0.99,
-   "n_polls": 7,
-   "poll_weight": 0.806,
+   "p_opp": 0.4323,
+   "p_rep": 0.5677,
+   "mean_margin": -0.98,
+   "margin_10": -8.95,
+   "margin_90": 6.81,
+   "poll_avg": -1.0,
+   "n_polls": 6,
+   "poll_weight": 0.807,
    "poll_miss_adjustment": -1.47,
-   "prior_margin": -0.88,
+   "prior_margin": -0.89,
    "fundraising_shift": 0.5,
    "weather_shift": 0.0,
    "rating": 0
@@ -534,16 +540,16 @@
     "caucus": "D"
    },
    "incumbent": "R",
-   "p_opp": 0.0193,
-   "p_rep": 0.9807,
-   "mean_margin": -15.26,
-   "margin_10": -24.06,
-   "margin_90": -6.67,
+   "p_opp": 0.02,
+   "p_rep": 0.9799,
+   "mean_margin": -15.33,
+   "margin_10": -23.88,
+   "margin_90": -6.87,
    "poll_avg": -9.05,
    "n_polls": 3,
-   "poll_weight": 0.491,
+   "poll_weight": 0.486,
    "poll_miss_adjustment": -2.74,
-   "prior_margin": -21.25,
+   "prior_margin": -21.26,
    "fundraising_shift": -0.25,
    "weather_shift": 0.0,
    "rating": -3
@@ -562,16 +568,16 @@
     "caucus": "D"
    },
    "incumbent": "D",
-   "p_opp": 0.9926,
-   "p_rep": 0.0074,
-   "mean_margin": 23.4,
-   "margin_10": 13.3,
-   "margin_90": 33.17,
+   "p_opp": 0.993,
+   "p_rep": 0.007,
+   "mean_margin": 23.39,
+   "margin_10": 13.41,
+   "margin_90": 33.14,
    "poll_avg": null,
    "n_polls": 0,
    "poll_weight": 0.0,
    "poll_miss_adjustment": 0.0,
-   "prior_margin": 23.4,
+   "prior_margin": 23.39,
    "fundraising_shift": 2.0,
    "weather_shift": 0.0,
    "rating": 3
@@ -592,14 +598,14 @@
    "incumbent": "D",
    "p_opp": 0.997,
    "p_rep": 0.003,
-   "mean_margin": 27.34,
-   "margin_10": 17.53,
-   "margin_90": 37.21,
+   "mean_margin": 27.33,
+   "margin_10": 17.43,
+   "margin_90": 37.12,
    "poll_avg": null,
    "n_polls": 0,
    "poll_weight": 0.0,
    "poll_miss_adjustment": 0.0,
-   "prior_margin": 27.34,
+   "prior_margin": 27.33,
    "fundraising_shift": 2.0,
    "weather_shift": 0.0,
    "rating": 3
@@ -618,16 +624,16 @@
     "caucus": "D"
    },
    "incumbent": "R",
-   "p_opp": 0.1634,
-   "p_rep": 0.8366,
-   "mean_margin": -5.79,
-   "margin_10": -13.49,
-   "margin_90": 2.01,
+   "p_opp": 0.1643,
+   "p_rep": 0.8357,
+   "mean_margin": -5.78,
+   "margin_10": -13.58,
+   "margin_90": 2.02,
    "poll_avg": -6.29,
    "n_polls": 7,
-   "poll_weight": 0.836,
+   "poll_weight": 0.833,
    "poll_miss_adjustment": -1.4,
-   "prior_margin": -3.21,
+   "prior_margin": -3.22,
    "fundraising_shift": -1.17,
    "weather_shift": 0.0,
    "rating": -2
@@ -646,16 +652,16 @@
     "caucus": "D"
    },
    "incumbent": "D",
-   "p_opp": 0.9417,
-   "p_rep": 0.0583,
+   "p_opp": 0.9395,
+   "p_rep": 0.0605,
    "mean_margin": 9.73,
-   "margin_10": 2.11,
-   "margin_90": 17.39,
+   "margin_10": 1.92,
+   "margin_90": 17.45,
    "poll_avg": 9.64,
    "n_polls": 11,
    "poll_weight": 0.85,
    "poll_miss_adjustment": -0.13,
-   "prior_margin": 10.28,
+   "prior_margin": 10.26,
    "fundraising_shift": 1.44,
    "weather_shift": 0.0,
    "rating": 2
@@ -674,16 +680,16 @@
     "caucus": "D"
    },
    "incumbent": "R",
-   "p_opp": 0.0361,
-   "p_rep": 0.9639,
-   "mean_margin": -13.64,
-   "margin_10": -22.53,
-   "margin_90": -4.7,
-   "poll_avg": -6.73,
-   "n_polls": 6,
-   "poll_weight": 0.657,
+   "p_opp": 0.0302,
+   "p_rep": 0.9698,
+   "mean_margin": -14.19,
+   "margin_10": -23.16,
+   "margin_90": -5.44,
+   "poll_avg": -7.81,
+   "n_polls": 5,
+   "poll_weight": 0.666,
    "poll_miss_adjustment": -2.45,
-   "prior_margin": -26.88,
+   "prior_margin": -26.9,
    "fundraising_shift": -0.92,
    "weather_shift": 0.0,
    "rating": -3
@@ -702,16 +708,16 @@
     "caucus": "D"
    },
    "incumbent": "none",
-   "p_opp": 0.9913,
-   "p_rep": 0.0087,
-   "mean_margin": 22.46,
+   "p_opp": 0.9931,
+   "p_rep": 0.0069,
+   "mean_margin": 22.44,
    "margin_10": 12.48,
-   "margin_90": 32.23,
+   "margin_90": 32.3,
    "poll_avg": null,
    "n_polls": 0,
    "poll_weight": 0.0,
    "poll_miss_adjustment": 0.0,
-   "prior_margin": 22.46,
+   "prior_margin": 22.44,
    "fundraising_shift": 1.8,
    "weather_shift": 0.0,
    "rating": 3
@@ -730,16 +736,16 @@
     "caucus": "D"
    },
    "incumbent": "none",
-   "p_opp": 0.456,
-   "p_rep": 0.544,
+   "p_opp": 0.4622,
+   "p_rep": 0.5378,
    "mean_margin": -0.59,
-   "margin_10": -8.45,
-   "margin_90": 7.08,
+   "margin_10": -8.38,
+   "margin_90": 7.15,
    "poll_avg": -0.23,
    "n_polls": 21,
    "poll_weight": 0.85,
    "poll_miss_adjustment": -1.9,
-   "prior_margin": -2.66,
+   "prior_margin": -2.67,
    "fundraising_shift": -0.16,
    "weather_shift": 0.0,
    "rating": 0
@@ -758,17 +764,17 @@
     "caucus": "D"
    },
    "incumbent": "R",
-   "p_opp": 0.3694,
-   "p_rep": 0.6306,
-   "mean_margin": -1.98,
+   "p_opp": 0.3614,
+   "p_rep": 0.6386,
+   "mean_margin": -2.0,
    "margin_10": -9.68,
-   "margin_90": 5.87,
+   "margin_90": 5.65,
    "poll_avg": -1.1,
    "n_polls": 9,
    "poll_weight": 0.85,
    "poll_miss_adjustment": -1.6,
-   "prior_margin": -6.96,
-   "fundraising_shift": 0.63,
+   "prior_margin": -7.08,
+   "fundraising_shift": 0.52,
    "weather_shift": 0.0,
    "rating": -1
   },
@@ -786,16 +792,16 @@
     "caucus": "D"
    },
    "incumbent": "none",
-   "p_opp": 0.012,
-   "p_rep": 0.9879,
-   "mean_margin": -18.86,
-   "margin_10": -28.21,
-   "margin_90": -9.71,
+   "p_opp": 0.0104,
+   "p_rep": 0.9896,
+   "mean_margin": -18.9,
+   "margin_10": -28.25,
+   "margin_90": -9.7,
    "poll_avg": -14.06,
    "n_polls": 1,
-   "poll_weight": 0.22,
+   "poll_weight": 0.217,
    "poll_miss_adjustment": -3.06,
-   "prior_margin": -20.22,
+   "prior_margin": -20.23,
    "fundraising_shift": -1.19,
    "weather_shift": 0.0,
    "rating": -3
@@ -814,16 +820,16 @@
     "caucus": "D"
    },
    "incumbent": "none",
-   "p_opp": 0.0879,
-   "p_rep": 0.9121,
-   "mean_margin": -9.4,
-   "margin_10": -18.32,
-   "margin_90": -0.54,
+   "p_opp": 0.0897,
+   "p_rep": 0.9103,
+   "mean_margin": -9.43,
+   "margin_10": -18.23,
+   "margin_90": -0.48,
    "poll_avg": -7.01,
    "n_polls": 2,
-   "poll_weight": 0.397,
+   "poll_weight": 0.392,
    "poll_miss_adjustment": -1.01,
-   "prior_margin": -10.98,
+   "prior_margin": -10.99,
    "fundraising_shift": 0.26,
    "weather_shift": 0.0,
    "rating": -2
@@ -842,16 +848,16 @@
     "caucus": "D"
    },
    "incumbent": "R",
-   "p_opp": 0.6073,
-   "p_rep": 0.3927,
-   "mean_margin": 1.49,
-   "margin_10": -6.33,
-   "margin_90": 9.2,
-   "poll_avg": 0.09,
-   "n_polls": 21,
+   "p_opp": 0.6207,
+   "p_rep": 0.3793,
+   "mean_margin": 1.76,
+   "margin_10": -6.03,
+   "margin_90": 9.58,
+   "poll_avg": 0.41,
+   "n_polls": 22,
    "poll_weight": 0.85,
    "poll_miss_adjustment": -1.72,
-   "prior_margin": 9.43,
+   "prior_margin": 9.42,
    "fundraising_shift": 0.0,
    "weather_shift": 0.0,
    "rating": 1
@@ -870,16 +876,16 @@
     "caucus": "D"
    },
    "incumbent": "D",
-   "p_opp": 0.9989,
-   "p_rep": 0.0011,
-   "mean_margin": 27.38,
-   "margin_10": 19.21,
-   "margin_90": 35.32,
+   "p_opp": 0.9987,
+   "p_rep": 0.0013,
+   "mean_margin": 27.43,
+   "margin_10": 19.22,
+   "margin_90": 35.43,
    "poll_avg": 23.83,
    "n_polls": 6,
-   "poll_weight": 0.739,
+   "poll_weight": 0.735,
    "poll_miss_adjustment": 0.2,
-   "prior_margin": 37.43,
+   "prior_margin": 37.41,
    "fundraising_shift": 1.16,
    "weather_shift": 0.0,
    "rating": 3
@@ -898,17 +904,17 @@
     "caucus": "D"
    },
    "incumbent": "none",
-   "p_opp": 0.7516,
-   "p_rep": 0.2484,
+   "p_opp": 0.7526,
+   "p_rep": 0.2474,
    "mean_margin": 3.89,
-   "margin_10": -3.88,
-   "margin_90": 11.58,
+   "margin_10": -3.78,
+   "margin_90": 11.48,
    "poll_avg": 3.05,
    "n_polls": 33,
    "poll_weight": 0.85,
    "poll_miss_adjustment": -0.64,
-   "prior_margin": 8.68,
-   "fundraising_shift": 0.15,
+   "prior_margin": 8.65,
+   "fundraising_shift": 0.14,
    "weather_shift": 0.0,
    "rating": 1
   },
@@ -926,16 +932,16 @@
     "caucus": "D"
    },
    "incumbent": "none",
-   "p_opp": 0.7824,
-   "p_rep": 0.2176,
-   "mean_margin": 4.53,
-   "margin_10": -3.21,
-   "margin_90": 12.33,
+   "p_opp": 0.7788,
+   "p_rep": 0.2212,
+   "mean_margin": 4.56,
+   "margin_10": -3.24,
+   "margin_90": 12.36,
    "poll_avg": 2.74,
    "n_polls": 8,
-   "poll_weight": 0.837,
+   "poll_weight": 0.834,
    "poll_miss_adjustment": -0.44,
-   "prior_margin": 13.74,
+   "prior_margin": 13.72,
    "fundraising_shift": 0.2,
    "weather_shift": 0.0,
    "rating": 1
@@ -954,16 +960,16 @@
     "caucus": "D"
    },
    "incumbent": "R",
-   "p_opp": 0.0558,
-   "p_rep": 0.9443,
-   "mean_margin": -12.05,
-   "margin_10": -21.42,
-   "margin_90": -2.67,
+   "p_opp": 0.0541,
+   "p_rep": 0.9459,
+   "mean_margin": -12.07,
+   "margin_10": -21.37,
+   "margin_90": -2.75,
    "poll_avg": -9.0,
    "n_polls": 1,
-   "poll_weight": 0.208,
+   "poll_weight": 0.205,
    "poll_miss_adjustment": -1.0,
-   "prior_margin": -12.85,
+   "prior_margin": -12.86,
    "fundraising_shift": 0.03,
    "weather_shift": 0.0,
    "rating": -2
@@ -982,16 +988,16 @@
     "caucus": "D"
    },
    "incumbent": "none",
-   "p_opp": 0.0192,
-   "p_rep": 0.9808,
-   "mean_margin": -15.6,
-   "margin_10": -24.19,
-   "margin_90": -7.06,
+   "p_opp": 0.0184,
+   "p_rep": 0.9817,
+   "mean_margin": -15.58,
+   "margin_10": -24.16,
+   "margin_90": -7.1,
    "poll_avg": -17.46,
    "n_polls": 13,
-   "poll_weight": 0.813,
+   "poll_weight": 0.81,
    "poll_miss_adjustment": -1.8,
-   "prior_margin": -7.52,
+   "prior_margin": -7.53,
    "fundraising_shift": 1.7,
    "weather_shift": 0.0,
    "rating": -3
@@ -1010,16 +1016,16 @@
     "caucus": "D"
    },
    "incumbent": "R",
-   "p_opp": 0.251,
-   "p_rep": 0.749,
-   "mean_margin": -4.41,
-   "margin_10": -12.86,
-   "margin_90": 4.37,
+   "p_opp": 0.2497,
+   "p_rep": 0.7503,
+   "mean_margin": -4.42,
+   "margin_10": -13.18,
+   "margin_90": 4.23,
    "poll_avg": -3.93,
    "n_polls": 5,
-   "poll_weight": 0.781,
+   "poll_weight": 0.777,
    "poll_miss_adjustment": -2.64,
-   "prior_margin": -6.15,
+   "prior_margin": -6.16,
    "fundraising_shift": 0.64,
    "weather_shift": 0.0,
    "rating": -1
@@ -1038,16 +1044,16 @@
     "caucus": "D"
    },
    "incumbent": "none",
-   "p_opp": 0.8728,
-   "p_rep": 0.1272,
+   "p_opp": 0.873,
+   "p_rep": 0.127,
    "mean_margin": 6.82,
-   "margin_10": -0.96,
-   "margin_90": 14.62,
+   "margin_10": -0.99,
+   "margin_90": 14.54,
    "poll_avg": 5.91,
    "n_polls": 12,
    "poll_weight": 0.85,
    "poll_miss_adjustment": -0.13,
-   "prior_margin": 11.99,
+   "prior_margin": 11.97,
    "fundraising_shift": 0.88,
    "weather_shift": 0.0,
    "rating": 2
@@ -1066,16 +1072,16 @@
     "caucus": "D"
    },
    "incumbent": "D",
-   "p_opp": 0.988,
-   "p_rep": 0.012,
-   "mean_margin": 20.33,
-   "margin_10": 10.5,
-   "margin_90": 30.17,
+   "p_opp": 0.9875,
+   "p_rep": 0.0125,
+   "mean_margin": 20.32,
+   "margin_10": 10.43,
+   "margin_90": 29.95,
    "poll_avg": null,
    "n_polls": 0,
    "poll_weight": 0.0,
    "poll_miss_adjustment": 0.0,
-   "prior_margin": 20.33,
+   "prior_margin": 20.32,
    "fundraising_shift": 2.0,
    "weather_shift": 0.0,
    "rating": 3
@@ -1094,16 +1100,16 @@
     "caucus": "D"
    },
    "incumbent": "D",
-   "p_opp": 0.9906,
-   "p_rep": 0.0094,
+   "p_opp": 0.9911,
+   "p_rep": 0.0089,
    "mean_margin": 17.58,
-   "margin_10": 9.41,
-   "margin_90": 25.93,
+   "margin_10": 9.34,
+   "margin_90": 25.89,
    "poll_avg": 16.76,
    "n_polls": 2,
-   "poll_weight": 0.664,
+   "poll_weight": 0.659,
    "poll_miss_adjustment": -0.51,
-   "prior_margin": 19.19,
+   "prior_margin": 19.18,
    "fundraising_shift": 2.0,
    "weather_shift": 0.0,
    "rating": 3
@@ -1122,16 +1128,16 @@
     "caucus": "D"
    },
    "incumbent": "none",
-   "p_opp": 0.9187,
-   "p_rep": 0.0813,
+   "p_opp": 0.926,
+   "p_rep": 0.074,
    "mean_margin": 8.8,
-   "margin_10": 0.84,
-   "margin_90": 16.63,
+   "margin_10": 1.08,
+   "margin_90": 16.67,
    "poll_avg": 8.85,
    "n_polls": 22,
    "poll_weight": 0.85,
    "poll_miss_adjustment": -1.25,
-   "prior_margin": 8.52,
+   "prior_margin": 8.51,
    "fundraising_shift": 0.26,
    "weather_shift": 0.0,
    "rating": 2
@@ -1150,17 +1156,17 @@
     "caucus": "D"
    },
    "incumbent": "R",
-   "p_opp": 0.6652,
-   "p_rep": 0.3348,
+   "p_opp": 0.6696,
+   "p_rep": 0.3304,
    "mean_margin": 2.49,
-   "margin_10": -5.27,
-   "margin_90": 10.17,
+   "margin_10": -5.23,
+   "margin_90": 10.22,
    "poll_avg": 2.61,
    "n_polls": 16,
    "poll_weight": 0.85,
    "poll_miss_adjustment": -2.05,
-   "prior_margin": 1.86,
-   "fundraising_shift": 0.64,
+   "prior_margin": 1.82,
+   "fundraising_shift": 0.61,
    "weather_shift": 0.0,
    "rating": 1
   },
@@ -1178,16 +1184,16 @@
     "caucus": "D"
    },
    "incumbent": "none",
-   "p_opp": 0.0037,
-   "p_rep": 0.9963,
+   "p_opp": 0.004,
+   "p_rep": 0.996,
    "mean_margin": -25.84,
-   "margin_10": -35.26,
-   "margin_90": -16.42,
+   "margin_10": -35.28,
+   "margin_90": -16.45,
    "poll_avg": -27.86,
    "n_polls": 1,
-   "poll_weight": 0.162,
+   "poll_weight": 0.16,
    "poll_miss_adjustment": -3.86,
-   "prior_margin": -25.45,
+   "prior_margin": -25.46,
    "fundraising_shift": -2.0,
    "weather_shift": 0.0,
    "rating": -3
@@ -1206,16 +1212,16 @@
     "caucus": "D"
    },
    "incumbent": "D",
-   "p_opp": 0.9954,
-   "p_rep": 0.0046,
-   "mean_margin": 26.37,
-   "margin_10": 16.45,
-   "margin_90": 36.22,
+   "p_opp": 0.9957,
+   "p_rep": 0.0043,
+   "mean_margin": 26.35,
+   "margin_10": 16.55,
+   "margin_90": 36.12,
    "poll_avg": null,
    "n_polls": 0,
    "poll_weight": 0.0,
    "poll_miss_adjustment": 0.0,
-   "prior_margin": 26.37,
+   "prior_margin": 26.35,
    "fundraising_shift": 2.0,
    "weather_shift": 0.0,
    "rating": 3
@@ -1234,16 +1240,16 @@
     "caucus": "D"
    },
    "incumbent": "D",
-   "p_opp": 0.9963,
-   "p_rep": 0.0037,
-   "mean_margin": 23.14,
-   "margin_10": 14.51,
-   "margin_90": 31.64,
+   "p_opp": 0.9969,
+   "p_rep": 0.0031,
+   "mean_margin": 23.17,
+   "margin_10": 14.48,
+   "margin_90": 31.57,
    "poll_avg": 19.5,
    "n_polls": 3,
-   "poll_weight": 0.51,
+   "poll_weight": 0.505,
    "poll_miss_adjustment": -0.39,
-   "prior_margin": 26.92,
+   "prior_margin": 26.91,
    "fundraising_shift": 1.79,
    "weather_shift": 0.0,
    "rating": 3
@@ -1262,16 +1268,16 @@
     "caucus": "D"
    },
    "incumbent": "R",
-   "p_opp": 0.307,
-   "p_rep": 0.6929,
-   "mean_margin": -3.09,
-   "margin_10": -11.02,
-   "margin_90": 4.96,
+   "p_opp": 0.3009,
+   "p_rep": 0.6991,
+   "mean_margin": -3.1,
+   "margin_10": -11.06,
+   "margin_90": 4.95,
    "poll_avg": -2.25,
    "n_polls": 6,
-   "poll_weight": 0.753,
+   "poll_weight": 0.749,
    "poll_miss_adjustment": -1.19,
-   "prior_margin": -5.64,
+   "prior_margin": -5.65,
    "fundraising_shift": 2.0,
    "weather_shift": 0.0,
    "rating": -1
@@ -1290,16 +1296,16 @@
     "caucus": "D"
    },
    "incumbent": "R",
-   "p_opp": 0.0445,
-   "p_rep": 0.9555,
-   "mean_margin": -12.32,
-   "margin_10": -21.13,
-   "margin_90": -3.55,
+   "p_opp": 0.0446,
+   "p_rep": 0.9554,
+   "mean_margin": -12.37,
+   "margin_10": -21.31,
+   "margin_90": -3.6,
    "poll_avg": -8.84,
    "n_polls": 5,
-   "poll_weight": 0.69,
+   "poll_weight": 0.685,
    "poll_miss_adjustment": -4.5,
-   "prior_margin": -20.06,
+   "prior_margin": -20.07,
    "fundraising_shift": -0.39,
    "weather_shift": 0.0,
    "rating": -3
@@ -1321,13 +1327,13 @@
    "p_opp": 0.005,
    "p_rep": 0.995,
    "mean_margin": -22.1,
-   "margin_10": -31.11,
-   "margin_90": -13.21,
+   "margin_10": -31.0,
+   "margin_90": -13.18,
    "poll_avg": -23.48,
    "n_polls": 1,
-   "poll_weight": 0.364,
+   "poll_weight": 0.359,
    "poll_miss_adjustment": -3.48,
-   "prior_margin": -21.32,
+   "prior_margin": -21.33,
    "fundraising_shift": -2.0,
    "weather_shift": 0.0,
    "rating": -3
@@ -1346,17 +1352,17 @@
     "caucus": "D"
    },
    "incumbent": "none",
-   "p_opp": 0.6303,
-   "p_rep": 0.3697,
-   "mean_margin": 1.98,
-   "margin_10": -5.84,
-   "margin_90": 9.71,
+   "p_opp": 0.631,
+   "p_rep": 0.369,
+   "mean_margin": 1.97,
+   "margin_10": -5.79,
+   "margin_90": 9.64,
    "poll_avg": 2.2,
    "n_polls": 31,
    "poll_weight": 0.85,
    "poll_miss_adjustment": -0.82,
-   "prior_margin": 0.7,
-   "fundraising_shift": 0.44,
+   "prior_margin": 0.63,
+   "fundraising_shift": 0.38,
    "weather_shift": 0.0,
    "rating": 1
   },
@@ -1374,16 +1380,16 @@
     "caucus": "D"
    },
    "incumbent": "D",
-   "p_opp": 0.9848,
-   "p_rep": 0.0152,
-   "mean_margin": 18.78,
-   "margin_10": 8.92,
-   "margin_90": 28.51,
+   "p_opp": 0.9845,
+   "p_rep": 0.0155,
+   "mean_margin": 18.77,
+   "margin_10": 9.0,
+   "margin_90": 28.44,
    "poll_avg": 17.0,
    "n_polls": 1,
-   "poll_weight": 0.056,
+   "poll_weight": 0.055,
    "poll_miss_adjustment": -1.0,
-   "prior_margin": 18.89,
+   "prior_margin": 18.87,
    "fundraising_shift": 2.0,
    "weather_shift": 0.0,
    "rating": 3
@@ -1402,16 +1408,16 @@
     "caucus": "D"
    },
    "incumbent": "R",
-   "p_opp": 0.0013,
-   "p_rep": 0.9987,
-   "mean_margin": -33.74,
-   "margin_10": -43.69,
+   "p_opp": 0.001,
+   "p_rep": 0.999,
+   "mean_margin": -33.75,
+   "margin_10": -43.72,
    "margin_90": -24.05,
    "poll_avg": null,
    "n_polls": 0,
    "poll_weight": 0.0,
    "poll_miss_adjustment": 0.0,
-   "prior_margin": -33.74,
+   "prior_margin": -33.75,
    "fundraising_shift": -2.0,
    "weather_shift": 0.0,
    "rating": -3
@@ -1430,23 +1436,24 @@
     "caucus": "D"
    },
    "incumbent": "none",
-   "p_opp": 0.0014,
-   "p_rep": 0.9987,
-   "mean_margin": -36.09,
-   "margin_10": -45.95,
-   "margin_90": -26.21,
+   "p_opp": 0.001,
+   "p_rep": 0.999,
+   "mean_margin": -36.1,
+   "margin_10": -46.09,
+   "margin_90": -26.19,
    "poll_avg": null,
    "n_polls": 0,
    "poll_weight": 0.0,
    "poll_miss_adjustment": 0.0,
-   "prior_margin": -36.09,
+   "prior_margin": -36.1,
    "fundraising_shift": -2.0,
    "weather_shift": 0.0,
    "rating": -3
   }
  ],
- "generated_at": "2026-10-06T03:38:19+00:00",
- "config_version": "ab72e8aa",
+ "p_dem_both": 0.6247,
+ "generated_at": "2026-10-06T10:29:59+00:00",
+ "config_version": "0f6cc834",
  "problems": [
   "fundraising: no FEC match for ME (Troy Jackson); FEC has: BELLOWS, SHENNA (DEM), CALABRESE, CARMEM VINCENT MR. (REP), CALABRESE, CARMEN VINCENT MR. (REP), COLLINS, SUSAN M. (REP), COSTELLO, DAVID (DEM), EVANS, DAVID ALAN (IND), FAVREAU, TUCKER (DEM), GIDEON, SARA (DEM), KING, ANGUS S. JR. (IND), KLEBAN, DAN (DEM), LAFLAMME, ANDREA (DEM), LOUD, PAIGE (DEM)"
  ],
@@ -1457,6 +1464,7 @@
    "p_rep_control": 0.5759,
    "p_no_majority": 0.0,
    "dem_seats_mean": 49.94,
+   "p_dem_both": 0.4105,
    "generic_ballot": {
     "dem": 47.31,
     "rep": 41.5
@@ -1472,6 +1480,7 @@
    "p_rep_control": 0.5594,
    "p_no_majority": 0.0,
    "dem_seats_mean": 50.08,
+   "p_dem_both": 0.4309,
    "generic_ballot": {
     "dem": 47.71,
     "rep": 41.7
@@ -1487,6 +1496,7 @@
    "p_rep_control": 0.57,
    "p_no_majority": 0.0,
    "dem_seats_mean": 49.96,
+   "p_dem_both": 0.4182,
    "generic_ballot": {
     "dem": 47.75,
     "rep": 41.74
@@ -1502,6 +1512,7 @@
    "p_rep_control": 0.5625,
    "p_no_majority": 0.0,
    "dem_seats_mean": 50.03,
+   "p_dem_both": 0.4251,
    "generic_ballot": {
     "dem": 47.76,
     "rep": 41.74
@@ -1517,6 +1528,7 @@
    "p_rep_control": 0.5645,
    "p_no_majority": 0.0,
    "dem_seats_mean": 50.03,
+   "p_dem_both": 0.4255,
    "generic_ballot": {
     "dem": 47.78,
     "rep": 41.74
@@ -1532,6 +1544,7 @@
    "p_rep_control": 0.5548,
    "p_no_majority": 0.0,
    "dem_seats_mean": 50.07,
+   "p_dem_both": 0.4343,
    "generic_ballot": {
     "dem": 47.79,
     "rep": 41.54
@@ -1547,6 +1560,7 @@
    "p_rep_control": 0.5468,
    "p_no_majority": 0.0,
    "dem_seats_mean": 50.15,
+   "p_dem_both": 0.4454,
    "generic_ballot": {
     "dem": 47.79,
     "rep": 41.54
@@ -1562,6 +1576,7 @@
    "p_rep_control": 0.5305,
    "p_no_majority": 0.0,
    "dem_seats_mean": 50.24,
+   "p_dem_both": 0.4612,
    "generic_ballot": {
     "dem": 47.85,
     "rep": 41.36
@@ -1577,6 +1592,7 @@
    "p_rep_control": 0.4747,
    "p_no_majority": 0.0,
    "dem_seats_mean": 50.66,
+   "p_dem_both": 0.5222,
    "generic_ballot": {
     "dem": 48.21,
     "rep": 40.95
@@ -1592,6 +1608,7 @@
    "p_rep_control": 0.4371,
    "p_no_majority": 0.0,
    "dem_seats_mean": 50.91,
+   "p_dem_both": 0.5617,
    "generic_ballot": {
     "dem": 48.36,
     "rep": 41.23
@@ -1607,6 +1624,7 @@
    "p_rep_control": 0.4203,
    "p_no_majority": 0.0,
    "dem_seats_mean": 51.04,
+   "p_dem_both": 0.5776,
    "generic_ballot": {
     "dem": 48.89,
     "rep": 41.67
@@ -1622,6 +1640,7 @@
    "p_rep_control": 0.4223,
    "p_no_majority": 0.0,
    "dem_seats_mean": 51.04,
+   "p_dem_both": 0.5761,
    "generic_ballot": {
     "dem": 48.89,
     "rep": 41.67
@@ -1637,6 +1656,7 @@
    "p_rep_control": 0.3907,
    "p_no_majority": 0.0,
    "dem_seats_mean": 51.25,
+   "p_dem_both": 0.6077,
    "generic_ballot": {
     "dem": 49.37,
     "rep": 42.02
@@ -1652,6 +1672,7 @@
    "p_rep_control": 0.4087,
    "p_no_majority": -0.0,
    "dem_seats_mean": 51.15,
+   "p_dem_both": 0.5893,
    "generic_ballot": {
     "dem": 49.35,
     "rep": 41.94
@@ -1667,6 +1688,7 @@
    "p_rep_control": 0.4042,
    "p_no_majority": 0.0,
    "dem_seats_mean": 51.19,
+   "p_dem_both": 0.5941,
    "generic_ballot": {
     "dem": 49.67,
     "rep": 41.93
@@ -1682,6 +1704,7 @@
    "p_rep_control": 0.3939,
    "p_no_majority": 0.0,
    "dem_seats_mean": 51.31,
+   "p_dem_both": 0.6049,
    "generic_ballot": {
     "dem": 49.63,
     "rep": 41.92
@@ -1697,6 +1720,7 @@
    "p_rep_control": 0.3917,
    "p_no_majority": 0.0,
    "dem_seats_mean": 51.34,
+   "p_dem_both": 0.6069,
    "generic_ballot": {
     "dem": 49.48,
     "rep": 41.83
@@ -1712,6 +1736,7 @@
    "p_rep_control": 0.3891,
    "p_no_majority": 0.0,
    "dem_seats_mean": 51.35,
+   "p_dem_both": 0.609,
    "generic_ballot": {
     "dem": 49.48,
     "rep": 41.82
@@ -1727,6 +1752,7 @@
    "p_rep_control": 0.3926,
    "p_no_majority": -0.0,
    "dem_seats_mean": 51.31,
+   "p_dem_both": 0.6062,
    "generic_ballot": {
     "dem": 49.48,
     "rep": 41.82
@@ -1742,6 +1768,7 @@
    "p_rep_control": 0.3693,
    "p_no_majority": -0.0,
    "dem_seats_mean": 51.48,
+   "p_dem_both": 0.6289,
    "generic_ballot": {
     "dem": 49.33,
     "rep": 41.68
@@ -1757,6 +1784,7 @@
    "p_rep_control": 0.3748,
    "p_no_majority": 0.0,
    "dem_seats_mean": 51.43,
+   "p_dem_both": 0.6237,
    "generic_ballot": {
     "dem": 49.64,
     "rep": 41.77
@@ -1772,6 +1800,7 @@
    "p_rep_control": 0.384,
    "p_no_majority": 0.0,
    "dem_seats_mean": 51.34,
+   "p_dem_both": 0.615,
    "generic_ballot": {
     "dem": 49.85,
     "rep": 41.87
@@ -1787,6 +1816,7 @@
    "p_rep_control": 0.3831,
    "p_no_majority": 0.0,
    "dem_seats_mean": 51.34,
+   "p_dem_both": 0.6159,
    "generic_ballot": {
     "dem": 49.85,
     "rep": 41.89
@@ -1802,6 +1832,7 @@
    "p_rep_control": 0.3724,
    "p_no_majority": -0.0,
    "dem_seats_mean": 51.41,
+   "p_dem_both": 0.6263,
    "generic_ballot": {
     "dem": 49.86,
     "rep": 41.88
@@ -1817,6 +1848,7 @@
    "p_rep_control": 0.3696,
    "p_no_majority": 0.0,
    "dem_seats_mean": 51.47,
+   "p_dem_both": 0.6298,
    "generic_ballot": {
     "dem": 50.08,
     "rep": 41.81
@@ -1832,6 +1864,7 @@
    "p_rep_control": 0.3668,
    "p_no_majority": 0.0,
    "dem_seats_mean": 51.46,
+   "p_dem_both": 0.6323,
    "generic_ballot": {
     "dem": 50.08,
     "rep": 41.81
@@ -1847,6 +1880,7 @@
    "p_rep_control": 0.3487,
    "p_no_majority": 0.0,
    "dem_seats_mean": 51.59,
+   "p_dem_both": 0.6504,
    "generic_ballot": {
     "dem": 50.12,
     "rep": 41.75
@@ -1862,6 +1896,7 @@
    "p_rep_control": 0.3573,
    "p_no_majority": -0.0,
    "dem_seats_mean": 51.52,
+   "p_dem_both": 0.6416,
    "generic_ballot": {
     "dem": 49.79,
     "rep": 41.66
@@ -1877,6 +1912,7 @@
    "p_rep_control": 0.3633,
    "p_no_majority": -0.0,
    "dem_seats_mean": 51.48,
+   "p_dem_both": 0.6353,
    "generic_ballot": {
     "dem": 49.79,
     "rep": 41.71
@@ -1892,6 +1928,7 @@
    "p_rep_control": 0.3724,
    "p_no_majority": -0.0,
    "dem_seats_mean": 51.39,
+   "p_dem_both": 0.6267,
    "generic_ballot": {
     "dem": 49.77,
     "rep": 41.74
@@ -1907,6 +1944,7 @@
    "p_rep_control": 0.3748,
    "p_no_majority": 0.0,
    "dem_seats_mean": 51.4,
+   "p_dem_both": 0.6242,
    "generic_ballot": {
     "dem": 49.77,
     "rep": 41.73
@@ -1922,6 +1960,7 @@
    "p_rep_control": 0.374,
    "p_no_majority": 0.0,
    "dem_seats_mean": 51.4,
+   "p_dem_both": 0.6256,
    "generic_ballot": {
     "dem": 50.08,
     "rep": 42.06
@@ -1937,6 +1976,7 @@
    "p_rep_control": 0.3757,
    "p_no_majority": 0.0,
    "dem_seats_mean": 51.37,
+   "p_dem_both": 0.6234,
    "generic_ballot": {
     "dem": 50.07,
     "rep": 42.06
@@ -1948,10 +1988,11 @@
   },
   {
    "date": "2026-10-04",
-   "p_dem_control": 0.6261,
-   "p_rep_control": 0.3739,
+   "p_dem_control": 0.629,
+   "p_rep_control": 0.371,
    "p_no_majority": 0.0,
-   "dem_seats_mean": 51.4,
+   "dem_seats_mean": 51.42,
+   "p_dem_both": 0.6279,
    "generic_ballot": {
     "dem": 50.08,
     "rep": 42.08
@@ -1963,10 +2004,11 @@
   },
   {
    "date": "2026-10-05",
-   "p_dem_control": 0.6286,
-   "p_rep_control": 0.3715,
+   "p_dem_control": 0.6316,
+   "p_rep_control": 0.3684,
    "p_no_majority": -0.0,
-   "dem_seats_mean": 51.38,
+   "dem_seats_mean": 51.4,
+   "p_dem_both": 0.6304,
    "generic_ballot": {
     "dem": 49.9,
     "rep": 41.94
@@ -1974,6 +2016,22 @@
    "approval": {
     "approve": 37.89,
     "disapprove": 59.69
+   }
+  },
+  {
+   "date": "2026-10-06",
+   "p_dem_control": 0.6258,
+   "p_rep_control": 0.3743,
+   "p_no_majority": -0.0,
+   "dem_seats_mean": 51.38,
+   "p_dem_both": 0.6247,
+   "generic_ballot": {
+    "dem": 49.9,
+    "rep": 41.95
+   },
+   "approval": {
+    "approve": 37.91,
+    "disapprove": 59.66
    }
   }
  ]

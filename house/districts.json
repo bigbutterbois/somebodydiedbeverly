@@ -1,0 +1,7132 @@
+[
+ {
+  "state": "AK-AL",
+  "name": "Alaska at-large",
+  "region": "west",
+  "lean": -12.0,
+  "new_lines": false,
+  "rep": {
+   "name": "Nick Begich III"
+  },
+  "opp": {
+   "name": "Eric Hafner",
+   "party": "D",
+   "caucus": "D"
+  },
+  "incumbent": "R"
+ },
+ {
+  "state": "AL-01",
+  "name": "Alabama 1",
+  "region": "south",
+  "lean": -34.0,
+  "new_lines": true,
+  "rep": {
+   "name": "Jerry Carl"
+  },
+  "opp": {
+   "name": "Clyde Jones Jr.",
+   "party": "D",
+   "caucus": "D"
+  },
+  "incumbent": "none"
+ },
+ {
+  "state": "AL-02",
+  "name": "Alabama 2",
+  "region": "south",
+  "lean": -14.0,
+  "new_lines": true,
+  "rep": {
+   "name": "Rhett Marques"
+  },
+  "opp": {
+   "name": "Shomari Figures",
+   "party": "D",
+   "caucus": "D"
+  },
+  "incumbent": "D"
+ },
+ {
+  "state": "AL-03",
+  "name": "Alabama 3",
+  "region": "south",
+  "lean": -46.0,
+  "new_lines": true,
+  "rep": {
+   "name": "Mike Rogers"
+  },
+  "opp": {
+   "name": "Lee McInnis",
+   "party": "D",
+   "caucus": "D"
+  },
+  "incumbent": "R"
+ },
+ {
+  "state": "AL-04",
+  "name": "Alabama 4",
+  "region": "south",
+  "lean": -66.0,
+  "new_lines": true,
+  "rep": {
+   "name": "Robert Aderholt"
+  },
+  "opp": {
+   "name": "Amanda Pusczek",
+   "party": "D",
+   "caucus": "D"
+  },
+  "incumbent": "R"
+ },
+ {
+  "state": "AL-05",
+  "name": "Alabama 5",
+  "region": "south",
+  "lean": -30.0,
+  "new_lines": true,
+  "rep": {
+   "name": "Dale Strong"
+  },
+  "opp": {
+   "name": "Andrew Sneed",
+   "party": "D",
+   "caucus": "D"
+  },
+  "incumbent": "R"
+ },
+ {
+  "state": "AL-06",
+  "name": "Alabama 6",
+  "region": "south",
+  "lean": -34.0,
+  "new_lines": true,
+  "rep": {
+   "name": "Gary Palmer"
+  },
+  "opp": {
+   "name": "Maurice Mercer",
+   "party": "D",
+   "caucus": "D"
+  },
+  "incumbent": "R"
+ },
+ {
+  "state": "AL-07",
+  "name": "Alabama 7",
+  "region": "south",
+  "lean": 20.0,
+  "new_lines": true,
+  "rep": {
+   "name": "Ammie Akin"
+  },
+  "opp": {
+   "name": "Terri Sewell",
+   "party": "D",
+   "caucus": "D"
+  },
+  "incumbent": "D"
+ },
+ {
+  "state": "AR-01",
+  "name": "Arkansas 1",
+  "region": "south",
+  "lean": -46.0,
+  "new_lines": false,
+  "rep": {
+   "name": "Rick Crawford"
+  },
+  "opp": {
+   "name": "Terri Green",
+   "party": "D",
+   "caucus": "D"
+  },
+  "incumbent": "R",
+  "overperformance": -2.2
+ },
+ {
+  "state": "AR-02",
+  "name": "Arkansas 2",
+  "region": "south",
+  "lean": -16.0,
+  "new_lines": false,
+  "rep": {
+   "name": "French Hill"
+  },
+  "opp": {
+   "name": "Chris Jones",
+   "party": "D",
+   "caucus": "D"
+  },
+  "incumbent": "R",
+  "overperformance": 2.9
+ },
+ {
+  "state": "AR-03",
+  "name": "Arkansas 3",
+  "region": "south",
+  "lean": -26.0,
+  "new_lines": false,
+  "rep": {
+   "name": "Steve Womack"
+  },
+  "opp": {
+   "name": "Robb Ryerse",
+   "party": "D",
+   "caucus": "D"
+  },
+  "incumbent": "R",
+  "overperformance": 0.7
+ },
+ {
+  "state": "AR-04",
+  "name": "Arkansas 4",
+  "region": "south",
+  "lean": -40.0,
+  "new_lines": false,
+  "rep": {
+   "name": "Bruce Westerman"
+  },
+  "opp": {
+   "name": "James Russell",
+   "party": "D",
+   "caucus": "D"
+  },
+  "incumbent": "R",
+  "overperformance": -3.1
+ },
+ {
+  "state": "AZ-01",
+  "name": "Arizona 1",
+  "region": "west",
+  "lean": -2.0,
+  "new_lines": false,
+  "rep": {
+   "name": "Jay Feely"
+  },
+  "opp": {
+   "name": "Amish Shah",
+   "party": "D",
+   "caucus": "D"
+  },
+  "incumbent": "none"
+ },
+ {
+  "state": "AZ-02",
+  "name": "Arizona 2",
+  "region": "west",
+  "lean": -14.0,
+  "new_lines": false,
+  "rep": {
+   "name": "Eli Crane"
+  },
+  "opp": {
+   "name": "Jonathan Nez",
+   "party": "D",
+   "caucus": "D"
+  },
+  "incumbent": "R",
+  "overperformance": 5.7
+ },
+ {
+  "state": "AZ-03",
+  "name": "Arizona 3",
+  "region": "west",
+  "lean": 44.0,
+  "new_lines": false,
+  "rep": {
+   "name": "No Republican"
+  },
+  "opp": {
+   "name": "Yassamin Ansari",
+   "party": "D",
+   "caucus": "D"
+  },
+  "incumbent": "D",
+  "uncontested": "D"
+ },
+ {
+  "state": "AZ-04",
+  "name": "Arizona 4",
+  "region": "west",
+  "lean": 8.0,
+  "new_lines": false,
+  "rep": {
+   "name": "Zuhdi Jasser"
+  },
+  "opp": {
+   "name": "Greg Stanton",
+   "party": "D",
+   "caucus": "D"
+  },
+  "incumbent": "D",
+  "overperformance": 5.9
+ },
+ {
+  "state": "AZ-05",
+  "name": "Arizona 5",
+  "region": "west",
+  "lean": -20.0,
+  "new_lines": false,
+  "rep": {
+   "name": "Mark Lamb"
+  },
+  "opp": {
+   "name": "Elizabeth Lee",
+   "party": "D",
+   "caucus": "D"
+  },
+  "incumbent": "none"
+ },
+ {
+  "state": "AZ-06",
+  "name": "Arizona 6",
+  "region": "west",
+  "lean": 0.0,
+  "new_lines": false,
+  "rep": {
+   "name": "Juan Ciscomani"
+  },
+  "opp": {
+   "name": "JoAnna Mendoza",
+   "party": "D",
+   "caucus": "D"
+  },
+  "incumbent": "R",
+  "overperformance": 6.2
+ },
+ {
+  "state": "AZ-07",
+  "name": "Arizona 7",
+  "region": "west",
+  "lean": 26.0,
+  "new_lines": false,
+  "rep": {
+   "name": "Daniel Butierez"
+  },
+  "opp": {
+   "name": "Adelita Grijalva",
+   "party": "D",
+   "caucus": "D"
+  },
+  "incumbent": "D",
+  "overperformance": -0.5
+ },
+ {
+  "state": "AZ-08",
+  "name": "Arizona 8",
+  "region": "west",
+  "lean": -16.0,
+  "new_lines": false,
+  "rep": {
+   "name": "Abraham Hamadeh"
+  },
+  "opp": {
+   "name": "Bernadette Greene-Placentia",
+   "party": "D",
+   "caucus": "D"
+  },
+  "incumbent": "R"
+ },
+ {
+  "state": "AZ-09",
+  "name": "Arizona 9",
+  "region": "west",
+  "lean": -30.0,
+  "new_lines": false,
+  "rep": {
+   "name": "Paul Gosar"
+  },
+  "opp": {
+   "name": "Dani Sterbinsky",
+   "party": "D",
+   "caucus": "D"
+  },
+  "incumbent": "R",
+  "overperformance": 4.1
+ },
+ {
+  "state": "CA-01",
+  "name": "California 1",
+  "region": "west",
+  "lean": 14.0,
+  "new_lines": true,
+  "rep": {
+   "name": "James Gallagher"
+  },
+  "opp": {
+   "name": "Mike McGuire",
+   "party": "D",
+   "caucus": "D"
+  },
+  "incumbent": "R"
+ },
+ {
+  "state": "CA-02",
+  "name": "California 2",
+  "region": "west",
+  "lean": 26.0,
+  "new_lines": true,
+  "rep": {
+   "name": "Robin Littau"
+  },
+  "opp": {
+   "name": "Jared Huffman",
+   "party": "D",
+   "caucus": "D"
+  },
+  "incumbent": "D"
+ },
+ {
+  "state": "CA-03",
+  "name": "California 3",
+  "region": "west",
+  "lean": 12.0,
+  "new_lines": true,
+  "rep": {
+   "name": "Robb Tucker"
+  },
+  "opp": {
+   "name": "Ami Bera",
+   "party": "D",
+   "caucus": "D"
+  },
+  "incumbent": "none"
+ },
+ {
+  "state": "CA-04",
+  "name": "California 4",
+  "region": "west",
+  "lean": 16.0,
+  "new_lines": true,
+  "rep": {
+   "name": "No Republican"
+  },
+  "opp": {
+   "name": "Eric Jones",
+   "party": "D",
+   "caucus": "D"
+  },
+  "incumbent": "none",
+  "uncontested": "D"
+ },
+ {
+  "state": "CA-05",
+  "name": "California 5",
+  "region": "west",
+  "lean": -20.0,
+  "new_lines": true,
+  "rep": {
+   "name": "Tom McClintock"
+  },
+  "opp": {
+   "name": "Michael Masuda",
+   "party": "D",
+   "caucus": "D"
+  },
+  "incumbent": "R"
+ },
+ {
+  "state": "CA-06",
+  "name": "California 6",
+  "region": "west",
+  "lean": 10.0,
+  "new_lines": true,
+  "rep": {
+   "name": "No Republican"
+  },
+  "opp": {
+   "name": "Richard Pan",
+   "party": "D",
+   "caucus": "D"
+  },
+  "incumbent": "none",
+  "uncontested": "D"
+ },
+ {
+  "state": "CA-07",
+  "name": "California 7",
+  "region": "west",
+  "lean": 14.0,
+  "new_lines": true,
+  "rep": {
+   "name": "No Republican"
+  },
+  "opp": {
+   "name": "Doris Matsui",
+   "party": "D",
+   "caucus": "D"
+  },
+  "incumbent": "D",
+  "uncontested": "D"
+ },
+ {
+  "state": "CA-08",
+  "name": "California 8",
+  "region": "west",
+  "lean": 38.0,
+  "new_lines": true,
+  "rep": {
+   "name": "Rudy Recile"
+  },
+  "opp": {
+   "name": "John Garamendi",
+   "party": "D",
+   "caucus": "D"
+  },
+  "incumbent": "D"
+ },
+ {
+  "state": "CA-09",
+  "name": "California 9",
+  "region": "west",
+  "lean": 16.0,
+  "new_lines": true,
+  "rep": {
+   "name": "John McBride"
+  },
+  "opp": {
+   "name": "Josh Harder",
+   "party": "D",
+   "caucus": "D"
+  },
+  "incumbent": "D"
+ },
+ {
+  "state": "CA-10",
+  "name": "California 10",
+  "region": "west",
+  "lean": 36.0,
+  "new_lines": true,
+  "rep": {
+   "name": "Jeff Frese"
+  },
+  "opp": {
+   "name": "Mark DeSaulnier",
+   "party": "D",
+   "caucus": "D"
+  },
+  "incumbent": "D"
+ },
+ {
+  "state": "CA-11",
+  "name": "California 11",
+  "region": "west",
+  "lean": 72.0,
+  "new_lines": true,
+  "rep": {
+   "name": "No Republican"
+  },
+  "opp": {
+   "name": "Connie Chan",
+   "party": "D",
+   "caucus": "D"
+  },
+  "incumbent": "none",
+  "uncontested": "D"
+ },
+ {
+  "state": "CA-12",
+  "name": "California 12",
+  "region": "west",
+  "lean": 78.0,
+  "new_lines": true,
+  "rep": {
+   "name": "No Republican"
+  },
+  "opp": {
+   "name": "Jamie Joyce",
+   "party": "D",
+   "caucus": "D"
+  },
+  "incumbent": "none",
+  "uncontested": "D"
+ },
+ {
+  "state": "CA-13",
+  "name": "California 13",
+  "region": "west",
+  "lean": 4.0,
+  "new_lines": true,
+  "rep": {
+   "name": "Kevin Lincoln"
+  },
+  "opp": {
+   "name": "Adam Gray",
+   "party": "D",
+   "caucus": "D"
+  },
+  "incumbent": "D"
+ },
+ {
+  "state": "CA-14",
+  "name": "California 14",
+  "region": "west",
+  "lean": 38.0,
+  "new_lines": true,
+  "rep": {
+   "name": "No Republican"
+  },
+  "opp": {
+   "name": "Melissa Hernandez",
+   "party": "D",
+   "caucus": "D"
+  },
+  "incumbent": "none",
+  "uncontested": "D"
+ },
+ {
+  "state": "CA-15",
+  "name": "California 15",
+  "region": "west",
+  "lean": 52.0,
+  "new_lines": true,
+  "rep": {
+   "name": "Charles Hoelter"
+  },
+  "opp": {
+   "name": "Kevin Mullin",
+   "party": "D",
+   "caucus": "D"
+  },
+  "incumbent": "D"
+ },
+ {
+  "state": "CA-16",
+  "name": "California 16",
+  "region": "west",
+  "lean": 50.0,
+  "new_lines": true,
+  "rep": {
+   "name": "Peter Soul\u00e9"
+  },
+  "opp": {
+   "name": "Sam Liccardo",
+   "party": "D",
+   "caucus": "D"
+  },
+  "incumbent": "D"
+ },
+ {
+  "state": "CA-17",
+  "name": "California 17",
+  "region": "west",
+  "lean": 42.0,
+  "new_lines": true,
+  "rep": {
+   "name": "Ritesh Tandon"
+  },
+  "opp": {
+   "name": "Ro Khanna",
+   "party": "D",
+   "caucus": "D"
+  },
+  "incumbent": "D"
+ },
+ {
+  "state": "CA-18",
+  "name": "California 18",
+  "region": "west",
+  "lean": 32.0,
+  "new_lines": true,
+  "rep": {
+   "name": "Shane Lewis"
+  },
+  "opp": {
+   "name": "Zoe Lofgren",
+   "party": "D",
+   "caucus": "D"
+  },
+  "incumbent": "D"
+ },
+ {
+  "state": "CA-19",
+  "name": "California 19",
+  "region": "west",
+  "lean": 36.0,
+  "new_lines": true,
+  "rep": {
+   "name": "Peter Coe Verbica"
+  },
+  "opp": {
+   "name": "Jimmy Panetta",
+   "party": "D",
+   "caucus": "D"
+  },
+  "incumbent": "D"
+ },
+ {
+  "state": "CA-20",
+  "name": "California 20",
+  "region": "west",
+  "lean": -32.0,
+  "new_lines": true,
+  "rep": {
+   "name": "Vince Fong"
+  },
+  "opp": {
+   "name": "Sandra Van Scotter",
+   "party": "D",
+   "caucus": "D"
+  },
+  "incumbent": "R"
+ },
+ {
+  "state": "CA-21",
+  "name": "California 21",
+  "region": "west",
+  "lean": 10.0,
+  "new_lines": true,
+  "rep": {
+   "name": "Kyle Kirkland"
+  },
+  "opp": {
+   "name": "Jim Costa",
+   "party": "D",
+   "caucus": "D"
+  },
+  "incumbent": "D"
+ },
+ {
+  "state": "CA-22",
+  "name": "California 22",
+  "region": "west",
+  "lean": 2.0,
+  "new_lines": true,
+  "rep": {
+   "name": "David Valadao"
+  },
+  "opp": {
+   "name": "Randy Villegas",
+   "party": "D",
+   "caucus": "D"
+  },
+  "incumbent": "R"
+ },
+ {
+  "state": "CA-23",
+  "name": "California 23",
+  "region": "west",
+  "lean": -18.0,
+  "new_lines": true,
+  "rep": {
+   "name": "Jay Obernolte"
+  },
+  "opp": {
+   "name": "Tessa Lynn Hodge",
+   "party": "D",
+   "caucus": "D"
+  },
+  "incumbent": "R"
+ },
+ {
+  "state": "CA-24",
+  "name": "California 24",
+  "region": "west",
+  "lean": 26.0,
+  "new_lines": true,
+  "rep": {
+   "name": "Bob Smith"
+  },
+  "opp": {
+   "name": "Salud Carbajal",
+   "party": "D",
+   "caucus": "D"
+  },
+  "incumbent": "D"
+ },
+ {
+  "state": "CA-25",
+  "name": "California 25",
+  "region": "west",
+  "lean": 8.0,
+  "new_lines": true,
+  "rep": {
+   "name": "Joe Males"
+  },
+  "opp": {
+   "name": "Raul Ruiz",
+   "party": "D",
+   "caucus": "D"
+  },
+  "incumbent": "D"
+ },
+ {
+  "state": "CA-26",
+  "name": "California 26",
+  "region": "west",
+  "lean": 18.0,
+  "new_lines": true,
+  "rep": {
+   "name": "Sam Gallucci"
+  },
+  "opp": {
+   "name": "Jacqui Irwin",
+   "party": "D",
+   "caucus": "D"
+  },
+  "incumbent": "none"
+ },
+ {
+  "state": "CA-27",
+  "name": "California 27",
+  "region": "west",
+  "lean": 12.0,
+  "new_lines": true,
+  "rep": {
+   "name": "Jason Gibbs"
+  },
+  "opp": {
+   "name": "George Whitesides",
+   "party": "D",
+   "caucus": "D"
+  },
+  "incumbent": "D"
+ },
+ {
+  "state": "CA-28",
+  "name": "California 28",
+  "region": "west",
+  "lean": 28.0,
+  "new_lines": true,
+  "rep": {
+   "name": "April Verlato"
+  },
+  "opp": {
+   "name": "Judy Chu",
+   "party": "D",
+   "caucus": "D"
+  },
+  "incumbent": "D"
+ },
+ {
+  "state": "CA-29",
+  "name": "California 29",
+  "region": "west",
+  "lean": 38.0,
+  "new_lines": true,
+  "rep": {
+   "name": "No Republican"
+  },
+  "opp": {
+   "name": "Angelica Due\u00f1as",
+   "party": "D",
+   "caucus": "D"
+  },
+  "incumbent": "none",
+  "uncontested": "D"
+ },
+ {
+  "state": "CA-30",
+  "name": "California 30",
+  "region": "west",
+  "lean": 42.0,
+  "new_lines": true,
+  "rep": {
+   "name": "Scott Meyers"
+  },
+  "opp": {
+   "name": "Laura Friedman",
+   "party": "D",
+   "caucus": "D"
+  },
+  "incumbent": "D"
+ },
+ {
+  "state": "CA-31",
+  "name": "California 31",
+  "region": "west",
+  "lean": 16.0,
+  "new_lines": true,
+  "rep": {
+   "name": "Eric Ching"
+  },
+  "opp": {
+   "name": "Gil Cisneros",
+   "party": "D",
+   "caucus": "D"
+  },
+  "incumbent": "D"
+ },
+ {
+  "state": "CA-32",
+  "name": "California 32",
+  "region": "west",
+  "lean": 28.0,
+  "new_lines": true,
+  "rep": {
+   "name": "Larry Thompson"
+  },
+  "opp": {
+   "name": "Brad Sherman",
+   "party": "D",
+   "caucus": "D"
+  },
+  "incumbent": "D"
+ },
+ {
+  "state": "CA-33",
+  "name": "California 33",
+  "region": "west",
+  "lean": 14.0,
+  "new_lines": true,
+  "rep": {
+   "name": "Stephanie Vargas"
+  },
+  "opp": {
+   "name": "Pete Aguilar",
+   "party": "D",
+   "caucus": "D"
+  },
+  "incumbent": "D"
+ },
+ {
+  "state": "CA-34",
+  "name": "California 34",
+  "region": "west",
+  "lean": 56.0,
+  "new_lines": true,
+  "rep": {
+   "name": "No Republican"
+  },
+  "opp": {
+   "name": "Jimmy Gomez",
+   "party": "D",
+   "caucus": "D"
+  },
+  "incumbent": "D",
+  "uncontested": "D"
+ },
+ {
+  "state": "CA-35",
+  "name": "California 35",
+  "region": "west",
+  "lean": 12.0,
+  "new_lines": true,
+  "rep": {
+   "name": "Mike Cargile"
+  },
+  "opp": {
+   "name": "Norma Torres",
+   "party": "D",
+   "caucus": "D"
+  },
+  "incumbent": "D"
+ },
+ {
+  "state": "CA-36",
+  "name": "California 36",
+  "region": "west",
+  "lean": 42.0,
+  "new_lines": true,
+  "rep": {
+   "name": "Houston Brignano"
+  },
+  "opp": {
+   "name": "Ted Lieu",
+   "party": "D",
+   "caucus": "D"
+  },
+  "incumbent": "D"
+ },
+ {
+  "state": "CA-37",
+  "name": "California 37",
+  "region": "west",
+  "lean": 66.0,
+  "new_lines": true,
+  "rep": {
+   "name": "No Republican"
+  },
+  "opp": {
+   "name": "Sydney Kamlager-Dove",
+   "party": "D",
+   "caucus": "D"
+  },
+  "incumbent": "D",
+  "uncontested": "D"
+ },
+ {
+  "state": "CA-38",
+  "name": "California 38",
+  "region": "west",
+  "lean": 16.0,
+  "new_lines": true,
+  "rep": {
+   "name": "Pedro Casas"
+  },
+  "opp": {
+   "name": "Hilda Solis",
+   "party": "D",
+   "caucus": "D"
+  },
+  "incumbent": "none"
+ },
+ {
+  "state": "CA-39",
+  "name": "California 39",
+  "region": "west",
+  "lean": 14.0,
+  "new_lines": true,
+  "rep": {
+   "name": "Steve Manos"
+  },
+  "opp": {
+   "name": "Mark Takano",
+   "party": "D",
+   "caucus": "D"
+  },
+  "incumbent": "D"
+ },
+ {
+  "state": "CA-40",
+  "name": "California 40",
+  "region": "west",
+  "lean": -12.0,
+  "new_lines": true,
+  "rep": {
+   "name": "Ken Calvert"
+  },
+  "opp": {
+   "name": "No Democrat",
+   "party": "D",
+   "caucus": "D"
+  },
+  "incumbent": "none",
+  "uncontested": "R"
+ },
+ {
+  "state": "CA-41",
+  "name": "California 41",
+  "region": "west",
+  "lean": 18.0,
+  "new_lines": true,
+  "rep": {
+   "name": "Mitch Clemmons"
+  },
+  "opp": {
+   "name": "Linda S\u00e1nchez",
+   "party": "D",
+   "caucus": "D"
+  },
+  "incumbent": "none"
+ },
+ {
+  "state": "CA-42",
+  "name": "California 42",
+  "region": "west",
+  "lean": 16.0,
+  "new_lines": true,
+  "rep": {
+   "name": "Brian Burley"
+  },
+  "opp": {
+   "name": "Robert Garcia",
+   "party": "D",
+   "caucus": "D"
+  },
+  "incumbent": "D"
+ },
+ {
+  "state": "CA-43",
+  "name": "California 43",
+  "region": "west",
+  "lean": 54.0,
+  "new_lines": true,
+  "rep": {
+   "name": "Cristian Morales"
+  },
+  "opp": {
+   "name": "Maxine Waters",
+   "party": "D",
+   "caucus": "D"
+  },
+  "incumbent": "D"
+ },
+ {
+  "state": "CA-44",
+  "name": "California 44",
+  "region": "west",
+  "lean": 40.0,
+  "new_lines": true,
+  "rep": {
+   "name": "Genevieve Angel"
+  },
+  "opp": {
+   "name": "Nanette Barrag\u00e1n",
+   "party": "D",
+   "caucus": "D"
+  },
+  "incumbent": "D"
+ },
+ {
+  "state": "CA-45",
+  "name": "California 45",
+  "region": "west",
+  "lean": 6.0,
+  "new_lines": true,
+  "rep": {
+   "name": "Chuong Vo"
+  },
+  "opp": {
+   "name": "Derek Tran",
+   "party": "D",
+   "caucus": "D"
+  },
+  "incumbent": "D"
+ },
+ {
+  "state": "CA-46",
+  "name": "California 46",
+  "region": "west",
+  "lean": 20.0,
+  "new_lines": true,
+  "rep": {
+   "name": "David Pan"
+  },
+  "opp": {
+   "name": "Lou Correa",
+   "party": "D",
+   "caucus": "D"
+  },
+  "incumbent": "D"
+ },
+ {
+  "state": "CA-47",
+  "name": "California 47",
+  "region": "west",
+  "lean": 12.0,
+  "new_lines": true,
+  "rep": {
+   "name": "Jenny Le Roux"
+  },
+  "opp": {
+   "name": "Dave Min",
+   "party": "D",
+   "caucus": "D"
+  },
+  "incumbent": "D"
+ },
+ {
+  "state": "CA-48",
+  "name": "California 48",
+  "region": "west",
+  "lean": 4.0,
+  "new_lines": true,
+  "rep": {
+   "name": "Jim Desmond"
+  },
+  "opp": {
+   "name": "Marni von Wilpert",
+   "party": "D",
+   "caucus": "D"
+  },
+  "incumbent": "none"
+ },
+ {
+  "state": "CA-49",
+  "name": "California 49",
+  "region": "west",
+  "lean": 14.0,
+  "new_lines": true,
+  "rep": {
+   "name": "Armen Kurdian"
+  },
+  "opp": {
+   "name": "Mike Levin",
+   "party": "D",
+   "caucus": "D"
+  },
+  "incumbent": "D"
+ },
+ {
+  "state": "CA-50",
+  "name": "California 50",
+  "region": "west",
+  "lean": 20.0,
+  "new_lines": true,
+  "rep": {
+   "name": "Steve Cohen"
+  },
+  "opp": {
+   "name": "Scott Peters",
+   "party": "D",
+   "caucus": "D"
+  },
+  "incumbent": "D"
+ },
+ {
+  "state": "CA-51",
+  "name": "California 51",
+  "region": "west",
+  "lean": 20.0,
+  "new_lines": true,
+  "rep": {
+   "name": "Ricardo Cabrera"
+  },
+  "opp": {
+   "name": "Sara Jacobs",
+   "party": "D",
+   "caucus": "D"
+  },
+  "incumbent": "D"
+ },
+ {
+  "state": "CA-52",
+  "name": "California 52",
+  "region": "west",
+  "lean": 22.0,
+  "new_lines": true,
+  "rep": {
+   "name": "Jeff Belle"
+  },
+  "opp": {
+   "name": "Juan Vargas",
+   "party": "D",
+   "caucus": "D"
+  },
+  "incumbent": "D"
+ },
+ {
+  "state": "CO-01",
+  "name": "Colorado 1",
+  "region": "west",
+  "lean": 58.0,
+  "new_lines": false,
+  "rep": {
+   "name": "Christy Peterson"
+  },
+  "opp": {
+   "name": "Melat Kiros",
+   "party": "D",
+   "caucus": "D"
+  },
+  "incumbent": "none"
+ },
+ {
+  "state": "CO-02",
+  "name": "Colorado 2",
+  "region": "west",
+  "lean": 40.0,
+  "new_lines": false,
+  "rep": {
+   "name": "Kelley Dennison"
+  },
+  "opp": {
+   "name": "Joe Neguse",
+   "party": "D",
+   "caucus": "D"
+  },
+  "incumbent": "D",
+  "overperformance": 8.2
+ },
+ {
+  "state": "CO-03",
+  "name": "Colorado 3",
+  "region": "west",
+  "lean": -10.0,
+  "new_lines": false,
+  "rep": {
+   "name": "Jeff Hurd"
+  },
+  "opp": {
+   "name": "Dwayne Romero",
+   "party": "D",
+   "caucus": "D"
+  },
+  "incumbent": "R"
+ },
+ {
+  "state": "CO-04",
+  "name": "Colorado 4",
+  "region": "west",
+  "lean": -18.0,
+  "new_lines": false,
+  "rep": {
+   "name": "Lauren Boebert"
+  },
+  "opp": {
+   "name": "Eileen Laubacher",
+   "party": "D",
+   "caucus": "D"
+  },
+  "incumbent": "R"
+ },
+ {
+  "state": "CO-05",
+  "name": "Colorado 5",
+  "region": "west",
+  "lean": -10.0,
+  "new_lines": false,
+  "rep": {
+   "name": "Jeff Crank"
+  },
+  "opp": {
+   "name": "Jessica Killin",
+   "party": "D",
+   "caucus": "D"
+  },
+  "incumbent": "R"
+ },
+ {
+  "state": "CO-06",
+  "name": "Colorado 6",
+  "region": "west",
+  "lean": 22.0,
+  "new_lines": false,
+  "rep": {
+   "name": "Jason Clark"
+  },
+  "opp": {
+   "name": "Jason Crow",
+   "party": "D",
+   "caucus": "D"
+  },
+  "incumbent": "D",
+  "overperformance": 5.2
+ },
+ {
+  "state": "CO-07",
+  "name": "Colorado 7",
+  "region": "west",
+  "lean": 16.0,
+  "new_lines": false,
+  "rep": {
+   "name": "Tim Bennett"
+  },
+  "opp": {
+   "name": "Brittany Pettersen",
+   "party": "D",
+   "caucus": "D"
+  },
+  "incumbent": "D",
+  "overperformance": 8.8
+ },
+ {
+  "state": "CO-08",
+  "name": "Colorado 8",
+  "region": "west",
+  "lean": 0.0,
+  "new_lines": false,
+  "rep": {
+   "name": "Gabe Evans"
+  },
+  "opp": {
+   "name": "Manny Rutinel",
+   "party": "D",
+   "caucus": "D"
+  },
+  "incumbent": "R"
+ },
+ {
+  "state": "CT-01",
+  "name": "Connecticut 1",
+  "region": "northeast",
+  "lean": 24.0,
+  "new_lines": false,
+  "rep": {
+   "name": "Amy Chai"
+  },
+  "opp": {
+   "name": "Luke Bronin",
+   "party": "D",
+   "caucus": "D"
+  },
+  "incumbent": "none"
+ },
+ {
+  "state": "CT-02",
+  "name": "Connecticut 2",
+  "region": "northeast",
+  "lean": 8.0,
+  "new_lines": false,
+  "rep": {
+   "name": "George Austin"
+  },
+  "opp": {
+   "name": "Joe Courtney",
+   "party": "D",
+   "caucus": "D"
+  },
+  "incumbent": "D",
+  "overperformance": 12.7
+ },
+ {
+  "state": "CT-03",
+  "name": "Connecticut 3",
+  "region": "northeast",
+  "lean": 16.0,
+  "new_lines": false,
+  "rep": {
+   "name": "Chris Lancia"
+  },
+  "opp": {
+   "name": "Rosa DeLauro",
+   "party": "D",
+   "caucus": "D"
+  },
+  "incumbent": "D",
+  "overperformance": 6.5
+ },
+ {
+  "state": "CT-04",
+  "name": "Connecticut 4",
+  "region": "northeast",
+  "lean": 26.0,
+  "new_lines": false,
+  "rep": {
+   "name": "Michael Goldstein"
+  },
+  "opp": {
+   "name": "Jim Himes",
+   "party": "D",
+   "caucus": "D"
+  },
+  "incumbent": "D",
+  "overperformance": 0.5
+ },
+ {
+  "state": "CT-05",
+  "name": "Connecticut 5",
+  "region": "northeast",
+  "lean": 6.0,
+  "new_lines": false,
+  "rep": {
+   "name": "Chris Shea"
+  },
+  "opp": {
+   "name": "Jahana Hayes",
+   "party": "D",
+   "caucus": "D"
+  },
+  "incumbent": "D",
+  "overperformance": 3.5
+ },
+ {
+  "state": "DE-AL",
+  "name": "Delaware at-large",
+  "region": "northeast",
+  "lean": 16.0,
+  "new_lines": false,
+  "rep": {
+   "name": "Joseph Arminio"
+  },
+  "opp": {
+   "name": "Sarah McBride",
+   "party": "D",
+   "caucus": "D"
+  },
+  "incumbent": "D"
+ },
+ {
+  "state": "FL-01",
+  "name": "Florida 1",
+  "region": "south",
+  "lean": -36.0,
+  "new_lines": true,
+  "rep": {
+   "name": "Jimmy Patronis"
+  },
+  "opp": {
+   "name": "Gay Valimont",
+   "party": "D",
+   "caucus": "D"
+  },
+  "incumbent": "R"
+ },
+ {
+  "state": "FL-02",
+  "name": "Florida 2",
+  "region": "south",
+  "lean": -16.0,
+  "new_lines": true,
+  "rep": {
+   "name": "Austin Rogers"
+  },
+  "opp": {
+   "name": "Amanda Green",
+   "party": "D",
+   "caucus": "D"
+  },
+  "incumbent": "none"
+ },
+ {
+  "state": "FL-03",
+  "name": "Florida 3",
+  "region": "south",
+  "lean": -20.0,
+  "new_lines": true,
+  "rep": {
+   "name": "Kat Cammack"
+  },
+  "opp": {
+   "name": "Seth Harp",
+   "party": "D",
+   "caucus": "D"
+  },
+  "incumbent": "R"
+ },
+ {
+  "state": "FL-04",
+  "name": "Florida 4",
+  "region": "south",
+  "lean": -10.0,
+  "new_lines": true,
+  "rep": {
+   "name": "Aaron Bean"
+  },
+  "opp": {
+   "name": "LaShonda Holloway",
+   "party": "D",
+   "caucus": "D"
+  },
+  "incumbent": "R"
+ },
+ {
+  "state": "FL-05",
+  "name": "Florida 5",
+  "region": "south",
+  "lean": -20.0,
+  "new_lines": true,
+  "rep": {
+   "name": "John Rutherford"
+  },
+  "opp": {
+   "name": "Rachel Grage",
+   "party": "D",
+   "caucus": "D"
+  },
+  "incumbent": "R"
+ },
+ {
+  "state": "FL-06",
+  "name": "Florida 6",
+  "region": "south",
+  "lean": -28.0,
+  "new_lines": true,
+  "rep": {
+   "name": "Randy Fine"
+  },
+  "opp": {
+   "name": "Eric Yonce",
+   "party": "D",
+   "caucus": "D"
+  },
+  "incumbent": "R"
+ },
+ {
+  "state": "FL-07",
+  "name": "Florida 7",
+  "region": "south",
+  "lean": -10.0,
+  "new_lines": true,
+  "rep": {
+   "name": "Ryan Elijah"
+  },
+  "opp": {
+   "name": "Bale Dalton",
+   "party": "D",
+   "caucus": "D"
+  },
+  "incumbent": "none"
+ },
+ {
+  "state": "FL-08",
+  "name": "Florida 8",
+  "region": "south",
+  "lean": -16.0,
+  "new_lines": true,
+  "rep": {
+   "name": "Mike Haridopolos"
+  },
+  "opp": {
+   "name": "Jennifer Jenkins",
+   "party": "D",
+   "caucus": "D"
+  },
+  "incumbent": "R"
+ },
+ {
+  "state": "FL-09",
+  "name": "Florida 9",
+  "region": "south",
+  "lean": -16.0,
+  "new_lines": true,
+  "rep": {
+   "name": "Dan Green"
+  },
+  "opp": {
+   "name": "Darren Soto",
+   "party": "D",
+   "caucus": "D"
+  },
+  "incumbent": "D"
+ },
+ {
+  "state": "FL-10",
+  "name": "Florida 10",
+  "region": "south",
+  "lean": 26.0,
+  "new_lines": true,
+  "rep": {
+   "name": "No Republican"
+  },
+  "opp": {
+   "name": "Maxwell Frost",
+   "party": "D",
+   "caucus": "D"
+  },
+  "incumbent": "D",
+  "uncontested": "D"
+ },
+ {
+  "state": "FL-11",
+  "name": "Florida 11",
+  "region": "south",
+  "lean": -14.0,
+  "new_lines": true,
+  "rep": {
+   "name": "Joe Strada"
+  },
+  "opp": {
+   "name": "James Pericola",
+   "party": "D",
+   "caucus": "D"
+  },
+  "incumbent": "none"
+ },
+ {
+  "state": "FL-12",
+  "name": "Florida 12",
+  "region": "south",
+  "lean": -14.0,
+  "new_lines": true,
+  "rep": {
+   "name": "Gus Bilirakis"
+  },
+  "opp": {
+   "name": "Kimberly Overman",
+   "party": "D",
+   "caucus": "D"
+  },
+  "incumbent": "R"
+ },
+ {
+  "state": "FL-13",
+  "name": "Florida 13",
+  "region": "south",
+  "lean": -12.0,
+  "new_lines": true,
+  "rep": {
+   "name": "Anna Paulina Luna"
+  },
+  "opp": {
+   "name": "Leela Gray",
+   "party": "D",
+   "caucus": "D"
+  },
+  "incumbent": "R"
+ },
+ {
+  "state": "FL-14",
+  "name": "Florida 14",
+  "region": "south",
+  "lean": -8.0,
+  "new_lines": true,
+  "rep": {
+   "name": "Mike Beltran"
+  },
+  "opp": {
+   "name": "Kathy Castor",
+   "party": "D",
+   "caucus": "D"
+  },
+  "incumbent": "D"
+ },
+ {
+  "state": "FL-15",
+  "name": "Florida 15",
+  "region": "south",
+  "lean": -18.0,
+  "new_lines": true,
+  "rep": {
+   "name": "Laurel Lee"
+  },
+  "opp": {
+   "name": "Robert People",
+   "party": "D",
+   "caucus": "D"
+  },
+  "incumbent": "R"
+ },
+ {
+  "state": "FL-16",
+  "name": "Florida 16",
+  "region": "south",
+  "lean": -12.0,
+  "new_lines": true,
+  "rep": {
+   "name": "Sydney Gruters"
+  },
+  "opp": {
+   "name": "Kelly Kirschner",
+   "party": "D",
+   "caucus": "D"
+  },
+  "incumbent": "none"
+ },
+ {
+  "state": "FL-17",
+  "name": "Florida 17",
+  "region": "south",
+  "lean": -20.0,
+  "new_lines": true,
+  "rep": {
+   "name": "Greg Steube"
+  },
+  "opp": {
+   "name": "Matthew Montavon",
+   "party": "D",
+   "caucus": "D"
+  },
+  "incumbent": "R"
+ },
+ {
+  "state": "FL-18",
+  "name": "Florida 18",
+  "region": "south",
+  "lean": -16.0,
+  "new_lines": true,
+  "rep": {
+   "name": "Scott Franklin"
+  },
+  "opp": {
+   "name": "Curtis Gibson",
+   "party": "D",
+   "caucus": "D"
+  },
+  "incumbent": "R"
+ },
+ {
+  "state": "FL-19",
+  "name": "Florida 19",
+  "region": "south",
+  "lean": -28.0,
+  "new_lines": true,
+  "rep": {
+   "name": "Jim Schwartzel"
+  },
+  "opp": {
+   "name": "Victor Arias",
+   "party": "D",
+   "caucus": "D"
+  },
+  "incumbent": "none"
+ },
+ {
+  "state": "FL-20",
+  "name": "Florida 20",
+  "region": "south",
+  "lean": 40.0,
+  "new_lines": true,
+  "rep": {
+   "name": "Brent Andersen"
+  },
+  "opp": {
+   "name": "Debbie Wasserman Schultz",
+   "party": "D",
+   "caucus": "D"
+  },
+  "incumbent": "none"
+ },
+ {
+  "state": "FL-21",
+  "name": "Florida 21",
+  "region": "south",
+  "lean": -14.0,
+  "new_lines": true,
+  "rep": {
+   "name": "Brian Mast"
+  },
+  "opp": {
+   "name": "James Martin",
+   "party": "D",
+   "caucus": "D"
+  },
+  "incumbent": "R"
+ },
+ {
+  "state": "FL-22",
+  "name": "Florida 22",
+  "region": "south",
+  "lean": -8.0,
+  "new_lines": true,
+  "rep": {
+   "name": "Casey Askar"
+  },
+  "opp": {
+   "name": "Pia Dandiya",
+   "party": "D",
+   "caucus": "D"
+  },
+  "incumbent": "none"
+ },
+ {
+  "state": "FL-23",
+  "name": "Florida 23",
+  "region": "south",
+  "lean": 18.0,
+  "new_lines": true,
+  "rep": {
+   "name": "Deborah Adeimy"
+  },
+  "opp": {
+   "name": "Lois Frankel",
+   "party": "D",
+   "caucus": "D"
+  },
+  "incumbent": "none"
+ },
+ {
+  "state": "FL-24",
+  "name": "Florida 24",
+  "region": "south",
+  "lean": 44.0,
+  "new_lines": true,
+  "rep": {
+   "name": "Te Mayonna Brown"
+  },
+  "opp": {
+   "name": "Oliver Gilbert",
+   "party": "D",
+   "caucus": "D"
+  },
+  "incumbent": "none"
+ },
+ {
+  "state": "FL-25",
+  "name": "Florida 25",
+  "region": "south",
+  "lean": -6.0,
+  "new_lines": true,
+  "rep": {
+   "name": "Scott Singer"
+  },
+  "opp": {
+   "name": "Jared Moskowitz",
+   "party": "D",
+   "caucus": "D"
+  },
+  "incumbent": "none"
+ },
+ {
+  "state": "FL-26",
+  "name": "Florida 26",
+  "region": "south",
+  "lean": -14.0,
+  "new_lines": true,
+  "rep": {
+   "name": "Mario D\u00edaz-Balart"
+  },
+  "opp": {
+   "name": "Nicole Locklin",
+   "party": "D",
+   "caucus": "D"
+  },
+  "incumbent": "R"
+ },
+ {
+  "state": "FL-27",
+  "name": "Florida 27",
+  "region": "south",
+  "lean": -12.0,
+  "new_lines": true,
+  "rep": {
+   "name": "Mar\u00eda Elvira Salazar"
+  },
+  "opp": {
+   "name": "Eliott Rodriguez",
+   "party": "D",
+   "caucus": "D"
+  },
+  "incumbent": "R"
+ },
+ {
+  "state": "FL-28",
+  "name": "Florida 28",
+  "region": "south",
+  "lean": -20.0,
+  "new_lines": true,
+  "rep": {
+   "name": "Carlos Gim\u00e9nez"
+  },
+  "opp": {
+   "name": "Phil Ehr",
+   "party": "D",
+   "caucus": "D"
+  },
+  "incumbent": "R"
+ },
+ {
+  "state": "GA-01",
+  "name": "Georgia 1",
+  "region": "south",
+  "lean": -16.0,
+  "new_lines": false,
+  "rep": {
+   "name": "Jim Kingston"
+  },
+  "opp": {
+   "name": "Amanda Hollowell",
+   "party": "D",
+   "caucus": "D"
+  },
+  "incumbent": "none"
+ },
+ {
+  "state": "GA-02",
+  "name": "Georgia 2",
+  "region": "south",
+  "lean": 8.0,
+  "new_lines": false,
+  "rep": {
+   "name": "Matt Day"
+  },
+  "opp": {
+   "name": "Sanford Bishop",
+   "party": "D",
+   "caucus": "D"
+  },
+  "incumbent": "D",
+  "overperformance": 9.3
+ },
+ {
+  "state": "GA-03",
+  "name": "Georgia 3",
+  "region": "south",
+  "lean": -30.0,
+  "new_lines": false,
+  "rep": {
+   "name": "Brian Jack"
+  },
+  "opp": {
+   "name": "Maura Keller",
+   "party": "D",
+   "caucus": "D"
+  },
+  "incumbent": "R"
+ },
+ {
+  "state": "GA-04",
+  "name": "Georgia 4",
+  "region": "south",
+  "lean": 54.0,
+  "new_lines": false,
+  "rep": {
+   "name": "James Duffie"
+  },
+  "opp": {
+   "name": "Hank Johnson",
+   "party": "D",
+   "caucus": "D"
+  },
+  "incumbent": "D",
+  "overperformance": -0.1
+ },
+ {
+  "state": "GA-05",
+  "name": "Georgia 5",
+  "region": "south",
+  "lean": 72.0,
+  "new_lines": false,
+  "rep": {
+   "name": "John Oscar Salvesen"
+  },
+  "opp": {
+   "name": "Nikema Williams",
+   "party": "D",
+   "caucus": "D"
+  },
+  "incumbent": "D",
+  "overperformance": 4.1
+ },
+ {
+  "state": "GA-06",
+  "name": "Georgia 6",
+  "region": "south",
+  "lean": 50.0,
+  "new_lines": false,
+  "rep": {
+   "name": "Kevin Martin"
+  },
+  "opp": {
+   "name": "Lucy McBath",
+   "party": "D",
+   "caucus": "D"
+  },
+  "incumbent": "D",
+  "overperformance": 8.1
+ },
+ {
+  "state": "GA-07",
+  "name": "Georgia 7",
+  "region": "south",
+  "lean": -22.0,
+  "new_lines": false,
+  "rep": {
+   "name": "Rich McCormick"
+  },
+  "opp": {
+   "name": "Tony Kozycki",
+   "party": "D",
+   "caucus": "D"
+  },
+  "incumbent": "R",
+  "overperformance": -1.1
+ },
+ {
+  "state": "GA-08",
+  "name": "Georgia 8",
+  "region": "south",
+  "lean": -30.0,
+  "new_lines": false,
+  "rep": {
+   "name": "Austin Scott"
+  },
+  "opp": {
+   "name": "Kelly Esti",
+   "party": "D",
+   "caucus": "D"
+  },
+  "incumbent": "R",
+  "overperformance": -3.1
+ },
+ {
+  "state": "GA-09",
+  "name": "Georgia 9",
+  "region": "south",
+  "lean": -34.0,
+  "new_lines": false,
+  "rep": {
+   "name": "Andrew Clyde"
+  },
+  "opp": {
+   "name": "Caitlyn Gegen",
+   "party": "D",
+   "caucus": "D"
+  },
+  "incumbent": "R",
+  "overperformance": 4.7
+ },
+ {
+  "state": "GA-10",
+  "name": "Georgia 10",
+  "region": "south",
+  "lean": -22.0,
+  "new_lines": false,
+  "rep": {
+   "name": "Houston Gaines"
+  },
+  "opp": {
+   "name": "Pam Delancy",
+   "party": "D",
+   "caucus": "D"
+  },
+  "incumbent": "none"
+ },
+ {
+  "state": "GA-11",
+  "name": "Georgia 11",
+  "region": "south",
+  "lean": -24.0,
+  "new_lines": false,
+  "rep": {
+   "name": "John Cowan"
+  },
+  "opp": {
+   "name": "Chris Harden",
+   "party": "D",
+   "caucus": "D"
+  },
+  "incumbent": "none"
+ },
+ {
+  "state": "GA-12",
+  "name": "Georgia 12",
+  "region": "south",
+  "lean": -14.0,
+  "new_lines": false,
+  "rep": {
+   "name": "Rick Allen"
+  },
+  "opp": {
+   "name": "Ceretta Smith",
+   "party": "D",
+   "caucus": "D"
+  },
+  "incumbent": "R",
+  "overperformance": -1.9
+ },
+ {
+  "state": "GA-13",
+  "name": "Georgia 13",
+  "region": "south",
+  "lean": 42.0,
+  "new_lines": false,
+  "rep": {
+   "name": "Jonathan Chavez"
+  },
+  "opp": {
+   "name": "Jasmine Clark",
+   "party": "D",
+   "caucus": "D"
+  },
+  "incumbent": "none"
+ },
+ {
+  "state": "GA-14",
+  "name": "Georgia 14",
+  "region": "south",
+  "lean": -38.0,
+  "new_lines": false,
+  "rep": {
+   "name": "Clay Fuller"
+  },
+  "opp": {
+   "name": "Shawn Harris",
+   "party": "D",
+   "caucus": "D"
+  },
+  "incumbent": "R"
+ },
+ {
+  "state": "HI-01",
+  "name": "Hawaii 1",
+  "region": "west",
+  "lean": 26.0,
+  "new_lines": false,
+  "rep": {
+   "name": "Adriel Lam"
+  },
+  "opp": {
+   "name": "Ed Case",
+   "party": "D",
+   "caucus": "D"
+  },
+  "incumbent": "D",
+  "overperformance": 18.3
+ },
+ {
+  "state": "HI-02",
+  "name": "Hawaii 2",
+  "region": "west",
+  "lean": 24.0,
+  "new_lines": false,
+  "rep": {
+   "name": "Brenton Awa"
+  },
+  "opp": {
+   "name": "Jill Tokuda",
+   "party": "D",
+   "caucus": "D"
+  },
+  "incumbent": "D",
+  "overperformance": 11.0
+ },
+ {
+  "state": "IA-01",
+  "name": "Iowa 1",
+  "region": "midwest",
+  "lean": -8.0,
+  "new_lines": false,
+  "rep": {
+   "name": "Mariannette Miller-Meeks"
+  },
+  "opp": {
+   "name": "Christina Bohannan",
+   "party": "D",
+   "caucus": "D"
+  },
+  "incumbent": "R",
+  "overperformance": 8.5
+ },
+ {
+  "state": "IA-02",
+  "name": "Iowa 2",
+  "region": "midwest",
+  "lean": -8.0,
+  "new_lines": false,
+  "rep": {
+   "name": "Joe Mitchell"
+  },
+  "opp": {
+   "name": "Lindsay James",
+   "party": "D",
+   "caucus": "D"
+  },
+  "incumbent": "none"
+ },
+ {
+  "state": "IA-03",
+  "name": "Iowa 3",
+  "region": "midwest",
+  "lean": -4.0,
+  "new_lines": false,
+  "rep": {
+   "name": "Zach Nunn"
+  },
+  "opp": {
+   "name": "Sarah Trone Garriott",
+   "party": "D",
+   "caucus": "D"
+  },
+  "incumbent": "R",
+  "overperformance": 4.9
+ },
+ {
+  "state": "IA-04",
+  "name": "Iowa 4",
+  "region": "midwest",
+  "lean": -30.0,
+  "new_lines": false,
+  "rep": {
+   "name": "Chris McGowan"
+  },
+  "opp": {
+   "name": "David Dawson",
+   "party": "D",
+   "caucus": "D"
+  },
+  "incumbent": "none"
+ },
+ {
+  "state": "ID-01",
+  "name": "Idaho 1",
+  "region": "west",
+  "lean": -44.0,
+  "new_lines": false,
+  "rep": {
+   "name": "Russ Fulcher"
+  },
+  "opp": {
+   "name": "Kaylee Peterson",
+   "party": "D",
+   "caucus": "D"
+  },
+  "incumbent": "R",
+  "overperformance": 1.1
+ },
+ {
+  "state": "ID-02",
+  "name": "Idaho 2",
+  "region": "west",
+  "lean": -26.0,
+  "new_lines": false,
+  "rep": {
+   "name": "Mike Simpson"
+  },
+  "opp": {
+   "name": "Ellie Gilbreath",
+   "party": "D",
+   "caucus": "D"
+  },
+  "incumbent": "R",
+  "overperformance": 0.3
+ },
+ {
+  "state": "IL-01",
+  "name": "Illinois 1",
+  "region": "midwest",
+  "lean": 36.0,
+  "new_lines": false,
+  "rep": {
+   "name": "Christian Maxwell"
+  },
+  "opp": {
+   "name": "Jonathan Jackson",
+   "party": "D",
+   "caucus": "D"
+  },
+  "incumbent": "D",
+  "overperformance": -5.5
+ },
+ {
+  "state": "IL-02",
+  "name": "Illinois 2",
+  "region": "midwest",
+  "lean": 36.0,
+  "new_lines": false,
+  "rep": {
+   "name": "Michael Noack"
+  },
+  "opp": {
+   "name": "Donna Miller",
+   "party": "D",
+   "caucus": "D"
+  },
+  "incumbent": "none"
+ },
+ {
+  "state": "IL-03",
+  "name": "Illinois 3",
+  "region": "midwest",
+  "lean": 34.0,
+  "new_lines": false,
+  "rep": {
+   "name": "Angel Oakley"
+  },
+  "opp": {
+   "name": "Delia Ramirez",
+   "party": "D",
+   "caucus": "D"
+  },
+  "incumbent": "D",
+  "overperformance": -2.7
+ },
+ {
+  "state": "IL-04",
+  "name": "Illinois 4",
+  "region": "midwest",
+  "lean": 34.0,
+  "new_lines": false,
+  "rep": {
+   "name": "Lupe Castillo"
+  },
+  "opp": {
+   "name": "Patty Garcia",
+   "party": "D",
+   "caucus": "D"
+  },
+  "incumbent": "D",
+  "overperformance": -1.1
+ },
+ {
+  "state": "IL-05",
+  "name": "Illinois 5",
+  "region": "midwest",
+  "lean": 38.0,
+  "new_lines": false,
+  "rep": {
+   "name": "Tommy Hanson"
+  },
+  "opp": {
+   "name": "Mike Quigley",
+   "party": "D",
+   "caucus": "D"
+  },
+  "incumbent": "D",
+  "overperformance": 4.7
+ },
+ {
+  "state": "IL-06",
+  "name": "Illinois 6",
+  "region": "midwest",
+  "lean": 6.0,
+  "new_lines": false,
+  "rep": {
+   "name": "Niki Conforti"
+  },
+  "opp": {
+   "name": "Sean Casten",
+   "party": "D",
+   "caucus": "D"
+  },
+  "incumbent": "D",
+  "overperformance": 5.1
+ },
+ {
+  "state": "IL-07",
+  "name": "Illinois 7",
+  "region": "midwest",
+  "lean": 68.0,
+  "new_lines": false,
+  "rep": {
+   "name": "Chad Koppie"
+  },
+  "opp": {
+   "name": "La Shawn Ford",
+   "party": "D",
+   "caucus": "D"
+  },
+  "incumbent": "none"
+ },
+ {
+  "state": "IL-08",
+  "name": "Illinois 8",
+  "region": "midwest",
+  "lean": 10.0,
+  "new_lines": false,
+  "rep": {
+   "name": "Jennifer Davis"
+  },
+  "opp": {
+   "name": "Melissa Bean",
+   "party": "D",
+   "caucus": "D"
+  },
+  "incumbent": "none"
+ },
+ {
+  "state": "IL-09",
+  "name": "Illinois 9",
+  "region": "midwest",
+  "lean": 38.0,
+  "new_lines": false,
+  "rep": {
+   "name": "John Elleson"
+  },
+  "opp": {
+   "name": "Daniel Biss",
+   "party": "D",
+   "caucus": "D"
+  },
+  "incumbent": "none"
+ },
+ {
+  "state": "IL-10",
+  "name": "Illinois 10",
+  "region": "midwest",
+  "lean": 24.0,
+  "new_lines": false,
+  "rep": {
+   "name": "Carl Lambrecht"
+  },
+  "opp": {
+   "name": "Brad Schneider",
+   "party": "D",
+   "caucus": "D"
+  },
+  "incumbent": "D",
+  "overperformance": 0.7
+ },
+ {
+  "state": "IL-11",
+  "name": "Illinois 11",
+  "region": "midwest",
+  "lean": 12.0,
+  "new_lines": false,
+  "rep": {
+   "name": "Jeff Walter"
+  },
+  "opp": {
+   "name": "Bill Foster",
+   "party": "D",
+   "caucus": "D"
+  },
+  "incumbent": "D",
+  "overperformance": 3.9
+ },
+ {
+  "state": "IL-12",
+  "name": "Illinois 12",
+  "region": "midwest",
+  "lean": -44.0,
+  "new_lines": false,
+  "rep": {
+   "name": "Mike Bost"
+  },
+  "opp": {
+   "name": "Julie Fortier",
+   "party": "D",
+   "caucus": "D"
+  },
+  "incumbent": "R",
+  "overperformance": 2.3
+ },
+ {
+  "state": "IL-13",
+  "name": "Illinois 13",
+  "region": "midwest",
+  "lean": 10.0,
+  "new_lines": false,
+  "rep": {
+   "name": "Jeff Wilson"
+  },
+  "opp": {
+   "name": "Nikki Budzinski",
+   "party": "D",
+   "caucus": "D"
+  },
+  "incumbent": "D",
+  "overperformance": 12.9
+ },
+ {
+  "state": "IL-14",
+  "name": "Illinois 14",
+  "region": "midwest",
+  "lean": 6.0,
+  "new_lines": false,
+  "rep": {
+   "name": "James Marter"
+  },
+  "opp": {
+   "name": "Lauren Underwood",
+   "party": "D",
+   "caucus": "D"
+  },
+  "incumbent": "D",
+  "overperformance": 4.9
+ },
+ {
+  "state": "IL-15",
+  "name": "Illinois 15",
+  "region": "midwest",
+  "lean": -40.0,
+  "new_lines": false,
+  "rep": {
+   "name": "Mary Miller"
+  },
+  "opp": {
+   "name": "Jennifer Todd",
+   "party": "D",
+   "caucus": "D"
+  },
+  "incumbent": "R"
+ },
+ {
+  "state": "IL-16",
+  "name": "Illinois 16",
+  "region": "midwest",
+  "lean": -22.0,
+  "new_lines": false,
+  "rep": {
+   "name": "Darin LaHood"
+  },
+  "opp": {
+   "name": "Paul Nolley",
+   "party": "D",
+   "caucus": "D"
+  },
+  "incumbent": "R"
+ },
+ {
+  "state": "IL-17",
+  "name": "Illinois 17",
+  "region": "midwest",
+  "lean": 6.0,
+  "new_lines": false,
+  "rep": {
+   "name": "Dillan Vancil"
+  },
+  "opp": {
+   "name": "Eric Sorensen",
+   "party": "D",
+   "caucus": "D"
+  },
+  "incumbent": "D",
+  "overperformance": 7.5
+ },
+ {
+  "state": "IN-01",
+  "name": "Indiana 1",
+  "region": "midwest",
+  "lean": 2.0,
+  "new_lines": false,
+  "rep": {
+   "name": "Barb Regnitz"
+  },
+  "opp": {
+   "name": "Frank Mrvan",
+   "party": "D",
+   "caucus": "D"
+  },
+  "incumbent": "D",
+  "overperformance": 5.2
+ },
+ {
+  "state": "IN-02",
+  "name": "Indiana 2",
+  "region": "midwest",
+  "lean": -26.0,
+  "new_lines": false,
+  "rep": {
+   "name": "Rudy Yakym"
+  },
+  "opp": {
+   "name": "Jamee Decio",
+   "party": "D",
+   "caucus": "D"
+  },
+  "incumbent": "R",
+  "overperformance": 2.6
+ },
+ {
+  "state": "IN-03",
+  "name": "Indiana 3",
+  "region": "midwest",
+  "lean": -32.0,
+  "new_lines": false,
+  "rep": {
+   "name": "Marlin Stutzman"
+  },
+  "opp": {
+   "name": "Kelly Thompson",
+   "party": "D",
+   "caucus": "D"
+  },
+  "incumbent": "R"
+ },
+ {
+  "state": "IN-04",
+  "name": "Indiana 4",
+  "region": "midwest",
+  "lean": -30.0,
+  "new_lines": false,
+  "rep": {
+   "name": "Jim Baird"
+  },
+  "opp": {
+   "name": "Drew Cox",
+   "party": "D",
+   "caucus": "D"
+  },
+  "incumbent": "R",
+  "overperformance": 4.8
+ },
+ {
+  "state": "IN-05",
+  "name": "Indiana 5",
+  "region": "midwest",
+  "lean": -16.0,
+  "new_lines": false,
+  "rep": {
+   "name": "Victoria Spartz"
+  },
+  "opp": {
+   "name": "J. D. Ford",
+   "party": "D",
+   "caucus": "D"
+  },
+  "incumbent": "R",
+  "overperformance": 6.1
+ },
+ {
+  "state": "IN-06",
+  "name": "Indiana 6",
+  "region": "midwest",
+  "lean": -32.0,
+  "new_lines": false,
+  "rep": {
+   "name": "Jefferson Shreve"
+  },
+  "opp": {
+   "name": "Cinde Wirth",
+   "party": "D",
+   "caucus": "D"
+  },
+  "incumbent": "R"
+ },
+ {
+  "state": "IN-07",
+  "name": "Indiana 7",
+  "region": "midwest",
+  "lean": 42.0,
+  "new_lines": false,
+  "rep": {
+   "name": "Patrick McAuley"
+  },
+  "opp": {
+   "name": "Andr\u00e9 Carson",
+   "party": "D",
+   "caucus": "D"
+  },
+  "incumbent": "D",
+  "overperformance": 4.0
+ },
+ {
+  "state": "IN-08",
+  "name": "Indiana 8",
+  "region": "midwest",
+  "lean": -36.0,
+  "new_lines": false,
+  "rep": {
+   "name": "Mark Messmer"
+  },
+  "opp": {
+   "name": "Mary Allen",
+   "party": "D",
+   "caucus": "D"
+  },
+  "incumbent": "R"
+ },
+ {
+  "state": "IN-09",
+  "name": "Indiana 9",
+  "region": "midwest",
+  "lean": -30.0,
+  "new_lines": false,
+  "rep": {
+   "name": "Erin Houchin"
+  },
+  "opp": {
+   "name": "Brad Meyer",
+   "party": "D",
+   "caucus": "D"
+  },
+  "incumbent": "R",
+  "overperformance": 3.0
+ },
+ {
+  "state": "KS-01",
+  "name": "Kansas 1",
+  "region": "plains",
+  "lean": -32.0,
+  "new_lines": false,
+  "rep": {
+   "name": "Tracey Mann"
+  },
+  "opp": {
+   "name": "Lauren Reinhold",
+   "party": "D",
+   "caucus": "D"
+  },
+  "incumbent": "R",
+  "overperformance": 0.5
+ },
+ {
+  "state": "KS-02",
+  "name": "Kansas 2",
+  "region": "plains",
+  "lean": -20.0,
+  "new_lines": false,
+  "rep": {
+   "name": "Derek Schmidt"
+  },
+  "opp": {
+   "name": "Don Coover",
+   "party": "D",
+   "caucus": "D"
+  },
+  "incumbent": "R"
+ },
+ {
+  "state": "KS-03",
+  "name": "Kansas 3",
+  "region": "plains",
+  "lean": 4.0,
+  "new_lines": false,
+  "rep": {
+   "name": "Eric Jenkins"
+  },
+  "opp": {
+   "name": "Sharice Davids",
+   "party": "D",
+   "caucus": "D"
+  },
+  "incumbent": "D",
+  "overperformance": 15.5
+ },
+ {
+  "state": "KS-04",
+  "name": "Kansas 4",
+  "region": "plains",
+  "lean": -24.0,
+  "new_lines": false,
+  "rep": {
+   "name": "Ron Estes"
+  },
+  "opp": {
+   "name": "Katy Tyndell",
+   "party": "D",
+   "caucus": "D"
+  },
+  "incumbent": "R",
+  "overperformance": 0.7
+ },
+ {
+  "state": "KY-01",
+  "name": "Kentucky 1",
+  "region": "south",
+  "lean": -46.0,
+  "new_lines": false,
+  "rep": {
+   "name": "James Comer"
+  },
+  "opp": {
+   "name": "Drew Williams",
+   "party": "D",
+   "caucus": "D"
+  },
+  "incumbent": "R",
+  "overperformance": 1.3
+ },
+ {
+  "state": "KY-02",
+  "name": "Kentucky 2",
+  "region": "south",
+  "lean": -40.0,
+  "new_lines": false,
+  "rep": {
+   "name": "Brett Guthrie"
+  },
+  "opp": {
+   "name": "Megan Wingfield",
+   "party": "D",
+   "caucus": "D"
+  },
+  "incumbent": "R",
+  "overperformance": -1.5
+ },
+ {
+  "state": "KY-03",
+  "name": "Kentucky 3",
+  "region": "south",
+  "lean": 20.0,
+  "new_lines": false,
+  "rep": {
+   "name": "Maria Rodriquez"
+  },
+  "opp": {
+   "name": "Morgan McGarvey",
+   "party": "D",
+   "caucus": "D"
+  },
+  "incumbent": "D",
+  "overperformance": 8.7
+ },
+ {
+  "state": "KY-04",
+  "name": "Kentucky 4",
+  "region": "south",
+  "lean": -36.0,
+  "new_lines": false,
+  "rep": {
+   "name": "Ed Gallrein"
+  },
+  "opp": {
+   "name": "Melissa Strange",
+   "party": "D",
+   "caucus": "D"
+  },
+  "incumbent": "none"
+ },
+ {
+  "state": "KY-05",
+  "name": "Kentucky 5",
+  "region": "south",
+  "lean": -64.0,
+  "new_lines": false,
+  "rep": {
+   "name": "Hal Rogers"
+  },
+  "opp": {
+   "name": "Ned Pillersdorf",
+   "party": "D",
+   "caucus": "D"
+  },
+  "incumbent": "R"
+ },
+ {
+  "state": "KY-06",
+  "name": "Kentucky 6",
+  "region": "south",
+  "lean": -14.0,
+  "new_lines": false,
+  "rep": {
+   "name": "Ralph Alvarado"
+  },
+  "opp": {
+   "name": "Zach Dembo",
+   "party": "D",
+   "caucus": "D"
+  },
+  "incumbent": "none"
+ },
+ {
+  "state": "LA-01",
+  "name": "Louisiana 1",
+  "region": "south",
+  "lean": -40.0,
+  "new_lines": true,
+  "rep": {
+   "name": "Randall Arrington"
+  },
+  "opp": {
+   "name": "Lauren Jewett",
+   "party": "D",
+   "caucus": "D"
+  },
+  "incumbent": "none"
+ },
+ {
+  "state": "LA-02",
+  "name": "Louisiana 2",
+  "region": "south",
+  "lean": 50.0,
+  "new_lines": true,
+  "rep": {
+   "name": "Peter Williams"
+  },
+  "opp": {
+   "name": "Troy Carter",
+   "party": "D",
+   "caucus": "D"
+  },
+  "incumbent": "D"
+ },
+ {
+  "state": "LA-03",
+  "name": "Louisiana 3",
+  "region": "south",
+  "lean": -36.0,
+  "new_lines": true,
+  "rep": {
+   "name": "Kate Cotten"
+  },
+  "opp": {
+   "name": "John Day",
+   "party": "D",
+   "caucus": "D"
+  },
+  "incumbent": "none"
+ },
+ {
+  "state": "LA-04",
+  "name": "Louisiana 4",
+  "region": "south",
+  "lean": -34.0,
+  "new_lines": true,
+  "rep": {
+   "name": "Gordon Heslop"
+  },
+  "opp": {
+   "name": "Conrad Cable",
+   "party": "D",
+   "caucus": "D"
+  },
+  "incumbent": "none"
+ },
+ {
+  "state": "LA-05",
+  "name": "Louisiana 5",
+  "region": "south",
+  "lean": -34.0,
+  "new_lines": true,
+  "rep": {
+   "name": "Stewart Cathey Jr."
+  },
+  "opp": {
+   "name": "Dan McKay",
+   "party": "D",
+   "caucus": "D"
+  },
+  "incumbent": "none"
+ },
+ {
+  "state": "LA-06",
+  "name": "Louisiana 6",
+  "region": "south",
+  "lean": -32.0,
+  "new_lines": true,
+  "rep": {
+   "name": "Monique Appeaning"
+  },
+  "opp": {
+   "name": "Pat Forbes",
+   "party": "D",
+   "caucus": "D"
+  },
+  "incumbent": "none"
+ },
+ {
+  "state": "MA-01",
+  "name": "Massachusetts 1",
+  "region": "northeast",
+  "lean": 16.0,
+  "new_lines": false,
+  "rep": {
+   "name": "No Republican"
+  },
+  "opp": {
+   "name": "Richard Neal",
+   "party": "D",
+   "caucus": "D"
+  },
+  "incumbent": "D",
+  "uncontested": "D"
+ },
+ {
+  "state": "MA-02",
+  "name": "Massachusetts 2",
+  "region": "northeast",
+  "lean": 26.0,
+  "new_lines": false,
+  "rep": {
+   "name": "No Republican"
+  },
+  "opp": {
+   "name": "Jim McGovern",
+   "party": "D",
+   "caucus": "D"
+  },
+  "incumbent": "D",
+  "uncontested": "D"
+ },
+ {
+  "state": "MA-03",
+  "name": "Massachusetts 3",
+  "region": "northeast",
+  "lean": 22.0,
+  "new_lines": false,
+  "rep": {
+   "name": "Gary Grossi"
+  },
+  "opp": {
+   "name": "Lori Trahan",
+   "party": "D",
+   "caucus": "D"
+  },
+  "incumbent": "D"
+ },
+ {
+  "state": "MA-04",
+  "name": "Massachusetts 4",
+  "region": "northeast",
+  "lean": 22.0,
+  "new_lines": false,
+  "rep": {
+   "name": "Thomas Stalcup"
+  },
+  "opp": {
+   "name": "Jake Auchincloss",
+   "party": "D",
+   "caucus": "D"
+  },
+  "incumbent": "D"
+ },
+ {
+  "state": "MA-05",
+  "name": "Massachusetts 5",
+  "region": "northeast",
+  "lean": 48.0,
+  "new_lines": false,
+  "rep": {
+   "name": "No Republican"
+  },
+  "opp": {
+   "name": "Katherine Clark",
+   "party": "D",
+   "caucus": "D"
+  },
+  "incumbent": "D",
+  "uncontested": "D"
+ },
+ {
+  "state": "MA-06",
+  "name": "Massachusetts 6",
+  "region": "northeast",
+  "lean": 22.0,
+  "new_lines": false,
+  "rep": {
+   "name": "Micah Jones"
+  },
+  "opp": {
+   "name": "Dan Koh",
+   "party": "D",
+   "caucus": "D"
+  },
+  "incumbent": "none"
+ },
+ {
+  "state": "MA-07",
+  "name": "Massachusetts 7",
+  "region": "northeast",
+  "lean": 68.0,
+  "new_lines": false,
+  "rep": {
+   "name": "No Republican"
+  },
+  "opp": {
+   "name": "Ayanna Pressley",
+   "party": "D",
+   "caucus": "D"
+  },
+  "incumbent": "D",
+  "uncontested": "D"
+ },
+ {
+  "state": "MA-08",
+  "name": "Massachusetts 8",
+  "region": "northeast",
+  "lean": 30.0,
+  "new_lines": false,
+  "rep": {
+   "name": "Robert Burke"
+  },
+  "opp": {
+   "name": "Stephen Lynch",
+   "party": "D",
+   "caucus": "D"
+  },
+  "incumbent": "D",
+  "overperformance": 13.7
+ },
+ {
+  "state": "MA-09",
+  "name": "Massachusetts 9",
+  "region": "northeast",
+  "lean": 12.0,
+  "new_lines": false,
+  "rep": {
+   "name": "Tyler MacAllister"
+  },
+  "opp": {
+   "name": "Bill Keating",
+   "party": "D",
+   "caucus": "D"
+  },
+  "incumbent": "D",
+  "overperformance": 3.7
+ },
+ {
+  "state": "MD-01",
+  "name": "Maryland 1",
+  "region": "northeast",
+  "lean": -16.0,
+  "new_lines": false,
+  "rep": {
+   "name": "Andy Harris"
+  },
+  "opp": {
+   "name": "Dan Schwartz",
+   "party": "D",
+   "caucus": "D"
+  },
+  "incumbent": "R",
+  "overperformance": 2.7
+ },
+ {
+  "state": "MD-02",
+  "name": "Maryland 2",
+  "region": "northeast",
+  "lean": 20.0,
+  "new_lines": false,
+  "rep": {
+   "name": "Dave Wallace"
+  },
+  "opp": {
+   "name": "Johnny Olszewski",
+   "party": "D",
+   "caucus": "D"
+  },
+  "incumbent": "D"
+ },
+ {
+  "state": "MD-03",
+  "name": "Maryland 3",
+  "region": "northeast",
+  "lean": 24.0,
+  "new_lines": false,
+  "rep": {
+   "name": "Berney Flowers"
+  },
+  "opp": {
+   "name": "Sarah Elfreth",
+   "party": "D",
+   "caucus": "D"
+  },
+  "incumbent": "D"
+ },
+ {
+  "state": "MD-04",
+  "name": "Maryland 4",
+  "region": "northeast",
+  "lean": 78.0,
+  "new_lines": false,
+  "rep": {
+   "name": "George McDermott"
+  },
+  "opp": {
+   "name": "Glenn Ivey",
+   "party": "D",
+   "caucus": "D"
+  },
+  "incumbent": "D",
+  "overperformance": -0.1
+ },
+ {
+  "state": "MD-05",
+  "name": "Maryland 5",
+  "region": "northeast",
+  "lean": 34.0,
+  "new_lines": false,
+  "rep": {
+   "name": "Chris Chaffee"
+  },
+  "opp": {
+   "name": "Adrian Boafo",
+   "party": "D",
+   "caucus": "D"
+  },
+  "incumbent": "none"
+ },
+ {
+  "state": "MD-06",
+  "name": "Maryland 6",
+  "region": "northeast",
+  "lean": 6.0,
+  "new_lines": false,
+  "rep": {
+   "name": "Robin Ficker"
+  },
+  "opp": {
+   "name": "April McClain Delaney",
+   "party": "D",
+   "caucus": "D"
+  },
+  "incumbent": "D"
+ },
+ {
+  "state": "MD-07",
+  "name": "Maryland 7",
+  "region": "northeast",
+  "lean": 62.0,
+  "new_lines": false,
+  "rep": {
+   "name": "Scott Collier"
+  },
+  "opp": {
+   "name": "Kweisi Mfume",
+   "party": "D",
+   "caucus": "D"
+  },
+  "incumbent": "D",
+  "overperformance": 5.8
+ },
+ {
+  "state": "MD-08",
+  "name": "Maryland 8",
+  "region": "northeast",
+  "lean": 60.0,
+  "new_lines": false,
+  "rep": {
+   "name": "Cheryl Riley"
+  },
+  "opp": {
+   "name": "Jamie Raskin",
+   "party": "D",
+   "caucus": "D"
+  },
+  "incumbent": "D",
+  "overperformance": 1.0
+ },
+ {
+  "state": "ME-01",
+  "name": "Maine 1",
+  "region": "northeast",
+  "lean": 22.0,
+  "new_lines": false,
+  "rep": {
+   "name": "Ronald Russell"
+  },
+  "opp": {
+   "name": "Chellie Pingree",
+   "party": "D",
+   "caucus": "D"
+  },
+  "incumbent": "D",
+  "overperformance": 7.0
+ },
+ {
+  "state": "ME-02",
+  "name": "Maine 2",
+  "region": "northeast",
+  "lean": -8.0,
+  "new_lines": false,
+  "rep": {
+   "name": "Paul LePage"
+  },
+  "opp": {
+   "name": "Matthew Dunlap",
+   "party": "D",
+   "caucus": "D"
+  },
+  "incumbent": "none"
+ },
+ {
+  "state": "MI-01",
+  "name": "Michigan 1",
+  "region": "midwest",
+  "lean": -22.0,
+  "new_lines": false,
+  "rep": {
+   "name": "Jack Bergman"
+  },
+  "opp": {
+   "name": "Callie Barr",
+   "party": "D",
+   "caucus": "D"
+  },
+  "incumbent": "R",
+  "overperformance": 7.5
+ },
+ {
+  "state": "MI-02",
+  "name": "Michigan 2",
+  "region": "midwest",
+  "lean": -30.0,
+  "new_lines": false,
+  "rep": {
+   "name": "John Moolenaar"
+  },
+  "opp": {
+   "name": "Ben Ambrose",
+   "party": "D",
+   "caucus": "D"
+  },
+  "incumbent": "R",
+  "overperformance": 1.3
+ },
+ {
+  "state": "MI-03",
+  "name": "Michigan 3",
+  "region": "midwest",
+  "lean": 8.0,
+  "new_lines": false,
+  "rep": {
+   "name": "Terri DeBoer"
+  },
+  "opp": {
+   "name": "Hillary Scholten",
+   "party": "D",
+   "caucus": "D"
+  },
+  "incumbent": "D",
+  "overperformance": 10.6
+ },
+ {
+  "state": "MI-04",
+  "name": "Michigan 4",
+  "region": "midwest",
+  "lean": -6.0,
+  "new_lines": false,
+  "rep": {
+   "name": "Bill Huizenga"
+  },
+  "opp": {
+   "name": "Sean McCann",
+   "party": "D",
+   "caucus": "D"
+  },
+  "incumbent": "R",
+  "overperformance": 1.0
+ },
+ {
+  "state": "MI-05",
+  "name": "Michigan 5",
+  "region": "midwest",
+  "lean": -26.0,
+  "new_lines": false,
+  "rep": {
+   "name": "Tim Walberg"
+  },
+  "opp": {
+   "name": "Christian Vukasovich",
+   "party": "D",
+   "caucus": "D"
+  },
+  "incumbent": "R",
+  "overperformance": -0.2
+ },
+ {
+  "state": "MI-06",
+  "name": "Michigan 6",
+  "region": "midwest",
+  "lean": 24.0,
+  "new_lines": false,
+  "rep": {
+   "name": "Heather Smiley"
+  },
+  "opp": {
+   "name": "Debbie Dingell",
+   "party": "D",
+   "caucus": "D"
+  },
+  "incumbent": "D",
+  "overperformance": 7.7
+ },
+ {
+  "state": "MI-07",
+  "name": "Michigan 7",
+  "region": "midwest",
+  "lean": 0.0,
+  "new_lines": false,
+  "rep": {
+   "name": "Tom Barrett"
+  },
+  "opp": {
+   "name": "William Lawrence",
+   "party": "D",
+   "caucus": "D"
+  },
+  "incumbent": "R"
+ },
+ {
+  "state": "MI-08",
+  "name": "Michigan 8",
+  "region": "midwest",
+  "lean": -2.0,
+  "new_lines": false,
+  "rep": {
+   "name": "Thomas Smith"
+  },
+  "opp": {
+   "name": "Kristen McDonald Rivet",
+   "party": "D",
+   "caucus": "D"
+  },
+  "incumbent": "D"
+ },
+ {
+  "state": "MI-09",
+  "name": "Michigan 9",
+  "region": "midwest",
+  "lean": -32.0,
+  "new_lines": false,
+  "rep": {
+   "name": "Lisa McClain"
+  },
+  "opp": {
+   "name": "Ray Pooley",
+   "party": "D",
+   "caucus": "D"
+  },
+  "incumbent": "R",
+  "overperformance": 1.4
+ },
+ {
+  "state": "MI-10",
+  "name": "Michigan 10",
+  "region": "midwest",
+  "lean": -6.0,
+  "new_lines": false,
+  "rep": {
+   "name": "Mike Bouchard"
+  },
+  "opp": {
+   "name": "Christina Hines",
+   "party": "D",
+   "caucus": "D"
+  },
+  "incumbent": "none"
+ },
+ {
+  "state": "MI-11",
+  "name": "Michigan 11",
+  "region": "midwest",
+  "lean": 18.0,
+  "new_lines": false,
+  "rep": {
+   "name": "Ethan Baker"
+  },
+  "opp": {
+   "name": "Jeremy Moss",
+   "party": "D",
+   "caucus": "D"
+  },
+  "incumbent": "none"
+ },
+ {
+  "state": "MI-12",
+  "name": "Michigan 12",
+  "region": "midwest",
+  "lean": 42.0,
+  "new_lines": false,
+  "rep": {
+   "name": "James Hooper"
+  },
+  "opp": {
+   "name": "Rashida Tlaib",
+   "party": "D",
+   "caucus": "D"
+  },
+  "incumbent": "D",
+  "overperformance": 1.0
+ },
+ {
+  "state": "MI-13",
+  "name": "Michigan 13",
+  "region": "midwest",
+  "lean": 44.0,
+  "new_lines": false,
+  "rep": {
+   "name": "T. P. Nykoriak"
+  },
+  "opp": {
+   "name": "Donavan McKinney",
+   "party": "D",
+   "caucus": "D"
+  },
+  "incumbent": "none"
+ },
+ {
+  "state": "MN-01",
+  "name": "Minnesota 1",
+  "region": "midwest",
+  "lean": -12.0,
+  "new_lines": false,
+  "rep": {
+   "name": "Brad Finstad"
+  },
+  "opp": {
+   "name": "Jake Johnson",
+   "party": "D",
+   "caucus": "D"
+  },
+  "incumbent": "R",
+  "overperformance": -0.3
+ },
+ {
+  "state": "MN-02",
+  "name": "Minnesota 2",
+  "region": "midwest",
+  "lean": 6.0,
+  "new_lines": false,
+  "rep": {
+   "name": "Eric Pratt"
+  },
+  "opp": {
+   "name": "Matt Little",
+   "party": "D",
+   "caucus": "D"
+  },
+  "incumbent": "none"
+ },
+ {
+  "state": "MN-03",
+  "name": "Minnesota 3",
+  "region": "midwest",
+  "lean": 22.0,
+  "new_lines": false,
+  "rep": {
+   "name": "Tyler Bass"
+  },
+  "opp": {
+   "name": "Kelly Morrison",
+   "party": "D",
+   "caucus": "D"
+  },
+  "incumbent": "D"
+ },
+ {
+  "state": "MN-04",
+  "name": "Minnesota 4",
+  "region": "midwest",
+  "lean": 36.0,
+  "new_lines": false,
+  "rep": {
+   "name": "Paul Wikstrom"
+  },
+  "opp": {
+   "name": "Betty McCollum",
+   "party": "D",
+   "caucus": "D"
+  },
+  "incumbent": "D",
+  "overperformance": 3.5
+ },
+ {
+  "state": "MN-05",
+  "name": "Minnesota 5",
+  "region": "midwest",
+  "lean": 64.0,
+  "new_lines": false,
+  "rep": {
+   "name": "John Nagel"
+  },
+  "opp": {
+   "name": "Ilhan Omar",
+   "party": "D",
+   "caucus": "D"
+  },
+  "incumbent": "D",
+  "overperformance": -6.9
+ },
+ {
+  "state": "MN-06",
+  "name": "Minnesota 6",
+  "region": "midwest",
+  "lean": -20.0,
+  "new_lines": false,
+  "rep": {
+   "name": "Tom Emmer"
+  },
+  "opp": {
+   "name": "Doug Chapin",
+   "party": "D",
+   "caucus": "D"
+  },
+  "incumbent": "R",
+  "overperformance": 1.7
+ },
+ {
+  "state": "MN-07",
+  "name": "Minnesota 7",
+  "region": "midwest",
+  "lean": -36.0,
+  "new_lines": false,
+  "rep": {
+   "name": "Michelle Fischbach"
+  },
+  "opp": {
+   "name": "Erik Osberg",
+   "party": "D",
+   "caucus": "D"
+  },
+  "incumbent": "R",
+  "overperformance": -0.3
+ },
+ {
+  "state": "MN-08",
+  "name": "Minnesota 8",
+  "region": "midwest",
+  "lean": -14.0,
+  "new_lines": false,
+  "rep": {
+   "name": "Pete Stauber"
+  },
+  "opp": {
+   "name": "Trina Swanson",
+   "party": "D",
+   "caucus": "D"
+  },
+  "incumbent": "R",
+  "overperformance": 2.7
+ },
+ {
+  "state": "MO-01",
+  "name": "Missouri 1",
+  "region": "midwest",
+  "lean": 58.0,
+  "new_lines": true,
+  "rep": {
+   "name": "Paul Berry"
+  },
+  "opp": {
+   "name": "Wesley Bell",
+   "party": "D",
+   "caucus": "D"
+  },
+  "incumbent": "D"
+ },
+ {
+  "state": "MO-02",
+  "name": "Missouri 2",
+  "region": "midwest",
+  "lean": -8.0,
+  "new_lines": true,
+  "rep": {
+   "name": "Ann Wagner"
+  },
+  "opp": {
+   "name": "Fred Wellman",
+   "party": "D",
+   "caucus": "D"
+  },
+  "incumbent": "R"
+ },
+ {
+  "state": "MO-03",
+  "name": "Missouri 3",
+  "region": "midwest",
+  "lean": -26.0,
+  "new_lines": true,
+  "rep": {
+   "name": "Bob Onder"
+  },
+  "opp": {
+   "name": "Bethany Mann",
+   "party": "D",
+   "caucus": "D"
+  },
+  "incumbent": "R"
+ },
+ {
+  "state": "MO-04",
+  "name": "Missouri 4",
+  "region": "midwest",
+  "lean": -42.0,
+  "new_lines": true,
+  "rep": {
+   "name": "Mark Alford"
+  },
+  "opp": {
+   "name": "Jordan Herrera",
+   "party": "D",
+   "caucus": "D"
+  },
+  "incumbent": "R"
+ },
+ {
+  "state": "MO-05",
+  "name": "Missouri 5",
+  "region": "midwest",
+  "lean": 24.0,
+  "new_lines": true,
+  "rep": {
+   "name": "Rick Brattin"
+  },
+  "opp": {
+   "name": "Emanuel Cleaver",
+   "party": "D",
+   "caucus": "D"
+  },
+  "incumbent": "D"
+ },
+ {
+  "state": "MO-06",
+  "name": "Missouri 6",
+  "region": "midwest",
+  "lean": -38.0,
+  "new_lines": true,
+  "rep": {
+   "name": "Chris Stigall"
+  },
+  "opp": {
+   "name": "Josh Smead",
+   "party": "D",
+   "caucus": "D"
+  },
+  "incumbent": "none"
+ },
+ {
+  "state": "MO-07",
+  "name": "Missouri 7",
+  "region": "midwest",
+  "lean": -42.0,
+  "new_lines": true,
+  "rep": {
+   "name": "Eric Burlison"
+  },
+  "opp": {
+   "name": "Missi Hesketh",
+   "party": "D",
+   "caucus": "D"
+  },
+  "incumbent": "R"
+ },
+ {
+  "state": "MO-08",
+  "name": "Missouri 8",
+  "region": "midwest",
+  "lean": -54.0,
+  "new_lines": true,
+  "rep": {
+   "name": "Jason Smith"
+  },
+  "opp": {
+   "name": "Chris Reichard",
+   "party": "D",
+   "caucus": "D"
+  },
+  "incumbent": "R"
+ },
+ {
+  "state": "MS-01",
+  "name": "Mississippi 1",
+  "region": "south",
+  "lean": -36.0,
+  "new_lines": false,
+  "rep": {
+   "name": "Trent Kelly"
+  },
+  "opp": {
+   "name": "Cliff Johnson",
+   "party": "D",
+   "caucus": "D"
+  },
+  "incumbent": "R",
+  "overperformance": -0.9
+ },
+ {
+  "state": "MS-02",
+  "name": "Mississippi 2",
+  "region": "south",
+  "lean": 22.0,
+  "new_lines": false,
+  "rep": {
+   "name": "Ron Eller"
+  },
+  "opp": {
+   "name": "Bennie Thompson",
+   "party": "D",
+   "caucus": "D"
+  },
+  "incumbent": "D",
+  "overperformance": 4.7
+ },
+ {
+  "state": "MS-03",
+  "name": "Mississippi 3",
+  "region": "south",
+  "lean": -28.0,
+  "new_lines": false,
+  "rep": {
+   "name": "Michael Guest"
+  },
+  "opp": {
+   "name": "Michael Chiaradio",
+   "party": "D",
+   "caucus": "D"
+  },
+  "incumbent": "R"
+ },
+ {
+  "state": "MS-04",
+  "name": "Mississippi 4",
+  "region": "south",
+  "lean": -42.0,
+  "new_lines": false,
+  "rep": {
+   "name": "Mike Ezell"
+  },
+  "opp": {
+   "name": "Jeffrey Hulum III",
+   "party": "D",
+   "caucus": "D"
+  },
+  "incumbent": "R",
+  "overperformance": -1.2
+ },
+ {
+  "state": "MT-01",
+  "name": "Montana 1",
+  "region": "west",
+  "lean": -10.0,
+  "new_lines": false,
+  "rep": {
+   "name": "Aaron Flint"
+  },
+  "opp": {
+   "name": "Sam Forstag",
+   "party": "D",
+   "caucus": "D"
+  },
+  "incumbent": "none"
+ },
+ {
+  "state": "MT-02",
+  "name": "Montana 2",
+  "region": "west",
+  "lean": -30.0,
+  "new_lines": false,
+  "rep": {
+   "name": "Troy Downing"
+  },
+  "opp": {
+   "name": "Brian Miller",
+   "party": "D",
+   "caucus": "D"
+  },
+  "incumbent": "R"
+ },
+ {
+  "state": "NC-01",
+  "name": "North Carolina 1",
+  "region": "south",
+  "lean": -10.0,
+  "new_lines": true,
+  "rep": {
+   "name": "Laurie Buckhout"
+  },
+  "opp": {
+   "name": "Don Davis",
+   "party": "D",
+   "caucus": "D"
+  },
+  "incumbent": "D"
+ },
+ {
+  "state": "NC-02",
+  "name": "North Carolina 2",
+  "region": "south",
+  "lean": 34.0,
+  "new_lines": true,
+  "rep": {
+   "name": "Eugene Douglass"
+  },
+  "opp": {
+   "name": "Deborah Ross",
+   "party": "D",
+   "caucus": "D"
+  },
+  "incumbent": "D"
+ },
+ {
+  "state": "NC-03",
+  "name": "North Carolina 3",
+  "region": "south",
+  "lean": -12.0,
+  "new_lines": true,
+  "rep": {
+   "name": "Greg Murphy"
+  },
+  "opp": {
+   "name": "Raymond Smith Jr.",
+   "party": "D",
+   "caucus": "D"
+  },
+  "incumbent": "R"
+ },
+ {
+  "state": "NC-04",
+  "name": "North Carolina 4",
+  "region": "south",
+  "lean": 46.0,
+  "new_lines": true,
+  "rep": {
+   "name": "Max Ganorkar"
+  },
+  "opp": {
+   "name": "Valerie Foushee",
+   "party": "D",
+   "caucus": "D"
+  },
+  "incumbent": "D"
+ },
+ {
+  "state": "NC-05",
+  "name": "North Carolina 5",
+  "region": "south",
+  "lean": -18.0,
+  "new_lines": true,
+  "rep": {
+   "name": "Virginia Foxx"
+  },
+  "opp": {
+   "name": "Chuck Hubbard",
+   "party": "D",
+   "caucus": "D"
+  },
+  "incumbent": "R"
+ },
+ {
+  "state": "NC-06",
+  "name": "North Carolina 6",
+  "region": "south",
+  "lean": -18.0,
+  "new_lines": true,
+  "rep": {
+   "name": "Addison McDowell"
+  },
+  "opp": {
+   "name": "Cyril Jefferson",
+   "party": "D",
+   "caucus": "D"
+  },
+  "incumbent": "R"
+ },
+ {
+  "state": "NC-07",
+  "name": "North Carolina 7",
+  "region": "south",
+  "lean": -14.0,
+  "new_lines": true,
+  "rep": {
+   "name": "David Rouzer"
+  },
+  "opp": {
+   "name": "Kimberly Hardy",
+   "party": "D",
+   "caucus": "D"
+  },
+  "incumbent": "R"
+ },
+ {
+  "state": "NC-08",
+  "name": "North Carolina 8",
+  "region": "south",
+  "lean": -20.0,
+  "new_lines": true,
+  "rep": {
+   "name": "Mark Harris"
+  },
+  "opp": {
+   "name": "Colby Watson",
+   "party": "D",
+   "caucus": "D"
+  },
+  "incumbent": "R"
+ },
+ {
+  "state": "NC-09",
+  "name": "North Carolina 9",
+  "region": "south",
+  "lean": -16.0,
+  "new_lines": true,
+  "rep": {
+   "name": "Richard Hudson"
+  },
+  "opp": {
+   "name": "Richard Ojeda",
+   "party": "D",
+   "caucus": "D"
+  },
+  "incumbent": "R"
+ },
+ {
+  "state": "NC-10",
+  "name": "North Carolina 10",
+  "region": "south",
+  "lean": -18.0,
+  "new_lines": true,
+  "rep": {
+   "name": "Pat Harrigan"
+  },
+  "opp": {
+   "name": "Ashley Bell",
+   "party": "D",
+   "caucus": "D"
+  },
+  "incumbent": "R"
+ },
+ {
+  "state": "NC-11",
+  "name": "North Carolina 11",
+  "region": "south",
+  "lean": -10.0,
+  "new_lines": true,
+  "rep": {
+   "name": "Jennifer Balkcom"
+  },
+  "opp": {
+   "name": "Jamie Ager",
+   "party": "D",
+   "caucus": "D"
+  },
+  "incumbent": "none"
+ },
+ {
+  "state": "NC-12",
+  "name": "North Carolina 12",
+  "region": "south",
+  "lean": 48.0,
+  "new_lines": true,
+  "rep": {
+   "name": "Jack Codiga"
+  },
+  "opp": {
+   "name": "Alma Adams",
+   "party": "D",
+   "caucus": "D"
+  },
+  "incumbent": "D"
+ },
+ {
+  "state": "NC-13",
+  "name": "North Carolina 13",
+  "region": "south",
+  "lean": -16.0,
+  "new_lines": true,
+  "rep": {
+   "name": "Brad Knott"
+  },
+  "opp": {
+   "name": "Paul Barringer",
+   "party": "D",
+   "caucus": "D"
+  },
+  "incumbent": "R"
+ },
+ {
+  "state": "NC-14",
+  "name": "North Carolina 14",
+  "region": "south",
+  "lean": -16.0,
+  "new_lines": true,
+  "rep": {
+   "name": "Tim Moore"
+  },
+  "opp": {
+   "name": "Lakesha Womack",
+   "party": "D",
+   "caucus": "D"
+  },
+  "incumbent": "R"
+ },
+ {
+  "state": "ND-AL",
+  "name": "North Dakota at-large",
+  "region": "plains",
+  "lean": -36.0,
+  "new_lines": false,
+  "rep": {
+   "name": "Julie Fedorchak"
+  },
+  "opp": {
+   "name": "Trygve Hammer",
+   "party": "D",
+   "caucus": "D"
+  },
+  "incumbent": "R"
+ },
+ {
+  "state": "NE-01",
+  "name": "Nebraska 1",
+  "region": "plains",
+  "lean": -12.0,
+  "new_lines": false,
+  "rep": {
+   "name": "Mike Flood"
+  },
+  "opp": {
+   "name": "Chris Backemeyer",
+   "party": "D",
+   "caucus": "D"
+  },
+  "incumbent": "R",
+  "overperformance": 0.5
+ },
+ {
+  "state": "NE-02",
+  "name": "Nebraska 2",
+  "region": "plains",
+  "lean": 6.0,
+  "new_lines": false,
+  "rep": {
+   "name": "Brinker Harding"
+  },
+  "opp": {
+   "name": "Denise Powell",
+   "party": "D",
+   "caucus": "D"
+  },
+  "incumbent": "none"
+ },
+ {
+  "state": "NE-03",
+  "name": "Nebraska 3",
+  "region": "plains",
+  "lean": -54.0,
+  "new_lines": false,
+  "rep": {
+   "name": "Adrian Smith"
+  },
+  "opp": {
+   "name": "Becky Stille",
+   "party": "D",
+   "caucus": "D"
+  },
+  "incumbent": "R",
+  "overperformance": -0.1
+ },
+ {
+  "state": "NH-01",
+  "name": "New Hampshire 1",
+  "region": "northeast",
+  "lean": 4.0,
+  "new_lines": false,
+  "rep": {
+   "name": "Anthony DiLorenzo"
+  },
+  "opp": {
+   "name": "Stefany Shaheen",
+   "party": "D",
+   "caucus": "D"
+  },
+  "incumbent": "none"
+ },
+ {
+  "state": "NH-02",
+  "name": "New Hampshire 2",
+  "region": "northeast",
+  "lean": 4.0,
+  "new_lines": false,
+  "rep": {
+   "name": "Lily Tang Williams"
+  },
+  "opp": {
+   "name": "Maggie Goodlander",
+   "party": "D",
+   "caucus": "D"
+  },
+  "incumbent": "D"
+ },
+ {
+  "state": "NJ-01",
+  "name": "New Jersey 1",
+  "region": "northeast",
+  "lean": 20.0,
+  "new_lines": false,
+  "rep": {
+   "name": "Damon Galdo"
+  },
+  "opp": {
+   "name": "Donald Norcross",
+   "party": "D",
+   "caucus": "D"
+  },
+  "incumbent": "D",
+  "overperformance": 0.5
+ },
+ {
+  "state": "NJ-02",
+  "name": "New Jersey 2",
+  "region": "northeast",
+  "lean": -10.0,
+  "new_lines": false,
+  "rep": {
+   "name": "Jeff Van Drew"
+  },
+  "opp": {
+   "name": "Zack Mullock",
+   "party": "D",
+   "caucus": "D"
+  },
+  "incumbent": "R",
+  "overperformance": -4.2
+ },
+ {
+  "state": "NJ-03",
+  "name": "New Jersey 3",
+  "region": "northeast",
+  "lean": 10.0,
+  "new_lines": false,
+  "rep": {
+   "name": "Michael McGuire"
+  },
+  "opp": {
+   "name": "Herb Conaway",
+   "party": "D",
+   "caucus": "D"
+  },
+  "incumbent": "D"
+ },
+ {
+  "state": "NJ-04",
+  "name": "New Jersey 4",
+  "region": "northeast",
+  "lean": -28.0,
+  "new_lines": false,
+  "rep": {
+   "name": "Chris Smith"
+  },
+  "opp": {
+   "name": "Rachel Peace",
+   "party": "D",
+   "caucus": "D"
+  },
+  "incumbent": "R",
+  "overperformance": -5.0
+ },
+ {
+  "state": "NJ-05",
+  "name": "New Jersey 5",
+  "region": "northeast",
+  "lean": 4.0,
+  "new_lines": false,
+  "rep": {
+   "name": "Sean Kirrane"
+  },
+  "opp": {
+   "name": "Josh Gottheimer",
+   "party": "D",
+   "caucus": "D"
+  },
+  "incumbent": "D",
+  "overperformance": 6.0
+ },
+ {
+  "state": "NJ-06",
+  "name": "New Jersey 6",
+  "region": "northeast",
+  "lean": 10.0,
+  "new_lines": false,
+  "rep": {
+   "name": "Hillary Herzig"
+  },
+  "opp": {
+   "name": "Frank Pallone",
+   "party": "D",
+   "caucus": "D"
+  },
+  "incumbent": "D",
+  "overperformance": 2.5
+ },
+ {
+  "state": "NJ-07",
+  "name": "New Jersey 7",
+  "region": "northeast",
+  "lean": 0.0,
+  "new_lines": false,
+  "rep": {
+   "name": "Thomas Kean Jr."
+  },
+  "opp": {
+   "name": "Rebecca Bennett",
+   "party": "D",
+   "caucus": "D"
+  },
+  "incumbent": "R",
+  "overperformance": -0.7
+ },
+ {
+  "state": "NJ-08",
+  "name": "New Jersey 8",
+  "region": "northeast",
+  "lean": 30.0,
+  "new_lines": false,
+  "rep": {
+   "name": "No Republican"
+  },
+  "opp": {
+   "name": "Rob Menendez",
+   "party": "D",
+   "caucus": "D"
+  },
+  "incumbent": "D",
+  "uncontested": "D",
+  "overperformance": -16.5
+ },
+ {
+  "state": "NJ-09",
+  "name": "New Jersey 9",
+  "region": "northeast",
+  "lean": 4.0,
+  "new_lines": false,
+  "rep": {
+   "name": "Rosie Pino"
+  },
+  "opp": {
+   "name": "Nellie Pou",
+   "party": "D",
+   "caucus": "D"
+  },
+  "incumbent": "D"
+ },
+ {
+  "state": "NJ-10",
+  "name": "New Jersey 10",
+  "region": "northeast",
+  "lean": 54.0,
+  "new_lines": false,
+  "rep": {
+   "name": "Carmen Bucco"
+  },
+  "opp": {
+   "name": "LaMonica McIver",
+   "party": "D",
+   "caucus": "D"
+  },
+  "incumbent": "D",
+  "overperformance": -5.1
+ },
+ {
+  "state": "NJ-11",
+  "name": "New Jersey 11",
+  "region": "northeast",
+  "lean": 10.0,
+  "new_lines": false,
+  "rep": {
+   "name": "Joe Hathaway"
+  },
+  "opp": {
+   "name": "Analilia Mejia",
+   "party": "D",
+   "caucus": "D"
+  },
+  "incumbent": "D"
+ },
+ {
+  "state": "NJ-12",
+  "name": "New Jersey 12",
+  "region": "northeast",
+  "lean": 26.0,
+  "new_lines": false,
+  "rep": {
+   "name": "Gregg Mele"
+  },
+  "opp": {
+   "name": "Adam Hamawy",
+   "party": "D",
+   "caucus": "D"
+  },
+  "incumbent": "none"
+ },
+ {
+  "state": "NM-01",
+  "name": "New Mexico 1",
+  "region": "west",
+  "lean": 14.0,
+  "new_lines": false,
+  "rep": {
+   "name": "Didi Okpareke"
+  },
+  "opp": {
+   "name": "Melanie Stansbury",
+   "party": "D",
+   "caucus": "D"
+  },
+  "incumbent": "D",
+  "overperformance": 5.5
+ },
+ {
+  "state": "NM-02",
+  "name": "New Mexico 2",
+  "region": "west",
+  "lean": 0.0,
+  "new_lines": false,
+  "rep": {
+   "name": "Greg Cunningham"
+  },
+  "opp": {
+   "name": "Gabe Vasquez",
+   "party": "D",
+   "caucus": "D"
+  },
+  "incumbent": "D",
+  "overperformance": 4.9
+ },
+ {
+  "state": "NM-03",
+  "name": "New Mexico 3",
+  "region": "west",
+  "lean": 6.0,
+  "new_lines": false,
+  "rep": {
+   "name": "Martin Zamora"
+  },
+  "opp": {
+   "name": "Teresa Leger Fern\u00e1ndez",
+   "party": "D",
+   "caucus": "D"
+  },
+  "incumbent": "D",
+  "overperformance": 7.3
+ },
+ {
+  "state": "NV-01",
+  "name": "Nevada 1",
+  "region": "west",
+  "lean": 4.0,
+  "new_lines": false,
+  "rep": {
+   "name": "Carrie Buck"
+  },
+  "opp": {
+   "name": "Dina Titus",
+   "party": "D",
+   "caucus": "D"
+  },
+  "incumbent": "D",
+  "overperformance": 4.2
+ },
+ {
+  "state": "NV-02",
+  "name": "Nevada 2",
+  "region": "west",
+  "lean": -14.0,
+  "new_lines": false,
+  "rep": {
+   "name": "David Flippo"
+  },
+  "opp": {
+   "name": "Teresa Benitez-Thompson",
+   "party": "D",
+   "caucus": "D"
+  },
+  "incumbent": "none"
+ },
+ {
+  "state": "NV-03",
+  "name": "Nevada 3",
+  "region": "west",
+  "lean": 2.0,
+  "new_lines": false,
+  "rep": {
+   "name": "Martin O'Donnell"
+  },
+  "opp": {
+   "name": "Susie Lee",
+   "party": "D",
+   "caucus": "D"
+  },
+  "incumbent": "D",
+  "overperformance": 3.5
+ },
+ {
+  "state": "NV-04",
+  "name": "Nevada 4",
+  "region": "west",
+  "lean": 4.0,
+  "new_lines": false,
+  "rep": {
+   "name": "Cody Whipple"
+  },
+  "opp": {
+   "name": "Steven Horsford",
+   "party": "D",
+   "caucus": "D"
+  },
+  "incumbent": "D",
+  "overperformance": 4.8
+ },
+ {
+  "state": "NY-01",
+  "name": "New York 1",
+  "region": "northeast",
+  "lean": -8.0,
+  "new_lines": false,
+  "rep": {
+   "name": "Nick LaLota"
+  },
+  "opp": {
+   "name": "Chris Gallant",
+   "party": "D",
+   "caucus": "D"
+  },
+  "incumbent": "R",
+  "overperformance": 0.3
+ },
+ {
+  "state": "NY-02",
+  "name": "New York 2",
+  "region": "northeast",
+  "lean": -12.0,
+  "new_lines": false,
+  "rep": {
+   "name": "Andrew Garbarino"
+  },
+  "opp": {
+   "name": "Patrick Halpin",
+   "party": "D",
+   "caucus": "D"
+  },
+  "incumbent": "R",
+  "overperformance": -7.7
+ },
+ {
+  "state": "NY-03",
+  "name": "New York 3",
+  "region": "northeast",
+  "lean": 0.0,
+  "new_lines": false,
+  "rep": {
+   "name": "Mike LiPetri"
+  },
+  "opp": {
+   "name": "Tom Suozzi",
+   "party": "D",
+   "caucus": "D"
+  },
+  "incumbent": "D",
+  "overperformance": 0.3
+ },
+ {
+  "state": "NY-04",
+  "name": "New York 4",
+  "region": "northeast",
+  "lean": 4.0,
+  "new_lines": false,
+  "rep": {
+   "name": "Jeanine Driscoll"
+  },
+  "opp": {
+   "name": "Laura Gillen",
+   "party": "D",
+   "caucus": "D"
+  },
+  "incumbent": "D"
+ },
+ {
+  "state": "NY-05",
+  "name": "New York 5",
+  "region": "northeast",
+  "lean": 48.0,
+  "new_lines": false,
+  "rep": {
+   "name": "George Marsh"
+  },
+  "opp": {
+   "name": "Gregory Meeks",
+   "party": "D",
+   "caucus": "D"
+  },
+  "incumbent": "D",
+  "overperformance": -11.5
+ },
+ {
+  "state": "NY-06",
+  "name": "New York 6",
+  "region": "northeast",
+  "lean": 12.0,
+  "new_lines": false,
+  "rep": {
+   "name": "Joseph Chou"
+  },
+  "opp": {
+   "name": "Grace Meng",
+   "party": "D",
+   "caucus": "D"
+  },
+  "incumbent": "D",
+  "overperformance": -2.2
+ },
+ {
+  "state": "NY-07",
+  "name": "New York 7",
+  "region": "northeast",
+  "lean": 50.0,
+  "new_lines": false,
+  "rep": {
+   "name": "Melvin Rivera"
+  },
+  "opp": {
+   "name": "Claire Valdez",
+   "party": "D",
+   "caucus": "D"
+  },
+  "incumbent": "none"
+ },
+ {
+  "state": "NY-08",
+  "name": "New York 8",
+  "region": "northeast",
+  "lean": 48.0,
+  "new_lines": false,
+  "rep": {
+   "name": "Lewis Mizrahi"
+  },
+  "opp": {
+   "name": "Hakeem Jeffries",
+   "party": "D",
+   "caucus": "D"
+  },
+  "incumbent": "D",
+  "overperformance": -0.5
+ },
+ {
+  "state": "NY-09",
+  "name": "New York 9",
+  "region": "northeast",
+  "lean": 44.0,
+  "new_lines": false,
+  "rep": {
+   "name": "Joel Azumah"
+  },
+  "opp": {
+   "name": "Yvette Clarke",
+   "party": "D",
+   "caucus": "D"
+  },
+  "incumbent": "D",
+  "overperformance": 1.3
+ },
+ {
+  "state": "NY-10",
+  "name": "New York 10",
+  "region": "northeast",
+  "lean": 64.0,
+  "new_lines": false,
+  "rep": {
+   "name": "Jennifer Moore"
+  },
+  "opp": {
+   "name": "Brad Lander",
+   "party": "D",
+   "caucus": "D"
+  },
+  "incumbent": "none"
+ },
+ {
+  "state": "NY-11",
+  "name": "New York 11",
+  "region": "northeast",
+  "lean": -20.0,
+  "new_lines": false,
+  "rep": {
+   "name": "Nicole Malliotakis"
+  },
+  "opp": {
+   "name": "Michael DeCillis",
+   "party": "D",
+   "caucus": "D"
+  },
+  "incumbent": "R",
+  "overperformance": -13.5
+ },
+ {
+  "state": "NY-12",
+  "name": "New York 12",
+  "region": "northeast",
+  "lean": 66.0,
+  "new_lines": false,
+  "rep": {
+   "name": "Caroline Shinkle"
+  },
+  "opp": {
+   "name": "Micah Lasher",
+   "party": "D",
+   "caucus": "D"
+  },
+  "incumbent": "none"
+ },
+ {
+  "state": "NY-13",
+  "name": "New York 13",
+  "region": "northeast",
+  "lean": 64.0,
+  "new_lines": false,
+  "rep": {
+   "name": "Jomo Williams"
+  },
+  "opp": {
+   "name": "Darializa Avila Chevalier",
+   "party": "D",
+   "caucus": "D"
+  },
+  "incumbent": "none"
+ },
+ {
+  "state": "NY-14",
+  "name": "New York 14",
+  "region": "northeast",
+  "lean": 38.0,
+  "new_lines": false,
+  "rep": {
+   "name": "Diamant Hysenaj"
+  },
+  "opp": {
+   "name": "Alexandria Ocasio-Cortez",
+   "party": "D",
+   "caucus": "D"
+  },
+  "incumbent": "D",
+  "overperformance": -12.9
+ },
+ {
+  "state": "NY-15",
+  "name": "New York 15",
+  "region": "northeast",
+  "lean": 54.0,
+  "new_lines": false,
+  "rep": {
+   "name": "Stylo Sapaskis"
+  },
+  "opp": {
+   "name": "Ritchie Torres",
+   "party": "D",
+   "caucus": "D"
+  },
+  "incumbent": "D",
+  "overperformance": -12.2
+ },
+ {
+  "state": "NY-16",
+  "name": "New York 16",
+  "region": "northeast",
+  "lean": 36.0,
+  "new_lines": false,
+  "rep": {
+   "name": "Joseph Cinquemani"
+  },
+  "opp": {
+   "name": "George Latimer",
+   "party": "D",
+   "caucus": "D"
+  },
+  "incumbent": "D"
+ },
+ {
+  "state": "NY-17",
+  "name": "New York 17",
+  "region": "northeast",
+  "lean": 2.0,
+  "new_lines": false,
+  "rep": {
+   "name": "Mike Lawler"
+  },
+  "opp": {
+   "name": "Cait Conley",
+   "party": "D",
+   "caucus": "D"
+  },
+  "incumbent": "R",
+  "overperformance": -9.7
+ },
+ {
+  "state": "NY-18",
+  "name": "New York 18",
+  "region": "northeast",
+  "lean": 4.0,
+  "new_lines": false,
+  "rep": {
+   "name": "Jacqueline Auringer"
+  },
+  "opp": {
+   "name": "Pat Ryan",
+   "party": "D",
+   "caucus": "D"
+  },
+  "incumbent": "D",
+  "overperformance": 13.1
+ },
+ {
+  "state": "NY-19",
+  "name": "New York 19",
+  "region": "northeast",
+  "lean": 2.0,
+  "new_lines": false,
+  "rep": {
+   "name": "Peter Oberacker"
+  },
+  "opp": {
+   "name": "Josh Riley",
+   "party": "D",
+   "caucus": "D"
+  },
+  "incumbent": "D"
+ },
+ {
+  "state": "NY-20",
+  "name": "New York 20",
+  "region": "northeast",
+  "lean": 16.0,
+  "new_lines": false,
+  "rep": {
+   "name": "Ralph Ambrosio"
+  },
+  "opp": {
+   "name": "Paul Tonko",
+   "party": "D",
+   "caucus": "D"
+  },
+  "incumbent": "D",
+  "overperformance": 10.9
+ },
+ {
+  "state": "NY-21",
+  "name": "New York 21",
+  "region": "northeast",
+  "lean": -20.0,
+  "new_lines": false,
+  "rep": {
+   "name": "Anthony Constantino"
+  },
+  "opp": {
+   "name": "Blake Gendebien",
+   "party": "D",
+   "caucus": "D"
+  },
+  "incumbent": "none"
+ },
+ {
+  "state": "NY-22",
+  "name": "New York 22",
+  "region": "northeast",
+  "lean": 8.0,
+  "new_lines": false,
+  "rep": {
+   "name": "Kailee Buller"
+  },
+  "opp": {
+   "name": "John Mannion",
+   "party": "D",
+   "caucus": "D"
+  },
+  "incumbent": "D"
+ },
+ {
+  "state": "NY-23",
+  "name": "New York 23",
+  "region": "northeast",
+  "lean": -20.0,
+  "new_lines": false,
+  "rep": {
+   "name": "Nick Langworthy"
+  },
+  "opp": {
+   "name": "Aaron Gies",
+   "party": "D",
+   "caucus": "D"
+  },
+  "incumbent": "R",
+  "overperformance": -4.9
+ },
+ {
+  "state": "NY-24",
+  "name": "New York 24",
+  "region": "northeast",
+  "lean": -22.0,
+  "new_lines": false,
+  "rep": {
+   "name": "Claudia Tenney"
+  },
+  "opp": {
+   "name": "Alissa Ellman",
+   "party": "D",
+   "caucus": "D"
+  },
+  "incumbent": "R",
+  "overperformance": -2.7
+ },
+ {
+  "state": "NY-25",
+  "name": "New York 25",
+  "region": "northeast",
+  "lean": 20.0,
+  "new_lines": false,
+  "rep": {
+   "name": "Virginia McIntyre"
+  },
+  "opp": {
+   "name": "Joseph Morelle",
+   "party": "D",
+   "caucus": "D"
+  },
+  "incumbent": "D",
+  "overperformance": 8.3
+ },
+ {
+  "state": "NY-26",
+  "name": "New York 26",
+  "region": "northeast",
+  "lean": 22.0,
+  "new_lines": false,
+  "rep": {
+   "name": "Dennis Hannon"
+  },
+  "opp": {
+   "name": "Tim Kennedy",
+   "party": "D",
+   "caucus": "D"
+  },
+  "incumbent": "D",
+  "overperformance": 13.1
+ },
+ {
+  "state": "OH-01",
+  "name": "Ohio 1",
+  "region": "midwest",
+  "lean": -2.0,
+  "new_lines": true,
+  "rep": {
+   "name": "Eric Conroy"
+  },
+  "opp": {
+   "name": "Greg Landsman",
+   "party": "D",
+   "caucus": "D"
+  },
+  "incumbent": "D"
+ },
+ {
+  "state": "OH-02",
+  "name": "Ohio 2",
+  "region": "midwest",
+  "lean": -42.0,
+  "new_lines": true,
+  "rep": {
+   "name": "David Taylor"
+  },
+  "opp": {
+   "name": "Jennifer Mazzuckelli",
+   "party": "D",
+   "caucus": "D"
+  },
+  "incumbent": "R"
+ },
+ {
+  "state": "OH-03",
+  "name": "Ohio 3",
+  "region": "midwest",
+  "lean": 42.0,
+  "new_lines": true,
+  "rep": {
+   "name": "Cleophus Dulaney"
+  },
+  "opp": {
+   "name": "Joyce Beatty",
+   "party": "D",
+   "caucus": "D"
+  },
+  "incumbent": "D"
+ },
+ {
+  "state": "OH-04",
+  "name": "Ohio 4",
+  "region": "midwest",
+  "lean": -42.0,
+  "new_lines": true,
+  "rep": {
+   "name": "Jim Jordan"
+  },
+  "opp": {
+   "name": "Joshua Kolasinski",
+   "party": "D",
+   "caucus": "D"
+  },
+  "incumbent": "R"
+ },
+ {
+  "state": "OH-05",
+  "name": "Ohio 5",
+  "region": "midwest",
+  "lean": -24.0,
+  "new_lines": true,
+  "rep": {
+   "name": "Bob Latta"
+  },
+  "opp": {
+   "name": "Brian Shaver",
+   "party": "D",
+   "caucus": "D"
+  },
+  "incumbent": "R"
+ },
+ {
+  "state": "OH-06",
+  "name": "Ohio 6",
+  "region": "midwest",
+  "lean": -34.0,
+  "new_lines": true,
+  "rep": {
+   "name": "Michael Rulli"
+  },
+  "opp": {
+   "name": "Elizabeth Kirtley",
+   "party": "D",
+   "caucus": "D"
+  },
+  "incumbent": "R"
+ },
+ {
+  "state": "OH-07",
+  "name": "Ohio 7",
+  "region": "midwest",
+  "lean": -10.0,
+  "new_lines": true,
+  "rep": {
+   "name": "Max Miller"
+  },
+  "opp": {
+   "name": "Brian Poindexter",
+   "party": "D",
+   "caucus": "D"
+  },
+  "incumbent": "R"
+ },
+ {
+  "state": "OH-08",
+  "name": "Ohio 8",
+  "region": "midwest",
+  "lean": -16.0,
+  "new_lines": true,
+  "rep": {
+   "name": "Warren Davidson"
+  },
+  "opp": {
+   "name": "Vanessa Enoch",
+   "party": "D",
+   "caucus": "D"
+  },
+  "incumbent": "R"
+ },
+ {
+  "state": "OH-09",
+  "name": "Ohio 9",
+  "region": "midwest",
+  "lean": -10.0,
+  "new_lines": true,
+  "rep": {
+   "name": "Derek Merrin"
+  },
+  "opp": {
+   "name": "Marcy Kaptur",
+   "party": "D",
+   "caucus": "D"
+  },
+  "incumbent": "D"
+ },
+ {
+  "state": "OH-10",
+  "name": "Ohio 10",
+  "region": "midwest",
+  "lean": -8.0,
+  "new_lines": true,
+  "rep": {
+   "name": "Mike Turner"
+  },
+  "opp": {
+   "name": "Kristina Knickerbocker",
+   "party": "D",
+   "caucus": "D"
+  },
+  "incumbent": "R"
+ },
+ {
+  "state": "OH-11",
+  "name": "Ohio 11",
+  "region": "midwest",
+  "lean": 56.0,
+  "new_lines": true,
+  "rep": {
+   "name": "Mike Kirchner"
+  },
+  "opp": {
+   "name": "Shontel Brown",
+   "party": "D",
+   "caucus": "D"
+  },
+  "incumbent": "D"
+ },
+ {
+  "state": "OH-12",
+  "name": "Ohio 12",
+  "region": "midwest",
+  "lean": -30.0,
+  "new_lines": true,
+  "rep": {
+   "name": "Troy Balderson"
+  },
+  "opp": {
+   "name": "Jerrad Christian",
+   "party": "D",
+   "caucus": "D"
+  },
+  "incumbent": "R"
+ },
+ {
+  "state": "OH-13",
+  "name": "Ohio 13",
+  "region": "midwest",
+  "lean": 4.0,
+  "new_lines": true,
+  "rep": {
+   "name": "Carey Coleman"
+  },
+  "opp": {
+   "name": "Emilia Sykes",
+   "party": "D",
+   "caucus": "D"
+  },
+  "incumbent": "D"
+ },
+ {
+  "state": "OH-14",
+  "name": "Ohio 14",
+  "region": "midwest",
+  "lean": -20.0,
+  "new_lines": true,
+  "rep": {
+   "name": "David Joyce"
+  },
+  "opp": {
+   "name": "Maria Jukic",
+   "party": "D",
+   "caucus": "D"
+  },
+  "incumbent": "R"
+ },
+ {
+  "state": "OH-15",
+  "name": "Ohio 15",
+  "region": "midwest",
+  "lean": -10.0,
+  "new_lines": true,
+  "rep": {
+   "name": "Mike Carey"
+  },
+  "opp": {
+   "name": "Don Leonard",
+   "party": "D",
+   "caucus": "D"
+  },
+  "incumbent": "R"
+ },
+ {
+  "state": "OK-01",
+  "name": "Oklahoma 1",
+  "region": "plains",
+  "lean": -22.0,
+  "new_lines": false,
+  "rep": {
+   "name": "Mark Tedford"
+  },
+  "opp": {
+   "name": "John Croisant",
+   "party": "D",
+   "caucus": "D"
+  },
+  "incumbent": "none"
+ },
+ {
+  "state": "OK-02",
+  "name": "Oklahoma 2",
+  "region": "plains",
+  "lean": -56.0,
+  "new_lines": false,
+  "rep": {
+   "name": "Josh Brecheen"
+  },
+  "opp": {
+   "name": "Brandon Wade",
+   "party": "D",
+   "caucus": "D"
+  },
+  "incumbent": "R",
+  "overperformance": 7.9
+ },
+ {
+  "state": "OK-03",
+  "name": "Oklahoma 3",
+  "region": "plains",
+  "lean": -46.0,
+  "new_lines": false,
+  "rep": {
+   "name": "Frank Lucas"
+  },
+  "opp": {
+   "name": "Suzie Byrd",
+   "party": "D",
+   "caucus": "D"
+  },
+  "incumbent": "R"
+ },
+ {
+  "state": "OK-04",
+  "name": "Oklahoma 4",
+  "region": "plains",
+  "lean": -34.0,
+  "new_lines": false,
+  "rep": {
+   "name": "Tom Cole"
+  },
+  "opp": {
+   "name": "Mitchell Jacob",
+   "party": "D",
+   "caucus": "D"
+  },
+  "incumbent": "R",
+  "overperformance": 3.8
+ },
+ {
+  "state": "OK-05",
+  "name": "Oklahoma 5",
+  "region": "plains",
+  "lean": -18.0,
+  "new_lines": false,
+  "rep": {
+   "name": "Stephanie Bice"
+  },
+  "opp": {
+   "name": "Jena Nelson",
+   "party": "D",
+   "caucus": "D"
+  },
+  "incumbent": "R",
+  "overperformance": 5.3
+ },
+ {
+  "state": "OR-01",
+  "name": "Oregon 1",
+  "region": "west",
+  "lean": 40.0,
+  "new_lines": false,
+  "rep": {
+   "name": "Barbara Kahl"
+  },
+  "opp": {
+   "name": "Suzanne Bonamici",
+   "party": "D",
+   "caucus": "D"
+  },
+  "incumbent": "D",
+  "overperformance": 7.3
+ },
+ {
+  "state": "OR-02",
+  "name": "Oregon 2",
+  "region": "west",
+  "lean": -28.0,
+  "new_lines": false,
+  "rep": {
+   "name": "Cliff Bentz"
+  },
+  "opp": {
+   "name": "Chris Beck",
+   "party": "D",
+   "caucus": "D"
+  },
+  "incumbent": "R",
+  "overperformance": 1.5
+ },
+ {
+  "state": "OR-03",
+  "name": "Oregon 3",
+  "region": "west",
+  "lean": 48.0,
+  "new_lines": false,
+  "rep": {
+   "name": "Loran Ayles"
+  },
+  "opp": {
+   "name": "Maxine Dexter",
+   "party": "D",
+   "caucus": "D"
+  },
+  "incumbent": "D"
+ },
+ {
+  "state": "OR-04",
+  "name": "Oregon 4",
+  "region": "west",
+  "lean": 12.0,
+  "new_lines": false,
+  "rep": {
+   "name": "Monique DeSpain"
+  },
+  "opp": {
+   "name": "Val Hoyle",
+   "party": "D",
+   "caucus": "D"
+  },
+  "incumbent": "D",
+  "overperformance": 2.5
+ },
+ {
+  "state": "OR-05",
+  "name": "Oregon 5",
+  "region": "west",
+  "lean": 8.0,
+  "new_lines": false,
+  "rep": {
+   "name": "Patti Adair"
+  },
+  "opp": {
+   "name": "Janelle Bynum",
+   "party": "D",
+   "caucus": "D"
+  },
+  "incumbent": "D"
+ },
+ {
+  "state": "OR-06",
+  "name": "Oregon 6",
+  "region": "west",
+  "lean": 12.0,
+  "new_lines": false,
+  "rep": {
+   "name": "David Russ"
+  },
+  "opp": {
+   "name": "Andrea Salinas",
+   "party": "D",
+   "caucus": "D"
+  },
+  "incumbent": "D",
+  "overperformance": 1.5
+ },
+ {
+  "state": "PA-01",
+  "name": "Pennsylvania 1",
+  "region": "northeast",
+  "lean": 2.0,
+  "new_lines": false,
+  "rep": {
+   "name": "Brian Fitzpatrick"
+  },
+  "opp": {
+   "name": "Bob Harvie",
+   "party": "D",
+   "caucus": "D"
+  },
+  "incumbent": "R",
+  "overperformance": -10.1
+ },
+ {
+  "state": "PA-02",
+  "name": "Pennsylvania 2",
+  "region": "northeast",
+  "lean": 38.0,
+  "new_lines": false,
+  "rep": {
+   "name": "Jessica Arriaga"
+  },
+  "opp": {
+   "name": "Brendan Boyle",
+   "party": "D",
+   "caucus": "D"
+  },
+  "incumbent": "D",
+  "overperformance": 5.6
+ },
+ {
+  "state": "PA-03",
+  "name": "Pennsylvania 3",
+  "region": "northeast",
+  "lean": 80.0,
+  "new_lines": false,
+  "rep": {
+   "name": "No Republican"
+  },
+  "opp": {
+   "name": "Chris Rabb",
+   "party": "D",
+   "caucus": "D"
+  },
+  "incumbent": "none",
+  "uncontested": "D"
+ },
+ {
+  "state": "PA-04",
+  "name": "Pennsylvania 4",
+  "region": "northeast",
+  "lean": 16.0,
+  "new_lines": false,
+  "rep": {
+   "name": "Aurora Stuski"
+  },
+  "opp": {
+   "name": "Madeleine Dean",
+   "party": "D",
+   "caucus": "D"
+  },
+  "incumbent": "D",
+  "overperformance": 6.9
+ },
+ {
+  "state": "PA-05",
+  "name": "Pennsylvania 5",
+  "region": "northeast",
+  "lean": 30.0,
+  "new_lines": false,
+  "rep": {
+   "name": "Nicholas Manganaro"
+  },
+  "opp": {
+   "name": "Mary Gay Scanlon",
+   "party": "D",
+   "caucus": "D"
+  },
+  "incumbent": "D",
+  "overperformance": 5.3
+ },
+ {
+  "state": "PA-06",
+  "name": "Pennsylvania 6",
+  "region": "northeast",
+  "lean": 12.0,
+  "new_lines": false,
+  "rep": {
+   "name": "Marty Young"
+  },
+  "opp": {
+   "name": "Chrissy Houlahan",
+   "party": "D",
+   "caucus": "D"
+  },
+  "incumbent": "D",
+  "overperformance": 5.1
+ },
+ {
+  "state": "PA-07",
+  "name": "Pennsylvania 7",
+  "region": "northeast",
+  "lean": -2.0,
+  "new_lines": false,
+  "rep": {
+   "name": "Ryan Mackenzie"
+  },
+  "opp": {
+   "name": "Bob Brooks",
+   "party": "D",
+   "caucus": "D"
+  },
+  "incumbent": "R"
+ },
+ {
+  "state": "PA-08",
+  "name": "Pennsylvania 8",
+  "region": "northeast",
+  "lean": -8.0,
+  "new_lines": false,
+  "rep": {
+   "name": "Rob Bresnahan"
+  },
+  "opp": {
+   "name": "Paige Cognetti",
+   "party": "D",
+   "caucus": "D"
+  },
+  "incumbent": "R"
+ },
+ {
+  "state": "PA-09",
+  "name": "Pennsylvania 9",
+  "region": "northeast",
+  "lean": -38.0,
+  "new_lines": false,
+  "rep": {
+   "name": "Dan Meuser"
+  },
+  "opp": {
+   "name": "Rachel Wallace",
+   "party": "D",
+   "caucus": "D"
+  },
+  "incumbent": "R",
+  "overperformance": 3.7
+ },
+ {
+  "state": "PA-10",
+  "name": "Pennsylvania 10",
+  "region": "northeast",
+  "lean": -6.0,
+  "new_lines": false,
+  "rep": {
+   "name": "Scott Perry"
+  },
+  "opp": {
+   "name": "Janelle Stelson",
+   "party": "D",
+   "caucus": "D"
+  },
+  "incumbent": "R",
+  "overperformance": 11.5
+ },
+ {
+  "state": "PA-11",
+  "name": "Pennsylvania 11",
+  "region": "northeast",
+  "lean": -22.0,
+  "new_lines": false,
+  "rep": {
+   "name": "Lloyd Smucker"
+  },
+  "opp": {
+   "name": "Nancy Mannion",
+   "party": "D",
+   "caucus": "D"
+  },
+  "incumbent": "R",
+  "overperformance": 2.9
+ },
+ {
+  "state": "PA-12",
+  "name": "Pennsylvania 12",
+  "region": "northeast",
+  "lean": 20.0,
+  "new_lines": false,
+  "rep": {
+   "name": "James Hayes"
+  },
+  "opp": {
+   "name": "Summer Lee",
+   "party": "D",
+   "caucus": "D"
+  },
+  "incumbent": "D",
+  "overperformance": -0.5
+ },
+ {
+  "state": "PA-13",
+  "name": "Pennsylvania 13",
+  "region": "northeast",
+  "lean": -46.0,
+  "new_lines": false,
+  "rep": {
+   "name": "John Joyce"
+  },
+  "opp": {
+   "name": "Beth Farnham",
+   "party": "D",
+   "caucus": "D"
+  },
+  "incumbent": "R",
+  "overperformance": 4.3
+ },
+ {
+  "state": "PA-14",
+  "name": "Pennsylvania 14",
+  "region": "northeast",
+  "lean": -34.0,
+  "new_lines": false,
+  "rep": {
+   "name": "Guy Reschenthaler"
+  },
+  "opp": {
+   "name": "Alan Bradstock",
+   "party": "D",
+   "caucus": "D"
+  },
+  "incumbent": "R",
+  "overperformance": 5.5
+ },
+ {
+  "state": "PA-15",
+  "name": "Pennsylvania 15",
+  "region": "northeast",
+  "lean": -38.0,
+  "new_lines": false,
+  "rep": {
+   "name": "Glenn Thompson"
+  },
+  "opp": {
+   "name": "Ray Bilger",
+   "party": "D",
+   "caucus": "D"
+  },
+  "incumbent": "R",
+  "overperformance": 1.7
+ },
+ {
+  "state": "PA-16",
+  "name": "Pennsylvania 16",
+  "region": "northeast",
+  "lean": -22.0,
+  "new_lines": false,
+  "rep": {
+   "name": "Mike Kelly"
+  },
+  "opp": {
+   "name": "Justin Wagner",
+   "party": "D",
+   "caucus": "D"
+  },
+  "incumbent": "R",
+  "overperformance": 1.5
+ },
+ {
+  "state": "PA-17",
+  "name": "Pennsylvania 17",
+  "region": "northeast",
+  "lean": 6.0,
+  "new_lines": false,
+  "rep": {
+   "name": "Tony Guy"
+  },
+  "opp": {
+   "name": "Chris Deluzio",
+   "party": "D",
+   "caucus": "D"
+  },
+  "incumbent": "D",
+  "overperformance": 10.5
+ },
+ {
+  "state": "RI-01",
+  "name": "Rhode Island 1",
+  "region": "northeast",
+  "lean": 24.0,
+  "new_lines": false,
+  "rep": {
+   "name": "Kellie Keenan"
+  },
+  "opp": {
+   "name": "Gabe Amo",
+   "party": "D",
+   "caucus": "D"
+  },
+  "incumbent": "D",
+  "overperformance": 9.8
+ },
+ {
+  "state": "RI-02",
+  "name": "Rhode Island 2",
+  "region": "northeast",
+  "lean": 8.0,
+  "new_lines": false,
+  "rep": {
+   "name": "Vic Mellor"
+  },
+  "opp": {
+   "name": "Seth Magaziner",
+   "party": "D",
+   "caucus": "D"
+  },
+  "incumbent": "D",
+  "overperformance": 11.5
+ },
+ {
+  "state": "SC-01",
+  "name": "South Carolina 1",
+  "region": "south",
+  "lean": -12.0,
+  "new_lines": false,
+  "rep": {
+   "name": "Jenny Costa Honeycutt"
+  },
+  "opp": {
+   "name": "Nancy Lacore",
+   "party": "D",
+   "caucus": "D"
+  },
+  "incumbent": "none"
+ },
+ {
+  "state": "SC-02",
+  "name": "South Carolina 2",
+  "region": "south",
+  "lean": -14.0,
+  "new_lines": false,
+  "rep": {
+   "name": "Joe Wilson"
+  },
+  "opp": {
+   "name": "Zyon Khalifa",
+   "party": "D",
+   "caucus": "D"
+  },
+  "incumbent": "R",
+  "overperformance": -0.7
+ },
+ {
+  "state": "SC-03",
+  "name": "South Carolina 3",
+  "region": "south",
+  "lean": -42.0,
+  "new_lines": false,
+  "rep": {
+   "name": "Sheri Biggs"
+  },
+  "opp": {
+   "name": "Eunice Lehmacher",
+   "party": "D",
+   "caucus": "D"
+  },
+  "incumbent": "R"
+ },
+ {
+  "state": "SC-04",
+  "name": "South Carolina 4",
+  "region": "south",
+  "lean": -22.0,
+  "new_lines": false,
+  "rep": {
+   "name": "William Timmons"
+  },
+  "opp": {
+   "name": "Courtney McClain",
+   "party": "D",
+   "caucus": "D"
+  },
+  "incumbent": "R",
+  "overperformance": 4.1
+ },
+ {
+  "state": "SC-05",
+  "name": "South Carolina 5",
+  "region": "south",
+  "lean": -22.0,
+  "new_lines": false,
+  "rep": {
+   "name": "Wes Climer"
+  },
+  "opp": {
+   "name": "Mallory Dittmer",
+   "party": "D",
+   "caucus": "D"
+  },
+  "incumbent": "none"
+ },
+ {
+  "state": "SC-06",
+  "name": "South Carolina 6",
+  "region": "south",
+  "lean": 26.0,
+  "new_lines": false,
+  "rep": {
+   "name": "John Peterson"
+  },
+  "opp": {
+   "name": "Jim Clyburn",
+   "party": "D",
+   "caucus": "D"
+  },
+  "incumbent": "D",
+  "overperformance": -2.5
+ },
+ {
+  "state": "SC-07",
+  "name": "South Carolina 7",
+  "region": "south",
+  "lean": -24.0,
+  "new_lines": false,
+  "rep": {
+   "name": "Russell Fry"
+  },
+  "opp": {
+   "name": "John Vincent",
+   "party": "D",
+   "caucus": "D"
+  },
+  "incumbent": "R",
+  "overperformance": -5.3
+ },
+ {
+  "state": "SD-AL",
+  "name": "South Dakota at-large",
+  "region": "plains",
+  "lean": -30.0,
+  "new_lines": false,
+  "rep": {
+   "name": "Marty Jackley"
+  },
+  "opp": {
+   "name": "Nikki Gronli",
+   "party": "D",
+   "caucus": "D"
+  },
+  "incumbent": "none"
+ },
+ {
+  "state": "TN-01",
+  "name": "Tennessee 1",
+  "region": "south",
+  "lean": -58.0,
+  "new_lines": true,
+  "rep": {
+   "name": "Diana Harshbarger"
+  },
+  "opp": {
+   "name": "Kristi Burke",
+   "party": "D",
+   "caucus": "D"
+  },
+  "incumbent": "R"
+ },
+ {
+  "state": "TN-02",
+  "name": "Tennessee 2",
+  "region": "south",
+  "lean": -34.0,
+  "new_lines": true,
+  "rep": {
+   "name": "Tim Burchett"
+  },
+  "opp": {
+   "name": "Michaela Barnett",
+   "party": "D",
+   "caucus": "D"
+  },
+  "incumbent": "R"
+ },
+ {
+  "state": "TN-03",
+  "name": "Tennessee 3",
+  "region": "south",
+  "lean": -36.0,
+  "new_lines": true,
+  "rep": {
+   "name": "Chuck Fleischmann"
+  },
+  "opp": {
+   "name": "Anna Golladay",
+   "party": "D",
+   "caucus": "D"
+  },
+  "incumbent": "R"
+ },
+ {
+  "state": "TN-04",
+  "name": "Tennessee 4",
+  "region": "south",
+  "lean": -22.0,
+  "new_lines": true,
+  "rep": {
+   "name": "Scott DesJarlais"
+  },
+  "opp": {
+   "name": "Victoria Broderick",
+   "party": "D",
+   "caucus": "D"
+  },
+  "incumbent": "R"
+ },
+ {
+  "state": "TN-05",
+  "name": "Tennessee 5",
+  "region": "south",
+  "lean": -20.0,
+  "new_lines": true,
+  "rep": {
+   "name": "Charlie Hatcher"
+  },
+  "opp": {
+   "name": "Chaz Molder",
+   "party": "D",
+   "caucus": "D"
+  },
+  "incumbent": "none"
+ },
+ {
+  "state": "TN-06",
+  "name": "Tennessee 6",
+  "region": "south",
+  "lean": -26.0,
+  "new_lines": true,
+  "rep": {
+   "name": "Johnny Garrett"
+  },
+  "opp": {
+   "name": "Mike Croley",
+   "party": "D",
+   "caucus": "D"
+  },
+  "incumbent": "none"
+ },
+ {
+  "state": "TN-07",
+  "name": "Tennessee 7",
+  "region": "south",
+  "lean": -22.0,
+  "new_lines": true,
+  "rep": {
+   "name": "Matt Van Epps"
+  },
+  "opp": {
+   "name": "Darden Copeland",
+   "party": "D",
+   "caucus": "D"
+  },
+  "incumbent": "R"
+ },
+ {
+  "state": "TN-08",
+  "name": "Tennessee 8",
+  "region": "south",
+  "lean": -20.0,
+  "new_lines": true,
+  "rep": {
+   "name": "David Kustoff"
+  },
+  "opp": {
+   "name": "Heidi Kuhn",
+   "party": "D",
+   "caucus": "D"
+  },
+  "incumbent": "R"
+ },
+ {
+  "state": "TN-09",
+  "name": "Tennessee 9",
+  "region": "south",
+  "lean": -18.0,
+  "new_lines": true,
+  "rep": {
+   "name": "Brent Taylor"
+  },
+  "opp": {
+   "name": "Justin Pearson",
+   "party": "D",
+   "caucus": "D"
+  },
+  "incumbent": "none"
+ },
+ {
+  "state": "TX-01",
+  "name": "Texas 1",
+  "region": "south",
+  "lean": -48.0,
+  "new_lines": true,
+  "rep": {
+   "name": "Nathaniel Moran"
+  },
+  "opp": {
+   "name": "Yolanda Prince",
+   "party": "D",
+   "caucus": "D"
+  },
+  "incumbent": "R"
+ },
+ {
+  "state": "TX-02",
+  "name": "Texas 2",
+  "region": "south",
+  "lean": -22.0,
+  "new_lines": true,
+  "rep": {
+   "name": "Steve Toth"
+  },
+  "opp": {
+   "name": "Shaun Finnie",
+   "party": "D",
+   "caucus": "D"
+  },
+  "incumbent": "none"
+ },
+ {
+  "state": "TX-03",
+  "name": "Texas 3",
+  "region": "south",
+  "lean": -22.0,
+  "new_lines": true,
+  "rep": {
+   "name": "Keith Self"
+  },
+  "opp": {
+   "name": "Evan Hunt",
+   "party": "D",
+   "caucus": "D"
+  },
+  "incumbent": "R"
+ },
+ {
+  "state": "TX-04",
+  "name": "Texas 4",
+  "region": "south",
+  "lean": -24.0,
+  "new_lines": true,
+  "rep": {
+   "name": "Pat Fallon"
+  },
+  "opp": {
+   "name": "Jason Pearce",
+   "party": "D",
+   "caucus": "D"
+  },
+  "incumbent": "R"
+ },
+ {
+  "state": "TX-05",
+  "name": "Texas 5",
+  "region": "south",
+  "lean": -20.0,
+  "new_lines": true,
+  "rep": {
+   "name": "Lance Gooden"
+  },
+  "opp": {
+   "name": "Chelsey Hockett",
+   "party": "D",
+   "caucus": "D"
+  },
+  "incumbent": "R"
+ },
+ {
+  "state": "TX-06",
+  "name": "Texas 6",
+  "region": "south",
+  "lean": -22.0,
+  "new_lines": true,
+  "rep": {
+   "name": "Jake Ellzey"
+  },
+  "opp": {
+   "name": "Danny Minton",
+   "party": "D",
+   "caucus": "D"
+  },
+  "incumbent": "R"
+ },
+ {
+  "state": "TX-07",
+  "name": "Texas 7",
+  "region": "south",
+  "lean": 26.0,
+  "new_lines": true,
+  "rep": {
+   "name": "Alexander Hale"
+  },
+  "opp": {
+   "name": "Lizzie Fletcher",
+   "party": "D",
+   "caucus": "D"
+  },
+  "incumbent": "D"
+ },
+ {
+  "state": "TX-08",
+  "name": "Texas 8",
+  "region": "south",
+  "lean": -26.0,
+  "new_lines": true,
+  "rep": {
+   "name": "Jessica Hart Steinmann"
+  },
+  "opp": {
+   "name": "Laura Jones",
+   "party": "D",
+   "caucus": "D"
+  },
+  "incumbent": "none"
+ },
+ {
+  "state": "TX-09",
+  "name": "Texas 9",
+  "region": "south",
+  "lean": -18.0,
+  "new_lines": true,
+  "rep": {
+   "name": "Alex Mealer"
+  },
+  "opp": {
+   "name": "Leticia Gutierrez",
+   "party": "D",
+   "caucus": "D"
+  },
+  "incumbent": "none"
+ },
+ {
+  "state": "TX-10",
+  "name": "Texas 10",
+  "region": "south",
+  "lean": -20.0,
+  "new_lines": true,
+  "rep": {
+   "name": "Chris Gober"
+  },
+  "opp": {
+   "name": "Caitlin Rourk",
+   "party": "D",
+   "caucus": "D"
+  },
+  "incumbent": "none"
+ },
+ {
+  "state": "TX-11",
+  "name": "Texas 11",
+  "region": "south",
+  "lean": -34.0,
+  "new_lines": true,
+  "rep": {
+   "name": "August Pfluger"
+  },
+  "opp": {
+   "name": "Claire Reynolds",
+   "party": "D",
+   "caucus": "D"
+  },
+  "incumbent": "R"
+ },
+ {
+  "state": "TX-12",
+  "name": "Texas 12",
+  "region": "south",
+  "lean": -22.0,
+  "new_lines": true,
+  "rep": {
+   "name": "Craig Goldman"
+  },
+  "opp": {
+   "name": "Angela Rodriguez Prilliman",
+   "party": "D",
+   "caucus": "D"
+  },
+  "incumbent": "R"
+ },
+ {
+  "state": "TX-13",
+  "name": "Texas 13",
+  "region": "south",
+  "lean": -46.0,
+  "new_lines": true,
+  "rep": {
+   "name": "Ronny Jackson"
+  },
+  "opp": {
+   "name": "Mark Nair",
+   "party": "D",
+   "caucus": "D"
+  },
+  "incumbent": "R"
+ },
+ {
+  "state": "TX-14",
+  "name": "Texas 14",
+  "region": "south",
+  "lean": -24.0,
+  "new_lines": true,
+  "rep": {
+   "name": "Randy Weber"
+  },
+  "opp": {
+   "name": "Thurman Bartie",
+   "party": "D",
+   "caucus": "D"
+  },
+  "incumbent": "R"
+ },
+ {
+  "state": "TX-15",
+  "name": "Texas 15",
+  "region": "south",
+  "lean": -14.0,
+  "new_lines": true,
+  "rep": {
+   "name": "Monica De La Cruz"
+  },
+  "opp": {
+   "name": "Bobby Pulido",
+   "party": "D",
+   "caucus": "D"
+  },
+  "incumbent": "R"
+ },
+ {
+  "state": "TX-16",
+  "name": "Texas 16",
+  "region": "south",
+  "lean": 22.0,
+  "new_lines": true,
+  "rep": {
+   "name": "Adam Bauman"
+  },
+  "opp": {
+   "name": "Veronica Escobar",
+   "party": "D",
+   "caucus": "D"
+  },
+  "incumbent": "D"
+ },
+ {
+  "state": "TX-17",
+  "name": "Texas 17",
+  "region": "south",
+  "lean": -20.0,
+  "new_lines": true,
+  "rep": {
+   "name": "Pete Sessions"
+  },
+  "opp": {
+   "name": "Casey Shepard",
+   "party": "D",
+   "caucus": "D"
+  },
+  "incumbent": "R"
+ },
+ {
+  "state": "TX-18",
+  "name": "Texas 18",
+  "region": "south",
+  "lean": 58.0,
+  "new_lines": true,
+  "rep": {
+   "name": "Ronald Whitfield"
+  },
+  "opp": {
+   "name": "Christian Menefee",
+   "party": "D",
+   "caucus": "D"
+  },
+  "incumbent": "D"
+ },
+ {
+  "state": "TX-19",
+  "name": "Texas 19",
+  "region": "south",
+  "lean": -50.0,
+  "new_lines": true,
+  "rep": {
+   "name": "Tom Sell"
+  },
+  "opp": {
+   "name": "Kyle Rable",
+   "party": "D",
+   "caucus": "D"
+  },
+  "incumbent": "none"
+ },
+ {
+  "state": "TX-20",
+  "name": "Texas 20",
+  "region": "south",
+  "lean": 32.0,
+  "new_lines": true,
+  "rep": {
+   "name": "Edgardo Rafael Baez"
+  },
+  "opp": {
+   "name": "Joaquin Castro",
+   "party": "D",
+   "caucus": "D"
+  },
+  "incumbent": "D"
+ },
+ {
+  "state": "TX-21",
+  "name": "Texas 21",
+  "region": "south",
+  "lean": -20.0,
+  "new_lines": true,
+  "rep": {
+   "name": "Mark Teixeira"
+  },
+  "opp": {
+   "name": "Kristin Hook",
+   "party": "D",
+   "caucus": "D"
+  },
+  "incumbent": "none"
+ },
+ {
+  "state": "TX-22",
+  "name": "Texas 22",
+  "region": "south",
+  "lean": -22.0,
+  "new_lines": true,
+  "rep": {
+   "name": "Trever Nehls"
+  },
+  "opp": {
+   "name": "Marquette Greene-Scott",
+   "party": "D",
+   "caucus": "D"
+  },
+  "incumbent": "R"
+ },
+ {
+  "state": "TX-23",
+  "name": "Texas 23",
+  "region": "south",
+  "lean": -14.0,
+  "new_lines": true,
+  "rep": {
+   "name": "Brandon Herrera"
+  },
+  "opp": {
+   "name": "Katy Padilla Stout",
+   "party": "D",
+   "caucus": "D"
+  },
+  "incumbent": "none"
+ },
+ {
+  "state": "TX-24",
+  "name": "Texas 24",
+  "region": "south",
+  "lean": -16.0,
+  "new_lines": true,
+  "rep": {
+   "name": "Beth Van Duyne"
+  },
+  "opp": {
+   "name": "Kevin Burge",
+   "party": "D",
+   "caucus": "D"
+  },
+  "incumbent": "R"
+ },
+ {
+  "state": "TX-25",
+  "name": "Texas 25",
+  "region": "south",
+  "lean": -22.0,
+  "new_lines": true,
+  "rep": {
+   "name": "Roger Williams"
+  },
+  "opp": {
+   "name": "Dione Sims",
+   "party": "D",
+   "caucus": "D"
+  },
+  "incumbent": "R"
+ },
+ {
+  "state": "TX-26",
+  "name": "Texas 26",
+  "region": "south",
+  "lean": -22.0,
+  "new_lines": true,
+  "rep": {
+   "name": "Brandon Gill"
+  },
+  "opp": {
+   "name": "Steven Shook",
+   "party": "D",
+   "caucus": "D"
+  },
+  "incumbent": "R"
+ },
+ {
+  "state": "TX-27",
+  "name": "Texas 27",
+  "region": "south",
+  "lean": -20.0,
+  "new_lines": true,
+  "rep": {
+   "name": "Michael Cloud"
+  },
+  "opp": {
+   "name": "Tanya Lloyd",
+   "party": "D",
+   "caucus": "D"
+  },
+  "incumbent": "R"
+ },
+ {
+  "state": "TX-28",
+  "name": "Texas 28",
+  "region": "south",
+  "lean": -6.0,
+  "new_lines": true,
+  "rep": {
+   "name": "Tano Tijerina"
+  },
+  "opp": {
+   "name": "Henry Cuellar",
+   "party": "D",
+   "caucus": "D"
+  },
+  "incumbent": "D"
+ },
+ {
+  "state": "TX-29",
+  "name": "Texas 29",
+  "region": "south",
+  "lean": 34.0,
+  "new_lines": true,
+  "rep": {
+   "name": "Martha Fierro"
+  },
+  "opp": {
+   "name": "Sylvia Garcia",
+   "party": "D",
+   "caucus": "D"
+  },
+  "incumbent": "D"
+ },
+ {
+  "state": "TX-30",
+  "name": "Texas 30",
+  "region": "south",
+  "lean": 50.0,
+  "new_lines": true,
+  "rep": {
+   "name": "Everett Jackson"
+  },
+  "opp": {
+   "name": "Frederick Haynes III",
+   "party": "D",
+   "caucus": "D"
+  },
+  "incumbent": "none"
+ },
+ {
+  "state": "TX-31",
+  "name": "Texas 31",
+  "region": "south",
+  "lean": -22.0,
+  "new_lines": true,
+  "rep": {
+   "name": "John Carter"
+  },
+  "opp": {
+   "name": "Justin Early",
+   "party": "D",
+   "caucus": "D"
+  },
+  "incumbent": "R"
+ },
+ {
+  "state": "TX-32",
+  "name": "Texas 32",
+  "region": "south",
+  "lean": -16.0,
+  "new_lines": true,
+  "rep": {
+   "name": "Jace Yarbrough"
+  },
+  "opp": {
+   "name": "Dan Barrios",
+   "party": "D",
+   "caucus": "D"
+  },
+  "incumbent": "none"
+ },
+ {
+  "state": "TX-33",
+  "name": "Texas 33",
+  "region": "south",
+  "lean": 36.0,
+  "new_lines": true,
+  "rep": {
+   "name": "Patrick Gillespie"
+  },
+  "opp": {
+   "name": "Colin Allred",
+   "party": "D",
+   "caucus": "D"
+  },
+  "incumbent": "none"
+ },
+ {
+  "state": "TX-34",
+  "name": "Texas 34",
+  "region": "south",
+  "lean": -6.0,
+  "new_lines": true,
+  "rep": {
+   "name": "Eric Flores"
+  },
+  "opp": {
+   "name": "Vicente Gonzalez",
+   "party": "D",
+   "caucus": "D"
+  },
+  "incumbent": "D"
+ },
+ {
+  "state": "TX-35",
+  "name": "Texas 35",
+  "region": "south",
+  "lean": -8.0,
+  "new_lines": true,
+  "rep": {
+   "name": "Carlos De La Cruz"
+  },
+  "opp": {
+   "name": "Johnny Garcia",
+   "party": "D",
+   "caucus": "D"
+  },
+  "incumbent": "none"
+ },
+ {
+  "state": "TX-36",
+  "name": "Texas 36",
+  "region": "south",
+  "lean": -24.0,
+  "new_lines": true,
+  "rep": {
+   "name": "Brian Babin"
+  },
+  "opp": {
+   "name": "Rhonda Hart",
+   "party": "D",
+   "caucus": "D"
+  },
+  "incumbent": "R"
+ },
+ {
+  "state": "TX-37",
+  "name": "Texas 37",
+  "region": "south",
+  "lean": 60.0,
+  "new_lines": true,
+  "rep": {
+   "name": "Lauren Pe\u00f1a"
+  },
+  "opp": {
+   "name": "Greg Casar",
+   "party": "D",
+   "caucus": "D"
+  },
+  "incumbent": "none"
+ },
+ {
+  "state": "TX-38",
+  "name": "Texas 38",
+  "region": "south",
+  "lean": -20.0,
+  "new_lines": true,
+  "rep": {
+   "name": "Jon Bonck"
+  },
+  "opp": {
+   "name": "Melissa McDonough",
+   "party": "D",
+   "caucus": "D"
+  },
+  "incumbent": "none"
+ },
+ {
+  "state": "UT-01",
+  "name": "Utah 1",
+  "region": "west",
+  "lean": 24.0,
+  "new_lines": true,
+  "rep": {
+   "name": "Riley Owen"
+  },
+  "opp": {
+   "name": "Ben McAdams",
+   "party": "D",
+   "caucus": "D"
+  },
+  "incumbent": "none"
+ },
+ {
+  "state": "UT-02",
+  "name": "Utah 2",
+  "region": "west",
+  "lean": -30.0,
+  "new_lines": true,
+  "rep": {
+   "name": "Blake Moore"
+  },
+  "opp": {
+   "name": "Peter Crosby",
+   "party": "D",
+   "caucus": "D"
+  },
+  "incumbent": "none"
+ },
+ {
+  "state": "UT-03",
+  "name": "Utah 3",
+  "region": "west",
+  "lean": -42.0,
+  "new_lines": true,
+  "rep": {
+   "name": "Celeste Maloy"
+  },
+  "opp": {
+   "name": "Kent Udell",
+   "party": "D",
+   "caucus": "D"
+  },
+  "incumbent": "none"
+ },
+ {
+  "state": "UT-04",
+  "name": "Utah 4",
+  "region": "west",
+  "lean": -34.0,
+  "new_lines": true,
+  "rep": {
+   "name": "Mike Kennedy"
+  },
+  "opp": {
+   "name": "Jonny Larsen",
+   "party": "D",
+   "caucus": "D"
+  },
+  "incumbent": "none"
+ },
+ {
+  "state": "VA-01",
+  "name": "Virginia 1",
+  "region": "south",
+  "lean": -6.0,
+  "new_lines": true,
+  "rep": {
+   "name": "Rob Wittman"
+  },
+  "opp": {
+   "name": "Shannon Taylor",
+   "party": "D",
+   "caucus": "D"
+  },
+  "incumbent": "R"
+ },
+ {
+  "state": "VA-02",
+  "name": "Virginia 2",
+  "region": "south",
+  "lean": 0.0,
+  "new_lines": true,
+  "rep": {
+   "name": "Jen Kiggans"
+  },
+  "opp": {
+   "name": "Elaine Luria",
+   "party": "D",
+   "caucus": "D"
+  },
+  "incumbent": "R"
+ },
+ {
+  "state": "VA-03",
+  "name": "Virginia 3",
+  "region": "south",
+  "lean": 36.0,
+  "new_lines": true,
+  "rep": {
+   "name": "Edwin Rivera"
+  },
+  "opp": {
+   "name": "Bobby Scott",
+   "party": "D",
+   "caucus": "D"
+  },
+  "incumbent": "D"
+ },
+ {
+  "state": "VA-04",
+  "name": "Virginia 4",
+  "region": "south",
+  "lean": 34.0,
+  "new_lines": true,
+  "rep": {
+   "name": "Robert Murray"
+  },
+  "opp": {
+   "name": "Jennifer McClellan",
+   "party": "D",
+   "caucus": "D"
+  },
+  "incumbent": "D"
+ },
+ {
+  "state": "VA-05",
+  "name": "Virginia 5",
+  "region": "south",
+  "lean": -12.0,
+  "new_lines": true,
+  "rep": {
+   "name": "John McGuire"
+  },
+  "opp": {
+   "name": "Tom Perriello",
+   "party": "D",
+   "caucus": "D"
+  },
+  "incumbent": "R"
+ },
+ {
+  "state": "VA-06",
+  "name": "Virginia 6",
+  "region": "south",
+  "lean": -24.0,
+  "new_lines": true,
+  "rep": {
+   "name": "Ben Cline"
+  },
+  "opp": {
+   "name": "Beth Macy",
+   "party": "D",
+   "caucus": "D"
+  },
+  "incumbent": "R"
+ },
+ {
+  "state": "VA-07",
+  "name": "Virginia 7",
+  "region": "south",
+  "lean": 4.0,
+  "new_lines": true,
+  "rep": {
+   "name": "Doug Ollivant"
+  },
+  "opp": {
+   "name": "Eugene Vindman",
+   "party": "D",
+   "caucus": "D"
+  },
+  "incumbent": "D"
+ },
+ {
+  "state": "VA-08",
+  "name": "Virginia 8",
+  "region": "south",
+  "lean": 52.0,
+  "new_lines": true,
+  "rep": {
+   "name": "Tony Sabio"
+  },
+  "opp": {
+   "name": "Don Beyer",
+   "party": "D",
+   "caucus": "D"
+  },
+  "incumbent": "D"
+ },
+ {
+  "state": "VA-09",
+  "name": "Virginia 9",
+  "region": "south",
+  "lean": -44.0,
+  "new_lines": true,
+  "rep": {
+   "name": "Morgan Griffith"
+  },
+  "opp": {
+   "name": "Joy Powers",
+   "party": "D",
+   "caucus": "D"
+  },
+  "incumbent": "R"
+ },
+ {
+  "state": "VA-10",
+  "name": "Virginia 10",
+  "region": "south",
+  "lean": 12.0,
+  "new_lines": true,
+  "rep": {
+   "name": "Dave Beckwith"
+  },
+  "opp": {
+   "name": "Suhas Subramanyam",
+   "party": "D",
+   "caucus": "D"
+  },
+  "incumbent": "D"
+ },
+ {
+  "state": "VA-11",
+  "name": "Virginia 11",
+  "region": "south",
+  "lean": 36.0,
+  "new_lines": true,
+  "rep": {
+   "name": "Arthur Purves"
+  },
+  "opp": {
+   "name": "James Walkinshaw",
+   "party": "D",
+   "caucus": "D"
+  },
+  "incumbent": "D"
+ },
+ {
+  "state": "VT-AL",
+  "name": "Vermont at-large",
+  "region": "northeast",
+  "lean": 34.0,
+  "new_lines": false,
+  "rep": {
+   "name": "Gerald Malloy"
+  },
+  "opp": {
+   "name": "Becca Balint",
+   "party": "D",
+   "caucus": "D"
+  },
+  "incumbent": "D",
+  "overperformance": 3.3
+ },
+ {
+  "state": "WA-01",
+  "name": "Washington 1",
+  "region": "west",
+  "lean": 30.0,
+  "new_lines": false,
+  "rep": {
+   "name": "Mary Silva"
+  },
+  "opp": {
+   "name": "Suzan DelBene",
+   "party": "D",
+   "caucus": "D"
+  },
+  "incumbent": "D",
+  "overperformance": 3.1
+ },
+ {
+  "state": "WA-02",
+  "name": "Washington 2",
+  "region": "west",
+  "lean": 24.0,
+  "new_lines": false,
+  "rep": {
+   "name": "Edwin Feller"
+  },
+  "opp": {
+   "name": "Rick Larsen",
+   "party": "D",
+   "caucus": "D"
+  },
+  "incumbent": "D",
+  "overperformance": 12.7
+ },
+ {
+  "state": "WA-03",
+  "name": "Washington 3",
+  "region": "west",
+  "lean": -4.0,
+  "new_lines": false,
+  "rep": {
+   "name": "John Braun"
+  },
+  "opp": {
+   "name": "Marie Gluesenkamp Perez",
+   "party": "D",
+   "caucus": "D"
+  },
+  "incumbent": "D",
+  "overperformance": 16.5
+ },
+ {
+  "state": "WA-04",
+  "name": "Washington 4",
+  "region": "west",
+  "lean": -20.0,
+  "new_lines": false,
+  "rep": {
+   "name": "Amanda McKinney"
+  },
+  "opp": {
+   "name": "John Duresky",
+   "party": "D",
+   "caucus": "D"
+  },
+  "incumbent": "none"
+ },
+ {
+  "state": "WA-05",
+  "name": "Washington 5",
+  "region": "west",
+  "lean": -10.0,
+  "new_lines": false,
+  "rep": {
+   "name": "Michael Baumgartner"
+  },
+  "opp": {
+   "name": "Carmela Conroy",
+   "party": "D",
+   "caucus": "D"
+  },
+  "incumbent": "R"
+ },
+ {
+  "state": "WA-06",
+  "name": "Washington 6",
+  "region": "west",
+  "lean": 20.0,
+  "new_lines": false,
+  "rep": {
+   "name": "Teresa Fox"
+  },
+  "opp": {
+   "name": "Emily Randall",
+   "party": "D",
+   "caucus": "D"
+  },
+  "incumbent": "D"
+ },
+ {
+  "state": "WA-07",
+  "name": "Washington 7",
+  "region": "west",
+  "lean": 78.0,
+  "new_lines": false,
+  "rep": {
+   "name": "Nirav Sheth"
+  },
+  "opp": {
+   "name": "Pramila Jayapal",
+   "party": "D",
+   "caucus": "D"
+  },
+  "incumbent": "D",
+  "overperformance": -0.9
+ },
+ {
+  "state": "WA-08",
+  "name": "Washington 8",
+  "region": "west",
+  "lean": 6.0,
+  "new_lines": false,
+  "rep": {
+   "name": "Spencer Meline"
+  },
+  "opp": {
+   "name": "Kim Schrier",
+   "party": "D",
+   "caucus": "D"
+  },
+  "incumbent": "D",
+  "overperformance": 8.9
+ },
+ {
+  "state": "WA-09",
+  "name": "Washington 9",
+  "region": "west",
+  "lean": 44.0,
+  "new_lines": false,
+  "rep": {
+   "name": "Doug Basler"
+  },
+  "opp": {
+   "name": "Adam Smith",
+   "party": "D",
+   "caucus": "D"
+  },
+  "incumbent": "D"
+ },
+ {
+  "state": "WA-10",
+  "name": "Washington 10",
+  "region": "west",
+  "lean": 18.0,
+  "new_lines": false,
+  "rep": {
+   "name": "Chris Chung"
+  },
+  "opp": {
+   "name": "Marilyn Strickland",
+   "party": "D",
+   "caucus": "D"
+  },
+  "incumbent": "D",
+  "overperformance": 6.1
+ },
+ {
+  "state": "WI-01",
+  "name": "Wisconsin 1",
+  "region": "midwest",
+  "lean": -4.0,
+  "new_lines": false,
+  "rep": {
+   "name": "Bryan Steil"
+  },
+  "opp": {
+   "name": "Mitchell Berman",
+   "party": "D",
+   "caucus": "D"
+  },
+  "incumbent": "R",
+  "overperformance": -1.5
+ },
+ {
+  "state": "WI-02",
+  "name": "Wisconsin 2",
+  "region": "midwest",
+  "lean": 42.0,
+  "new_lines": false,
+  "rep": {
+   "name": "No Republican"
+  },
+  "opp": {
+   "name": "Mark Pocan",
+   "party": "D",
+   "caucus": "D"
+  },
+  "incumbent": "D",
+  "uncontested": "D",
+  "overperformance": 4.9
+ },
+ {
+  "state": "WI-03",
+  "name": "Wisconsin 3",
+  "region": "midwest",
+  "lean": -6.0,
+  "new_lines": false,
+  "rep": {
+   "name": "Derrick Van Orden"
+  },
+  "opp": {
+   "name": "Rebecca Cooke",
+   "party": "D",
+   "caucus": "D"
+  },
+  "incumbent": "R",
+  "overperformance": 7.9
+ },
+ {
+  "state": "WI-04",
+  "name": "Wisconsin 4",
+  "region": "midwest",
+  "lean": 52.0,
+  "new_lines": false,
+  "rep": {
+   "name": "Tim Rogers"
+  },
+  "opp": {
+   "name": "Gwen Moore",
+   "party": "D",
+   "caucus": "D"
+  },
+  "incumbent": "D",
+  "overperformance": 5.2
+ },
+ {
+  "state": "WI-05",
+  "name": "Wisconsin 5",
+  "region": "midwest",
+  "lean": -22.0,
+  "new_lines": false,
+  "rep": {
+   "name": "Scott Fitzgerald"
+  },
+  "opp": {
+   "name": "Andrew Beck",
+   "party": "D",
+   "caucus": "D"
+  },
+  "incumbent": "R",
+  "overperformance": 1.7
+ },
+ {
+  "state": "WI-06",
+  "name": "Wisconsin 6",
+  "region": "midwest",
+  "lean": -16.0,
+  "new_lines": false,
+  "rep": {
+   "name": "Glenn Grothman"
+  },
+  "opp": {
+   "name": "Brad Smith",
+   "party": "D",
+   "caucus": "D"
+  },
+  "incumbent": "R",
+  "overperformance": 0.1
+ },
+ {
+  "state": "WI-07",
+  "name": "Wisconsin 7",
+  "region": "midwest",
+  "lean": -22.0,
+  "new_lines": false,
+  "rep": {
+   "name": "Michael Alfonso"
+  },
+  "opp": {
+   "name": "Fred Clark",
+   "party": "D",
+   "caucus": "D"
+  },
+  "incumbent": "none"
+ },
+ {
+  "state": "WI-08",
+  "name": "Wisconsin 8",
+  "region": "midwest",
+  "lean": -16.0,
+  "new_lines": false,
+  "rep": {
+   "name": "Tony Wied"
+  },
+  "opp": {
+   "name": "Rick Crosson",
+   "party": "D",
+   "caucus": "D"
+  },
+  "incumbent": "R"
+ },
+ {
+  "state": "WV-01",
+  "name": "West Virginia 1",
+  "region": "south",
+  "lean": -44.0,
+  "new_lines": false,
+  "rep": {
+   "name": "Carol Miller"
+  },
+  "opp": {
+   "name": "Vince George",
+   "party": "D",
+   "caucus": "D"
+  },
+  "incumbent": "R",
+  "overperformance": 6.5
+ },
+ {
+  "state": "WV-02",
+  "name": "West Virginia 2",
+  "region": "south",
+  "lean": -40.0,
+  "new_lines": false,
+  "rep": {
+   "name": "Riley Moore"
+  },
+  "opp": {
+   "name": "Ace Parsi",
+   "party": "D",
+   "caucus": "D"
+  },
+  "incumbent": "R"
+ },
+ {
+  "state": "WY-AL",
+  "name": "Wyoming at-large",
+  "region": "west",
+  "lean": -46.0,
+  "new_lines": false,
+  "rep": {
+   "name": "Chuck Gray"
+  },
+  "opp": {
+   "name": "Lisa Kinney",
+   "party": "D",
+   "caucus": "D"
+  },
+  "incumbent": "none"
+ }
+]
