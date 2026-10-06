@@ -1,5 +1,6 @@
 import { createServerClient } from "@supabase/ssr";
 import { NextResponse, type NextRequest } from "next/server";
+import { isPreviewBot, previewHtml } from "@/lib/link-preview";
 import { ACCESS_COOKIE, hasSiteAccess } from "@/lib/site-access";
 
 // Pages anyone can open: the two sign-in screens.
@@ -9,6 +10,17 @@ const OPEN_PATHS = ["/enter", "/login"];
 // - /admin needs the owner signed in (Supabase Auth).
 // - everything else needs the friends & family password, or the owner.
 export async function proxy(request: NextRequest) {
+  // Link preview fetchers (iMessage, WhatsApp…) get a title and the SDB image
+  // instead of the password page (see src/lib/link-preview.ts).
+  if (isPreviewBot(request.headers.get("user-agent"))) {
+    return new NextResponse(previewHtml(request.nextUrl.pathname, request.nextUrl.origin), {
+      headers: {
+        "Content-Type": "text/html; charset=utf-8",
+        "X-Robots-Tag": "noindex, nofollow",
+      },
+    });
+  }
+
   let response = NextResponse.next({ request });
 
   const supabase = createServerClient(
