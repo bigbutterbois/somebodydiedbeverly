@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { formatPostDate } from "@/lib/blog";
-import { createClient } from "@/lib/supabase/server";
+import { contentClient } from "@/lib/supabase/content";
 
 type Row = {
   title: string;
@@ -11,7 +11,7 @@ type Row = {
 };
 
 async function getPost(slug: string) {
-  const supabase = await createClient();
+  const supabase = await contentClient();
   const { data } = await supabase
     .from("posts")
     .select("title, content, published_at, categories(name, slug)")
