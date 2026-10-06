@@ -21,6 +21,7 @@ export function TrendChart({
   format,
   dashed,
   label,
+  labelWidth = PAD.right,
 }: {
   points: TrendPoint[];
   series: TrendSeries[];
@@ -30,12 +31,15 @@ export function TrendChart({
   format: (v: number) => string;
   dashed?: number;
   label: string;
+  /** Room at the right for the end-of-line labels, px. */
+  labelWidth?: number;
 }) {
   const svgRef = useRef<SVGSVGElement>(null);
   const [hover, setHover] = useState<number | null>(null);
   // Draw at the container's real width so text stays a readable size on phones.
   const [W, setW] = useState(720);
   const H = W < 500 ? 220 : 260;
+  const right = labelWidth;
   useEffect(() => {
     const el = svgRef.current?.parentElement;
     if (!el) return;
@@ -46,14 +50,14 @@ export function TrendChart({
 
   const start = dayNumber(points[0].date);
   const end = Math.max(dayNumber(electionDay), dayNumber(points[points.length - 1].date));
-  const x = (iso: string) => PAD.left + ((dayNumber(iso) - start) / Math.max(end - start, 1)) * (W - PAD.left - PAD.right);
+  const x = (iso: string) => PAD.left + ((dayNumber(iso) - start) / Math.max(end - start, 1)) * (W - PAD.left - right);
   const y = (v: number) => PAD.top + (1 - (v - domain[0]) / (domain[1] - domain[0])) * (H - PAD.top - PAD.bottom);
   const line = (i: number) =>
     points.map((p, j) => `${j ? "L" : "M"}${x(p.date).toFixed(1)},${y(p.values[i]).toFixed(1)}`).join("");
 
   const last = points[points.length - 1];
   const point = hover === null ? null : points[hover];
-  const ticks = weekTicks(points[0].date, electionDay, (W - PAD.left - PAD.right) / Math.max(end - start, 1));
+  const ticks = weekTicks(points[0].date, electionDay, (W - PAD.left - right) / Math.max(end - start, 1));
 
   function onMove(e: React.PointerEvent) {
     const box = svgRef.current!.getBoundingClientRect();
@@ -87,7 +91,7 @@ export function TrendChart({
           <g key={v}>
             <line
               x1={PAD.left}
-              x2={W - PAD.right}
+              x2={W - right}
               y1={y(v)}
               y2={y(v)}
               stroke="var(--line)"

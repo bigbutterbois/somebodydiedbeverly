@@ -1,29 +1,6 @@
-import { DEM, REP, isIncumbent, outOf100, type Forecast, type Race } from "@/lib/forecast";
+import { DEM, REP, isIncumbent, type Forecast, type Race } from "@/lib/forecast";
 
-// Pieces of the House forecast page (admin only; the public Senate page keeps its own).
-
-/** The chance Democrats win both chambers, from simulations that run both together. */
-export function BothChambers({ house, senate }: { house: Forecast; senate: Forecast | null }) {
-  if (house.p_dem_both == null) return null;
-  const odds = (p: number) => (
-    <span className="tabular-nums" style={{ color: DEM }}>
-      {outOf100(p)}
-    </span>
-  );
-  return (
-    <p className="text-sm text-muted">
-      {senate && (
-        <>
-          Democrats win the Senate in {odds(senate.p_dem_control)} and the House in {odds(house.p_dem_control)} of 100
-          simulations, and{" "}
-        </>
-      )}
-      {senate ? "both" : "Democrats win both the Senate and the House"} in {odds(house.p_dem_both)}
-      {senate ? "" : " of 100 simulations"}; the two forecasts share their national swing, so they rise and fall
-      together.
-    </p>
-  );
-}
+// Pieces of the admin forecast pages (the public Senate page keeps its own).
 
 export function CandidateName({ race, side }: { race: Race; side: "rep" | "opp" }) {
   const c = race[side];
