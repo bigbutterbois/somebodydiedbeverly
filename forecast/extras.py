@@ -21,9 +21,10 @@ FEC_IE = "https://www.fec.gov/files/bulk-downloads/{year}/independent_expenditur
 # Each party's flagship Senate super PAC, by FEC committee ID: Senate Leadership
 # Fund (filed as SLF PAC) for Republicans, Senate Majority PAC (SMP) for Democrats.
 SUPER_PACS = {"C00571703": "rep", "C00484642": "opp"}
-# Spending they route through affiliated super PACs, matched by spender name:
-# Senate Majority PAC's ads run through WinSenate.
-SUPER_PAC_NAMES = {"winsenate": "opp"}
+# More super PACs, matched by spender name (lowercase letters only, exact):
+# Senate Majority PAC's ads run through WinSenate; Trump's MAGA Inc. and Musk's
+# America PAC count for Republicans.
+SUPER_PAC_NAMES = {"winsenate": "opp", "magainc": "rep", "makeamericagreatagaininc": "rep", "americapac": "rep"}
 APPROVAL_PAGES = [
     "Opinion_polling_on_the_second_Trump_presidency",
     "Opinion_polling_on_the_second_Donald_Trump_administration",
@@ -136,8 +137,7 @@ def fetch_super_pacs(races: list[dict], year: int) -> tuple[dict, list[str]]:
             # exp_amo, exp_date, agg_amo, sup_opp, purpose, payee, file_num, amndt_ind, tran_id, ...
             if len(row) < 18 or row[7] != "S" or row[5] not in states or not row[4].upper().startswith("G"):
                 continue  # only Senate general elections in this cycle's races (no primaries or runoffs)
-            side = SUPER_PACS.get(row[2]) or next(
-                (v for k, v in SUPER_PAC_NAMES.items() if k in re.sub(r"[^a-z]", "", row[3].lower())), None)
+            side = SUPER_PACS.get(row[2]) or SUPER_PAC_NAMES.get(re.sub(r"[^a-z]", "", row[3].lower()))
             if side is None:
                 try:
                     others[row[3]] = others.get(row[3], 0.0) + float(row[9] or 0)
@@ -160,7 +160,7 @@ def fetch_super_pacs(races: list[dict], year: int) -> tuple[dict, list[str]]:
     out: dict[str, dict[str, float]] = {}
     for (state, side, _, _), dollars in totals.items():
         out.setdefault(state, {"rep": 0.0, "opp": 0.0})[side] += dollars
-    print("super PACs (SLF / SMP + WinSenate, $M): " + ", ".join(
+    print("super PACs (GOP / Dem, $M): " + ", ".join(
         f"{s} {v['rep'] / 1e6:.1f}/{v['opp'] / 1e6:.1f}" for s, v in sorted(out.items())))
     print("other big outside spenders in these races ($M): " + ", ".join(
         f"{name} {dollars / 1e6:.1f}" for name, dollars in sorted(others.items(), key=lambda kv: -kv[1])[:12]))
