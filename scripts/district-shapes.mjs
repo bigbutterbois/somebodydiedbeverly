@@ -138,6 +138,13 @@ for (const [st, src] of Object.entries(sources.states)) {
   }
 }
 
+// The far Aleutians sit past 180° and can't be projected; drop those islands.
+if (shapes.has("AK-AL")) {
+  const g = shapes.get("AK-AL");
+  const polys = (g.type === "Polygon" ? [g.coordinates] : g.coordinates).filter((p) => p[0].every(([x]) => x < 0));
+  shapes.set("AK-AL", { type: "MultiPolygon", coordinates: polys });
+}
+
 const missing = forecast.races.map((r) => r.state).filter((id) => !shapes.has(id));
 if (missing.length) problems.push(`no shape for ${missing.join(", ")}`);
 
