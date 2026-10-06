@@ -1,8 +1,8 @@
 @AGENTS.md
 
-# somebodydiedbeverly (v2)
+# wilfullymisunderstand (v2)
 
-Mike's personal website, hosted at `somebodydiedbeverly.com`. This is a fresh start: the previous site (blog, art gallery, diplomat plate tracker) is preserved on the `legacy-v1` branch for reference. Pull ideas or code from it deliberately; nothing from it is wired in here.
+Mike's personal website, hosted at `www.wilfullymisunderstand.com` (the old `somebodydiedbeverly.com` redirects there; the repo and Vercel project keep the old name). This is a fresh start: the previous site (blog, art gallery, diplomat plate tracker) is preserved on the `legacy-v1` branch for reference. Pull ideas or code from it deliberately; nothing from it is wired in here.
 
 ## Tech Stack
 

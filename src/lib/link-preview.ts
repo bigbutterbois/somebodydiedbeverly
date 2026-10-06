@@ -2,11 +2,11 @@
 // the like fetch a link to build its preview card, but every page sits behind
 // the friends & family password, so they used to get nothing back. The proxy
 // answers these fetchers with a tiny page holding just a title, a one-line
-// description and the SDB image (public/og.png), and none of the page itself.
+// description and the WM image (public/og.png), and none of the page itself.
 // Anyone can pretend to be one of them, so the card only ever names the
 // section, never a post title, a number or anything else behind the password.
 
-export const SITE_NAME = "somebodydiedbeverly";
+export const SITE_NAME = "wilfullymisunderstand";
 
 const PREVIEW_BOTS =
   /facebookexternalhit|facebot|twitterbot|whatsapp|slackbot|discordbot|telegrambot|linkedinbot|skypeuripreview|iframely|embedly|redditbot|pinterest|snapchat|mastodon|bluesky|signal/i;

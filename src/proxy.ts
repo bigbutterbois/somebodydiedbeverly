@@ -10,7 +10,7 @@ const OPEN_PATHS = ["/enter", "/login"];
 // - /admin needs the owner signed in (Supabase Auth).
 // - everything else needs the friends & family password, or the owner.
 export async function proxy(request: NextRequest) {
-  // Link preview fetchers (iMessage, WhatsApp…) get a title and the SDB image
+  // Link preview fetchers (iMessage, WhatsApp…) get a title and the WM image
   // instead of the password page (see src/lib/link-preview.ts).
   if (isPreviewBot(request.headers.get("user-agent"))) {
     return new NextResponse(previewHtml(request.nextUrl.pathname, request.nextUrl.origin), {

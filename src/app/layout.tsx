@@ -8,7 +8,7 @@ const workSans = Work_Sans({
   subsets: ["latin"],
 });
 
-const productionHost = process.env.VERCEL_PROJECT_PRODUCTION_URL ?? "www.somebodydiedbeverly.com";
+const productionHost = process.env.VERCEL_PROJECT_PRODUCTION_URL ?? "www.wilfullymisunderstand.com";
 
 // The Open Graph tags matter for the password page, which is where any link
 // preview fetcher the proxy doesn't recognize ends up (see src/lib/link-preview.ts).

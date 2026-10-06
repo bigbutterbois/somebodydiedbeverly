@@ -30,7 +30,7 @@ All sans: **Work Sans** (via `next/font/google`) for everything. Large headings 
 
 ## Logo
 
-The **SDB monogram**: "SDB" in light-weight Work Sans inside a thin outlined box (`src/components/Monogram.tsx`). It is the home link in the public nav and the heading on the password page. The browser tab icon (`src/app/icon.svg`) is the same mark with a teal box.
+The **WM monogram**: "WM" in light-weight Work Sans inside a thin outlined box (`src/components/Monogram.tsx`). It is the home link in the public nav and the heading on the password page. The browser tab icon (`src/app/icon.svg`) is the same mark with a teal box.
 
 ## Homepage
 

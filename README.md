@@ -1,6 +1,6 @@
-# somebodydiedbeverly
+# wilfullymisunderstand
 
-Source for [somebodydiedbeverly.com](https://somebodydiedbeverly.com), rebuilt from scratch in 2026.
+Source for [wilfullymisunderstand.com](https://www.wilfullymisunderstand.com) (formerly somebodydiedbeverly.com, which now redirects here), rebuilt from scratch in 2026.
 
 The previous version of the site lives on the [`legacy-v1`](../../tree/legacy-v1) branch.
 
