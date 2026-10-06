@@ -12,7 +12,8 @@ import {
   type Forecast,
 } from "@/lib/forecast";
 import { ControlChart } from "./ControlChart";
-import { OUTCOMES, circleCounts, outcomeOdds } from "./outcomes";
+import { CircleGrid } from "./CircleGrid";
+import { OUTCOMES, outcomeOdds } from "./outcomes";
 import { SectionTitle } from "./parts";
 
 export const metadata = { title: "Forecast" };
@@ -143,22 +144,5 @@ function Chamber({ name, href, forecast, total }: { name: string; href: string; 
         Democrats win {forecast.dem_seats_mean.toFixed(0)} of {total} seats on average.
       </p>
     </Link>
-  );
-}
-
-/** 100 circles colored in proportion to each outcome's odds, read row by row. */
-function CircleGrid({ odds }: { odds: number[] }) {
-  const colors = circleCounts(odds).flatMap((n, i) => Array<string>(n).fill(OUTCOMES[i].color));
-  return (
-    <svg
-      viewBox="0 0 100 100"
-      className="w-56 shrink-0"
-      role="img"
-      aria-label={`100 simulations: ${OUTCOMES.map((o, i) => `${o.label} ${circleCounts(odds)[i]}`).join(", ")}`}
-    >
-      {colors.map((c, k) => (
-        <circle key={k} cx={5 + (k % 10) * 10} cy={5 + Math.floor(k / 10) * 10} r={4.1} fill={c} />
-      ))}
-    </svg>
   );
 }
