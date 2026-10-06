@@ -5,7 +5,15 @@ import { useState } from "react";
 import { lookupPlate, type Country } from "@/lib/plates";
 
 // Type a plate (or just its letters) to see which country it belongs to.
-export function PlateLookup({ countries }: { countries: Country[] }) {
+export function PlateLookup({
+  countries,
+  label,
+  noMatch,
+}: {
+  countries: Country[];
+  label: string;
+  noMatch: string;
+}) {
   const [plate, setPlate] = useState("");
   const matches = lookupPlate(plate, countries);
   const letters = plate.replace(/[^a-z]/gi, "").length;
@@ -13,7 +21,7 @@ export function PlateLookup({ countries }: { countries: Country[] }) {
   return (
     <section className="flex flex-col gap-3">
       <label htmlFor="plate" className="text-xs uppercase tracking-[0.12em] text-muted">
-        Whose plate is that?
+        {label}
       </label>
       <input
         id="plate"
@@ -36,7 +44,7 @@ export function PlateLookup({ countries }: { countries: Country[] }) {
           ))}
         </ul>
       ) : (
-        letters >= 2 && <p className="text-sm text-muted">No country uses that code.</p>
+        letters >= 2 && <p className="text-sm text-muted">{noMatch}</p>
       )}
     </section>
   );

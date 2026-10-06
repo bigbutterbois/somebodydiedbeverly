@@ -2,6 +2,7 @@ import Link from "next/link";
 import { formatPostDate } from "@/lib/blog";
 import { getCategories } from "@/lib/supabase/categories";
 import { contentClient } from "@/lib/supabase/content";
+import { getSiteText } from "@/lib/supabase/site-text";
 
 export const metadata = { title: "Blog" };
 
@@ -16,7 +17,7 @@ type Row = {
 export default async function BlogPage({ searchParams }: PageProps<"/blog">) {
   const { category } = await searchParams;
   const supabase = await contentClient();
-  const categories = await getCategories();
+  const [categories, t] = await Promise.all([getCategories(), getSiteText()]);
   const current = categories.find((c) => c.slug === category);
 
   let query = supabase
@@ -31,11 +32,11 @@ export default async function BlogPage({ searchParams }: PageProps<"/blog">) {
   return (
     <div className="flex flex-col gap-10 py-6">
       <header className="flex flex-col gap-4">
-        <h1 className="text-4xl font-light tracking-tight">Blog</h1>
+        <h1 className="text-4xl font-light tracking-tight">{t("blog.title")}</h1>
         {categories.length > 0 && (
           <nav className="flex flex-wrap gap-x-5 gap-y-2 text-sm">
             <Link href="/blog" className={current ? "text-muted hover:text-foreground" : "text-accent"}>
-              All
+              {t("blog.all")}
             </Link>
             {categories.map((c) => (
               <Link
@@ -51,7 +52,7 @@ export default async function BlogPage({ searchParams }: PageProps<"/blog">) {
       </header>
 
       {posts.length === 0 ? (
-        <p className="text-muted">No posts yet.</p>
+        <p className="text-muted">{t("blog.empty")}</p>
       ) : (
         <ul className="flex flex-col divide-y divide-line border-y border-line">
           {posts.map((post) => (

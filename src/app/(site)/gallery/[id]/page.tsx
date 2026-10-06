@@ -3,6 +3,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { galleryImageUrl } from "@/lib/gallery";
 import { getGalleryItems } from "@/lib/supabase/gallery";
+import { getSiteText } from "@/lib/supabase/site-text";
 
 async function getPiece(id: string) {
   const items = await getGalleryItems();
@@ -19,12 +20,13 @@ export async function generateMetadata({ params }: PageProps<"/gallery/[id]">) {
 export default async function GalleryPiecePage({ params }: PageProps<"/gallery/[id]">) {
   const piece = await getPiece((await params).id);
   if (!piece) notFound();
+  const t = await getSiteText();
   const { item, previous, next } = piece;
 
   return (
     <div className="flex flex-col gap-6 py-6">
       <Link href="/gallery" className="text-sm text-muted hover:text-foreground">
-        ← Gallery
+        {t("gallery.back")}
       </Link>
       <figure className="flex flex-col items-center gap-4">
         <Image
@@ -41,14 +43,14 @@ export default async function GalleryPiecePage({ params }: PageProps<"/gallery/[
       <nav className="flex justify-between text-sm">
         {previous ? (
           <Link href={`/gallery/${previous.id}`} className="text-accent hover:underline">
-            ← Previous
+            {t("gallery.previous")}
           </Link>
         ) : (
           <span />
         )}
         {next && (
           <Link href={`/gallery/${next.id}`} className="text-accent hover:underline">
-            Next →
+            {t("gallery.next")}
           </Link>
         )}
       </nav>

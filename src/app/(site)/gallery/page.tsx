@@ -2,6 +2,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { galleryImageUrl, type GalleryItem } from "@/lib/gallery";
 import { getGalleryItems } from "@/lib/supabase/gallery";
+import { getSiteText } from "@/lib/supabase/site-text";
 
 export const metadata = { title: "Gallery" };
 
@@ -20,14 +21,14 @@ function toColumns(items: GalleryItem[]): GalleryItem[][] {
 }
 
 export default async function GalleryPage() {
-  const items = await getGalleryItems();
+  const [items, t] = await Promise.all([getGalleryItems(), getSiteText()]);
   const firstIds = new Set(items.slice(0, 4).map((item) => item.id));
 
   return (
     <div className="flex flex-col gap-10 py-6">
-      <h1 className="text-4xl font-light tracking-tight">Gallery</h1>
+      <h1 className="text-4xl font-light tracking-tight">{t("gallery.title")}</h1>
       {items.length === 0 ? (
-        <p className="text-muted">New pieces will show up here.</p>
+        <p className="text-muted">{t("gallery.empty")}</p>
       ) : (
         <div className="grid grid-cols-2 items-start gap-3">
           {toColumns(items).map((column, index) => (

@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { contentClient } from "@/lib/supabase/content";
+import { getSiteText } from "@/lib/supabase/site-text";
 import type { Country } from "@/lib/plates";
 import { PlateLookup } from "./PlateLookup";
 
@@ -9,6 +10,7 @@ type Row = Country & { plate_sightings: { id: string }[] };
 
 export default async function PlatesPage() {
   const supabase = await contentClient();
+  const t = await getSiteText();
   const { data } = await supabase
     .from("countries")
     .select("id, name, slug, plate_codes, plate_sightings(id)")
@@ -25,14 +27,12 @@ export default async function PlatesPage() {
   return (
     <div className="flex flex-col gap-10 py-6">
       <header className="flex flex-col gap-4">
-        <h1 className="text-4xl font-light tracking-tight">Diplomat plates</h1>
-        <p className="max-w-xl text-muted">
-          Every country whose diplomatic license plate Mike has spotted so far.
-        </p>
+        <h1 className="text-4xl font-light tracking-tight">{t("plates.title")}</h1>
+        <p className="max-w-xl text-muted">{t("plates.intro")}</p>
         <div className="flex flex-col gap-2">
           <p className="tabular-nums">
             <span className="text-2xl">{spotted}</span>
-            <span className="text-muted"> of {countries.length} countries spotted</span>
+            <span className="text-muted"> {t("plates.count", { total: countries.length })}</span>
           </p>
           <div className="h-1 w-full max-w-md bg-surface">
             <div className="h-full bg-accent" style={{ width: `${percent}%` }} />
@@ -40,11 +40,11 @@ export default async function PlatesPage() {
         </div>
       </header>
 
-      <PlateLookup countries={countries} />
+      <PlateLookup countries={countries} label={t("plates.lookup")} noMatch={t("plates.lookupNoMatch")} />
 
       <section className="flex flex-col gap-4">
         <h2 className="border-b border-line pb-2 text-xs uppercase tracking-[0.12em] text-muted">
-          Checklist
+          {t("plates.checklist")}
         </h2>
         <ul className="grid gap-x-8 sm:grid-cols-2 lg:grid-cols-3">
           {countries.map((c) => (

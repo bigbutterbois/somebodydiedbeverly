@@ -2,6 +2,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { formatPostDate } from "@/lib/blog";
 import { contentClient } from "@/lib/supabase/content";
+import { getSiteText } from "@/lib/supabase/site-text";
 
 type Row = {
   title: string;
@@ -30,6 +31,7 @@ export async function generateMetadata({ params }: PageProps<"/blog/[slug]">) {
 export default async function PostPage({ params }: PageProps<"/blog/[slug]">) {
   const post = await getPost((await params).slug);
   if (!post) notFound();
+  const t = await getSiteText();
 
   return (
     <article className="mx-auto flex w-full max-w-2xl flex-col gap-8 py-6">
@@ -47,7 +49,7 @@ export default async function PostPage({ params }: PageProps<"/blog/[slug]">) {
       {/* The owner's own HTML from the admin editor. */}
       <div className="post-body" dangerouslySetInnerHTML={{ __html: post.content }} />
       <Link href="/blog" className="text-sm text-accent hover:underline">
-        ← All posts
+        {t("blog.back")}
       </Link>
     </article>
   );

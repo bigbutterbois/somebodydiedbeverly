@@ -15,17 +15,18 @@ import { OddsChart } from "../OddsChart";
 import { CandidateName, SectionTitle, Topline } from "../parts";
 import { DotHistogram } from "./DotHistogram";
 import { HouseMap } from "./HouseMap";
+import { getSiteText } from "@/lib/supabase/site-text";
 
 export const metadata = { title: "House forecast" };
 
 export default async function HouseForecastPage() {
-  const forecast = await getHouseForecast();
+  const [forecast, t] = await Promise.all([getHouseForecast(), getSiteText()]);
 
   if (!forecast) {
     return (
       <div className="flex flex-col gap-2 py-6">
-        <h1 className="text-4xl font-light tracking-tight">2026 House forecast</h1>
-        <p className="text-muted">The first House forecast is on its way. It updates every morning at 6am Eastern.</p>
+        <h1 className="text-4xl font-light tracking-tight">{t("forecast.house.title")}</h1>
+        <p className="text-muted">{t("forecast.house.empty")}</p>
       </div>
     );
   }
@@ -44,7 +45,7 @@ export default async function HouseForecastPage() {
   return (
     <div className="flex flex-col gap-14 py-6">
       <header className="flex flex-col gap-3">
-        <h1 className="text-4xl font-light tracking-tight">2026 House forecast</h1>
+        <h1 className="text-4xl font-light tracking-tight">{t("forecast.house.title")}</h1>
         <p className="text-sm text-muted">
           Updated{" "}
           {forecast.generated_at
@@ -56,22 +57,22 @@ export default async function HouseForecastPage() {
 
       <section className="flex flex-col gap-3">
         <Topline forecast={forecast}>
-          Democrats need {majority} of {total} seats. Same model as the Senate forecast, run district by district.
+          {t("forecast.house.topline", { majority, total })}
         </Topline>
       </section>
 
       {forecast.dem_seat_distribution && (
         <section className="flex flex-col gap-4">
-          <SectionTitle>Democratic seats in 500 simulations</SectionTitle>
+          <SectionTitle>{t("forecast.house.simulations")}</SectionTitle>
           <DotHistogram distribution={forecast.dem_seat_distribution} total={total} majority={majority} />
           <p className="text-xs text-muted">
-            On average Democrats win {forecast.dem_seats_mean.toFixed(0)} seats.
+            {t("forecast.house.seatsMean", { seats: forecast.dem_seats_mean.toFixed(0) })}
           </p>
         </section>
       )}
 
       <section className="flex flex-col gap-4">
-        <SectionTitle>The map</SectionTitle>
+        <SectionTitle>{t("forecast.map")}</SectionTitle>
         <HouseMap races={forecast.races} />
         <ul className="flex flex-wrap justify-center gap-x-4 gap-y-2 text-xs text-muted">
           {RATINGS.map((r) => (
@@ -85,13 +86,13 @@ export default async function HouseForecastPage() {
 
       {history.length > 0 && (
         <section className="flex flex-col gap-4">
-          <SectionTitle>Chance of controlling the House, by day</SectionTitle>
+          <SectionTitle>{t("forecast.house.byDay")}</SectionTitle>
           <OddsChart history={history} electionDay={forecast.election_day} chamber="House" />
         </section>
       )}
 
       <section className="flex flex-col gap-4">
-        <SectionTitle>Competitive districts</SectionTitle>
+        <SectionTitle>{t("forecast.house.competitive")}</SectionTitle>
         <table className="w-full table-fixed text-[13px] tabular-nums sm:text-sm">
           <colgroup>
             <col className="w-[15%] sm:w-[12%]" />
@@ -147,10 +148,7 @@ export default async function HouseForecastPage() {
           </tbody>
         </table>
         <p className="text-xs text-muted">
-          {shown.length} districts that aren&rsquo;t Safe for either party, from most to least Democratic. Not shown:{" "}
-          {safe(1)} Safe D and {safe(-1)} Safe R. The tipping-point district: the party that wins it and every district
-          on its side of the table controls the House. (I) = incumbent · † = new district lines for 2026 · * =
-          independent
+          {t("forecast.house.tableNote", { shown: shown.length, safeD: safe(1), safeR: safe(-1) })}
         </p>
       </section>
 

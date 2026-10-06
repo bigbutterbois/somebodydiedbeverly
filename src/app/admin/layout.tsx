@@ -12,6 +12,7 @@ const TOOLS = [
   { href: "/admin/plates", label: "Plates" },
   { href: "/admin/blog", label: "Blog" },
   { href: "/admin/gallery", label: "Gallery" },
+  { href: "/admin/text", label: "Text" },
   { href: "/admin/visitors", label: "Visitors" },
 ];
 
