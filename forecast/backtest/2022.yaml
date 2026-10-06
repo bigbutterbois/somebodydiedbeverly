@@ -104,3 +104,12 @@ races:
       rep: { name: Tiffany Smiley }, opp: { name: Patty Murray, party: D, caucus: D } }
   - { state: WI, name: Wisconsin, region: midwest, incumbent: R, pres_2020: 0.6, pres_2016: -0.8, result: -1.0,
       rep: { name: Ron Johnson }, opp: { name: Mandela Barnes, party: D, caucus: D } }
+
+# For the House backtest (backtest.py --house): districts, nominees and results
+# come from Wikipedia's 2022 House page.
+house:
+  actual_dem_seats: 213
+  # 2020 national House vote, Dem minus Rep (approximate), for incumbents' 2020 over-performance.
+  national_house_margin_prev: 3.1
+  # Every state redrew after the 2020 census except those with one district.
+  unchanged_states: [AK, DE, ND, SD, VT, WY]

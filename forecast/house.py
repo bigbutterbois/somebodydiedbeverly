@@ -211,6 +211,8 @@ def fetch_districts(facts: dict, verbose: bool = False) -> tuple[list[dict], lis
                     "caucus": "D" if not opp or opp["party"] == "D" else "none"},
             "incumbent": "none",
         }
+        if rep and opp and rep["pct"] is not None and opp["pct"] is not None:  # a past election's result
+            race["result"] = opp["pct"] - rep["pct"]
         if not rep and not opp:
             problems.append(f"{r['id']}: no candidates parsed ({r['raw'][:160]})")
             race["uncontested"] = r["member_party"] or ("D" if r["pvi"] > 0 else "R")
