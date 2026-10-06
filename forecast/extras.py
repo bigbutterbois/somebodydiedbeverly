@@ -123,6 +123,7 @@ def fetch_super_pacs(races: list[dict], year: int) -> tuple[dict, list[str]]:
     running: dict[tuple[str, str, str], float] = {}  # (state, side, candidate id) -> largest running total
     summed: dict[tuple[str, str, str], float] = {}   # same key -> sum of distinct expenditures
     seen: set[tuple[str, ...]] = set()
+    others: dict[str, float] = {}  # other spenders in these races, for the log
     try:
         r = requests.get(FEC_IE.format(year=year), headers=scrape.HEADERS, timeout=300, stream=True)
         r.raise_for_status()
@@ -130,9 +131,13 @@ def fetch_super_pacs(races: list[dict], year: int) -> tuple[dict, list[str]]:
         for row in csv.reader(lines):
             # cand_id, cand_name, spe_id, spe_nam, ele_type, state, district, office, party,
             # exp_amo, exp_date, agg_amo, sup_opp, purpose, payee, file_num, amndt_ind, tran_id, ...
-            if len(row) < 18 or row[2] not in SUPER_PACS or row[7] != "S" or row[5] not in states:
-                continue
-            if not row[4].upper().startswith("G"):  # primaries and runoffs don't count
+            if len(row) < 18 or row[7] != "S" or row[5] not in states or not row[4].upper().startswith("G"):
+                continue  # only Senate general elections in this cycle's races (no primaries or runoffs)
+            if row[2] not in SUPER_PACS:
+                try:
+                    others[row[3]] = others.get(row[3], 0.0) + float(row[9] or 0)
+                except ValueError:
+                    pass
                 continue
             try:
                 amount, agg = float(row[9] or 0), float(row[11] or 0)
@@ -152,6 +157,8 @@ def fetch_super_pacs(races: list[dict], year: int) -> tuple[dict, list[str]]:
         out.setdefault(state, {"rep": 0.0, "opp": 0.0})[side] += dollars
     print("super PACs (SLF / SMP, $M): " + ", ".join(
         f"{s} {v['rep'] / 1e6:.1f}/{v['opp'] / 1e6:.1f}" for s, v in sorted(out.items())))
+    print("other big outside spenders in these races ($M): " + ", ".join(
+        f"{name} {dollars / 1e6:.1f}" for name, dollars in sorted(others.items(), key=lambda kv: -kv[1])[:12]))
     return out, []
 
 
