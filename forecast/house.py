@@ -149,11 +149,12 @@ def nominee(cands: list[dict], party: str) -> dict | None:
 
 
 def overperformance(year: int, national_margin: float, verbose: bool = False) -> dict[str, dict]:
-    """How far each district's winner ran ahead of their district's expected margin in the given
+    """How far each re-elected incumbent ran ahead of their district's expected margin in the given
     election: {id: {"member": name, "party": D/R, "over": points toward their own party}}.
 
-    Expected = twice the district's PVI plus the national House vote margin. Uncontested races
-    and districts without a PVI are left out.
+    Expected = twice the district's PVI plus the national House vote margin. Only incumbents who
+    won again count: a newcomer's margin over a defeated incumbent says more about the loser.
+    Uncontested races and districts without a PVI are left out.
     """
     html = scrape.fetch_html(f"{year}_United_States_House_of_Representatives_elections")
     out = {}
@@ -162,13 +163,15 @@ def overperformance(year: int, national_margin: float, verbose: bool = False) ->
         rep = nominee(r["candidates"], "R")
         if r["pvi"] is None or not d or not rep or d["pct"] is None or rep["pct"] is None:
             continue
+        if "re-elected" not in scrape.norm(r["status"]):
+            continue
         margin = d["pct"] - rep["pct"]
         winner = d if margin > 0 else rep
         over = margin - (2 * r["pvi"] + national_margin)
         out[r["id"]] = {"member": winner["name"], "party": winner["party"],
                         "over": round(over if winner["party"] == "D" else -over, 2)}
     if verbose:
-        print(f"{year} over-performance: {len(out)} contested districts")
+        print(f"{year} over-performance: {len(out)} re-elected incumbents in contested races")
     return out
 
 

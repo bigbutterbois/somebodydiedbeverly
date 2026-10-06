@@ -26,9 +26,9 @@ SUPER_PACS = {"C00571703": "rep", "C00484642": "opp"}
 # America PAC count for Republicans.
 SUPER_PAC_NAMES = {"winsenate": "opp", "magainc": "rep", "makeamericagreatagaininc": "rep", "americapac": "rep"}
 # The House's flagship super PACs: Congressional Leadership Fund (GOP) and House
-# Majority PAC (Democrats), by committee ID and by name.
+# Majority PAC (Democrats, files as "HMP"), by committee ID and by name.
 HOUSE_SUPER_PACS = {"C00504530": "rep", "C00495861": "opp"}
-HOUSE_SUPER_PAC_NAMES = {"congressionalleadershipfund": "rep", "housemajoritypac": "opp",
+HOUSE_SUPER_PAC_NAMES = {"congressionalleadershipfund": "rep", "housemajoritypac": "opp", "hmp": "opp",
                          "magainc": "rep", "makeamericagreatagaininc": "rep", "americapac": "rep"}
 APPROVAL_PAGES = [
     "Opinion_polling_on_the_second_Trump_presidency",
