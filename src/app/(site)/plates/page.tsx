@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { createClient } from "@/lib/supabase/server";
+import { contentClient } from "@/lib/supabase/content";
 import type { Country } from "@/lib/plates";
 import { PlateLookup } from "./PlateLookup";
 
@@ -8,7 +8,7 @@ export const metadata = { title: "Diplomat plates" };
 type Row = Country & { plate_sightings: { id: string }[] };
 
 export default async function PlatesPage() {
-  const supabase = await createClient();
+  const supabase = await contentClient();
   const { data } = await supabase
     .from("countries")
     .select("id, name, slug, plate_codes, plate_sightings(id)")
