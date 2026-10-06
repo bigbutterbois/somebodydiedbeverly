@@ -4,25 +4,25 @@ import {
   formatDay,
   formatMargin,
   formatUpdated,
+  getForecast,
   getHistory,
   getHouseForecast,
   outOf100,
   partyLetter,
   ratingInfo,
 } from "@/lib/forecast";
-import { OddsChart, PollingChart } from "../OddsChart";
-import { BothChambers, CandidateName, ChamberTabs, SectionTitle, Topline } from "../parts";
-import { SeatHistogram } from "../SeatHistogram";
+import { OddsChart, PollingChart } from "@/app/(site)/forecast/OddsChart";
+import { BothChambers, CandidateName, SectionTitle, Topline } from "./parts";
+import { SeatHistogram } from "@/app/(site)/forecast/SeatHistogram";
 
 export const metadata = { title: "House forecast" };
 
 export default async function HouseForecastPage() {
-  const forecast = await getHouseForecast();
+  const [forecast, senate] = await Promise.all([getHouseForecast(), getForecast()]);
 
   if (!forecast) {
     return (
       <div className="flex flex-col gap-2 py-6">
-        <ChamberTabs active="house" />
         <h1 className="text-4xl font-light tracking-tight">2026 House forecast</h1>
         <p className="text-muted">The first House forecast is on its way. It updates every morning at 6am Eastern.</p>
       </div>
@@ -43,7 +43,6 @@ export default async function HouseForecastPage() {
   return (
     <div className="flex flex-col gap-14 py-6">
       <header className="flex flex-col gap-3">
-        <ChamberTabs active="house" />
         <h1 className="text-4xl font-light tracking-tight">2026 House forecast</h1>
         <p className="text-sm text-muted">
           Updated{" "}
@@ -58,7 +57,7 @@ export default async function HouseForecastPage() {
         <Topline forecast={forecast}>
           Democrats need {majority} of {total} seats. Same model as the Senate forecast, run district by district.
         </Topline>
-        <BothChambers forecast={forecast} />
+        <BothChambers house={forecast} senate={senate} />
       </section>
 
       {forecast.dem_seat_distribution && (

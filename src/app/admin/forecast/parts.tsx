@@ -1,42 +1,26 @@
-import Link from "next/link";
 import { DEM, REP, isIncumbent, outOf100, type Forecast, type Race } from "@/lib/forecast";
 
-// Pieces shared by the Senate and House forecast pages.
-
-/** Senate / House switch at the top of both forecast pages. */
-export function ChamberTabs({ active }: { active: "senate" | "house" }) {
-  const tabs = [
-    { key: "senate", href: "/forecast", label: "Senate" },
-    { key: "house", href: "/forecast/house", label: "House" },
-  ] as const;
-  return (
-    <nav className="flex gap-1 text-sm" aria-label="Chamber">
-      {tabs.map((t) => (
-        <Link
-          key={t.key}
-          href={t.href}
-          aria-current={t.key === active ? "page" : undefined}
-          className={`rounded-full border px-3 py-1 transition-colors ${
-            t.key === active ? "border-accent bg-accent text-background" : "border-line text-muted hover:text-foreground"
-          }`}
-        >
-          {t.label}
-        </Link>
-      ))}
-    </nav>
-  );
-}
+// Pieces of the House forecast page (admin only; the public Senate page keeps its own).
 
 /** The chance Democrats win both chambers, from simulations that run both together. */
-export function BothChambers({ forecast }: { forecast: Forecast }) {
-  if (forecast.p_dem_both == null) return null;
+export function BothChambers({ house, senate }: { house: Forecast; senate: Forecast | null }) {
+  if (house.p_dem_both == null) return null;
+  const odds = (p: number) => (
+    <span className="tabular-nums" style={{ color: DEM }}>
+      {outOf100(p)}
+    </span>
+  );
   return (
     <p className="text-sm text-muted">
-      Democrats win both the Senate and the House in{" "}
-      <span className="tabular-nums" style={{ color: DEM }}>
-        {outOf100(forecast.p_dem_both)}
-      </span>{" "}
-      of 100 simulations; the two forecasts share their national swing, so they rise and fall together.
+      {senate && (
+        <>
+          Democrats win the Senate in {odds(senate.p_dem_control)} and the House in {odds(house.p_dem_control)} of 100
+          simulations, and{" "}
+        </>
+      )}
+      {senate ? "both" : "Democrats win both the Senate and the House"} in {odds(house.p_dem_both)}
+      {senate ? "" : " of 100 simulations"}; the two forecasts share their national swing, so they rise and fall
+      together.
     </p>
   );
 }
