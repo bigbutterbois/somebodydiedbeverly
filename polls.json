@@ -13770,6 +13770,18 @@
   "source": "https://en.wikipedia.org/wiki/2026_United_States_Senate_election_in_Michigan"
  },
  {
+  "state": "MI",
+  "pollster": "Mitchell Research & Communications",
+  "sponsor_party": null,
+  "end_date": "2026-10-01",
+  "n": 682,
+  "population": "LV",
+  "rep": 41.0,
+  "opp": 46.0,
+  "others": [],
+  "source": "https://en.wikipedia.org/wiki/2026_United_States_Senate_election_in_Michigan"
+ },
+ {
   "state": "MN",
   "pollster": "Impact Research",
   "sponsor_party": "D",
