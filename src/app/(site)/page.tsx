@@ -2,9 +2,10 @@ import Link from "next/link";
 import { EmptyPreview, HomeSection } from "@/components/HomeSection";
 import Image from "next/image";
 import { formatPostDate } from "@/lib/blog";
-import { DEM, REP, getForecast } from "@/lib/forecast";
+import { DEM, REP, getForecast, getHouseForecast, outOf100, type Forecast } from "@/lib/forecast";
 import { galleryImageUrl } from "@/lib/gallery";
-import { SeatHistogramPreview } from "./forecast/SeatHistogramPreview";
+import { CircleGrid } from "./forecast/CircleGrid";
+import { OUTCOMES, outcomeOdds } from "./forecast/outcomes";
 import { getGalleryItems } from "@/lib/supabase/gallery";
 import { contentClient } from "@/lib/supabase/content";
 
@@ -12,7 +13,7 @@ import { contentClient } from "@/lib/supabase/content";
 // replaces its empty state with real items once it has data.
 export default async function Home() {
   const supabase = await contentClient();
-  const [{ count: totalCountries }, { data: sightings }, { data: posts }, pieces, forecast] = await Promise.all([
+  const [{ count: totalCountries }, { data: sightings }, { data: posts }, pieces, senate, house] = await Promise.all([
     supabase.from("countries").select("id", { count: "exact", head: true }),
     supabase.from("plate_sightings").select("country_id"),
     supabase
@@ -23,8 +24,10 @@ export default async function Home() {
       .limit(3),
     getGalleryItems(3),
     getForecast(),
+    getHouseForecast(),
   ]);
   const spotted = new Set(sightings?.map((s) => s.country_id)).size;
+  const split = senate && house ? outcomeOdds(senate.p_dem_control, house.p_dem_control, house.p_dem_both ?? null) : null;
 
   return (
     <div className="flex flex-col gap-14 py-6">
@@ -35,26 +38,30 @@ export default async function Home() {
         <p className="text-muted">Published stuff here</p>
       </header>
 
-      <HomeSection title="2026 Senate election forecast" href="/forecast/senate">
-        {forecast ? (
-          <Link href="/forecast/senate" className="flex flex-col gap-4 tabular-nums">
-            <div className="flex flex-col gap-2">
-              <p className="text-sm text-muted">Chance of winning the Senate</p>
-              <p className="flex gap-6">
-                <span>
-                  <span className="text-2xl" style={{ color: DEM }}>{Math.round(forecast.p_dem_control * 100)}%</span>
-                  <span className="text-muted"> Dem</span>
-                </span>
-                <span>
-                  <span className="text-2xl" style={{ color: REP }}>{Math.round(forecast.p_rep_control * 100)}%</span>
-                  <span className="text-muted"> Rep</span>
-                </span>
-              </p>
+      <HomeSection title="2026 midterms forecast" href="/forecast">
+        {senate && house ? (
+          <Link href="/forecast" className="flex flex-col gap-6 tabular-nums">
+            <div className="flex flex-wrap gap-x-10 gap-y-4">
+              <ChamberOdds name="Senate" forecast={senate} />
+              <ChamberOdds name="House" forecast={house} />
             </div>
-            {forecast.dem_seat_distribution && <SeatHistogramPreview forecast={forecast} />}
+            {split && (
+              <div className="flex flex-col items-center gap-5 sm:flex-row">
+                <CircleGrid odds={split} className="w-40 shrink-0" />
+                <ul className="flex w-full flex-col gap-2 text-sm sm:max-w-sm">
+                  {OUTCOMES.map((o, i) => (
+                    <li key={o.label} className="flex items-baseline gap-2">
+                      <span className="inline-block size-2.5 shrink-0 rounded-full" style={{ background: o.color }} />
+                      <span className="flex-1">{o.label}</span>
+                      <span style={{ color: o.color }}>{outOf100(split[i])}%</span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            )}
           </Link>
         ) : (
-          <EmptyPreview>The first Senate forecast is on its way.</EmptyPreview>
+          <EmptyPreview>The first forecast is on its way.</EmptyPreview>
         )}
       </HomeSection>
 
@@ -104,6 +111,24 @@ export default async function Home() {
           <span className="text-muted"> of {totalCountries ?? 0} countries spotted</span>
         </p>
       </HomeSection>
+    </div>
+  );
+}
+
+function ChamberOdds({ name, forecast }: { name: string; forecast: Forecast }) {
+  return (
+    <div className="flex flex-col gap-2">
+      <p className="text-sm text-muted">Chance of winning the {name}</p>
+      <p className="flex gap-6">
+        <span>
+          <span className="text-2xl" style={{ color: DEM }}>{Math.round(forecast.p_dem_control * 100)}%</span>
+          <span className="text-muted"> Dem</span>
+        </span>
+        <span>
+          <span className="text-2xl" style={{ color: REP }}>{Math.round(forecast.p_rep_control * 100)}%</span>
+          <span className="text-muted"> Rep</span>
+        </span>
+      </p>
     </div>
   );
 }
