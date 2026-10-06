@@ -1,8 +1,8 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
   <rect width="64" height="64" rx="10" fill="#121315"/>
-  <clipPath id="band"><rect width="64" height="36" y="14"/></clipPath>
-  <g clip-path="url(#band)" fill="none" stroke-width="6" stroke-miterlimit="10">
-    <path d="M6.1 8.3 L20 50 L32 24 L44 50 L57.9 8.3" stroke="#3fbfb2"/>
-    <path d="M6.1 55.7 L20 14 L32 40 L44 14 L57.9 55.7" stroke="#e9e7e3"/>
-  </g>
+  <circle cx="32" cy="32" r="28.5" fill="none" stroke="#3fbfb2" stroke-width="3.5"/>
+  <svg x="0" y="21" width="64" height="22" viewBox="0 21 64 22" fill="none" stroke-width="4.6" stroke-miterlimit="10">
+    <path d="M9.53 15.25 L17.73 43 L21.57 30 L25.41 43 L33.61 15.25" stroke="#e9e7e3"/>
+    <path d="M54.47 48.75 L46.27 21 L42.43 34 L38.59 21 L30.39 48.75" stroke="#3fbfb2"/>
+  </svg>
 </svg>
