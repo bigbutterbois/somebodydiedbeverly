@@ -118,7 +118,7 @@ def summarize(result: dict) -> None:
         print(
             f"  {r['state']} {r['opp']['name'][:22]:22} vs {r['rep']['name'][:20]:20} "
             f"p_opp {r['p_opp']:6.1%}  mean {r['mean_margin']:+6.1f}  polls {avg} (n={r['n_polls']:2}, "
-            f"w={r['poll_weight']:.2f})  prior {r['prior_margin']:+6.1f} (money {r['fundraising_shift']:+.1f}, "
+            f"w={r['poll_weight']:.2f}, miss adj {r['poll_miss_adjustment']:+.1f})  prior {r['prior_margin']:+6.1f} (money {r['fundraising_shift']:+.1f}, "
             f"rain {r['weather_shift']:+.1f})  rating {r['rating']:+d}"
         )
 
