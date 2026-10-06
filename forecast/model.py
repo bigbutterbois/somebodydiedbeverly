@@ -141,7 +141,12 @@ def fundraising_shift(state: str, extras: dict, cfg: dict) -> float:
     if not money or money["rep"] <= 0 or money["opp"] <= 0:
         return 0.0
     f = cfg["fundamentals"]
-    shift = f["fundraising_points_per_doubling"] * math.log2(money["opp"] / money["rep"])
+    rep, opp = money["rep"], money["opp"]
+    pacs = extras.get("super_pacs", {}).get(state)
+    if pacs:
+        rep += f.get("super_pac_weight", 0.0) * pacs["rep"]
+        opp += f.get("super_pac_weight", 0.0) * pacs["opp"]
+    shift = f["fundraising_points_per_doubling"] * math.log2(opp / rep)
     return max(-f["fundraising_cap"], min(f["fundraising_cap"], shift))
 
 

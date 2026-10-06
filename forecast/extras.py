@@ -17,6 +17,10 @@ import requests
 import scrape
 
 FEC_BULK = "https://www.fec.gov/files/bulk-downloads/{year}/weball{yy}.zip"
+FEC_IE = "https://www.fec.gov/files/bulk-downloads/{year}/independent_expenditure_{year}.csv"
+# Each party's flagship Senate super PAC, by FEC committee ID: Senate Leadership
+# Fund (filed as SLF PAC) for Republicans, Senate Majority PAC (SMP) for Democrats.
+SUPER_PACS = {"C00571703": "rep", "C00484642": "opp"}
 APPROVAL_PAGES = [
     "Opinion_polling_on_the_second_Trump_presidency",
     "Opinion_polling_on_the_second_Donald_Trump_administration",
@@ -103,6 +107,52 @@ def fetch_fundraising(races: list[dict], year: int) -> tuple[dict, list[str]]:
                             f"FEC has: {', '.join(in_state[:12])}")
     print(f"fundraising: {len(out)} of {len(races)} races matched")
     return out, problems
+
+
+def fetch_super_pacs(races: list[dict], year: int) -> tuple[dict, list[str]]:
+    """General-election spending this cycle by each side's flagship super PAC, per Senate race.
+
+    From the FEC's independent expenditure file. Everything a PAC spends in a state's
+    Senate general election counts for its own side, whether it backs its candidate
+    or attacks the other one. Filings carry the PAC's running total for each
+    candidate, so the largest one is used (amended or re-reported spending isn't
+    counted twice); without one, distinct expenditures are summed.
+    Returns {state: {"rep": dollars, "opp": dollars}}.
+    """
+    states = {r["state"] for r in races}
+    running: dict[tuple[str, str, str], float] = {}  # (state, side, candidate id) -> largest running total
+    summed: dict[tuple[str, str, str], float] = {}   # same key -> sum of distinct expenditures
+    seen: set[tuple[str, ...]] = set()
+    try:
+        r = requests.get(FEC_IE.format(year=year), headers=scrape.HEADERS, timeout=300, stream=True)
+        r.raise_for_status()
+        lines = (line.decode("latin-1") for line in r.iter_lines())
+        for row in csv.reader(lines):
+            # cand_id, cand_name, spe_id, spe_nam, ele_type, state, district, office, party,
+            # exp_amo, exp_date, agg_amo, sup_opp, purpose, payee, file_num, amndt_ind, tran_id, ...
+            if len(row) < 18 or row[2] not in SUPER_PACS or row[7] != "S" or row[5] not in states:
+                continue
+            if not row[4].upper().startswith("G"):  # primaries and runoffs don't count
+                continue
+            try:
+                amount, agg = float(row[9] or 0), float(row[11] or 0)
+            except ValueError:
+                continue
+            key = (row[5], SUPER_PACS[row[2]], row[0])
+            running[key] = max(running.get(key, 0.0), agg)
+            tran = (row[2], row[17]) if row[17] else tuple(row[:15])
+            if tran not in seen:
+                seen.add(tran)
+                summed[key] = summed.get(key, 0.0) + amount
+    except Exception as e:
+        return {}, [f"super PACs: {e}"]
+    totals = {key: running.get(key) or summed.get(key, 0.0) for key in running.keys() | summed.keys()}
+    out: dict[str, dict[str, float]] = {}
+    for (state, side, _), dollars in totals.items():
+        out.setdefault(state, {"rep": 0.0, "opp": 0.0})[side] += dollars
+    print("super PACs (SLF / SMP, $M): " + ", ".join(
+        f"{s} {v['rep'] / 1e6:.1f}/{v['opp'] / 1e6:.1f}" for s, v in sorted(out.items())))
+    return out, []
 
 
 def scrape_approval(aggregators: list[str], year: int | None = None, pages: list[str] | None = None,

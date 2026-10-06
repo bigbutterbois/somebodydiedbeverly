@@ -90,12 +90,14 @@ def history_entry(result: dict) -> dict:
 
 
 def extras_as_of(extras: dict, d: date) -> dict:
-    """Fundraising from the latest snapshot on or before d (else the earliest); weather from d only."""
+    """Fundraising and super PAC spending from the latest snapshot on or before d (else the
+    earliest); weather from d only."""
     out = {}
-    funds = extras.get("fundraising", {})
-    if funds:
-        earlier = [k for k in funds if k <= d.isoformat()]
-        out["fundraising"] = funds[max(earlier) if earlier else min(funds)]
+    for key in ("fundraising", "super_pacs"):
+        snapshots = extras.get(key, {})
+        if snapshots:
+            earlier = [k for k in snapshots if k <= d.isoformat()]
+            out[key] = snapshots[max(earlier) if earlier else min(snapshots)]
     if d.isoformat() in extras.get("weather", {}):
         out["weather"] = extras["weather"][d.isoformat()]
     if extras.get("economy"):
@@ -171,10 +173,14 @@ def main() -> int:
         election = facts["election_day"]
         election = election if isinstance(election, date) else date.fromisoformat(election)
         funds, fund_problems = extra_sources.fetch_fundraising(facts["races"], election.year)
+        pacs, pac_problems = extra_sources.fetch_super_pacs(facts["races"], election.year)
+        fund_problems += pac_problems
         weather, weather_problems = extra_sources.fetch_weather(election)
         economy, economy_problems = extra_sources.fetch_economy(date(election.year - 1, 1, 1))
         if funds:
             extras["fundraising"][today.isoformat()] = funds
+        if pacs:
+            extras.setdefault("super_pacs", {})[today.isoformat()] = pacs
         if weather:
             extras["weather"][today.isoformat()] = weather
         for key, values in economy.items():  # whole daily series; the model only reads days up to as_of
