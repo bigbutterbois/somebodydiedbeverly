@@ -117,11 +117,16 @@ def flatten_columns(df: pd.DataFrame) -> list[str]:
     return cols
 
 
+def last_name(name: str) -> str:
+    """'Thomas Kean Jr.' -> 'kean': the last word that isn't a suffix."""
+    words = [w for w in re.findall(r"[a-z'-]+", norm(name)) if w not in {"jr", "sr", "ii", "iii", "iv"}]
+    return words[-1] if words else ""
+
+
 def candidate_pattern(cand: dict) -> re.Pattern:
     if cand.get("match"):
         return re.compile(cand["match"], re.I)
-    last = norm(cand["name"]).split(" ")[-1]
-    return re.compile(r"\b" + re.escape(last) + r"\b")
+    return re.compile(r"\b" + re.escape(last_name(cand["name"])) + r"\b")
 
 
 def find_col(cols: list[str], pattern: re.Pattern) -> int | None:

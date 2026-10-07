@@ -99,7 +99,7 @@ def fetch_fundraising(races: list[dict], year: int, office: str = "S") -> tuple[
 
     def find(cand: dict, race_id: str, party: str) -> float | None:
         state, district = race_id[:2], fec_district(race_id)
-        last = scrape.norm(cand["name"]).split(" ")[-1].upper()
+        last = scrape.last_name(cand["name"]).upper()
         first = cand.get("fec_first", "").upper()
         best = None
         for row in senate:
