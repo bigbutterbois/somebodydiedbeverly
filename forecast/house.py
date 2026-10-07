@@ -138,11 +138,6 @@ def district_rows(html: str) -> list[dict]:
     return list(best.values())
 
 
-def last_name(name: str) -> str:
-    words = [w for w in re.findall(r"[a-z'-]+", scrape.norm(name)) if w not in {"jr", "sr", "ii", "iii", "iv"}]
-    return words[-1] if words else ""
-
-
 def nominee(cands: list[dict], party: str) -> dict | None:
     """The party's one candidate; with several (a primary still to come), the first listed."""
     of_party = [c for c in cands if c["party"] == party]
@@ -225,12 +220,12 @@ def fetch_districts(facts: dict, verbose: bool = False) -> tuple[list[dict], lis
         elif not opp:
             race["uncontested"] = "R"
         # The incumbent counts only if they are running here (members move after redistricting).
-        member_last = last_name(r["member"])
-        running = next((c for c in (rep, opp) if c and member_last and last_name(c["name"]) == member_last), None)
+        member_last = scrape.last_name(r["member"])
+        running = next((c for c in (rep, opp) if c and member_last and scrape.last_name(c["name"]) == member_last), None)
         if running:
             race["incumbent"] = running["party"]
             prev = past.get(r["id"])
-            if prev and st not in redrawn and last_name(prev["member"]) == member_last:
+            if prev and st not in redrawn and scrape.last_name(prev["member"]) == member_last:
                 # Signed toward the opposition (Dem) side, like every other margin.
                 race["overperformance"] = prev["over"] if running["party"] == "D" else -prev["over"]
         races.append(race)
