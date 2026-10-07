@@ -12306,6 +12306,30 @@
   "source": "https://en.wikipedia.org/wiki/2026_United_States_Senate_special_election_in_Florida"
  },
  {
+  "state": "FL",
+  "pollster": "Mason-Dixon",
+  "sponsor_party": null,
+  "end_date": "2026-10-01",
+  "n": 625,
+  "population": "LV",
+  "rep": 50.0,
+  "opp": 40.0,
+  "others": [],
+  "source": "https://en.wikipedia.org/wiki/2026_United_States_Senate_special_election_in_Florida"
+ },
+ {
+  "state": "FL",
+  "pollster": "YouGov",
+  "sponsor_party": null,
+  "end_date": "2026-10-05",
+  "n": 3813,
+  "population": "LV",
+  "rep": 49.0,
+  "opp": 44.0,
+  "others": [],
+  "source": "https://en.wikipedia.org/wiki/2026_United_States_Senate_special_election_in_Florida"
+ },
+ {
   "state": "FL-08",
   "pollster": "Public Policy Polling",
   "sponsor_party": "D",
@@ -13231,7 +13255,7 @@
  },
  {
   "state": "IL",
-  "pollster": "Public Policy Polling/Chicago News Weekly",
+  "pollster": "Public Policy Polling",
   "sponsor_party": "D",
   "end_date": "2026-10-01",
   "n": 569,
@@ -13239,8 +13263,7 @@
   "rep": 36.0,
   "opp": 49.0,
   "others": [],
-  "source": "https://www.cnwmedia.com/article/cnw-poll-pritzker-leads-bailey-by-20-points-democrats-ahead-in-four-other-statewide-races",
-  "feed": "votehub"
+  "source": "https://en.wikipedia.org/wiki/2026_United_States_Senate_election_in_Illinois"
  },
  {
   "state": "IL-04",
@@ -13383,6 +13406,18 @@
   "population": "LV",
   "rep": 44.0,
   "opp": 44.0,
+  "others": [],
+  "source": "https://en.wikipedia.org/wiki/2026_United_States_Senate_election_in_Kansas"
+ },
+ {
+  "state": "KS",
+  "pollster": "YouGov",
+  "sponsor_party": null,
+  "end_date": "2026-10-04",
+  "n": 2255,
+  "population": "LV",
+  "rep": 45.0,
+  "opp": 48.0,
   "others": [],
   "source": "https://en.wikipedia.org/wiki/2026_United_States_Senate_election_in_Kansas"
  },
@@ -14511,6 +14546,18 @@
   "population": "LV",
   "rep": 41.0,
   "opp": 46.0,
+  "others": [],
+  "source": "https://en.wikipedia.org/wiki/2026_United_States_Senate_election_in_Michigan"
+ },
+ {
+  "state": "MI",
+  "pollster": "YouGov",
+  "sponsor_party": null,
+  "end_date": "2026-10-04",
+  "n": 3949,
+  "population": "LV",
+  "rep": 48.0,
+  "opp": 49.0,
   "others": [],
   "source": "https://en.wikipedia.org/wiki/2026_United_States_Senate_election_in_Michigan"
  },
@@ -15863,6 +15910,18 @@
   "source": "https://en.wikipedia.org/wiki/2026_United_States_Senate_election_in_Nebraska"
  },
  {
+  "state": "NE",
+  "pollster": "YouGov",
+  "sponsor_party": null,
+  "end_date": "2026-10-03",
+  "n": 1809,
+  "population": "LV",
+  "rep": 47.0,
+  "opp": 48.0,
+  "others": [],
+  "source": "https://en.wikipedia.org/wiki/2026_United_States_Senate_election_in_Nebraska"
+ },
+ {
   "state": "NE-01",
   "pollster": "Zenith Research",
   "sponsor_party": "D",
@@ -16219,6 +16278,18 @@
   "n": 1042,
   "population": "LV",
   "rep": 44.0,
+  "opp": 51.0,
+  "others": [],
+  "source": "https://en.wikipedia.org/wiki/2026_United_States_Senate_election_in_New_Hampshire"
+ },
+ {
+  "state": "NH",
+  "pollster": "YouGov",
+  "sponsor_party": null,
+  "end_date": "2026-10-05",
+  "n": 1520,
+  "population": "LV",
+  "rep": 43.0,
   "opp": 51.0,
   "others": [],
   "source": "https://en.wikipedia.org/wiki/2026_United_States_Senate_election_in_New_Hampshire"
@@ -16904,6 +16975,18 @@
   "population": "LV",
   "rep": 43.0,
   "opp": 44.0,
+  "others": [],
+  "source": "https://en.wikipedia.org/wiki/2026_United_States_Senate_special_election_in_Ohio"
+ },
+ {
+  "state": "OH",
+  "pollster": "YouGov",
+  "sponsor_party": null,
+  "end_date": "2026-09-30",
+  "n": 3780,
+  "population": "LV",
+  "rep": 45.0,
+  "opp": 49.0,
   "others": [],
   "source": "https://en.wikipedia.org/wiki/2026_United_States_Senate_special_election_in_Ohio"
  },
@@ -18118,6 +18201,18 @@
   "population": "LV",
   "rep": 45.0,
   "opp": 51.0,
+  "others": [],
+  "source": "https://en.wikipedia.org/wiki/2026_United_States_Senate_election_in_Texas"
+ },
+ {
+  "state": "TX",
+  "pollster": "YouGov",
+  "sponsor_party": null,
+  "end_date": "2026-10-05",
+  "n": 3625,
+  "population": "LV",
+  "rep": 44.0,
+  "opp": 50.0,
   "others": [],
   "source": "https://en.wikipedia.org/wiki/2026_United_States_Senate_election_in_Texas"
  },
@@ -24550,6 +24645,18 @@
  },
  {
   "state": "US",
+  "pollster": "KFF",
+  "sponsor_party": null,
+  "end_date": "2026-09-21",
+  "n": 1013,
+  "population": "RV",
+  "opp": 45.0,
+  "rep": 35.0,
+  "others": [],
+  "source": "https://en.wikipedia.org/wiki/2026_United_States_elections"
+ },
+ {
+  "state": "US",
   "pollster": "Strength In Numbers/Verasight",
   "sponsor_party": null,
   "end_date": "2026-09-21",
@@ -24718,6 +24825,18 @@
  },
  {
   "state": "US",
+  "pollster": "Centerline Research & Strategy",
+  "sponsor_party": null,
+  "end_date": "2026-10-01",
+  "n": 930,
+  "population": "LV",
+  "opp": 50.0,
+  "rep": 42.0,
+  "others": [],
+  "source": "https://en.wikipedia.org/wiki/2026_United_States_elections"
+ },
+ {
+  "state": "US",
   "pollster": "ActiVote",
   "sponsor_party": null,
   "end_date": "2026-10-02",
@@ -24761,6 +24880,18 @@
   "population": "RV",
   "opp": 44.0,
   "rep": 37.0,
+  "others": [],
+  "source": "https://en.wikipedia.org/wiki/2026_United_States_elections"
+ },
+ {
+  "state": "US",
+  "pollster": "The Economist/YouGov",
+  "sponsor_party": null,
+  "end_date": "2026-10-05",
+  "n": 995,
+  "population": "LV",
+  "opp": 52.0,
+  "rep": 40.0,
   "others": [],
   "source": "https://en.wikipedia.org/wiki/2026_United_States_elections"
  },
