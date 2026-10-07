@@ -13074,6 +13074,18 @@
   "source": "https://en.wikipedia.org/wiki/2026_United_States_Senate_election_in_Iowa"
  },
  {
+  "state": "IA",
+  "pollster": "Suffolk University",
+  "sponsor_party": null,
+  "end_date": "2026-10-04",
+  "n": 500,
+  "population": "LV",
+  "rep": 44.0,
+  "opp": 48.0,
+  "others": [],
+  "source": "https://en.wikipedia.org/wiki/2026_United_States_Senate_election_in_Iowa"
+ },
+ {
   "state": "IA-01",
   "pollster": "Public Policy Polling",
   "sponsor_party": "D",
@@ -13406,6 +13418,18 @@
   "population": "LV",
   "rep": 44.0,
   "opp": 44.0,
+  "others": [],
+  "source": "https://en.wikipedia.org/wiki/2026_United_States_Senate_election_in_Kansas"
+ },
+ {
+  "state": "KS",
+  "pollster": "GBAO",
+  "sponsor_party": "D",
+  "end_date": "2026-10-04",
+  "n": 600,
+  "population": "LV",
+  "rep": 41.0,
+  "opp": 46.0,
   "others": [],
   "source": "https://en.wikipedia.org/wiki/2026_United_States_Senate_election_in_Kansas"
  },
@@ -14558,6 +14582,18 @@
   "population": "LV",
   "rep": 48.0,
   "opp": 49.0,
+  "others": [],
+  "source": "https://en.wikipedia.org/wiki/2026_United_States_Senate_election_in_Michigan"
+ },
+ {
+  "state": "MI",
+  "pollster": "Quantus Insights",
+  "sponsor_party": "R",
+  "end_date": "2026-10-06",
+  "n": 762,
+  "population": "LV",
+  "rep": 47.0,
+  "opp": 48.0,
   "others": [],
   "source": "https://en.wikipedia.org/wiki/2026_United_States_Senate_election_in_Michigan"
  },
@@ -15730,6 +15766,18 @@
   "source": "https://en.wikipedia.org/wiki/2026_United_States_House_of_Representatives_elections_in_North_Carolina"
  },
  {
+  "state": "NC-03",
+  "pollster": "Tulchin Research",
+  "sponsor_party": "D",
+  "end_date": "2026-08-02",
+  "n": 600,
+  "population": "LV",
+  "rep": 44.0,
+  "opp": 41.0,
+  "others": [],
+  "source": "https://en.wikipedia.org/wiki/2026_United_States_House_of_Representatives_elections_in_North_Carolina"
+ },
+ {
   "state": "NC-07",
   "pollster": "Public Policy Polling",
   "sponsor_party": "D",
@@ -16403,6 +16451,30 @@
   "source": "https://en.wikipedia.org/wiki/2026_United_States_House_of_Representatives_elections_in_New_Hampshire"
  },
  {
+  "state": "NJ-07",
+  "pollster": "Z to A Research",
+  "sponsor_party": null,
+  "end_date": "2026-05-26",
+  "n": 430,
+  "population": "LV",
+  "rep": 43.0,
+  "opp": 47.0,
+  "others": [],
+  "source": "https://en.wikipedia.org/wiki/2026_United_States_House_of_Representatives_elections_in_New_Jersey"
+ },
+ {
+  "state": "NJ-07",
+  "pollster": "StimSight Research",
+  "sponsor_party": null,
+  "end_date": "2026-09-12",
+  "n": 498,
+  "population": "LV",
+  "rep": 42.0,
+  "opp": 47.0,
+  "others": [],
+  "source": "https://en.wikipedia.org/wiki/2026_United_States_House_of_Representatives_elections_in_New_Jersey"
+ },
+ {
   "state": "NM",
   "pollster": "Research & Polling Inc.",
   "sponsor_party": null,
@@ -16555,6 +16627,18 @@
   "population": "LV",
   "rep": 39.0,
   "opp": 53.0,
+  "others": [],
+  "source": "https://en.wikipedia.org/wiki/2026_United_States_House_of_Representatives_elections_in_New_York"
+ },
+ {
+  "state": "NY-18",
+  "pollster": "Public Policy Polling",
+  "sponsor_party": "D",
+  "end_date": "2026-09-30",
+  "n": 561,
+  "population": "LV",
+  "rep": 35.0,
+  "opp": 52.0,
   "others": [],
   "source": "https://en.wikipedia.org/wiki/2026_United_States_House_of_Representatives_elections_in_New_York"
  },
@@ -18183,7 +18267,7 @@
  {
   "state": "TX",
   "pollster": "Rasmussen Reports",
-  "sponsor_party": "R",
+  "sponsor_party": null,
   "end_date": "2026-09-29",
   "n": 1128,
   "population": "LV",
