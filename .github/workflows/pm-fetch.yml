@@ -1,0 +1,18 @@
+name: Polymarket fetch (scratch)
+on:
+  push:
+    branches: [claude/project-thread-y5ld8n]
+    paths: [scratch/pm_fetch.py, .github/workflows/pm-fetch.yml]
+permissions:
+  contents: write
+jobs:
+  fetch:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: python3 scratch/pm_fetch.py
+      - run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898283+github-actions[bot]@users.noreply.github.com"
+          git add scratch/pm_events.json
+          git commit -m "Polymarket snapshot" && git push
