@@ -12389,6 +12389,18 @@
  },
  {
   "state": "FL",
+  "pollster": "Targoz Market Research",
+  "sponsor_party": null,
+  "end_date": "2026-10-04",
+  "n": 847,
+  "population": "LV",
+  "rep": 52.0,
+  "opp": 42.0,
+  "others": [],
+  "source": "https://en.wikipedia.org/wiki/2026_United_States_Senate_special_election_in_Florida"
+ },
+ {
+  "state": "FL",
   "pollster": "YouGov",
   "sponsor_party": null,
   "end_date": "2026-10-05",
@@ -18643,6 +18655,18 @@
   "population": "LV",
   "rep": 44.0,
   "opp": 50.0,
+  "others": [],
+  "source": "https://en.wikipedia.org/wiki/2026_United_States_Senate_election_in_Texas"
+ },
+ {
+  "state": "TX",
+  "pollster": "Trafalgar Group",
+  "sponsor_party": "R",
+  "end_date": "2026-10-08",
+  "n": 1086,
+  "population": "LV",
+  "rep": 44.0,
+  "opp": 47.0,
   "others": [],
   "source": "https://en.wikipedia.org/wiki/2026_United_States_Senate_election_in_Texas"
  },
