@@ -172,7 +172,9 @@ def poll_tables(tables, required: dict[str, re.Pattern], optional: dict[str, re.
         yield df, cols, {k: v for k, v in idx.items() if v is not None}
 
 
-def parse_rows(df, cols, idx, default_year, aggregators):
+def parse_rows(df, cols, idx, default_year, aggregators, skipped: list | None = None):
+    """Poll rows from one table. Rows with a pollster that still get dropped (no readable end
+    date or share) go in `skipped`, if given, as (reason, raw row) for the run log."""
     pollster_col = next((i for i, c in enumerate(cols) if "poll" in c or "source" in c), 0)
     date_col = next(i for i, c in enumerate(cols) if "date" in c)
     sample_col = next((i for i, c in enumerate(cols) if "sample" in c), None)
@@ -184,10 +186,14 @@ def parse_rows(df, cols, idx, default_year, aggregators):
             continue
         end = parse_end_date(str(values[date_col]), default_year)
         if not end:
+            if skipped is not None:
+                skipped.append(("no date", values))
             continue
         n, pop = parse_sample(str(values[sample_col])) if sample_col is not None else (None, None)
         shares = {k: parse_pct(values[i]) for k, i in idx.items()}
         if any(shares[k] is None for k in ("rep", "opp") if k in shares):
+            if skipped is not None:
+                skipped.append(("no share", values))
             continue
         partisan = re.search(r"\((D|R)\)", pollster)
         yield {
@@ -240,6 +246,15 @@ def search_titles(query: str) -> list[str]:
         return []
 
 
+def print_skipped(label: str, skipped: list, limit: int = 8) -> None:
+    """Log the first rows a poll table dropped (Wikipedia lists newest first)."""
+    if not skipped:
+        return
+    print(f"{label}: skipped {len(skipped)} rows; first {min(limit, len(skipped))}:")
+    for reason, values in skipped[:limit]:
+        print(f"    {reason}: " + " | ".join(str(v)[:40] for v in values))
+
+
 def scrape_generic_ballot(aggregators: list[str], default_year: int, pages: list[str] | None = None,
                           query: str | None = None) -> list[dict]:
     # Party columns ("Democratic", "Republican"), not candidate names.
@@ -247,20 +262,22 @@ def scrape_generic_ballot(aggregators: list[str], default_year: int, pages: list
     query = query or f"{default_year} generic congressional ballot opinion polling"
     found = [t for t in search_titles(query) if str(default_year) in t]
     titles = (pages or GENERIC_BALLOT_PAGES) + found
+    print(f"generic ballot: search found {found}")
     for title in dict.fromkeys(titles):
         try:
             tables = read_tables(fetch_html(title, retries=1))
         except RuntimeError:
             continue
-        best = {}
+        best, skipped = {}, []
         for df, cols, idx in poll_tables(tables, required, {}):
-            for poll in parse_rows(df, cols, idx, default_year, aggregators):
+            for poll in parse_rows(df, cols, idx, default_year, aggregators, skipped):
                 best.setdefault((norm(poll["pollster"]), poll["end_date"]), poll)
         if len(best) >= 5:
             recent = sorted(best.values(), key=lambda p: p["end_date"])[-5:]
             print(f"generic ballot: {len(best)} polls from {title}; latest:")
             for p in recent:
                 print(f"    {p['end_date']} {p['pollster']}: D {p['opp']} R {p['rep']}")
+            print_skipped("generic ballot", skipped)
             return [{"state": "US", **p, "others": [],
                      "source": f"https://en.wikipedia.org/wiki/{title}"} for p in best.values()]
     raise RuntimeError(f"no generic ballot table found in {', '.join(dict.fromkeys(titles))}")
