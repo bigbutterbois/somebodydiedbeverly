@@ -11955,6 +11955,18 @@
  },
  {
   "state": "APPROVAL",
+  "pollster": "Financial Times/Focaldata",
+  "sponsor_party": null,
+  "end_date": "2026-10-04",
+  "n": 2275,
+  "population": null,
+  "opp": 34.0,
+  "rep": 59.0,
+  "others": [],
+  "source": "https://en.wikipedia.org/wiki/Opinion_polling_on_the_second_Trump_presidency"
+ },
+ {
+  "state": "APPROVAL",
   "pollster": "Pew Research Center",
   "sponsor_party": null,
   "end_date": "2026-10-04",
@@ -13564,6 +13576,18 @@
   "source": "https://en.wikipedia.org/wiki/2026_United_States_Senate_election_in_Kansas"
  },
  {
+  "state": "KS",
+  "pollster": "InsiderAdvantage",
+  "sponsor_party": "R",
+  "end_date": "2026-10-10",
+  "n": 1200,
+  "population": "LV",
+  "rep": 47.0,
+  "opp": 48.0,
+  "others": [],
+  "source": "https://en.wikipedia.org/wiki/2026_United_States_Senate_election_in_Kansas"
+ },
+ {
   "state": "KY",
   "pollster": "Public Policy Polling",
   "sponsor_party": "D",
@@ -14800,6 +14824,18 @@
   "source": "https://en.wikipedia.org/wiki/2026_United_States_Senate_election_in_Michigan"
  },
  {
+  "state": "MI",
+  "pollster": "InsiderAdvantage",
+  "sponsor_party": "R",
+  "end_date": "2026-10-10",
+  "n": 1200,
+  "population": "LV",
+  "rep": 46.0,
+  "opp": 48.0,
+  "others": [],
+  "source": "https://en.wikipedia.org/wiki/2026_United_States_Senate_election_in_Michigan"
+ },
+ {
   "state": "MI-04",
   "pollster": "Public Policy Polling",
   "sponsor_party": "D",
@@ -15042,7 +15078,7 @@
  {
   "state": "MN",
   "pollster": "Morning Consult",
-  "sponsor_party": "D",
+  "sponsor_party": null,
   "end_date": "2026-10-07",
   "n": 1000,
   "population": "RV",
@@ -16036,6 +16072,18 @@
   "population": "LV",
   "rep": 41.0,
   "opp": 51.0,
+  "others": [],
+  "source": "https://en.wikipedia.org/wiki/2026_United_States_House_of_Representatives_elections_in_North_Carolina"
+ },
+ {
+  "state": "NC-01",
+  "pollster": "co/efficient",
+  "sponsor_party": "R",
+  "end_date": "2026-10-08",
+  "n": 623,
+  "population": "LV",
+  "rep": 43.0,
+  "opp": 42.0,
   "others": [],
   "source": "https://en.wikipedia.org/wiki/2026_United_States_House_of_Representatives_elections_in_North_Carolina"
  },
@@ -17854,6 +17902,18 @@
  },
  {
   "state": "SC",
+  "pollster": "Rasmussen Reports",
+  "sponsor_party": "R",
+  "end_date": "2026-09-14",
+  "n": 1006,
+  "population": "LV",
+  "rep": 48.0,
+  "opp": 43.0,
+  "others": [],
+  "source": "https://en.wikipedia.org/wiki/2026_United_States_Senate_election_in_South_Carolina"
+ },
+ {
+  "state": "SC",
   "pollster": "Trafalgar Group",
   "sponsor_party": "R",
   "end_date": "2026-09-25",
@@ -17872,6 +17932,18 @@
   "n": 1200,
   "population": "LV",
   "rep": 46.0,
+  "opp": 45.0,
+  "others": [],
+  "source": "https://en.wikipedia.org/wiki/2026_United_States_Senate_election_in_South_Carolina"
+ },
+ {
+  "state": "SC",
+  "pollster": "Rasmussen Reports",
+  "sponsor_party": "R",
+  "end_date": "2026-10-08",
+  "n": 837,
+  "population": "LV",
+  "rep": 49.0,
   "opp": 45.0,
   "others": [],
   "source": "https://en.wikipedia.org/wiki/2026_United_States_Senate_election_in_South_Carolina"
