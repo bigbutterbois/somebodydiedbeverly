@@ -1962,11 +1962,11 @@
  },
  {
   "date": "2026-10-08",
-  "p_dem_control": 0.6412,
-  "p_rep_control": 0.3588,
+  "p_dem_control": 0.6415,
+  "p_rep_control": 0.3585,
   "p_no_majority": 0.0,
   "dem_seats_mean": 51.45,
-  "p_dem_both": 0.6405,
+  "p_dem_both": 0.6409,
   "generic_ballot": {
    "dem": 49.74,
    "rep": 41.61
@@ -2007,7 +2007,7 @@
    "SC": 0.2923,
    "SD": 0.0439,
    "TN": 0.0048,
-   "TX": 0.6372,
+   "TX": 0.6382,
    "VA": 0.9851,
    "WV": 0.0012,
    "WY": 0.0006
@@ -2015,11 +2015,11 @@
  },
  {
   "date": "2026-10-09",
-  "p_dem_control": 0.6425,
-  "p_rep_control": 0.3574,
-  "p_no_majority": 0.0,
+  "p_dem_control": 0.6429,
+  "p_rep_control": 0.3572,
+  "p_no_majority": -0.0,
   "dem_seats_mean": 51.46,
-  "p_dem_both": 0.6417,
+  "p_dem_both": 0.642,
   "generic_ballot": {
    "dem": 49.74,
    "rep": 41.61
@@ -2060,7 +2060,7 @@
    "SC": 0.2945,
    "SD": 0.0393,
    "TN": 0.0054,
-   "TX": 0.6445,
+   "TX": 0.6455,
    "VA": 0.985,
    "WV": 0.0013,
    "WY": 0.0007
@@ -2068,11 +2068,11 @@
  },
  {
   "date": "2026-10-10",
-  "p_dem_control": 0.6533,
-  "p_rep_control": 0.3467,
+  "p_dem_control": 0.6536,
+  "p_rep_control": 0.3464,
   "p_no_majority": 0.0,
   "dem_seats_mean": 51.5,
-  "p_dem_both": 0.6526,
+  "p_dem_both": 0.653,
   "generic_ballot": {
    "dem": 49.77,
    "rep": 41.61
@@ -2113,7 +2113,7 @@
    "SC": 0.2952,
    "SD": 0.0427,
    "TN": 0.0062,
-   "TX": 0.652,
+   "TX": 0.6531,
    "VA": 0.9856,
    "WV": 0.0011,
    "WY": 0.0006
@@ -2121,11 +2121,11 @@
  },
  {
   "date": "2026-10-11",
-  "p_dem_control": 0.6448,
-  "p_rep_control": 0.3552,
-  "p_no_majority": -0.0,
-  "dem_seats_mean": 51.47,
-  "p_dem_both": 0.6438,
+  "p_dem_control": 0.645,
+  "p_rep_control": 0.355,
+  "p_no_majority": 0.0,
+  "dem_seats_mean": 51.48,
+  "p_dem_both": 0.644,
   "generic_ballot": {
    "dem": 49.78,
    "rep": 41.64
@@ -2166,7 +2166,7 @@
    "SC": 0.2889,
    "SD": 0.041,
    "TN": 0.005,
-   "TX": 0.6439,
+   "TX": 0.6446,
    "VA": 0.9866,
    "WV": 0.0018,
    "WY": 0.0004
@@ -2174,10 +2174,10 @@
  },
  {
   "date": "2026-10-12",
-  "p_dem_control": 0.6449,
-  "p_rep_control": 0.3551,
-  "p_no_majority": -0.0,
-  "dem_seats_mean": 51.47,
+  "p_dem_control": 0.645,
+  "p_rep_control": 0.355,
+  "p_no_majority": 0.0,
+  "dem_seats_mean": 51.48,
   "p_dem_both": 0.6445,
   "generic_ballot": {
    "dem": 49.78,
@@ -2219,7 +2219,7 @@
    "SC": 0.2864,
    "SD": 0.038,
    "TN": 0.005,
-   "TX": 0.6474,
+   "TX": 0.6483,
    "VA": 0.9866,
    "WV": 0.0014,
    "WY": 0.001
@@ -2227,11 +2227,11 @@
  },
  {
   "date": "2026-10-13",
-  "p_dem_control": 0.6515,
-  "p_rep_control": 0.3484,
-  "p_no_majority": 0.0,
+  "p_dem_control": 0.6519,
+  "p_rep_control": 0.3481,
+  "p_no_majority": -0.0,
   "dem_seats_mean": 51.49,
-  "p_dem_both": 0.6508,
+  "p_dem_both": 0.6511,
   "generic_ballot": {
    "dem": 49.78,
    "rep": 41.65
@@ -2251,7 +2251,7 @@
    "ID": 0.0266,
    "IL": 0.991,
    "IA": 0.4299,
-   "KS": 0.4286,
+   "KS": 0.4296,
    "KY": 0.0118,
    "LA": 0.0886,
    "ME": 0.6332,
@@ -2269,10 +2269,10 @@
    "OK": 0.0034,
    "OR": 0.9969,
    "RI": 0.9969,
-   "SC": 0.2865,
+   "SC": 0.2864,
    "SD": 0.0384,
    "TN": 0.0056,
-   "TX": 0.6437,
+   "TX": 0.6443,
    "VA": 0.9867,
    "WV": 0.001,
    "WY": 0.0008

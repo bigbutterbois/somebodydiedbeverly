@@ -18864,6 +18864,18 @@
  },
  {
   "state": "TX",
+  "pollster": "ReconMR/Siena University",
+  "sponsor_party": null,
+  "end_date": "2026-10-08",
+  "n": 617,
+  "population": "LV",
+  "rep": 44.0,
+  "opp": 48.0,
+  "others": [],
+  "source": "https://en.wikipedia.org/wiki/2026_United_States_Senate_election_in_Texas"
+ },
+ {
+  "state": "TX",
   "pollster": "Trafalgar Group",
   "sponsor_party": "R",
   "end_date": "2026-10-08",

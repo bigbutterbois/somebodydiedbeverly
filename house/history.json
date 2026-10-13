@@ -16766,7 +16766,7 @@
   "p_rep_control": 0.041,
   "p_no_majority": 0.0,
   "dem_seats_mean": 240.36,
-  "p_dem_both": 0.6405,
+  "p_dem_both": 0.6409,
   "generic_ballot": {
    "dem": 49.74,
    "rep": 41.61
@@ -17219,7 +17219,7 @@
   "p_rep_control": 0.0423,
   "p_no_majority": 0.0,
   "dem_seats_mean": 240.39,
-  "p_dem_both": 0.6417,
+  "p_dem_both": 0.642,
   "generic_ballot": {
    "dem": 49.74,
    "rep": 41.61
@@ -17672,7 +17672,7 @@
   "p_rep_control": 0.0399,
   "p_no_majority": 0.0,
   "dem_seats_mean": 240.95,
-  "p_dem_both": 0.6526,
+  "p_dem_both": 0.653,
   "generic_ballot": {
    "dem": 49.77,
    "rep": 41.61
@@ -18125,7 +18125,7 @@
   "p_rep_control": 0.0413,
   "p_no_majority": 0.0,
   "dem_seats_mean": 240.64,
-  "p_dem_both": 0.6438,
+  "p_dem_both": 0.644,
   "generic_ballot": {
    "dem": 49.78,
    "rep": 41.64
@@ -19031,7 +19031,7 @@
   "p_rep_control": 0.0374,
   "p_no_majority": -0.0,
   "dem_seats_mean": 240.7,
-  "p_dem_both": 0.6508,
+  "p_dem_both": 0.6511,
   "generic_ballot": {
    "dem": 49.78,
    "rep": 41.65
@@ -19141,7 +19141,7 @@
    "FL-11": 0.2127,
    "FL-12": 0.1587,
    "FL-13": 0.2656,
-   "FL-14": 0.7005,
+   "FL-14": 0.7004,
    "FL-15": 0.0559,
    "FL-16": 0.2505,
    "FL-17": 0.0393,
@@ -19347,7 +19347,7 @@
    "OH-06": 0.0024,
    "OH-07": 0.4894,
    "OH-08": 0.0924,
-   "OH-09": 0.4905,
+   "OH-09": 0.4904,
    "OH-10": 0.4349,
    "OH-11": 1.0,
    "OH-12": 0.0063,
