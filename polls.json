@@ -12856,6 +12856,30 @@
   "source": "https://en.wikipedia.org/wiki/2026_United_States_Senate_election_in_Georgia"
  },
  {
+  "state": "GA",
+  "pollster": "Trafalgar Group",
+  "sponsor_party": "R",
+  "end_date": "2026-10-09",
+  "n": 1101,
+  "population": "LV",
+  "rep": 43.0,
+  "opp": 51.0,
+  "others": [],
+  "source": "https://en.wikipedia.org/wiki/2026_United_States_Senate_election_in_Georgia"
+ },
+ {
+  "state": "GA-03",
+  "pollster": "VoteNexus",
+  "sponsor_party": "D",
+  "end_date": "2026-10-07",
+  "n": 301,
+  "population": "LV",
+  "rep": 50.0,
+  "opp": 45.0,
+  "others": [],
+  "source": "https://en.wikipedia.org/wiki/2026_United_States_House_of_Representatives_elections_in_Georgia"
+ },
+ {
   "state": "GA-07",
   "pollster": "20/20 Insight",
   "sponsor_party": "D",
@@ -12864,6 +12888,18 @@
   "population": "LV",
   "rep": 46.0,
   "opp": 43.0,
+  "others": [],
+  "source": "https://en.wikipedia.org/wiki/2026_United_States_House_of_Representatives_elections_in_Georgia"
+ },
+ {
+  "state": "GA-07",
+  "pollster": "20/20 Insight",
+  "sponsor_party": "D",
+  "end_date": "2026-10-09",
+  "n": 457,
+  "population": "LV",
+  "rep": 45.0,
+  "opp": 47.0,
   "others": [],
   "source": "https://en.wikipedia.org/wiki/2026_United_States_House_of_Representatives_elections_in_Georgia"
  },
@@ -15077,6 +15113,18 @@
  },
  {
   "state": "MN",
+  "pollster": "Mason-Dixon Polling & Strategy",
+  "sponsor_party": null,
+  "end_date": "2026-10-07",
+  "n": 800,
+  "population": "LV",
+  "rep": 43.0,
+  "opp": 47.0,
+  "others": [],
+  "source": "https://en.wikipedia.org/wiki/2026_United_States_Senate_election_in_Minnesota"
+ },
+ {
+  "state": "MN",
   "pollster": "Morning Consult",
   "sponsor_party": null,
   "end_date": "2026-10-07",
@@ -15132,6 +15180,18 @@
   "population": "LV",
   "rep": 46.0,
   "opp": 47.0,
+  "others": [],
+  "source": "https://en.wikipedia.org/wiki/2026_United_States_House_of_Representatives_elections_in_Minnesota"
+ },
+ {
+  "state": "MN-01",
+  "pollster": "SurveyUSA",
+  "sponsor_party": null,
+  "end_date": "2026-10-09",
+  "n": 565,
+  "population": "LV",
+  "rep": 44.0,
+  "opp": 46.0,
   "others": [],
   "source": "https://en.wikipedia.org/wiki/2026_United_States_House_of_Representatives_elections_in_Minnesota"
  },
@@ -16004,6 +16064,18 @@
   "source": "https://en.wikipedia.org/wiki/2026_United_States_Senate_election_in_North_Carolina"
  },
  {
+  "state": "NC",
+  "pollster": "Trafalgar Group",
+  "sponsor_party": "R",
+  "end_date": "2026-10-10",
+  "n": 1091,
+  "population": "LV",
+  "rep": 41.0,
+  "opp": 49.0,
+  "others": [],
+  "source": "https://en.wikipedia.org/wiki/2026_United_States_Senate_election_in_North_Carolina"
+ },
+ {
   "state": "NC-01",
   "pollster": "GQR",
   "sponsor_party": "D",
@@ -16292,6 +16364,18 @@
   "source": "https://en.wikipedia.org/wiki/2026_United_States_Senate_election_in_Nebraska"
  },
  {
+  "state": "NE",
+  "pollster": "National Public Affairs",
+  "sponsor_party": "R",
+  "end_date": "2026-10-05",
+  "n": 800,
+  "population": "LV",
+  "rep": 46.0,
+  "opp": 43.0,
+  "others": [],
+  "source": "https://en.wikipedia.org/wiki/2026_United_States_Senate_election_in_Nebraska"
+ },
+ {
   "state": "NE-01",
   "pollster": "Zenith Research",
   "sponsor_party": "D",
@@ -16336,6 +16420,18 @@
   "population": "LV",
   "rep": 42.0,
   "opp": 46.0,
+  "others": [],
+  "source": "https://en.wikipedia.org/wiki/2026_United_States_House_of_Representatives_elections_in_Nebraska"
+ },
+ {
+  "state": "NE-02",
+  "pollster": "National Public Affairs",
+  "sponsor_party": null,
+  "end_date": "2026-10-05",
+  "n": 800,
+  "population": "LV",
+  "rep": 38.0,
+  "opp": 50.0,
   "others": [],
   "source": "https://en.wikipedia.org/wiki/2026_United_States_House_of_Representatives_elections_in_Nebraska"
  },
@@ -16841,6 +16937,18 @@
   "population": "LV",
   "rep": 43.0,
   "opp": 46.0,
+  "others": [],
+  "source": "https://en.wikipedia.org/wiki/2026_United_States_House_of_Representatives_elections_in_New_Mexico"
+ },
+ {
+  "state": "NM-02",
+  "pollster": "Research & Polling",
+  "sponsor_party": null,
+  "end_date": "2026-10-09",
+  "n": 383,
+  "population": "LV",
+  "rep": 44.0,
+  "opp": 48.0,
   "others": [],
   "source": "https://en.wikipedia.org/wiki/2026_United_States_House_of_Representatives_elections_in_New_Mexico"
  },
@@ -17638,6 +17746,18 @@
  },
  {
   "state": "PA-01",
+  "pollster": "Global Strategy Group",
+  "sponsor_party": "D",
+  "end_date": "2025-10-08",
+  "n": 1032,
+  "population": "LV",
+  "rep": 46.0,
+  "opp": 46.0,
+  "others": [],
+  "source": "https://en.wikipedia.org/wiki/2026_United_States_House_of_Representatives_elections_in_Pennsylvania"
+ },
+ {
+  "state": "PA-01",
   "pollster": "Public Policy Polling",
   "sponsor_party": "D",
   "end_date": "2025-10-11",
@@ -17981,6 +18101,18 @@
   "population": "LV",
   "rep": 46.0,
   "opp": 40.0,
+  "others": [],
+  "source": "https://en.wikipedia.org/wiki/2026_United_States_House_of_Representatives_elections_in_South_Carolina"
+ },
+ {
+  "state": "SC-01",
+  "pollster": "GQR",
+  "sponsor_party": "D",
+  "end_date": "2026-10-04",
+  "n": 400,
+  "population": "LV",
+  "rep": 45.0,
+  "opp": 48.0,
   "others": [],
   "source": "https://en.wikipedia.org/wiki/2026_United_States_House_of_Representatives_elections_in_South_Carolina"
  },
@@ -25447,6 +25579,18 @@
  },
  {
   "state": "US",
+  "pollster": "Focaldata",
+  "sponsor_party": null,
+  "end_date": "2026-10-05",
+  "n": 2201,
+  "population": "LV",
+  "opp": 52.0,
+  "rep": 44.0,
+  "others": [],
+  "source": "https://en.wikipedia.org/wiki/2026_United_States_elections"
+ },
+ {
+  "state": "US",
   "pollster": "Reuters/Ipsos",
   "sponsor_party": null,
   "end_date": "2026-10-05",
@@ -25466,6 +25610,30 @@
   "population": "LV",
   "opp": 52.0,
   "rep": 40.0,
+  "others": [],
+  "source": "https://en.wikipedia.org/wiki/2026_United_States_elections"
+ },
+ {
+  "state": "US",
+  "pollster": "Cygnal",
+  "sponsor_party": "R",
+  "end_date": "2026-10-10",
+  "n": 1500,
+  "population": "LV",
+  "opp": 51.0,
+  "rep": 42.0,
+  "others": [],
+  "source": "https://en.wikipedia.org/wiki/2026_United_States_elections"
+ },
+ {
+  "state": "US",
+  "pollster": "Morning Consult",
+  "sponsor_party": null,
+  "end_date": "2026-10-11",
+  "n": 17654,
+  "population": "LV",
+  "opp": 50.0,
+  "rep": 43.0,
   "others": [],
   "source": "https://en.wikipedia.org/wiki/2026_United_States_elections"
  },
