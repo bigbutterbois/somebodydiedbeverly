@@ -205,6 +205,7 @@ def scrape_approval(aggregators: list[str], year: int | None = None, pages: list
     """Presidential approval polls, stored as polls with state APPROVAL (opp = approve, rep = disapprove)."""
     required = {"opp": re.compile(r"^approv"), "rep": re.compile(r"^disapprov")}
     found = [t for t in scrape.search_titles(query) if name in t.lower()]
+    print(f"approval: search found {found}")
     year = year or date.today().year
     for title in dict.fromkeys((pages or APPROVAL_PAGES) + found):
         try:
@@ -213,12 +214,12 @@ def scrape_approval(aggregators: list[str], year: int | None = None, pages: list
         except RuntimeError:
             continue
         best = {}
-        headers = []
+        headers, skipped = [], []
         for df, cols, idx in scrape.poll_tables(tables, required, {}):
             if any("favorab" in c for c in cols):
                 continue  # favorability, not job approval
             headers.append(" | ".join(cols))
-            for poll in scrape.parse_rows(df, cols, idx, year, aggregators):
+            for poll in scrape.parse_rows(df, cols, idx, year, aggregators, skipped):
                 best.setdefault((scrape.norm(poll["pollster"]), poll["end_date"]), poll)
         recent = [p for p in best.values() if p["end_date"] >= f"{year}-01-01"]
         if len(recent) >= 5:
@@ -227,6 +228,7 @@ def scrape_approval(aggregators: list[str], year: int | None = None, pages: list
                 print(f"    {h}")
             for p in sorted(recent, key=lambda p: p["end_date"])[-8:]:
                 print(f"    {p['end_date']} {p['pollster']}: approve {p['opp']} disapprove {p['rep']} ({p['population']})")
+            scrape.print_skipped("approval", skipped)
             return [{"state": "APPROVAL", **p, "others": [],
                      "source": f"https://en.wikipedia.org/wiki/{title}"} for p in best.values()], []
     return [], [f"approval: no {name.title()} approval table found"]
@@ -284,6 +286,13 @@ def fetch_votehub(races: list[dict], aggregators: list[str], year: int) -> tuple
     polls = [poll for _, poll in best.values()]
     if not polls:
         return [], ["votehub: no usable polls in the feed"]
+    kinds = {"approval": lambda st: st == "APPROVAL", "generic ballot": lambda st: st == "US",
+             "senate": lambda st: st not in ("APPROVAL", "US")}
+    print(f"votehub: {len(feed)} polls in the feed, {len(polls)} usable; newest feed end date "
+          f"{max((p.get('end_date') or '') for p in feed)}")
+    for label, test in kinds.items():
+        mine = sorted((p for p in polls if test(p["state"])), key=lambda p: p["end_date"])
+        print(f"    {label}: {len(mine)}, newest " + ", ".join(f"{p['end_date']} {p['pollster']}" for p in mine[-3:]))
     return polls, []
 
 

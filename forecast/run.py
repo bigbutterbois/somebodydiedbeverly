@@ -59,6 +59,9 @@ def pollster_words(name: str) -> set[str]:
     return {w for w in re.findall(r"[a-z]+", scrape.norm(name)) if len(w) >= 3 and w not in NAME_FILLER}
 
 
+# Warn when the newest generic ballot or approval poll is older than this.
+STALE_POLL_DAYS = 5
+
 # Second-hand feeds, best first; Wikipedia's own rows (no feed) outrank them all.
 FEED_RANK = {"rcp": 1, "votehub": 2}
 
@@ -247,6 +250,12 @@ def main() -> int:
         for key, values in economy.items():  # whole daily series; the model only reads days up to as_of
             extras.setdefault("economy", {}).setdefault(key, {}).update(values)
         problems += fund_problems + weather_problems + economy_problems
+        # A national poll feed that goes quiet is otherwise silent: the model just leans on old polls.
+        for label, state in (("generic ballot", "US"), ("approval", "APPROVAL")):
+            newest = max((p["end_date"] for p in polls if p["state"] == state), default="")
+            if newest and (today - date.fromisoformat(newest)).days > STALE_POLL_DAYS:
+                problems.append(f"{label}: newest poll ends {newest}, over {STALE_POLL_DAYS} days ago")
+                print(f"  ! {problems[-1]}")
         for p in fund_problems + weather_problems + economy_problems + approval_problems + votehub_problems:
             print(f"  ! {p}")
     days = [today]
