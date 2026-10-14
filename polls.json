@@ -12436,6 +12436,18 @@
   "source": "https://en.wikipedia.org/wiki/2026_United_States_Senate_special_election_in_Florida"
  },
  {
+  "state": "FL",
+  "pollster": "Stetson University",
+  "sponsor_party": null,
+  "end_date": "2026-10-09",
+  "n": 716,
+  "population": "LV",
+  "rep": 52.0,
+  "opp": 41.0,
+  "others": [],
+  "source": "https://en.wikipedia.org/wiki/2026_United_States_Senate_special_election_in_Florida"
+ },
+ {
   "state": "FL-08",
   "pollster": "Public Policy Polling",
   "sponsor_party": "D",
@@ -16065,6 +16077,18 @@
  },
  {
   "state": "NC",
+  "pollster": "Change Research",
+  "sponsor_party": "D",
+  "end_date": "2026-10-07",
+  "n": 829,
+  "population": "LV",
+  "rep": 40.0,
+  "opp": 50.0,
+  "others": [],
+  "source": "https://en.wikipedia.org/wiki/2026_United_States_Senate_election_in_North_Carolina"
+ },
+ {
+  "state": "NC",
   "pollster": "Trafalgar Group",
   "sponsor_party": "R",
   "end_date": "2026-10-10",
@@ -16072,6 +16096,18 @@
   "population": "LV",
   "rep": 41.0,
   "opp": 49.0,
+  "others": [],
+  "source": "https://en.wikipedia.org/wiki/2026_United_States_Senate_election_in_North_Carolina"
+ },
+ {
+  "state": "NC",
+  "pollster": "SurveyUSA",
+  "sponsor_party": null,
+  "end_date": "2026-10-11",
+  "n": 643,
+  "population": "LV",
+  "rep": 40.0,
+  "opp": 54.0,
   "others": [],
   "source": "https://en.wikipedia.org/wiki/2026_United_States_Senate_election_in_North_Carolina"
  },
@@ -17973,6 +18009,18 @@
   "source": "https://en.wikipedia.org/wiki/2026_United_States_Senate_election_in_Rhode_Island"
  },
  {
+  "state": "RI",
+  "pollster": "Emerson College/WPRI-TV",
+  "sponsor_party": null,
+  "end_date": "2026-10-11",
+  "n": 800,
+  "population": "LV",
+  "rep": 25.0,
+  "opp": 59.0,
+  "others": [],
+  "source": "https://en.wikipedia.org/wiki/2026_United_States_Senate_election_in_Rhode_Island"
+ },
+ {
   "state": "SC",
   "pollster": "Impact Research",
   "sponsor_party": "D",
@@ -18805,7 +18853,7 @@
  {
   "state": "TX",
   "pollster": "Guidant Polling & Strategy",
-  "sponsor_party": null,
+  "sponsor_party": "R",
   "end_date": "2026-09-28",
   "n": 800,
   "population": "LV",
@@ -18882,6 +18930,30 @@
   "n": 1086,
   "population": "LV",
   "rep": 44.0,
+  "opp": 47.0,
+  "others": [],
+  "source": "https://en.wikipedia.org/wiki/2026_United_States_Senate_election_in_Texas"
+ },
+ {
+  "state": "TX",
+  "pollster": "Marist University",
+  "sponsor_party": null,
+  "end_date": "2026-10-11",
+  "n": null,
+  "population": "LV",
+  "rep": 45.0,
+  "opp": 47.0,
+  "others": [],
+  "source": "https://en.wikipedia.org/wiki/2026_United_States_Senate_election_in_Texas"
+ },
+ {
+  "state": "TX",
+  "pollster": "Quantus Insights",
+  "sponsor_party": null,
+  "end_date": "2026-10-11",
+  "n": 854,
+  "population": "LV",
+  "rep": 47.0,
   "opp": 47.0,
   "others": [],
   "source": "https://en.wikipedia.org/wiki/2026_United_States_Senate_election_in_Texas"
@@ -25622,6 +25694,18 @@
   "population": "LV",
   "opp": 52.0,
   "rep": 40.0,
+  "others": [],
+  "source": "https://en.wikipedia.org/wiki/2026_United_States_elections"
+ },
+ {
+  "state": "US",
+  "pollster": "TrueDot",
+  "sponsor_party": null,
+  "end_date": "2026-10-09",
+  "n": 974,
+  "population": "LV",
+  "opp": 49.0,
+  "rep": 42.0,
   "others": [],
   "source": "https://en.wikipedia.org/wiki/2026_United_States_elections"
  },
