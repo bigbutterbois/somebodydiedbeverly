@@ -29,6 +29,7 @@ export const SITE_TEXT = {
   "nav.blog": { page: "Menu", label: "Blog link", default: "Blog", kind: "short" },
   "nav.forecast": { page: "Menu", label: "Forecast link", default: "Forecast", kind: "short" },
   "nav.plates": { page: "Menu", label: "Plates link", default: "Plates", kind: "short" },
+  "nav.metro": { page: "Menu", label: "Metro link", default: "Metro", kind: "short" },
 
   // Homepage
   "home.title": { page: "Homepage", label: "Headline", default: "Election forecasting and other silly projects", kind: "short" },
@@ -54,6 +55,16 @@ export const SITE_TEXT = {
     default: "of {total} countries spotted",
     kind: "short",
     fills: ["total"],
+  },
+
+  // Metro
+  "metro.tab.arrivals": { page: "Metro", label: "Arrivals tab", default: "Arrivals", kind: "short" },
+  "metro.tab.map": { page: "Metro", label: "Map tab", default: "Map", kind: "short" },
+  "metro.map.intro": {
+    page: "Metro",
+    label: "Line above the map",
+    default: "Every Metrorail train right now, from WMATA's live feed.",
+    kind: "long",
   },
 
   // Forecast: shared
