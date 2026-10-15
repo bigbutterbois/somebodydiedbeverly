@@ -347,7 +347,7 @@ export function MetroMap({ coords }: { coords: Record<string, Point> | null }) {
               if (!p) return null;
               const big = s.codes.length > 1;
               return (
-                <a key={s.key} href={`/metro?station=${s.key}`}>
+                <a key={s.key} href={`/metro?station=${s.key}`} aria-label={`${s.name} arrivals`}>
                   <circle
                     cx={p[0]}
                     cy={p[1]}
