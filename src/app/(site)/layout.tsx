@@ -12,6 +12,7 @@ const MODULES = [
   { href: "/blog", text: "nav.blog" },
   { href: "/forecast", text: "nav.forecast" },
   { href: "/plates", text: "nav.plates" },
+  { href: "/metro", text: "nav.metro" },
 ] as const;
 
 export default async function SiteLayout({ children }: LayoutProps<"/">) {
