@@ -404,6 +404,8 @@ export function MetroMap({ coords }: { coords: Record<string, Point> | null }) {
       <div className="flex flex-wrap items-center gap-x-4 gap-y-1 text-sm text-muted">
         {error === "no-key" ? (
           <span>Live trains show up once the WMATA key is connected.</span>
+        ) : error === "budget" ? (
+          <span>Pausing for a moment to stay under WMATA&apos;s call limit; trying again.</span>
         ) : error ? (
           <span>WMATA isn&apos;t answering right now; trying again.</span>
         ) : (

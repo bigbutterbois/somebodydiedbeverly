@@ -196,6 +196,8 @@ export function Arrivals({ coords, requested }: { coords: Record<string, Point> 
 
       {error === "no-key" ? (
         <p className="text-muted">Live arrivals show up once the WMATA key is connected.</p>
+      ) : error === "budget" && !data ? (
+        <p className="text-muted">Pausing for a moment to stay under WMATA&apos;s call limit; trying again.</p>
       ) : error && !data ? (
         <p className="text-muted">WMATA isn&apos;t answering right now; trying again.</p>
       ) : !data ? (
