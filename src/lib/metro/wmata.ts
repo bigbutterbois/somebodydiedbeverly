@@ -37,16 +37,19 @@ export function errorResponse(error: unknown) {
   if (error instanceof NoKeyError) return Response.json({ error: "no-key" }, { status: 503 });
   if (error instanceof BudgetError) return Response.json({ error: "budget" }, { status: 429 });
   console.error(error);
-  return Response.json({ error: "wmata" }, { status: 502 });
+  // The message names the step that failed (never the key), so /api/metro/trains shows what's wrong.
+  return Response.json({ error: "wmata", detail: error instanceof Error ? error.message : String(error) }, { status: 502 });
 }
 
 /** One ticket from the site-wide budget. Fails closed: no database answer, no call. */
 async function takeTicket() {
-  const supabase = createClient(process.env.NEXT_PUBLIC_SUPABASE_URL!, process.env.SUPABASE_SECRET_KEY!, {
+  const secret = process.env.SUPABASE_SECRET_KEY;
+  if (!secret) throw new Error("Call budget check failed: SUPABASE_SECRET_KEY is not set");
+  const supabase = createClient(process.env.NEXT_PUBLIC_SUPABASE_URL!, secret, {
     auth: { persistSession: false, autoRefreshToken: false },
   });
   const { data, error } = await supabase.rpc("wmata_take");
-  if (error) console.error("wmata_take", error.message);
+  if (error) throw new Error(`Call budget check failed: ${error.message}`);
   if (data !== true) throw new BudgetError();
 }
 
