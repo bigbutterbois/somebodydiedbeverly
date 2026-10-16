@@ -26,6 +26,8 @@ export type Station = {
   x: number;
   y: number;
   label: LabelSide;
+  /** Extra label shift, in line widths, where the usual spot would sit on a line. */
+  nudge?: [number, number];
 };
 
 // Official line colors from WMATA's map.
@@ -84,33 +86,33 @@ export const LINES: Line[] = [
   },
 ];
 
-const s = (codes: string, name: string, x: number, y: number, label: LabelSide): Station => {
+const s = (codes: string, name: string, x: number, y: number, label: LabelSide, nudge?: [number, number]): Station => {
   const list = codes.split(",");
-  return { key: list[0], codes: list, name, x, y, label };
+  return { key: list[0], codes: list, name, x, y, label, nudge };
 };
 
 export const STATIONS: Station[] = [
   // Red, west of downtown
-  s("A15", "Shady Grove", 248, 354, "l"),
-  s("A14", "Rockville", 272, 378, "l"),
-  s("A13", "Twinbrook", 296, 402, "l"),
-  s("A12", "North Bethesda", 320, 426, "l"),
+  s("A15", "Shady Grove", 248, 355, "l"),
+  s("A14", "Rockville", 272, 379, "l"),
+  s("A13", "Twinbrook", 296, 403, "l"),
+  s("A12", "North Bethesda", 320, 427, "l"),
   s("A11", "Grosvenor-Strathmore", 343, 450, "l"),
   s("A10", "Medical Center", 367, 474, "l"),
-  s("A09", "Bethesda", 390, 498, "l"),
+  s("A09", "Bethesda", 390, 497, "l"),
   s("A08", "Friendship Heights", 413, 520, "l"),
-  s("A07", "Tenleytown-AU", 429, 532, "ne"),
-  s("A06", "Van Ness-UDC", 450, 534, "ne"),
+  s("A07", "Tenleytown-AU", 429, 533, "ne"),
+  s("A06", "Van Ness-UDC", 450, 533, "ne"),
   s("A05", "Cleveland Park", 465, 548, "l"),
-  s("A04", "Woodley Park", 482, 566, "l"),
+  s("A04", "Woodley Park", 482, 565, "l"),
   s("A03", "Dupont Circle", 499, 582, "l"),
   s("A02", "Farragut North", 512, 604, "l"),
   // Downtown transfers
   s("A01,C01", "Metro Center", 558, 676, "sw"),
   s("B01,F01", "Gallery Place", 622, 676, "ne"),
-  s("D03,F03", "L'Enfant Plaza", 622, 760, "sw"),
+  s("D03,F03", "L'Enfant Plaza", 622, 760, "bl", [-2.6, 0.4]),
   // Red, east of downtown
-  s("B02", "Judiciary Square", 662, 676, "se"),
+  s("B02", "Judiciary Sq", 662, 676, "br"),
   s("B03", "Union Station", 706, 658, "r"),
   s("B35", "NoMa-Gallaudet U", 706, 630, "r"),
   s("B04", "Rhode Island Ave", 706, 604, "r"),
@@ -122,22 +124,22 @@ export const STATIONS: Station[] = [
   s("B10", "Wheaton", 580, 335, "r"),
   s("B11", "Glenmont", 580, 308, "r"),
   // Blue, Orange and Silver through downtown
-  s("C02", "McPherson Square", 532, 634, "tr"),
+  s("C02", "McPherson Sq", 532, 634, "tr"),
   s("C03", "Farragut West", 488, 634, "sw"),
-  s("C04", "Foggy Bottom-GWU", 462, 634, "sw"),
+  s("C04", "Foggy Bottom-GWU", 462, 634, "sw", [0.7, -0.35]),
   s("C05", "Rosslyn", 382, 678, "l"),
   s("D01", "Federal Triangle", 558, 709, "sw"),
   s("D02", "Smithsonian", 558, 734, "sw"),
   s("D04", "Federal Center SW", 658, 760, "se"),
   s("D05", "Capitol South", 691, 760, "se"),
   s("D06", "Eastern Market", 720, 754, "se"),
-  s("D07", "Potomac Ave", 738, 738, "se"),
+  s("D07", "Potomac Ave", 736, 738, "se"),
   s("D08", "Stadium-Armory", 774, 730, "se"),
   // Orange east
   s("D09", "Minnesota Ave", 842, 706, "r"),
-  s("D10", "Deanwood", 862, 688, "r"),
-  s("D11", "Cheverly", 881, 668, "r"),
-  s("D12", "Landover", 900, 650, "r"),
+  s("D10", "Deanwood", 861, 687, "r"),
+  s("D11", "Cheverly", 880, 668, "r"),
+  s("D12", "Landover", 898, 650, "r"),
   s("D13", "New Carrollton", 916, 632, "r"),
   // Blue and Silver east
   s("G01", "Benning Road", 866, 736, "se"),
@@ -173,7 +175,7 @@ export const STATIONS: Station[] = [
   s("C09", "Crystal City", 500, 940, "sw"),
   s("C10", "National Airport", 534, 960, "r"),
   s("C11", "Potomac Yard", 534, 980, "r"),
-  s("C12", "Braddock Road", 535, 999, "r"),
+  s("C12", "Braddock Road", 534, 999, "r"),
   s("C13", "King St-Old Town", 534, 1024, "r"),
   s("C14", "Eisenhower Avenue", 542, 1060, "r"),
   s("C15", "Huntington", 542, 1098, "r"),
@@ -181,16 +183,16 @@ export const STATIONS: Station[] = [
   s("J03", "Franconia-Springfield", 360, 1098, "l"),
   // Green north
   s("E01", "Mt Vernon Sq", 622, 644, "ne"),
-  s("E02", "Shaw-Howard U", 621, 610, "ne"),
+  s("E02", "Shaw-Howard U", 622, 608, "ne"),
   s("E03", "U Street", 596, 582, "l"),
   s("E04", "Columbia Heights", 572, 553, "l"),
-  s("E05", "Georgia Ave-Petworth", 597, 528, "nw"),
+  s("E05", "Georgia Ave-Petworth", 597, 532, "nw"),
   s("E07", "West Hyattsville", 684, 478, "r"),
-  s("E08", "Hyattsville Crossing", 704, 460, "r"),
+  s("E08", "Hyattsville Crossing", 703, 459, "r"),
   s("E09", "College Park-U of Md", 722, 440, "r"),
   s("E10", "Greenbelt", 742, 420, "r"),
   // Green and Yellow south
-  s("F02", "Archives", 622, 710, "sw"),
+  s("F02", "Archives", 622, 710, "r"),
   s("F04", "Waterfront", 656, 846, "sw"),
   s("F05", "Navy Yard-Ballpark", 680, 846, "sw"),
   s("F06", "Anacostia", 726, 864, "sw"),
@@ -202,50 +204,43 @@ export const STATIONS: Station[] = [
 ];
 
 /**
- * The diagram's track between two neighboring stations where it isn't a
- * straight line: points traced along the middle of WMATA's map, keyed by the
- * two station keys in sorted order and listed going from the first to the
- * second.
+ * Corners the diagram's track turns between two neighboring stations, as on
+ * WMATA's map: every stretch runs straight across, straight up or at 45
+ * degrees, and the map rounds each corner. Keyed by the two station keys in
+ * sorted order, listed going from the first to the second.
  */
 export const BENDS: Record<string, [number, number][]> = {
-  "A01|A02": [[524, 675.8], [518.1, 673.8], [514.4, 669.9], [512.4, 664], [511, 635]],
-  "A01|C02": [[558, 656], [555.3, 643.5], [549, 636.5], [541, 634]],
-  "A02|A03": [[507.5, 592]],
-  "A06|A07": [[445, 531.3]],
-  "B01|F02": [[621, 695], [624.2, 708.2]],
-  "B02|B03": [[682, 677], [698, 674.7], [703.7, 669]],
-  "B05|B06": [[702.5, 564], [697.8, 557]],
-  "B06|B07": [[601, 460]],
-  "B06|E05": [[637.3, 525.7], [631, 529.7], [615, 532], [602.1, 530.7]],
-  "B06|E07": [[660, 502.4], [672.8, 494.6]],
-  "B07|B08": [[584.7, 441], [581.9, 435]],
-  "C04|C05": [[429, 633], [404, 636.3], [394, 639.5], [389.6, 643.1], [386.6, 649]],
-  "C05|C06": [[384.9, 679.2], [396.6, 700], [397, 747], [399.3, 759]],
-  "C05|K01": [[380, 678.7], [368.4, 705.4]],
-  "C06|C07": [[467.5, 831], [471.8, 839], [476.5, 856]],
-  "C07|D03": [[500, 852.6], [530, 823.3], [539, 817.8], [549, 816], [594, 816], [608.8, 812.3], [618.5, 797], [619.3, 775]],
-  "C08|C09": [[481.7, 914], [485, 929], [489.1, 934.4]],
-  "C09|C10": [[508, 939.5], [526, 944.1], [531.2, 950]],
-  "C13|C14": [[541.5, 1036]],
-  "C13|J02": [[520.8, 1037.9], [513, 1040.3]],
-  "D02|D03": [[565.6, 749.1], [576, 746.4], [590, 746.5], [606, 757.1], [620.6, 758.4]],
-  "D03|D04": [[623.9, 758.4]],
-  "D03|F02": [[618.8, 753.9], [627, 727], [626.7, 715], [624.9, 711]],
-  "D03|F04": [[625.2, 761.1], [624, 796], [628.8, 810], [630.3, 837], [633.3, 841.5], [638, 844.3]],
-  "D07|D08": [[752, 732.1]],
-  "D08|D09": [[777.3, 725.4], [789, 720.2], [811, 718.7], [824, 712.3], [840.7, 708.1]],
-  "D08|G01": [[779, 732], [802, 732.1], [814, 736.9], [822, 738]],
-  "E01|E02": [[623, 617]],
-  "E02|E03": [[617.6, 608.8], [615.3, 604], [615.5, 585.7], [607, 582.3]],
-  "E03|E04": [[596.3, 579.9], [592.8, 576.3], [579.3, 569.5], [574.6, 554.3]],
-  "E04|E05": [[575, 553], [578.5, 549.9], [582.5, 537], [597, 529.7]],
-  "F05|F06": [[707, 847.8], [716, 853.3]],
-  "F07|F08": [[756, 891.1]],
-  "F08|F09": [[783, 881.6], [790, 882.4]],
-  "J02|J03": [[380, 1041.8], [372, 1045.2], [365.6, 1051], [360.5, 1063]],
-  "K04|K05": [[253.4, 710.7]],
-  "K05|K06": [[249.7, 709.4], [231, 704.1]],
-  "K05|N01": [[249.7, 709.4], [227.5, 702.5]],
+  "A01|A02": [[512, 676]],
+  "A01|C02": [[558, 634]],
+  "A02|A03": [[512, 595]],
+  "A07|A08": [[426, 533]],
+  "B02|B03": [[706, 676]],
+  "B05|B06": [[706, 564]],
+  "B06|E05": [[630, 532]],
+  "B07|B08": [[580, 437]],
+  "C04|C05": [[426, 634]],
+  "C05|C06": [[382, 746]],
+  "C06|C07": [[482, 846]],
+  "C07|D03": [[530, 814], [568, 814]],
+  "C08|C09": [[482, 922]],
+  "C09|C10": [[514, 940]],
+  "C13|C14": [[534, 1032], [542, 1040]],
+  "C13|J02": [[518, 1040]],
+  "D02|D03": [[558, 760]],
+  "D03|F04": [[622, 846]],
+  "D05|D06": [[714, 760]],
+  "D07|D08": [[744, 730]],
+  "D08|D09": [[818, 730]],
+  "D08|G01": [[780, 730], [786, 736]],
+  "E02|E03": [[622, 600], [604, 582]],
+  "E03|E04": [[572, 582]],
+  "E04|E05": [[572, 532]],
+  "F05|F06": [[708, 846]],
+  "F07|F08": [[755, 893]],
+  "F08|F09": [[778, 881], [791, 881]],
+  "J02|J03": [[360, 1040]],
+  "K05|K06": [[244, 704]],
+  "K05|N01": [[238, 712]],
 };
 
 /**
