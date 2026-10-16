@@ -4,6 +4,7 @@ import { geoMercator, geoPath } from "d3-geo";
 import { useEffect, useMemo, useRef, useState } from "react";
 import {
   BENDS,
+  BUNDLES,
   LINES,
   LINE_BY_CODE,
   STATIONS,
@@ -17,11 +18,14 @@ import type { Train } from "@/lib/metro/wmata";
 import { Updated } from "../Updated";
 import { useStored } from "../useStored";
 import backdrop from "./backdrop.json";
+import scenery from "./diagram-backdrop.json";
 
-// Every Metrorail train, live, two ways: a diagram like the one in the cars, or
-// to scale over the real geography. Trains come from /api/metro/trains every 10
-// seconds while the tab is visible, and glide to their new spot. Zoom with the
-// buttons, a pinch or ctrl/⌘ + scroll, drag to pan, tap a train for its details.
+// Every Metrorail train, live, two ways: WMATA's own system map traced line for
+// line, or to scale over the real geography. Trains come from /api/metro/trains
+// every 10 seconds while the tab is visible, and each one glides along the track
+// from where it was to where it is over the next 10 seconds, so the map runs a
+// few seconds behind but something is always moving. Zoom with the buttons, a
+// pinch or ctrl/⌘ + scroll, drag to pan, tap a train for its details.
 
 type Mode = "diagram" | "scale";
 type Point = [number, number];
@@ -41,7 +45,8 @@ type Layout = {
 const REFRESH = 10_000;
 const MODE_KEY = "metro.mapMode";
 
-// Diagram: station spots traced from WMATA's map (network.ts), scaled up, with room around for names.
+// Diagram: stations and track traced from WMATA's map (network.ts), scaled up, over its
+// rivers, parks and roads (diagram-backdrop.json, traced from the same map).
 const S = 1.4;
 const BOUNDS = { x0: 30, x1: 1030, y0: 290, y1: 1115 };
 const at = ([x, y]: Point): Point => [(x - BOUNDS.x0) * S, (y - BOUNDS.y0) * S];
@@ -50,10 +55,11 @@ const DIAGRAM: Layout = {
   H: (BOUNDS.y1 - BOUNDS.y0) * S,
   pos: new Map(STATIONS.map((s) => [s.key, at([s.x, s.y])])),
   bends: new Map(Object.entries(BENDS).map(([id, pts]) => [id, pts.map(at)])),
-  line: 6,
-  gap: 6,
-  train: 5,
-  font: 10,
+  // As thick as on WMATA's map, lines sharing track side by side and touching.
+  line: 17,
+  gap: 17,
+  train: 7,
+  font: 12,
 };
 
 function scaleLayout(coords: Record<string, Point>): { layout: Layout; counties: string[] } {
@@ -74,7 +80,7 @@ function scaleLayout(coords: Record<string, Point>): { layout: Layout; counties:
   }
   const path = geoPath(projection);
   const counties = (backdrop as GeoJSON.FeatureCollection).features.map((f) => path(f) ?? "");
-  return { layout: { W, H, pos, bends: new Map(), line: 3, gap: 3, train: 3.5, font: 10 }, counties };
+  return { layout: { W, H, pos, bends: new Map(), line: 4, gap: 4, train: 4, font: 10 }, counties };
 }
 
 function unit([x, y]: Point): Point {
@@ -87,7 +93,10 @@ function normal(a: Point, b: Point): Point {
   return unit([a[1] - b[1], b[0] - a[0]]);
 }
 
-/** Lines that share the track between two neighboring stations, keyed by the two keys sorted. */
+/**
+ * Lines that share the track between two neighboring stations, keyed by the two
+ * keys sorted, in their order across it on WMATA's map.
+ */
 const SHARED = new Map<string, LineCode[]>();
 for (const line of LINES) {
   for (let i = 1; i < line.stations.length; i++) {
@@ -95,6 +104,24 @@ for (const line of LINES) {
     SHARED.set(id, [...(SHARED.get(id) ?? []), line.code]);
   }
 }
+for (const [id, users] of SHARED) {
+  const order = BUNDLES[id];
+  if (order?.length === users.length && users.every((u) => order.includes(u))) SHARED.set(id, order);
+}
+
+/** Stations where lines branch or cross (three or more directions), drawn as WMATA's bullseye. */
+const HUBS = new Set(
+  STATIONS.filter((st) => {
+    const next = new Set<string>();
+    for (const l of LINES) {
+      const i = l.stations.indexOf(st.key);
+      if (i < 0) continue;
+      if (l.stations[i - 1]) next.add(l.stations[i - 1]);
+      if (l.stations[i + 1]) next.add(l.stations[i + 1]);
+    }
+    return next.size > 2;
+  }).map((st) => st.key),
+);
 
 /** The track from station a to station b: the two stations and any corners between. */
 function track(layout: Layout, a: string, b: string): Point[] | null {
@@ -154,6 +181,7 @@ function Label({ station, at, font, clear }: { station: Station; at: Point; font
     ne: { dx: d * 0.7, dy: -d * 0.5, anchor: "start", rotate: -45 },
     se: { dx: d * 0.6, dy: d * 1.0, anchor: "start", rotate: 45 },
     sw: { dx: -d * 0.6, dy: d * 1.0, anchor: "end", rotate: -45 },
+    nw: { dx: -d * 0.7, dy: -d * 0.4, anchor: "end", rotate: 45 },
   };
   const p = props[station.label];
   const x = at[0] + p.dx;
@@ -165,47 +193,64 @@ function Label({ station, at, font, clear }: { station: Station; at: Point; font
       textAnchor={p.anchor}
       fontSize={font}
       transform={p.rotate ? `rotate(${p.rotate} ${x} ${y})` : undefined}
-      className="pointer-events-none fill-muted"
+      className="pointer-events-none fill-foreground"
     >
       {station.name}
     </text>
   );
 }
 
-/**
- * Where a train sits: along the track between its two stations, just outside
- * the lines on the right-hand side of the way it's heading, so trains going
- * opposite ways pass on opposite sides.
- */
-function trainPoint(train: Train, layout: Layout): Point | null {
+/** Which way a train is heading: toward the end of its line's station list, or back toward the start. */
+function heading(train: Train) {
   const stops = LINE_BY_CODE.get(train.line)!.stations;
-  let { from, to, t } = train;
-  // At a station (from = to), measure along the track toward a neighbor.
-  if (from === to) {
-    const i = stops.indexOf(from);
-    if (stops[i + 1]) [to, t] = [stops[i + 1], 0];
-    else if (stops[i - 1]) [from, t] = [stops[i - 1], 1];
-  }
+  const here = stops.indexOf(train.from);
+  const dest = train.toward ? stops.indexOf(train.toward) : -1;
+  return dest >= 0 && dest !== here ? dest > here : train.track === 2;
+}
+
+/** How far along its line a train is, counted in stations (2.5 = halfway between the third and fourth). */
+function along(train: Train) {
+  const stops = LINE_BY_CODE.get(train.line)!.stations;
+  const i = stops.indexOf(train.from);
+  const j = stops.indexOf(train.to);
+  return i + (j - i) * train.t;
+}
+
+/**
+ * The spot `u` stations along a line (see along), on the track and just
+ * outside the lines on the right-hand side of the way the train is heading,
+ * so trains going opposite ways pass on opposite sides.
+ */
+function trainPoint(line: LineCode, u: number, forward: boolean, layout: Layout): Point | null {
+  const stops = LINE_BY_CODE.get(line)!.stations;
+  const i = Math.max(0, Math.min(stops.length - 2, Math.floor(u)));
+  const from = stops[i];
+  const to = stops[i + 1];
+  const t = Math.max(0, Math.min(1, u - i));
   const pts = track(layout, from, to);
   if (!pts) return null;
 
   // Walk t of the way along the track.
-  const lengths = pts.slice(1).map((p, i) => Math.hypot(p[0] - pts[i][0], p[1] - pts[i][1]));
+  const lengths = pts.slice(1).map((p, k) => Math.hypot(p[0] - pts[k][0], p[1] - pts[k][1]));
   let left = lengths.reduce((a, b) => a + b, 0) * t;
-  let i = 0;
-  while (i < lengths.length - 1 && left > lengths[i]) left -= lengths[i++];
-  const f = lengths[i] ? left / lengths[i] : 0;
-  const a = pts[i];
-  const b = pts[i + 1];
+  let k = 0;
+  while (k < lengths.length - 1 && left > lengths[k]) left -= lengths[k++];
+  const f = lengths[k] ? left / lengths[k] : 0;
+  const a = pts[k];
+  const b = pts[k + 1];
 
-  // Heading toward the end of the line's station list (from → to) or back toward its start?
-  const here = stops.indexOf(train.from);
-  const dest = train.toward ? stops.indexOf(train.toward) : -1;
-  const forward = dest >= 0 && dest !== here ? dest > here : train.track === 2;
   const users = SHARED.get([from, to].sort().join("|"))?.length ?? 1;
-  const side = (forward ? 1 : -1) * ((users * layout.gap) / 2 + layout.train + 1);
+  const side = (forward ? 1 : -1) * ((users * layout.gap) / 2 + layout.train + 2);
   const n = normal(a, b);
   return [a[0] + (b[0] - a[0]) * f + n[0] * side, a[1] + (b[1] - a[1]) * f + n[1] * side];
+}
+
+/** A train's trip on screen: from where it was drawn when new data came in, to where WMATA now says it is. */
+type Trip = { line: LineCode; u0: number; u1: number; forward: boolean; start: number };
+
+function tripAt(trip: Trip, now: number) {
+  const f = Math.min(1, Math.max(0, (now - trip.start) / REFRESH));
+  return trip.u0 + (trip.u1 - trip.u0) * f;
 }
 
 function useTrains() {
@@ -257,6 +302,42 @@ export function MetroMap({ coords }: { coords: Record<string, Point> | null }) {
   const { trains, updated, error } = useTrains();
   const [selected, setSelected] = useState<string | null>(null);
   const picked = trains.find((t) => t.id === selected);
+
+  // Each train glides along the track to its new spot over one refresh, moved
+  // frame by frame outside React so the map itself doesn't re-render.
+  const trips = useRef(new Map<string, Trip>());
+  const dots = useRef(new Map<string, SVGGElement>());
+  const layoutRef = useRef(layout);
+  useEffect(() => {
+    layoutRef.current = layout;
+  });
+  useEffect(() => {
+    const now = performance.now();
+    const next = new Map<string, Trip>();
+    for (const t of trains) {
+      const u1 = along(t);
+      const old = trips.current.get(t.id);
+      let u0 = old && old.line === t.line ? tripAt(old, now) : u1;
+      // A jump of more than a few stations is a train turned around or renumbered: no gliding.
+      if (Math.abs(u1 - u0) > 3) u0 = u1;
+      next.set(t.id, { line: t.line, u0, u1, forward: heading(t), start: now });
+    }
+    trips.current = next;
+  }, [trains]);
+  useEffect(() => {
+    let frame = 0;
+    const tick = () => {
+      const now = performance.now();
+      for (const [id, trip] of trips.current) {
+        const el = dots.current.get(id);
+        const p = el && trainPoint(trip.line, tripAt(trip, now), trip.forward, layoutRef.current);
+        if (p) el.setAttribute("transform", `translate(${p[0].toFixed(1)} ${p[1].toFixed(1)})`);
+      }
+      frame = requestAnimationFrame(tick);
+    };
+    frame = requestAnimationFrame(tick);
+    return () => cancelAnimationFrame(frame);
+  }, []);
 
   // Zoom and pan, as on the House map.
   const boxRef = useRef<HTMLDivElement>(null);
@@ -393,13 +474,21 @@ export function MetroMap({ coords }: { coords: Record<string, Point> | null }) {
           <g transform={`translate(${view.x} ${view.y}) scale(${view.k})`}>
             {mode === "scale" &&
               scale?.counties.map((d, i) => <path key={i} d={d} className="fill-surface stroke-line" strokeWidth={1} />)}
+            {mode === "diagram" && (
+              <g transform={`scale(${S}) translate(${-BOUNDS.x0} ${-BOUNDS.y0})`} fillRule="evenodd">
+                <path d={scenery.park} fill="color-mix(in srgb, #d1e4aa 14%, var(--background))" />
+                <path d={scenery.mall} fill="color-mix(in srgb, #a0bb6c 18%, var(--background))" />
+                <path d={scenery.river} fill="color-mix(in srgb, #7fc0ea 20%, var(--background))" />
+                <path d={scenery.road} fill="color-mix(in srgb, #c5cec9 14%, var(--background))" />
+              </g>
+            )}
             {segs.map((s) => (
               <polyline
                 key={s.id}
                 points={s.points}
                 fill="none"
-                // Faded toward the page color (not made see-through, which darkens where pieces overlap).
-                stroke={`color-mix(in srgb, ${s.color} 45%, var(--background))`}
+                // Faded a little toward the page color so the trains stand out.
+                stroke={`color-mix(in srgb, ${s.color} 70%, var(--background))`}
                 strokeWidth={layout.line}
                 strokeLinecap="round"
                 strokeLinejoin="round"
@@ -408,37 +497,49 @@ export function MetroMap({ coords }: { coords: Record<string, Point> | null }) {
             {STATIONS.map((s) => {
               const p = layout.pos.get(s.key);
               if (!p) return null;
-              const big = s.codes.length > 1;
-              const r = big ? layout.line * 1.15 : layout.line * 0.55;
+              const hub = HUBS.has(s.key);
+              const r = hub ? layout.line * 0.9 : layout.line * 0.36;
               return (
                 <a key={s.key} href={`/metro?station=${s.key}`} aria-label={`${s.name} arrivals`}>
-                  <circle cx={p[0]} cy={p[1]} r={r} className="fill-background stroke-muted" strokeWidth={big ? 2 : 1.5}>
+                  <circle cx={p[0]} cy={p[1]} r={r} className="fill-background stroke-foreground" strokeWidth={layout.line / 5}>
                     <title>{`${s.name}: ${linesAt(s.key).map((l) => l.name).join(", ")}`}</title>
                   </circle>
-                  {big && <circle cx={p[0]} cy={p[1]} r={r * 0.4} className="pointer-events-none fill-muted" />}
+                  {hub && (
+                    <circle cx={p[0]} cy={p[1]} r={r * 0.45} className="pointer-events-none fill-background stroke-foreground" strokeWidth={layout.line / 6} />
+                  )}
                 </a>
               );
             })}
             {labelled.map((s) => {
               const p = layout.pos.get(s.key);
-              return p ? <Label key={s.key} station={s} at={p} font={layout.font} clear={layout.line * 1.2} /> : null;
+              return p ? <Label key={s.key} station={s} at={p} font={layout.font} clear={layout.line} /> : null;
             })}
             {trains.map((t) => {
-              const p = trainPoint(t, layout);
-              if (!p) return null;
               const on = t.id === selected;
               return (
                 <g
                   key={t.id}
+                  ref={(el) => {
+                    if (!el) {
+                      dots.current.delete(t.id);
+                      return;
+                    }
+                    dots.current.set(t.id, el);
+                    // Where it stands right now, before the next frame moves it.
+                    const trip = trips.current.get(t.id);
+                    const p = trip
+                      ? trainPoint(trip.line, tripAt(trip, performance.now()), trip.forward, layoutRef.current)
+                      : trainPoint(t.line, along(t), heading(t), layoutRef.current);
+                    if (p) el.setAttribute("transform", `translate(${p[0].toFixed(1)} ${p[1].toFixed(1)})`);
+                  }}
                   className="cursor-pointer"
-                  style={{ transform: `translate(${p[0]}px, ${p[1]}px)`, transition: "transform 2s linear" }}
                   onClick={() => !drag.current?.moved && setSelected(on ? null : t.id)}
                 >
                   <circle
                     r={on ? layout.train * 1.5 : layout.train}
                     fill={LINE_BY_CODE.get(t.line)!.color}
                     stroke="var(--foreground)"
-                    strokeWidth={on ? 2 : 1.2}
+                    strokeWidth={on ? 2.5 : 1.5}
                   />
                   <title>{`${LINE_BY_CODE.get(t.line)!.name} line to ${t.destination ?? "?"}, ${t.cars} cars`}</title>
                 </g>

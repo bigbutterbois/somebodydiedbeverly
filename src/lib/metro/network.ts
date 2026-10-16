@@ -15,9 +15,9 @@ export type Line = { code: LineCode; name: string; color: string; stations: stri
 /**
  * Where a station's name sits on the diagram: to the left or right, above or
  * below to one side ("tl", "tr", "bl", "br"), or slanted 45 degrees up or down
- * to the right ("ne", "se") or down to the left ("sw").
+ * to the right ("ne", "se") or to the left ("nw", "sw"), as on WMATA's map.
  */
-export type LabelSide = "l" | "r" | "tl" | "tr" | "bl" | "br" | "ne" | "se" | "sw";
+export type LabelSide = "l" | "r" | "tl" | "tr" | "bl" | "br" | "ne" | "se" | "sw" | "nw";
 
 export type Station = {
   key: string;
@@ -106,8 +106,8 @@ export const STATIONS: Station[] = [
   s("A03", "Dupont Circle", 499, 582, "l"),
   s("A02", "Farragut North", 512, 604, "l"),
   // Downtown transfers
-  s("A01,C01", "Metro Center", 558, 676, "br"),
-  s("B01,F01", "Gallery Place", 622, 676, "se"),
+  s("A01,C01", "Metro Center", 558, 676, "sw"),
+  s("B01,F01", "Gallery Place", 622, 676, "ne"),
   s("D03,F03", "L'Enfant Plaza", 622, 760, "sw"),
   // Red, east of downtown
   s("B02", "Judiciary Square", 662, 676, "se"),
@@ -126,15 +126,15 @@ export const STATIONS: Station[] = [
   s("C03", "Farragut West", 488, 634, "sw"),
   s("C04", "Foggy Bottom-GWU", 462, 634, "sw"),
   s("C05", "Rosslyn", 382, 678, "l"),
-  s("D01", "Federal Triangle", 558, 709, "l"),
-  s("D02", "Smithsonian", 558, 734, "l"),
+  s("D01", "Federal Triangle", 558, 709, "sw"),
+  s("D02", "Smithsonian", 558, 734, "sw"),
   s("D04", "Federal Center SW", 658, 760, "se"),
   s("D05", "Capitol South", 691, 760, "se"),
   s("D06", "Eastern Market", 720, 754, "se"),
   s("D07", "Potomac Ave", 738, 738, "se"),
   s("D08", "Stadium-Armory", 774, 730, "se"),
   // Orange east
-  s("D09", "Minnesota Ave", 842, 706, "l"),
+  s("D09", "Minnesota Ave", 842, 706, "r"),
   s("D10", "Deanwood", 862, 688, "r"),
   s("D11", "Cheverly", 881, 668, "r"),
   s("D12", "Landover", 900, 650, "r"),
@@ -170,27 +170,27 @@ export const STATIONS: Station[] = [
   s("C06", "Arlington Cemetery", 436, 800, "l"),
   s("C07", "Pentagon", 482, 862, "l"),
   s("C08", "Pentagon City", 482, 904, "l"),
-  s("C09", "Crystal City", 500, 940, "l"),
+  s("C09", "Crystal City", 500, 940, "sw"),
   s("C10", "National Airport", 534, 960, "r"),
   s("C11", "Potomac Yard", 534, 980, "r"),
   s("C12", "Braddock Road", 535, 999, "r"),
   s("C13", "King St-Old Town", 534, 1024, "r"),
   s("C14", "Eisenhower Avenue", 542, 1060, "r"),
   s("C15", "Huntington", 542, 1098, "r"),
-  s("J02", "Van Dorn Street", 408, 1040, "se"),
+  s("J02", "Van Dorn Street", 408, 1040, "nw"),
   s("J03", "Franconia-Springfield", 360, 1098, "l"),
   // Green north
-  s("E01", "Mt Vernon Sq", 622, 644, "r"),
-  s("E02", "Shaw-Howard U", 621, 610, "r"),
-  s("E03", "U Street", 596, 582, "r"),
+  s("E01", "Mt Vernon Sq", 622, 644, "ne"),
+  s("E02", "Shaw-Howard U", 621, 610, "ne"),
+  s("E03", "U Street", 596, 582, "l"),
   s("E04", "Columbia Heights", 572, 553, "l"),
-  s("E05", "Georgia Ave-Petworth", 597, 528, "tl"),
+  s("E05", "Georgia Ave-Petworth", 597, 528, "nw"),
   s("E07", "West Hyattsville", 684, 478, "r"),
   s("E08", "Hyattsville Crossing", 704, 460, "r"),
   s("E09", "College Park-U of Md", 722, 440, "r"),
   s("E10", "Greenbelt", 742, 420, "r"),
   // Green and Yellow south
-  s("F02", "Archives", 622, 710, "l"),
+  s("F02", "Archives", 622, 710, "sw"),
   s("F04", "Waterfront", 656, 846, "sw"),
   s("F05", "Navy Yard-Ballpark", 680, 846, "sw"),
   s("F06", "Anacostia", 726, 864, "sw"),
@@ -202,23 +202,88 @@ export const STATIONS: Station[] = [
 ];
 
 /**
- * Corners the diagram's track takes between two neighboring stations, so it
- * bends where WMATA's map bends. Keyed by the two station keys in sorted order,
- * points listed going from the first to the second.
+ * The diagram's track between two neighboring stations where it isn't a
+ * straight line: points traced along the middle of WMATA's map, keyed by the
+ * two station keys in sorted order and listed going from the first to the
+ * second.
  */
 export const BENDS: Record<string, [number, number][]> = {
-  "A01|A02": [[528, 676], [512, 652]],
-  "B02|B03": [[690, 676], [706, 662]],
-  "B07|B08": [[580, 428]],
-  "D08|D09": [[798, 728]],
-  "B05|B06": [[706, 564]],
-  "D03|F04": [[622, 828], [640, 846]],
-  "C05|C06": [[400, 704], [404, 760]],
-  "C04|C05": [[414, 634], [398, 646]],
-  "A01|C02": [[558, 646], [548, 634]],
-  "D02|D03": [[558, 746], [572, 760]],
-  "C13|J02": [[520, 1040]],
-  "J02|J03": [[372, 1040], [360, 1054]],
+  "A01|A02": [[524, 675.8], [518.1, 673.8], [514.4, 669.9], [512.4, 664], [511, 635]],
+  "A01|C02": [[558, 656], [555.3, 643.5], [549, 636.5], [541, 634]],
+  "A02|A03": [[507.5, 592]],
+  "A06|A07": [[445, 531.3]],
+  "B01|F02": [[621, 695], [624.2, 708.2]],
+  "B02|B03": [[682, 677], [698, 674.7], [703.7, 669]],
+  "B05|B06": [[702.5, 564], [697.8, 557]],
+  "B06|B07": [[601, 460]],
+  "B06|E05": [[637.3, 525.7], [631, 529.7], [615, 532], [602.1, 530.7]],
+  "B06|E07": [[660, 502.4], [672.8, 494.6]],
+  "B07|B08": [[584.7, 441], [581.9, 435]],
+  "C04|C05": [[429, 633], [404, 636.3], [394, 639.5], [389.6, 643.1], [386.6, 649]],
+  "C05|C06": [[384.9, 679.2], [396.6, 700], [397, 747], [399.3, 759]],
+  "C05|K01": [[380, 678.7], [368.4, 705.4]],
+  "C06|C07": [[467.5, 831], [471.8, 839], [476.5, 856]],
+  "C07|D03": [[500, 852.6], [530, 823.3], [539, 817.8], [549, 816], [594, 816], [608.8, 812.3], [618.5, 797], [619.3, 775]],
+  "C08|C09": [[481.7, 914], [485, 929], [489.1, 934.4]],
+  "C09|C10": [[508, 939.5], [526, 944.1], [531.2, 950]],
+  "C13|C14": [[541.5, 1036]],
+  "C13|J02": [[520.8, 1037.9], [513, 1040.3]],
+  "D02|D03": [[565.6, 749.1], [576, 746.4], [590, 746.5], [606, 757.1], [620.6, 758.4]],
+  "D03|D04": [[623.9, 758.4]],
+  "D03|F02": [[618.8, 753.9], [627, 727], [626.7, 715], [624.9, 711]],
+  "D03|F04": [[625.2, 761.1], [624, 796], [628.8, 810], [630.3, 837], [633.3, 841.5], [638, 844.3]],
+  "D07|D08": [[752, 732.1]],
+  "D08|D09": [[777.3, 725.4], [789, 720.2], [811, 718.7], [824, 712.3], [840.7, 708.1]],
+  "D08|G01": [[779, 732], [802, 732.1], [814, 736.9], [822, 738]],
+  "E01|E02": [[623, 617]],
+  "E02|E03": [[617.6, 608.8], [615.3, 604], [615.5, 585.7], [607, 582.3]],
+  "E03|E04": [[596.3, 579.9], [592.8, 576.3], [579.3, 569.5], [574.6, 554.3]],
+  "E04|E05": [[575, 553], [578.5, 549.9], [582.5, 537], [597, 529.7]],
+  "F05|F06": [[707, 847.8], [716, 853.3]],
+  "F07|F08": [[756, 891.1]],
+  "F08|F09": [[783, 881.6], [790, 882.4]],
+  "J02|J03": [[380, 1041.8], [372, 1045.2], [365.6, 1051], [360.5, 1063]],
+  "K04|K05": [[253.4, 710.7]],
+  "K05|K06": [[249.7, 709.4], [231, 704.1]],
+  "K05|N01": [[249.7, 709.4], [227.5, 702.5]],
+};
+
+/**
+ * Where several lines share track, their order across it as on WMATA's map:
+ * left to right looking from the first station key toward the second.
+ */
+export const BUNDLES: Record<string, LineCode[]> = {
+  "A01|C02": ["BL", "SV", "OR"],
+  "A01|D01": ["OR", "SV", "BL"],
+  "B01|E01": ["YL", "GR"],
+  "B01|F02": ["GR", "YL"],
+  "C02|C03": ["BL", "SV", "OR"],
+  "C03|C04": ["BL", "SV", "OR"],
+  "C04|C05": ["BL", "SV", "OR"],
+  "C05|K01": ["SV", "OR"],
+  "C07|C08": ["YL", "BL"],
+  "C08|C09": ["YL", "BL"],
+  "C09|C10": ["YL", "BL"],
+  "C10|C11": ["YL", "BL"],
+  "C11|C12": ["YL", "BL"],
+  "C12|C13": ["YL", "BL"],
+  "D01|D02": ["OR", "SV", "BL"],
+  "D02|D03": ["OR", "SV", "BL"],
+  "D03|D04": ["OR", "SV", "BL"],
+  "D03|F02": ["YL", "GR"],
+  "D04|D05": ["OR", "SV", "BL"],
+  "D05|D06": ["OR", "SV", "BL"],
+  "D06|D07": ["OR", "SV", "BL"],
+  "D07|D08": ["OR", "SV", "BL"],
+  "D08|G01": ["SV", "BL"],
+  "G01|G02": ["SV", "BL"],
+  "G02|G03": ["SV", "BL"],
+  "G03|G04": ["SV", "BL"],
+  "G04|G05": ["SV", "BL"],
+  "K01|K02": ["SV", "OR"],
+  "K02|K03": ["SV", "OR"],
+  "K03|K04": ["SV", "OR"],
+  "K04|K05": ["SV", "OR"],
 };
 
 /** Station by key. */
