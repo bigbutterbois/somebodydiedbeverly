@@ -155,7 +155,10 @@ export const getAlerts = cached("alerts", 60, async (): Promise<Alert[]> => {
 // to-scale map and the diagram.
 
 type WmataTrain = {
+  TrainId: string;
   TrainNumber: string;
+  DirectionNum: number;
+  SecondsAtLocation: number;
   CarCount: number;
   CircuitId: number;
   DestinationStationCode: string | null;
@@ -171,11 +174,21 @@ type WmataRoute = {
 
 export type Train = {
   id: string;
+  /** The number WMATA shows for the train (not unique over a day, unlike id). */
+  number: string;
+  /** False for trains running without passengers (moving between yards and lines, testing). */
+  passengers: boolean;
   line: LineCode;
   cars: number;
   destination: string | null;
-  /** WMATA's track number, 1 or 2; the map draws the two on either side of the line. */
+  /** Station key of the destination, which says which way the train is heading. */
+  toward: string | null;
+  /** WMATA's track number, 1 or 2. */
   track: number;
+  /** Heading toward the end of the line's station list (from → to) rather than its start. */
+  forward: boolean;
+  /** Seconds since the train last moved onto a new stretch of track (stopped, if large). */
+  still: number;
   /** Station keys the train is between, in the line's order, and how far along it is (0 to 1). */
   from: string;
   to: string;
@@ -237,26 +250,60 @@ function placements(routes: Awaited<ReturnType<typeof getRoutes>>) {
   return map;
 }
 
-/** Every train in passenger service and where it is. */
+/**
+ * Every train on the main line and where it is: passenger trains, and trains
+ * running empty (which often carry no line, so they take the line whose track
+ * they're on). Trains in yards and on side tracks aren't on any line's route
+ * and are left out.
+ */
 export async function getTrains(): Promise<Train[]> {
   const [positions, routes] = await Promise.all([getPositions(), getRoutes()]);
   const circuits = placements(routes);
-  const trains: Train[] = [];
+  const lineCodes = LINES.map((l) => l.code);
+  const found: (Omit<Train, "forward"> & { dir: number })[] = [];
   for (const t of positions) {
-    if (t.ServiceType !== "Normal" || !t.LineCode || !LINE_BY_CODE.has(t.LineCode as LineCode)) continue;
-    for (const track of [1, 2]) {
-      const place = circuits.get(`${t.LineCode}-${track}`)?.get(t.CircuitId);
-      if (!place) continue;
-      trains.push({
-        id: t.TrainNumber,
-        line: t.LineCode as LineCode,
-        cars: t.CarCount,
-        destination: STATION_BY_CODE.get(t.DestinationStationCode ?? "")?.name ?? null,
-        track,
-        ...place,
-      });
-      break;
+    const passengers = t.ServiceType === "Normal";
+    const own = LINE_BY_CODE.has(t.LineCode as LineCode) ? (t.LineCode as LineCode) : null;
+    if (passengers && !own) continue;
+    search: for (const line of own ? [own] : lineCodes) {
+      for (const track of [1, 2]) {
+        const place = circuits.get(`${line}-${track}`)?.get(t.CircuitId);
+        if (!place) continue;
+        const dest = passengers ? STATION_BY_CODE.get(t.DestinationStationCode ?? "") : undefined;
+        found.push({
+          id: t.TrainId || t.TrainNumber,
+          number: t.TrainNumber,
+          passengers,
+          line,
+          cars: t.CarCount,
+          destination: dest?.name ?? null,
+          toward: dest?.key ?? null,
+          track,
+          still: t.SecondsAtLocation,
+          dir: t.DirectionNum,
+          ...place,
+        });
+        break search;
+      }
     }
   }
-  return trains;
+
+  // Which way a train heads: toward its destination when it has one. Otherwise by WMATA's
+  // direction number, read the way the line's passenger trains read it right now.
+  const vote = new Map<string, number>();
+  const towardEnd = (t: (typeof found)[number]) => {
+    const stops = LINE_BY_CODE.get(t.line)!.stations;
+    const here = stops.indexOf(t.from);
+    const dest = t.toward ? stops.indexOf(t.toward) : -1;
+    return dest >= 0 && dest !== here ? dest > here : null;
+  };
+  for (const t of found) {
+    const f = towardEnd(t);
+    if (f !== null) vote.set(`${t.line}-${t.dir}`, (vote.get(`${t.line}-${t.dir}`) ?? 0) + (f ? 1 : -1));
+  }
+  return found.map(({ dir, ...t }) => {
+    const known = towardEnd({ ...t, dir });
+    const guess = vote.get(`${t.line}-${dir}`) ?? -(vote.get(`${t.line}-${3 - dir}`) ?? 0);
+    return { ...t, forward: known ?? (guess !== 0 ? guess > 0 : dir === 1) };
+  });
 }
