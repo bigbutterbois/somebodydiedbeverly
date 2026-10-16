@@ -2,7 +2,17 @@
 
 import { geoMercator, geoPath } from "d3-geo";
 import { useEffect, useMemo, useRef, useState } from "react";
-import { LINES, LINE_BY_CODE, STATIONS, STATION_BY_KEY, linesAt, type LabelSide, type Station } from "@/lib/metro/network";
+import {
+  BENDS,
+  LINES,
+  LINE_BY_CODE,
+  STATIONS,
+  STATION_BY_KEY,
+  linesAt,
+  type LabelSide,
+  type LineCode,
+  type Station,
+} from "@/lib/metro/network";
 import type { Train } from "@/lib/metro/wmata";
 import { Updated } from "../Updated";
 import { useStored } from "../useStored";
@@ -16,21 +26,34 @@ import backdrop from "./backdrop.json";
 type Mode = "diagram" | "scale";
 type Point = [number, number];
 type View = { k: number; x: number; y: number };
-type Layout = { W: number; H: number; pos: Map<string, Point>; line: number; gap: number; font: number };
+type Layout = {
+  W: number;
+  H: number;
+  pos: Map<string, Point>;
+  /** Corners between neighboring stations (diagram only), keyed like BENDS. */
+  bends: Map<string, Point[]>;
+  line: number;
+  gap: number;
+  train: number;
+  font: number;
+};
 
 const REFRESH = 10_000;
 const MODE_KEY = "metro.mapMode";
 
-// Diagram: grid units from network.ts, U pixels apart, with room around for names.
-const U = 36;
-const BOUNDS = { x0: -21.5, x1: 16, y0: -16, y1: 13 };
+// Diagram: station spots traced from WMATA's map (network.ts), scaled up, with room around for names.
+const S = 1.4;
+const BOUNDS = { x0: 30, x1: 1030, y0: 290, y1: 1115 };
+const at = ([x, y]: Point): Point => [(x - BOUNDS.x0) * S, (y - BOUNDS.y0) * S];
 const DIAGRAM: Layout = {
-  W: (BOUNDS.x1 - BOUNDS.x0) * U,
-  H: (BOUNDS.y1 - BOUNDS.y0) * U,
-  pos: new Map(STATIONS.map((s) => [s.key, [(s.x - BOUNDS.x0) * U, (s.y - BOUNDS.y0) * U]])),
-  line: 5,
-  gap: 5,
-  font: 9,
+  W: (BOUNDS.x1 - BOUNDS.x0) * S,
+  H: (BOUNDS.y1 - BOUNDS.y0) * S,
+  pos: new Map(STATIONS.map((s) => [s.key, at([s.x, s.y])])),
+  bends: new Map(Object.entries(BENDS).map(([id, pts]) => [id, pts.map(at)])),
+  line: 6,
+  gap: 6,
+  train: 5,
+  font: 10,
 };
 
 function scaleLayout(coords: Record<string, Point>): { layout: Layout; counties: string[] } {
@@ -51,43 +74,66 @@ function scaleLayout(coords: Record<string, Point>): { layout: Layout; counties:
   }
   const path = geoPath(projection);
   const counties = (backdrop as GeoJSON.FeatureCollection).features.map((f) => path(f) ?? "");
-  return { layout: { W, H, pos, line: 3, gap: 3, font: 10 }, counties };
+  return { layout: { W, H, pos, bends: new Map(), line: 3, gap: 3, train: 3.5, font: 10 }, counties };
 }
 
-/** Unit vector at right angles to a → b. */
+function unit([x, y]: Point): Point {
+  const len = Math.hypot(x, y) || 1;
+  return [x / len, y / len];
+}
+
+/** Unit vector at right angles to a → b: to the right of travel, since y points down. */
 function normal(a: Point, b: Point): Point {
-  const dx = b[0] - a[0];
-  const dy = b[1] - a[1];
-  const len = Math.hypot(dx, dy) || 1;
-  return [-dy / len, dx / len];
+  return unit([a[1] - b[1], b[0] - a[0]]);
 }
 
-/** Each line's track as short segments, nudged sideways where several lines share one. */
-function segments(layout: Layout) {
-  const shared = new Map<string, string[]>();
-  for (const line of LINES) {
-    for (let i = 1; i < line.stations.length; i++) {
-      const id = [line.stations[i - 1], line.stations[i]].sort().join("|");
-      shared.set(id, [...(shared.get(id) ?? []), line.code]);
-    }
+/** Lines that share the track between two neighboring stations, keyed by the two keys sorted. */
+const SHARED = new Map<string, LineCode[]>();
+for (const line of LINES) {
+  for (let i = 1; i < line.stations.length; i++) {
+    const id = [line.stations[i - 1], line.stations[i]].sort().join("|");
+    SHARED.set(id, [...(SHARED.get(id) ?? []), line.code]);
   }
-  const out: { id: string; color: string; x1: number; y1: number; x2: number; y2: number }[] = [];
+}
+
+/** The track from station a to station b: the two stations and any corners between. */
+function track(layout: Layout, a: string, b: string): Point[] | null {
+  const pa = layout.pos.get(a);
+  const pb = layout.pos.get(b);
+  if (!pa || !pb) return null;
+  const [ka, kb] = [a, b].sort();
+  const mid = layout.bends.get(`${ka}|${kb}`) ?? [];
+  return [pa, ...(a === ka ? mid : [...mid].reverse()), pb];
+}
+
+/** A path moved sideways by d, keeping its corners. */
+function offset(pts: Point[], d: number): Point[] {
+  if (d === 0) return pts;
+  return pts.map((p, i) => {
+    const n1 = normal(pts[Math.max(0, i - 1)], pts[Math.max(1, i)]);
+    const n2 = normal(pts[Math.min(pts.length - 2, i)], pts[Math.min(pts.length - 1, i + 1)]);
+    const m = unit([n1[0] + n2[0], n1[1] + n2[1]]);
+    const k = d / Math.max(0.5, m[0] * n1[0] + m[1] * n1[1]);
+    return [p[0] + m[0] * k, p[1] + m[1] * k];
+  });
+}
+
+/** Each line's track as short paths, set side by side where several lines share one. */
+function segments(layout: Layout) {
+  const out: { id: string; color: string; points: string }[] = [];
   for (const line of LINES) {
     for (let i = 1; i < line.stations.length; i++) {
       const [ka, kb] = [line.stations[i - 1], line.stations[i]].sort();
-      const a = layout.pos.get(ka);
-      const b = layout.pos.get(kb);
-      if (!a || !b) continue;
-      const users = shared.get(`${ka}|${kb}`)!;
+      const pts = track(layout, ka, kb);
+      if (!pts) continue;
+      const users = SHARED.get(`${ka}|${kb}`)!;
       const shift = (users.indexOf(line.code) - (users.length - 1) / 2) * layout.gap;
-      const n = normal(a, b);
       out.push({
         id: `${line.code}-${ka}-${kb}`,
         color: line.color,
-        x1: a[0] + n[0] * shift,
-        y1: a[1] + n[1] * shift,
-        x2: b[0] + n[0] * shift,
-        y2: b[1] + n[1] * shift,
+        points: offset(pts, shift)
+          .map((p) => p.join(","))
+          .join(" "),
       });
     }
   }
@@ -96,18 +142,18 @@ function segments(layout: Layout) {
 
 const TERMINALS = new Set(LINES.flatMap((l) => [l.stations[0], l.stations[l.stations.length - 1]]));
 
-function Label({ station, at, font }: { station: Station; at: Point; font: number }) {
-  const d = font * 0.9;
+function Label({ station, at, font, clear }: { station: Station; at: Point; font: number; clear: number }) {
+  const d = font * 0.5 + clear;
   const props: Record<LabelSide, { dx: number; dy: number; anchor: "start" | "end"; rotate?: number }> = {
     l: { dx: -d, dy: font * 0.35, anchor: "end" },
     r: { dx: d, dy: font * 0.35, anchor: "start" },
-    tl: { dx: -d * 0.6, dy: -d * 0.7, anchor: "end" },
-    tr: { dx: d * 0.6, dy: -d * 0.7, anchor: "start" },
-    bl: { dx: -d * 0.6, dy: d * 1.4, anchor: "end" },
-    br: { dx: d * 0.6, dy: d * 1.4, anchor: "start" },
-    ne: { dx: d * 0.7, dy: -d * 0.4, anchor: "start", rotate: -45 },
-    se: { dx: d * 0.7, dy: d * 0.9, anchor: "start", rotate: 45 },
-    sw: { dx: -d * 0.7, dy: d * 0.9, anchor: "end", rotate: -45 },
+    tl: { dx: -d * 0.6, dy: -d * 0.9, anchor: "end" },
+    tr: { dx: d * 0.6, dy: -d * 0.9, anchor: "start" },
+    bl: { dx: -d * 0.6, dy: d * 1.6, anchor: "end" },
+    br: { dx: d * 0.6, dy: d * 1.6, anchor: "start" },
+    ne: { dx: d * 0.7, dy: -d * 0.5, anchor: "start", rotate: -45 },
+    se: { dx: d * 0.6, dy: d * 1.0, anchor: "start", rotate: 45 },
+    sw: { dx: -d * 0.6, dy: d * 1.0, anchor: "end", rotate: -45 },
   };
   const p = props[station.label];
   const x = at[0] + p.dx;
@@ -119,30 +165,47 @@ function Label({ station, at, font }: { station: Station; at: Point; font: numbe
       textAnchor={p.anchor}
       fontSize={font}
       transform={p.rotate ? `rotate(${p.rotate} ${x} ${y})` : undefined}
-      className="pointer-events-none fill-foreground"
+      className="pointer-events-none fill-muted"
     >
       {station.name}
     </text>
   );
 }
 
-/** Where a train sits: along its segment, nudged to one side of the line by track. */
+/**
+ * Where a train sits: along the track between its two stations, just outside
+ * the lines on the right-hand side of the way it's heading, so trains going
+ * opposite ways pass on opposite sides.
+ */
 function trainPoint(train: Train, layout: Layout): Point | null {
-  const a = layout.pos.get(train.from);
-  const b = layout.pos.get(train.to);
-  if (!a || !b) return null;
-  // At a station (from = to), take the direction toward the next station on the line.
-  let dir: [Point, Point] = [a, b];
-  if (train.from === train.to) {
-    const stops = LINE_BY_CODE.get(train.line)!.stations;
-    const i = stops.indexOf(train.from);
-    const next = layout.pos.get(stops[i + 1]);
-    const prev = layout.pos.get(stops[i - 1]);
-    dir = next ? [a, next] : prev ? [prev, a] : [a, [a[0] + 1, a[1]]];
+  const stops = LINE_BY_CODE.get(train.line)!.stations;
+  let { from, to, t } = train;
+  // At a station (from = to), measure along the track toward a neighbor.
+  if (from === to) {
+    const i = stops.indexOf(from);
+    if (stops[i + 1]) [to, t] = [stops[i + 1], 0];
+    else if (stops[i - 1]) [from, t] = [stops[i - 1], 1];
   }
-  const n = normal(...dir);
-  const side = (train.track === 1 ? -1 : 1) * layout.gap * 1.6;
-  return [a[0] + (b[0] - a[0]) * train.t + n[0] * side, a[1] + (b[1] - a[1]) * train.t + n[1] * side];
+  const pts = track(layout, from, to);
+  if (!pts) return null;
+
+  // Walk t of the way along the track.
+  const lengths = pts.slice(1).map((p, i) => Math.hypot(p[0] - pts[i][0], p[1] - pts[i][1]));
+  let left = lengths.reduce((a, b) => a + b, 0) * t;
+  let i = 0;
+  while (i < lengths.length - 1 && left > lengths[i]) left -= lengths[i++];
+  const f = lengths[i] ? left / lengths[i] : 0;
+  const a = pts[i];
+  const b = pts[i + 1];
+
+  // Heading toward the end of the line's station list (from → to) or back toward its start?
+  const here = stops.indexOf(train.from);
+  const dest = train.toward ? stops.indexOf(train.toward) : -1;
+  const forward = dest >= 0 && dest !== here ? dest > here : train.track === 2;
+  const users = SHARED.get([from, to].sort().join("|"))?.length ?? 1;
+  const side = (forward ? 1 : -1) * ((users * layout.gap) / 2 + layout.train + 1);
+  const n = normal(a, b);
+  return [a[0] + (b[0] - a[0]) * f + n[0] * side, a[1] + (b[1] - a[1]) * f + n[1] * side];
 }
 
 function useTrains() {
@@ -331,38 +394,34 @@ export function MetroMap({ coords }: { coords: Record<string, Point> | null }) {
             {mode === "scale" &&
               scale?.counties.map((d, i) => <path key={i} d={d} className="fill-surface stroke-line" strokeWidth={1} />)}
             {segs.map((s) => (
-              <line
+              <polyline
                 key={s.id}
-                x1={s.x1}
-                y1={s.y1}
-                x2={s.x2}
-                y2={s.y2}
-                stroke={s.color}
+                points={s.points}
+                fill="none"
+                // Faded toward the page color (not made see-through, which darkens where pieces overlap).
+                stroke={`color-mix(in srgb, ${s.color} 45%, var(--background))`}
                 strokeWidth={layout.line}
                 strokeLinecap="round"
+                strokeLinejoin="round"
               />
             ))}
             {STATIONS.map((s) => {
               const p = layout.pos.get(s.key);
               if (!p) return null;
               const big = s.codes.length > 1;
+              const r = big ? layout.line * 1.15 : layout.line * 0.55;
               return (
                 <a key={s.key} href={`/metro?station=${s.key}`} aria-label={`${s.name} arrivals`}>
-                  <circle
-                    cx={p[0]}
-                    cy={p[1]}
-                    r={big ? layout.line * 1.3 : layout.line * 0.75}
-                    className="fill-background stroke-foreground"
-                    strokeWidth={1.5}
-                  >
+                  <circle cx={p[0]} cy={p[1]} r={r} className="fill-background stroke-muted" strokeWidth={big ? 2 : 1.5}>
                     <title>{`${s.name}: ${linesAt(s.key).map((l) => l.name).join(", ")}`}</title>
                   </circle>
+                  {big && <circle cx={p[0]} cy={p[1]} r={r * 0.4} className="pointer-events-none fill-muted" />}
                 </a>
               );
             })}
             {labelled.map((s) => {
               const p = layout.pos.get(s.key);
-              return p ? <Label key={s.key} station={s} at={p} font={layout.font} /> : null;
+              return p ? <Label key={s.key} station={s} at={p} font={layout.font} clear={layout.line * 1.2} /> : null;
             })}
             {trains.map((t) => {
               const p = trainPoint(t, layout);
@@ -376,10 +435,10 @@ export function MetroMap({ coords }: { coords: Record<string, Point> | null }) {
                   onClick={() => !drag.current?.moved && setSelected(on ? null : t.id)}
                 >
                   <circle
-                    r={on ? layout.line * 1.4 : layout.line}
+                    r={on ? layout.train * 1.5 : layout.train}
                     fill={LINE_BY_CODE.get(t.line)!.color}
-                    stroke={on ? "var(--foreground)" : "var(--background)"}
-                    strokeWidth={1.5}
+                    stroke="var(--foreground)"
+                    strokeWidth={on ? 2 : 1.2}
                   />
                   <title>{`${LINE_BY_CODE.get(t.line)!.name} line to ${t.destination ?? "?"}, ${t.cars} cars`}</title>
                 </g>

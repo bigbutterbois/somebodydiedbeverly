@@ -174,6 +174,8 @@ export type Train = {
   line: LineCode;
   cars: number;
   destination: string | null;
+  /** Station key of the destination, which says which way the train is heading. */
+  toward: string | null;
   /** WMATA's track number, 1 or 2; the map draws the two on either side of the line. */
   track: number;
   /** Station keys the train is between, in the line's order, and how far along it is (0 to 1). */
@@ -252,6 +254,7 @@ export async function getTrains(): Promise<Train[]> {
         line: t.LineCode as LineCode,
         cars: t.CarCount,
         destination: STATION_BY_CODE.get(t.DestinationStationCode ?? "")?.name ?? null,
+        toward: STATION_BY_CODE.get(t.DestinationStationCode ?? "")?.key ?? null,
         track,
         ...place,
       });
