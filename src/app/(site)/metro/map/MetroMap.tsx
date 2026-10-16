@@ -10,7 +10,6 @@ import {
   STATIONS,
   STATION_BY_KEY,
   type LabelSide,
-  type Line,
   type LineCode,
   type Station,
 } from "@/lib/metro/network";
@@ -66,7 +65,7 @@ const DIAGRAM: Layout = {
   line: 17,
   train: 7.5,
   font: 13,
-  radius: 22 * S,
+  radius: 28 * S,
 };
 
 function scaleLayout(coords: Record<string, Point>): Layout {
@@ -193,7 +192,7 @@ function rounded(all: Point[], radius: number, line: number, allLanes: number[],
     const half = Math.tan(Math.atan2(Math.abs(cross), dot) / 2);
     const room = Math.min(Math.hypot(cb[0] - ca[0], cb[1] - ca[1]), Math.hypot(cc[0] - cb[0], cc[1] - cb[1])) / 2;
     // Tight spots still leave the innermost of three lanes a visible curve.
-    const tc = Math.max(Math.min(radius, room), (line * 1.5 + 6) * half);
+    const tc = Math.max(Math.min(radius, room), (line * 2 + 6) * half);
     // Never run past the middle of either side, or neighboring curves would overlap into a blob.
     const fit = Math.min(Math.hypot(b[0] - pts[i - 1][0], b[1] - pts[i - 1][1]), Math.hypot(pts[i + 1][0] - b[0], pts[i + 1][1] - b[1])) / 2;
     const t = Math.max(0.5, Math.min(fit, (steady ? tc : Math.min(radius, room)) - Math.sign(cross) * li * half));
@@ -204,46 +203,114 @@ function rounded(all: Point[], radius: number, line: number, allLanes: number[],
   return d + `L${f(pts[pts.length - 1])}`;
 }
 
-/** How far right of the shared track's middle a line runs between two stations, going from a to b. */
-function lane(line: LineCode, a: string, b: string, layout: Layout) {
-  const users = SHARED.get(key2(a, b)) ?? [line];
-  const d = (users.indexOf(line) - (users.length - 1) / 2) * layout.line;
-  return [a, b].sort()[0] === a ? d : -d;
-}
-
-const users = (a: string, b: string) => SHARED.get(key2(a, b))?.length ?? 1;
-
-/** A point `dist` along the path's first edge, moved `d` right of travel. */
-function stepIn(pts: Point[], dist: number, d: number): Point {
-  const [a, b] = [pts[0], pts[1]];
-  const u = unit([b[0] - a[0], b[1] - a[1]]);
-  const n = normal(a, b);
-  return [a[0] + u[0] * dist + n[0] * d, a[1] + u[1] * dist + n[1] * d];
+/** The edge of the track between a and b (keyed sorted) where it leaves station x: its direction away from x, and the sideways direction of its lanes. */
+function edgeAt(key: string, x: string): { dir: Point; side: Point } {
+  const [a, b] = key.split("|");
+  const pts = track(DIAGRAM, a, b)!;
+  const n = pts.length;
+  const side = x === a ? normal(pts[0], pts[1]) : normal(pts[n - 2], pts[n - 1]);
+  const dir = x === a ? unit([pts[1][0] - pts[0][0], pts[1][1] - pts[0][1]]) : unit([pts[n - 2][0] - pts[n - 1][0], pts[n - 2][1] - pts[n - 1][1]]);
+  return { dir, side };
 }
 
 /**
- * Where a line sits at its i-th station: in its lane of the busier track on
- * either side (the incoming one on a tie). Both neighboring runs meet there,
- * so the line never steps sideways at a station.
+ * Each line's lane on every stretch of track, in line widths right of the track's
+ * middle (looking from the first sorted key toward the second). Busy stretches go
+ * first, and a stretch that carries straight on from one already placed keeps its
+ * lines in the same lanes, so Orange and Silver hold their lanes from Rosslyn out to
+ * East Falls Church and lines never jog sideways at a station along a straight run.
  */
-function port(line: Line, i: number, layout: Layout): Point | null {
-  const st = line.stations;
-  const before = i > 0 ? track(layout, st[i - 1], st[i]) : null;
-  const after = i < st.length - 1 ? track(layout, st[i], st[i + 1]) : null;
-  const useAfter = !before || (after && users(st[i], st[i + 1]) > users(st[i - 1], st[i]));
-  if (useAfter && after) return stepIn(after, 0, lane(line.code, st[i], st[i + 1], layout));
-  if (!before) return null;
-  return stepIn([...before].reverse(), 0, -lane(line.code, st[i - 1], st[i], layout));
+const LANES = (() => {
+  const lanes = new Map<string, Map<LineCode, number>>();
+  const order = [...SHARED.keys()].sort((p, q) => SHARED.get(q)!.length - SHARED.get(p)!.length);
+  while (lanes.size < order.length) {
+    let placed = false;
+    for (const key of order) {
+      if (lanes.has(key)) continue;
+      const users = SHARED.get(key)!;
+      let best: { from: Map<LineCode, number>; here: Point; there: Point; size: number } | null = null;
+      for (const x of key.split("|")) {
+        const mine = edgeAt(key, x);
+        for (const [other, theirs] of lanes) {
+          if (!other.split("|").includes(x) || !users.every((u) => theirs.has(u))) continue;
+          const e = edgeAt(other, x);
+          // Straight on through the station: leaving x in opposite directions.
+          if (mine.dir[0] * e.dir[0] + mine.dir[1] * e.dir[1] > -0.99) continue;
+          if (!best || theirs.size > best.size) best = { from: theirs, here: mine.side, there: e.side, size: theirs.size };
+        }
+      }
+      if (!best) continue;
+      const flip = best.here[0] * best.there[0] + best.here[1] * best.there[1] < 0 ? -1 : 1;
+      lanes.set(key, new Map(users.map((u) => [u, best!.from.get(u)! * flip])));
+      placed = true;
+    }
+    if (placed) continue;
+    // Nothing carries straight on: center the busiest unplaced stretch on its track.
+    const key = order.find((k) => !lanes.has(k))!;
+    const users = SHARED.get(key)!;
+    lanes.set(key, new Map(users.map((u, i) => [u, i - (users.length - 1) / 2])));
+  }
+  return lanes;
+})();
+
+/** How far right of the track's middle a line runs going from station a to b. */
+function lane(line: LineCode, a: string, b: string, layout: Layout) {
+  const d = LANES.get(key2(a, b))?.get(line) ?? 0;
+  return ([a, b].sort()[0] === a ? d : -d) * layout.line;
+}
+
+/** Where the line(s) actually pass through a station, which is off the track's middle when lanes are shifted. */
+function stationPoint(key: string, layout: Layout): Point | null {
+  const p = layout.pos.get(key);
+  if (!p) return null;
+  let sx = 0;
+  let sy = 0;
+  let n = 0;
+  for (const l of LINES) {
+    const i = l.stations.indexOf(key);
+    if (i < 0) continue;
+    // The busier stretch on either side decides the lane.
+    const near = [l.stations[i - 1], l.stations[i + 1]].filter(Boolean).map((o) => key2(key, o));
+    const id = near.sort((p2, q) => SHARED.get(q)!.length - SHARED.get(p2)!.length)[0];
+    const [a, b] = id.split("|");
+    const pts = track(layout, a, b);
+    if (!pts) continue;
+    const m = pts.length;
+    const side = key === a ? normal(pts[0], pts[1]) : normal(pts[m - 2], pts[m - 1]);
+    const d = LANES.get(id)!.get(l.code)! * layout.line;
+    sx += side[0] * d;
+    sy += side[1] * d;
+    n++;
+  }
+  return n ? [p[0] + sx / n, p[1] + sy / n] : p;
+}
+
+/** Where two offset lines meet, or null when they run parallel. */
+function meet(p1: Point, u1: Point, p2: Point, u2: Point): Point | null {
+  const den = u1[0] * u2[1] - u1[1] * u2[0];
+  if (Math.abs(den) < 1e-6) return null;
+  const t = ((p2[0] - p1[0]) * u2[1] - (p2[1] - p1[1]) * u2[0]) / den;
+  return [p1[0] + u1[0] * t, p1[1] + u1[1] * t];
 }
 
 /**
  * Each line as one path end to end, in its own lane wherever it shares track.
- * Where its lane at a station differs from its lane on the run (Blue joining
- * Orange and Silver at Rosslyn), it eases across just outside the station.
+ * Corners are mitred so neighboring lanes stay parallel; where a line has to move
+ * over a lane on a straight run, it eases across.
  */
 function linePaths(layout: Layout) {
   return LINES.map((line) => {
     const st = line.stations;
+    // Every straight edge of the line's track, with its lane.
+    const edges: { a: Point; b: Point; d: number }[] = [];
+    for (let i = 1; i < st.length; i++) {
+      const mid = track(layout, st[i - 1], st[i]);
+      if (!mid) continue;
+      const d = lane(line.code, st[i - 1], st[i], layout);
+      for (let k = 1; k < mid.length; k++) {
+        if (Math.hypot(mid[k][0] - mid[k - 1][0], mid[k][1] - mid[k - 1][1]) > 0.5) edges.push({ a: mid[k - 1], b: mid[k], d });
+      }
+    }
     const pts: Point[] = [];
     const lanes: number[] = [];
     const centers: Point[] = [];
@@ -254,33 +321,36 @@ function linePaths(layout: Layout) {
       lanes.push(d);
       centers.push(c);
     };
-    const far = (p: Point, q: Point) => Math.hypot(p[0] - q[0], p[1] - q[1]) > 0.5;
-    for (let i = 1; i < st.length; i++) {
-      const [a, b] = [st[i - 1], st[i]];
-      const mid = track(layout, a, b);
-      const pa = port(line, i - 1, layout);
-      const pb = port(line, i, layout);
-      if (!mid || !pa || !pb) continue;
-      const d = lane(line.code, a, b, layout);
-      const ps = offset(mid, d);
-      const n = ps.length;
-      const len = (p: Point, q: Point) => Math.hypot(q[0] - p[0], q[1] - p[1]);
-      const easeIn = far(pa, ps[0]);
-      const easeOut = far(pb, ps[n - 1]);
-      // NaN lanes mark the easing bits, which curve on their own path rather than the track's middle.
-      if (easeIn) {
-        push(pa, NaN, pa);
-        const q = stepIn(mid, Math.min(layout.line * 2.5, len(mid[0], mid[1]) / 3), d);
-        push(q, NaN, q);
-      } else push(ps[0], d, mid[0]);
-      for (let k = 1; k < n - 1; k++) push(ps[k], d, mid[k]);
-      if (easeOut) {
-        const back = [...mid].reverse();
-        const q = stepIn(back, Math.min(layout.line * 2.5, len(back[0], back[1]) / 3), -d);
-        push(q, NaN, q);
-        push(pb, NaN, pb);
-      } else push(ps[n - 1], d, mid[n - 1]);
+    const shifted = (e: { a: Point; b: Point; d: number }, p: Point): Point => {
+      const n = normal(e.a, e.b);
+      return [p[0] + n[0] * e.d, p[1] + n[1] * e.d];
+    };
+    if (!edges.length) return { code: line.code, color: line.color, d: "" };
+    push(shifted(edges[0], edges[0].a), edges[0].d, edges[0].a);
+    for (let k = 1; k < edges.length; k++) {
+      const [e, f] = [edges[k - 1], edges[k]];
+      const u1 = unit([e.b[0] - e.a[0], e.b[1] - e.a[1]]);
+      const u2 = unit([f.b[0] - f.a[0], f.b[1] - f.a[1]]);
+      const corner = meet(shifted(e, e.a), u1, shifted(f, f.a), u2);
+      if (corner) {
+        // Same lane round the corner curves about the track's middle; a lane change at a corner just follows the mitre.
+        push(corner, e.d === f.d ? e.d : NaN, corner && e.d === f.d ? e.b : corner);
+      } else if (e.d === f.d) {
+        push(shifted(e, e.b), e.d, e.b);
+      } else {
+        // Straight on but changing lane: slide across over a short stretch centered on the station.
+        const room = Math.min(Math.hypot(e.b[0] - e.a[0], e.b[1] - e.a[1]), Math.hypot(f.b[0] - f.a[0], f.b[1] - f.a[1])) / 2;
+        const half = Math.min(layout.line * 1.5, room * 0.8);
+        const p: Point = [e.b[0] - u1[0] * half, e.b[1] - u1[1] * half];
+        const q: Point = [f.a[0] + u2[0] * half, f.a[1] + u2[1] * half];
+        const pe = shifted(e, p);
+        const qf = shifted(f, q);
+        push(pe, NaN, pe);
+        push(qf, NaN, qf);
+      }
     }
+    const last = edges[edges.length - 1];
+    push(shifted(last, last.b), last.d, last.b);
     return { code: line.code, color: line.color, d: pts.length > 1 ? rounded(pts, layout.radius, layout.line, lanes, centers) : "" };
   });
 }
@@ -305,7 +375,7 @@ function StationMark({
   layout: Layout;
   onHover: (key: string | null) => void;
 }) {
-  const p = layout.pos.get(station.key);
+  const p = stationPoint(station.key, layout);
   if (!p) return null;
   const w = layout.line / 4.5;
   let mark;
@@ -335,7 +405,7 @@ function StationMark({
 }
 
 function Label({ station, layout }: { station: Station; layout: Layout }) {
-  const at = layout.pos.get(station.key);
+  const at = stationPoint(station.key, layout);
   if (!at) return null;
   const font = layout.font;
   // Clear the widest thing at the station: the bullseye, or every lane of shared track.
@@ -397,11 +467,12 @@ function trainPoint(line: LineCode, u: number, forward: boolean, layout: Layout)
   const from = stops[i];
   const to = stops[i + 1];
   const t = Math.max(0, Math.min(1, u - i));
-  const users = SHARED.get(key2(from, to))?.length ?? 1;
-  const side = (forward ? 1 : -1) * ((users * layout.line) / 2 + layout.train + 1.5);
   const mid = track(layout, from, to);
   if (!mid) return null;
-  const pts = offset(mid, side);
+  // Just outside the outermost lane on this stretch, on the train's right.
+  const ds = (SHARED.get(key2(from, to)) ?? [line]).map((l) => lane(l, from, to, layout));
+  const clear = layout.line / 2 + layout.train + 1.5;
+  const pts = offset(mid, forward ? Math.max(...ds) + clear : Math.min(...ds) - clear);
 
   // Walk t of the way along it.
   const lengths = pts.slice(1).map((p, k) => Math.hypot(p[0] - pts[k][0], p[1] - pts[k][1]));
@@ -658,7 +729,8 @@ export function MetroMap({ coords }: { coords: Record<string, Point> | null }) {
                 d={p.d}
                 fill="none"
                 stroke={p.color}
-                strokeWidth={layout.line}
+                // A hair wider than the lane so neighboring lines overlap instead of leaving a thin seam.
+                strokeWidth={layout.line + 1.2}
                 strokeLinecap="round"
                 strokeLinejoin="round"
               />
