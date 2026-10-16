@@ -9,8 +9,8 @@ import {
   LINE_BY_CODE,
   STATIONS,
   STATION_BY_KEY,
-  linesAt,
   type LabelSide,
+  type Line,
   type LineCode,
   type Station,
 } from "@/lib/metro/network";
@@ -116,6 +116,9 @@ for (const [id, users] of SHARED) {
   if (order?.length === users.length && users.every((u) => order.includes(u))) SHARED.set(id, order);
 }
 
+/** The three big downtown transfer stations, drawn as WMATA's bullseye: Metro Center, Gallery Place, L'Enfant Plaza. */
+const BIG = new Set(["A01", "B01", "D03"]);
+
 /** Stations where lines branch or cross (three or more directions), drawn as WMATA's bullseye. */
 const HUBS = new Set(
   STATIONS.filter((st) => {
@@ -159,12 +162,25 @@ function offset(pts: Point[], ds: number | number[]): Point[] {
  * `centers` is that middle, so every line through a corner curves around the
  * same center and lines sharing track stay touching all the way round.
  */
-function rounded(pts: Point[], radius: number, line: number, lanes: number[], centers: Point[]) {
+function rounded(all: Point[], radius: number, line: number, allLanes: number[], allCenters: Point[]) {
   const f = (p: Point) => `${p[0].toFixed(1)} ${p[1].toFixed(1)}`;
+  // Drop points along a straight run (stations mid-run) so a curve can start before them.
+  const keep = all.map((p, i) => {
+    if (i === 0 || i === all.length - 1) return true;
+    const u1 = unit([p[0] - all[i - 1][0], p[1] - all[i - 1][1]]);
+    const u2 = unit([all[i + 1][0] - p[0], all[i + 1][1] - p[1]]);
+    return Math.abs(u1[0] * u2[1] - u1[1] * u2[0]) > 0.01 || u1[0] * u2[0] + u1[1] * u2[1] < 0;
+  });
+  const pts = all.filter((_, i) => keep[i]);
+  const lanes = allLanes.filter((_, i) => keep[i]);
+  const centers = allCenters.filter((_, i) => keep[i]);
   let d = `M${f(pts[0])}`;
   for (let i = 1; i < pts.length - 1; i++) {
     const b = pts[i];
-    const [ca, cb, cc] = [centers[i - 1], centers[i], centers[i + 1]];
+    // Within one lane, curve around the track's middle; where a line is easing between lanes, use its own path.
+    const steady = lanes[i - 1] === lanes[i] && lanes[i] === lanes[i + 1];
+    const [ca, cb, cc] = steady ? [centers[i - 1], centers[i], centers[i + 1]] : [pts[i - 1], pts[i], pts[i + 1]];
+    const li = steady ? lanes[i] : 0;
     const u1 = unit([cb[0] - ca[0], cb[1] - ca[1]]);
     const u2 = unit([cc[0] - cb[0], cc[1] - cb[1]]);
     const cross = u1[0] * u2[1] - u1[1] * u2[0];
@@ -178,7 +194,9 @@ function rounded(pts: Point[], radius: number, line: number, lanes: number[], ce
     const room = Math.min(Math.hypot(cb[0] - ca[0], cb[1] - ca[1]), Math.hypot(cc[0] - cb[0], cc[1] - cb[1])) / 2;
     // Tight spots still leave the innermost of three lanes a visible curve.
     const tc = Math.max(Math.min(radius, room), (line * 1.5 + 6) * half);
-    const t = Math.max(0.5, tc - Math.sign(cross) * lanes[i] * half);
+    // Never run past the middle of either side, or neighboring curves would overlap into a blob.
+    const fit = Math.min(Math.hypot(b[0] - pts[i - 1][0], b[1] - pts[i - 1][1]), Math.hypot(pts[i + 1][0] - b[0], pts[i + 1][1] - b[1])) / 2;
+    const t = Math.max(0.5, Math.min(fit, (steady ? tc : Math.min(radius, room)) - Math.sign(cross) * li * half));
     const r = t / half;
     d += `L${f([b[0] - u1[0] * t, b[1] - u1[1] * t])}`;
     d += `A${r.toFixed(1)} ${r.toFixed(1)} 0 0 ${cross > 0 ? 1 : 0} ${f([b[0] + u2[0] * t, b[1] + u2[1] * t])}`;
@@ -193,38 +211,78 @@ function lane(line: LineCode, a: string, b: string, layout: Layout) {
   return [a, b].sort()[0] === a ? d : -d;
 }
 
-/** Each line as one path end to end, in its own lane wherever it shares track. */
+const users = (a: string, b: string) => SHARED.get(key2(a, b))?.length ?? 1;
+
+/** A point `dist` along the path's first edge, moved `d` right of travel. */
+function stepIn(pts: Point[], dist: number, d: number): Point {
+  const [a, b] = [pts[0], pts[1]];
+  const u = unit([b[0] - a[0], b[1] - a[1]]);
+  const n = normal(a, b);
+  return [a[0] + u[0] * dist + n[0] * d, a[1] + u[1] * dist + n[1] * d];
+}
+
+/**
+ * Where a line sits at its i-th station: in its lane of the busier track on
+ * either side (the incoming one on a tie). Both neighboring runs meet there,
+ * so the line never steps sideways at a station.
+ */
+function port(line: Line, i: number, layout: Layout): Point | null {
+  const st = line.stations;
+  const before = i > 0 ? track(layout, st[i - 1], st[i]) : null;
+  const after = i < st.length - 1 ? track(layout, st[i], st[i + 1]) : null;
+  const useAfter = !before || (after && users(st[i], st[i + 1]) > users(st[i - 1], st[i]));
+  if (useAfter && after) return stepIn(after, 0, lane(line.code, st[i], st[i + 1], layout));
+  if (!before) return null;
+  return stepIn([...before].reverse(), 0, -lane(line.code, st[i - 1], st[i], layout));
+}
+
+/**
+ * Each line as one path end to end, in its own lane wherever it shares track.
+ * Where its lane at a station differs from its lane on the run (Blue joining
+ * Orange and Silver at Rosslyn), it eases across just outside the station.
+ */
 function linePaths(layout: Layout) {
   return LINES.map((line) => {
+    const st = line.stations;
     const pts: Point[] = [];
     const lanes: number[] = [];
     const centers: Point[] = [];
-    for (let i = 1; i < line.stations.length; i++) {
-      const [a, b] = [line.stations[i - 1], line.stations[i]];
+    const push = (p: Point, d: number, c: Point) => {
+      const last = pts[pts.length - 1];
+      if (last && Math.hypot(p[0] - last[0], p[1] - last[1]) <= 0.5) return;
+      pts.push(p);
+      lanes.push(d);
+      centers.push(c);
+    };
+    const far = (p: Point, q: Point) => Math.hypot(p[0] - q[0], p[1] - q[1]) > 0.5;
+    for (let i = 1; i < st.length; i++) {
+      const [a, b] = [st[i - 1], st[i]];
       const mid = track(layout, a, b);
-      if (!mid) continue;
-      const ds = Array<number>(mid.length).fill(lane(line.code, a, b, layout));
-      offset(mid, ds).forEach((p, k) => {
-        const last = pts[pts.length - 1];
-        if (!last || Math.hypot(p[0] - last[0], p[1] - last[1]) > 0.5) {
-          pts.push(p);
-          lanes.push(ds[k]);
-          centers.push(mid[k]);
-        }
-      });
+      const pa = port(line, i - 1, layout);
+      const pb = port(line, i, layout);
+      if (!mid || !pa || !pb) continue;
+      const d = lane(line.code, a, b, layout);
+      const ps = offset(mid, d);
+      const n = ps.length;
+      const len = (p: Point, q: Point) => Math.hypot(q[0] - p[0], q[1] - p[1]);
+      const easeIn = far(pa, ps[0]);
+      const easeOut = far(pb, ps[n - 1]);
+      // NaN lanes mark the easing bits, which curve on their own path rather than the track's middle.
+      if (easeIn) {
+        push(pa, NaN, pa);
+        const q = stepIn(mid, Math.min(layout.line * 2.5, len(mid[0], mid[1]) / 3), d);
+        push(q, NaN, q);
+      } else push(ps[0], d, mid[0]);
+      for (let k = 1; k < n - 1; k++) push(ps[k], d, mid[k]);
+      if (easeOut) {
+        const back = [...mid].reverse();
+        const q = stepIn(back, Math.min(layout.line * 2.5, len(back[0], back[1]) / 3), -d);
+        push(q, NaN, q);
+        push(pb, NaN, pb);
+      } else push(ps[n - 1], d, mid[n - 1]);
     }
     return { code: line.code, color: line.color, d: pts.length > 1 ? rounded(pts, layout.radius, layout.line, lanes, centers) : "" };
   });
-}
-
-/** Which way the track runs through a station, for the bar across shared track. */
-function through(key: string, layout: Layout): Point {
-  const line = linesAt(key)[0];
-  const i = line.stations.indexOf(key);
-  const a = line.stations[i - 1] ? track(layout, line.stations[i - 1], key) : null;
-  const b = line.stations[i + 1] ? track(layout, key, line.stations[i + 1]) : null;
-  const [p, q] = a ? [a[a.length - 2], a[a.length - 1]] : [b![0], b![1]];
-  return unit([q[0] - p[0], q[1] - p[1]]);
 }
 
 /** How many lines wide the track is at a station. */
@@ -250,34 +308,14 @@ function StationMark({
   const p = layout.pos.get(station.key);
   if (!p) return null;
   const w = layout.line / 4.5;
-  const n = width(station.key);
   let mark;
-  if (HUBS.has(station.key)) {
-    // Big enough to sit across every lane of shared track.
-    const r = Math.max(layout.line * 0.95, (n * layout.line) / 2 + w);
+  if (BIG.has(station.key)) {
+    const r = layout.line * 1.2;
     mark = (
       <>
         <circle cx={p[0]} cy={p[1]} r={r} fill={FACE} stroke={RING} strokeWidth={w} />
         <circle cx={p[0]} cy={p[1]} r={r * 0.42} fill={FACE} stroke={RING} strokeWidth={w} />
       </>
-    );
-  } else if (n > 1) {
-    // Across shared track, a white bar spanning every lane.
-    const [ux, uy] = through(station.key, layout);
-    const half = (n * layout.line) / 2 - layout.line * 0.15;
-    const angle = (Math.atan2(uy, ux) * 180) / Math.PI;
-    mark = (
-      <rect
-        x={p[0] - layout.line * 0.4}
-        y={p[1] - half}
-        width={layout.line * 0.8}
-        height={half * 2}
-        rx={layout.line * 0.4}
-        fill={FACE}
-        stroke={RING}
-        strokeWidth={w}
-        transform={`rotate(${angle} ${p[0]} ${p[1]})`}
-      />
     );
   } else {
     mark = <circle cx={p[0]} cy={p[1]} r={layout.line * 0.42} fill={FACE} stroke={RING} strokeWidth={w} />;
