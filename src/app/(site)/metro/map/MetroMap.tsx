@@ -51,7 +51,8 @@ const MODE_KEY = "metro.mapMode";
 // Station marks as on WMATA's map: white with a dark ring.
 const RING = "#231f20";
 const FACE = "#ffffff";
-const GREY_TRAIN = "#c3c8cc";
+// No-passenger trains: a color no Metro line uses, so they never pass for Silver.
+const EMPTY_TRAIN = "#a855f7";
 
 // Diagram: station spots and corners from network.ts (WMATA's map), scaled up.
 const S = 1.4;
@@ -129,8 +130,6 @@ const HUBS = new Set(
   }).map((st) => st.key),
 );
 
-const TERMINALS = new Set(LINES.flatMap((l) => [l.stations[0], l.stations[l.stations.length - 1]]));
-
 /** The middle of the track from station a to station b: the two stations and the corners between. */
 function track(layout: Layout, a: string, b: string): Point[] | null {
   const pa = layout.pos.get(a);
@@ -140,10 +139,12 @@ function track(layout: Layout, a: string, b: string): Point[] | null {
   return [pa, ...([a, b].sort()[0] === a ? mid : [...mid].reverse()), pb];
 }
 
-/** A path moved d to the right of travel, its corners kept sharp (exact for the map's 45° and 90° turns). */
-function offset(pts: Point[], d: number): Point[] {
-  if (d === 0) return pts;
+/** A path moved right of travel by ds[i] at each point, its corners kept sharp (exact for the map's 45° and 90° turns). */
+function offset(pts: Point[], ds: number | number[]): Point[] {
+  const at = (i: number) => (typeof ds === "number" ? ds : ds[i]);
   return pts.map((p, i) => {
+    const d = at(i);
+    if (d === 0) return p;
     const n1 = normal(pts[Math.max(0, i - 1)], pts[Math.max(1, i)]);
     const n2 = normal(pts[Math.min(pts.length - 2, i)], pts[Math.min(pts.length - 1, i + 1)]);
     const m = unit([n1[0] + n2[0], n1[1] + n2[1]]);
@@ -153,29 +154,34 @@ function offset(pts: Point[], d: number): Point[] {
 }
 
 /**
- * An SVG path along the points with every corner rounded off. `lanes` is how far each
- * point sits right of the shared track's middle, so lines sharing a corner curve
- * around one center and stay side by side instead of pulling apart.
+ * An SVG path along the points with every corner rounded into a circular arc.
+ * `lanes` is how far each point sits right of the shared track's middle and
+ * `centers` is that middle, so every line through a corner curves around the
+ * same center and lines sharing track stay touching all the way round.
  */
-function rounded(pts: Point[], radius: number, lanes: number[]) {
+function rounded(pts: Point[], radius: number, line: number, lanes: number[], centers: Point[]) {
   const f = (p: Point) => `${p[0].toFixed(1)} ${p[1].toFixed(1)}`;
   let d = `M${f(pts[0])}`;
   for (let i = 1; i < pts.length - 1; i++) {
-    const [a, b, c] = [pts[i - 1], pts[i], pts[i + 1]];
-    const l1 = Math.hypot(b[0] - a[0], b[1] - a[1]);
-    const l2 = Math.hypot(c[0] - b[0], c[1] - b[1]);
-    const u1 = unit([b[0] - a[0], b[1] - a[1]]);
-    const u2 = unit([c[0] - b[0], c[1] - b[1]]);
+    const b = pts[i];
+    const [ca, cb, cc] = [centers[i - 1], centers[i], centers[i + 1]];
+    const u1 = unit([cb[0] - ca[0], cb[1] - ca[1]]);
+    const u2 = unit([cc[0] - cb[0], cc[1] - cb[1]]);
     const cross = u1[0] * u2[1] - u1[1] * u2[0];
     const dot = u1[0] * u2[0] + u1[1] * u2[1];
     if (Math.abs(cross) < 0.01 || radius === 0) {
       d += `L${f(b)}`;
       continue;
     }
-    // Lanes on the outside of the turn get a wider curve, lanes on the inside a tighter one.
+    // Size the curve on the middle of the track, then widen it for outside lanes and tighten it for inside ones.
     const half = Math.tan(Math.atan2(Math.abs(cross), dot) / 2);
-    const r = Math.min(Math.max(1, radius - Math.sign(cross) * lanes[i] * half), l1 / 2, l2 / 2);
-    d += `L${f([b[0] - u1[0] * r, b[1] - u1[1] * r])}Q${f(b)} ${f([b[0] + u2[0] * r, b[1] + u2[1] * r])}`;
+    const room = Math.min(Math.hypot(cb[0] - ca[0], cb[1] - ca[1]), Math.hypot(cc[0] - cb[0], cc[1] - cb[1])) / 2;
+    // Tight spots still leave the innermost of three lanes a visible curve.
+    const tc = Math.max(Math.min(radius, room), (line * 1.5 + 6) * half);
+    const t = Math.max(0.5, tc - Math.sign(cross) * lanes[i] * half);
+    const r = t / half;
+    d += `L${f([b[0] - u1[0] * t, b[1] - u1[1] * t])}`;
+    d += `A${r.toFixed(1)} ${r.toFixed(1)} 0 0 ${cross > 0 ? 1 : 0} ${f([b[0] + u2[0] * t, b[1] + u2[1] * t])}`;
   }
   return d + `L${f(pts[pts.length - 1])}`;
 }
@@ -192,20 +198,22 @@ function linePaths(layout: Layout) {
   return LINES.map((line) => {
     const pts: Point[] = [];
     const lanes: number[] = [];
+    const centers: Point[] = [];
     for (let i = 1; i < line.stations.length; i++) {
       const [a, b] = [line.stations[i - 1], line.stations[i]];
       const mid = track(layout, a, b);
       if (!mid) continue;
-      const d = lane(line.code, a, b, layout);
-      for (const p of offset(mid, d)) {
+      const ds = Array<number>(mid.length).fill(lane(line.code, a, b, layout));
+      offset(mid, ds).forEach((p, k) => {
         const last = pts[pts.length - 1];
         if (!last || Math.hypot(p[0] - last[0], p[1] - last[1]) > 0.5) {
           pts.push(p);
-          lanes.push(d);
+          lanes.push(ds[k]);
+          centers.push(mid[k]);
         }
-      }
+      });
     }
-    return { code: line.code, color: line.color, d: pts.length > 1 ? rounded(pts, layout.radius, lanes) : "" };
+    return { code: line.code, color: line.color, d: pts.length > 1 ? rounded(pts, layout.radius, layout.line, lanes, centers) : "" };
   });
 }
 
@@ -230,14 +238,23 @@ function width(key: string) {
   return n;
 }
 
-function StationMark({ station, layout }: { station: Station; layout: Layout }) {
+function StationMark({
+  station,
+  layout,
+  onHover,
+}: {
+  station: Station;
+  layout: Layout;
+  onHover: (key: string | null) => void;
+}) {
   const p = layout.pos.get(station.key);
   if (!p) return null;
   const w = layout.line / 4.5;
   const n = width(station.key);
   let mark;
   if (HUBS.has(station.key)) {
-    const r = layout.line * 0.95;
+    // Big enough to sit across every lane of shared track.
+    const r = Math.max(layout.line * 0.95, (n * layout.line) / 2 + w);
     mark = (
       <>
         <circle cx={p[0]} cy={p[1]} r={r} fill={FACE} stroke={RING} strokeWidth={w} />
@@ -266,11 +283,15 @@ function StationMark({ station, layout }: { station: Station; layout: Layout }) 
     mark = <circle cx={p[0]} cy={p[1]} r={layout.line * 0.42} fill={FACE} stroke={RING} strokeWidth={w} />;
   }
   return (
-    <a href={`/metro?station=${station.key}`} aria-label={`${station.name} arrivals`}>
+    <a
+      href={`/metro?station=${station.key}`}
+      aria-label={`${station.name} arrivals`}
+      onPointerEnter={() => onHover(station.key)}
+      onPointerLeave={() => onHover(null)}
+      onFocus={() => onHover(station.key)}
+      onBlur={() => onHover(null)}
+    >
       {mark}
-      <title>{`${station.name}: ${linesAt(station.key)
-        .map((l) => l.name)
-        .join(", ")}`}</title>
     </a>
   );
 }
@@ -419,6 +440,7 @@ export function MetroMap({ coords }: { coords: Record<string, Point> | null }) {
   const paths = useMemo(() => linePaths(layout), [layout]);
   const { trains, updated, error } = useTrains();
   const [selected, setSelected] = useState<string | null>(null);
+  const [hover, setHover] = useState<string | null>(null);
   const picked = trains.find((t) => t.id === selected);
 
   // Each train glides along the track to its new spot over one refresh, moved
@@ -524,8 +546,8 @@ export function MetroMap({ coords }: { coords: Record<string, Point> | null }) {
     if (pointers.current.size === 0) drag.current = null;
   }
 
-  // On the to-scale map only the big stations get names; the rest are a tap away in Arrivals.
-  const labelled = mode === "diagram" ? STATIONS : STATIONS.filter((s) => HUBS.has(s.key) || TERMINALS.has(s.key));
+  // Names stay hidden so the trains stand out; hovering a station shows its name.
+  const labelled = hover ? STATIONS.filter((s) => s.key === hover) : [];
   const inService = trains.filter((t) => t.passengers);
   const counts = LINES.map((l) => ({ line: l, n: inService.filter((t) => t.line === l.code).length }));
   const empty = trains.length - inService.length;
@@ -604,7 +626,7 @@ export function MetroMap({ coords }: { coords: Record<string, Point> | null }) {
               />
             ))}
             {STATIONS.map((s) => (
-              <StationMark key={s.key} station={s} layout={layout} />
+              <StationMark key={s.key} station={s} layout={layout} onHover={setHover} />
             ))}
             {labelled.map((s) => (
               <Label key={s.key} station={s} layout={layout} />
@@ -631,8 +653,8 @@ export function MetroMap({ coords }: { coords: Record<string, Point> | null }) {
                   onClick={() => !drag.current?.moved && setSelected(on ? null : t.id)}
                 >
                   <circle
-                    r={(on ? 1.5 : 1) * layout.train * (t.passengers ? 1 : 0.85)}
-                    fill={t.passengers ? LINE_BY_CODE.get(t.line)!.color : GREY_TRAIN}
+                    r={(on ? 1.5 : 1) * layout.train}
+                    fill={t.passengers ? LINE_BY_CODE.get(t.line)!.color : EMPTY_TRAIN}
                     stroke="var(--foreground)"
                     strokeWidth={on ? 2.5 : 1.5}
                   />
@@ -650,7 +672,7 @@ export function MetroMap({ coords }: { coords: Record<string, Point> | null }) {
           <div className="absolute bottom-2 left-2 rounded border border-line bg-background/95 px-3 py-2 text-sm">
             <span
               className="mr-2 inline-block size-2.5 rounded-full"
-              style={{ background: picked.passengers ? LINE_BY_CODE.get(picked.line)!.color : GREY_TRAIN }}
+              style={{ background: picked.passengers ? LINE_BY_CODE.get(picked.line)!.color : EMPTY_TRAIN }}
             />
             {picked.passengers
               ? `${LINE_BY_CODE.get(picked.line)!.name} line to ${picked.destination ?? "?"}`
@@ -677,7 +699,7 @@ export function MetroMap({ coords }: { coords: Record<string, Point> | null }) {
               </span>
             ))}
             <span className="flex items-center gap-1.5 tabular-nums">
-              <span className="inline-block size-2.5 rounded-full" style={{ background: GREY_TRAIN }} />
+              <span className="inline-block size-2.5 rounded-full" style={{ background: EMPTY_TRAIN }} />
               No passengers {empty}
             </span>
             {updated && <Updated at={updated} />}
