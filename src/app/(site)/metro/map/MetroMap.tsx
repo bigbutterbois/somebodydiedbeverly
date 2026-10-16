@@ -65,7 +65,7 @@ const DIAGRAM: Layout = {
   line: 17,
   train: 7.5,
   font: 13,
-  radius: 16 * S,
+  radius: 22 * S,
 };
 
 function scaleLayout(coords: Record<string, Point>): Layout {
@@ -152,8 +152,12 @@ function offset(pts: Point[], d: number): Point[] {
   });
 }
 
-/** An SVG path along the points with every corner rounded off. */
-function rounded(pts: Point[], radius: number) {
+/**
+ * An SVG path along the points with every corner rounded off. `lanes` is how far each
+ * point sits right of the shared track's middle, so lines sharing a corner curve
+ * around one center and stay side by side instead of pulling apart.
+ */
+function rounded(pts: Point[], radius: number, lanes: number[]) {
   const f = (p: Point) => `${p[0].toFixed(1)} ${p[1].toFixed(1)}`;
   let d = `M${f(pts[0])}`;
   for (let i = 1; i < pts.length - 1; i++) {
@@ -162,12 +166,15 @@ function rounded(pts: Point[], radius: number) {
     const l2 = Math.hypot(c[0] - b[0], c[1] - b[1]);
     const u1 = unit([b[0] - a[0], b[1] - a[1]]);
     const u2 = unit([c[0] - b[0], c[1] - b[1]]);
-    const turn = Math.abs(u1[0] * u2[1] - u1[1] * u2[0]);
-    const r = Math.min(radius, l1 / 2, l2 / 2);
-    if (turn < 0.01 || r < 0.5) {
+    const cross = u1[0] * u2[1] - u1[1] * u2[0];
+    const dot = u1[0] * u2[0] + u1[1] * u2[1];
+    if (Math.abs(cross) < 0.01 || radius === 0) {
       d += `L${f(b)}`;
       continue;
     }
+    // Lanes on the outside of the turn get a wider curve, lanes on the inside a tighter one.
+    const half = Math.tan(Math.atan2(Math.abs(cross), dot) / 2);
+    const r = Math.min(Math.max(1, radius - Math.sign(cross) * lanes[i] * half), l1 / 2, l2 / 2);
     d += `L${f([b[0] - u1[0] * r, b[1] - u1[1] * r])}Q${f(b)} ${f([b[0] + u2[0] * r, b[1] + u2[1] * r])}`;
   }
   return d + `L${f(pts[pts.length - 1])}`;
@@ -184,16 +191,21 @@ function lane(line: LineCode, a: string, b: string, layout: Layout) {
 function linePaths(layout: Layout) {
   return LINES.map((line) => {
     const pts: Point[] = [];
+    const lanes: number[] = [];
     for (let i = 1; i < line.stations.length; i++) {
       const [a, b] = [line.stations[i - 1], line.stations[i]];
       const mid = track(layout, a, b);
       if (!mid) continue;
-      for (const p of offset(mid, lane(line.code, a, b, layout))) {
+      const d = lane(line.code, a, b, layout);
+      for (const p of offset(mid, d)) {
         const last = pts[pts.length - 1];
-        if (!last || Math.hypot(p[0] - last[0], p[1] - last[1]) > 0.5) pts.push(p);
+        if (!last || Math.hypot(p[0] - last[0], p[1] - last[1]) > 0.5) {
+          pts.push(p);
+          lanes.push(d);
+        }
       }
     }
-    return { code: line.code, color: line.color, d: pts.length > 1 ? rounded(pts, layout.radius) : "" };
+    return { code: line.code, color: line.color, d: pts.length > 1 ? rounded(pts, layout.radius, lanes) : "" };
   });
 }
 
