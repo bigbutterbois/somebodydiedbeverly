@@ -1,6 +1,5 @@
 "use client";
 
-import { geoMercator } from "d3-geo";
 import { useEffect, useMemo, useRef, useState } from "react";
 import {
   BENDS,
@@ -15,26 +14,23 @@ import {
 } from "@/lib/metro/network";
 import type { Train } from "@/lib/metro/wmata";
 import { Updated } from "../Updated";
-import { useStored } from "../useStored";
 
-// Every Metrorail train, live, two ways: on WMATA's own system map, or to scale
-// with the stations where they really are. Only the lines, stations and names
-// are drawn, so the trains stand out.
+// Every Metrorail train, live, on WMATA's own system map, filling the screen.
+// Only the lines and stations are drawn, so the trains stand out.
 //
 // Trains come from /api/metro/trains every 10 seconds while the tab is visible.
 // Each one glides along the track from where it was to where it is over the next
 // 10 seconds, so the map runs a few seconds behind but something is always
-// moving. Zoom with the buttons, a pinch or ctrl/⌘ + scroll, drag to pan, tap a
+// moving. Zoom with the buttons, a pinch or the scroll wheel, drag to pan, tap a
 // train for its details.
 
-type Mode = "diagram" | "scale";
 type Point = [number, number];
 type View = { k: number; x: number; y: number };
 type Layout = {
   W: number;
   H: number;
   pos: Map<string, Point>;
-  /** Corners between neighboring stations (diagram only), keyed like BENDS. */
+  /** Corners between neighboring stations, keyed like BENDS. */
   bends: Map<string, Point[]>;
   /** Line thickness; lines sharing track sit side by side, touching. */
   line: number;
@@ -45,7 +41,6 @@ type Layout = {
 };
 
 const REFRESH = 10_000;
-const MODE_KEY = "metro.mapMode";
 
 // Station marks as on WMATA's map: white with a dark ring.
 const RING = "#231f20";
@@ -67,24 +62,6 @@ const DIAGRAM: Layout = {
   font: 13,
   radius: 28 * S,
 };
-
-function scaleLayout(coords: Record<string, Point>): Layout {
-  const W = 1000;
-  const H = 820;
-  const projection = geoMercator().fitExtent(
-    [
-      [40, 40],
-      [W - 40, H - 40],
-    ],
-    { type: "MultiPoint", coordinates: Object.values(coords) },
-  );
-  const pos = new Map<string, Point>();
-  for (const [key, c] of Object.entries(coords)) {
-    const p = projection(c);
-    if (p) pos.set(key, p);
-  }
-  return { W, H, pos, bends: new Map(), line: 4, train: 4, font: 10, radius: 0 };
-}
 
 function unit([x, y]: Point): Point {
   const len = Math.hypot(x, y) || 1;
@@ -535,16 +512,8 @@ function useTrains() {
   return state;
 }
 
-export function MetroMap({ coords }: { coords: Record<string, Point> | null }) {
-  const [saved, save] = useStored(MODE_KEY);
-  const mode: Mode = saved === "scale" && coords ? "scale" : "diagram";
-  function switchMode(next: Mode) {
-    save(next);
-    setView({ k: 1, x: 0, y: 0 });
-  }
-
-  const scale = useMemo(() => (coords ? scaleLayout(coords) : null), [coords]);
-  const layout = mode === "scale" && scale ? scale : DIAGRAM;
+export function MetroMap() {
+  const layout = DIAGRAM;
   const { W, H } = layout;
   const paths = useMemo(() => linePaths(layout), [layout]);
   const { trains, updated, error } = useTrains();
@@ -588,20 +557,44 @@ export function MetroMap({ coords }: { coords: Record<string, Point> | null }) {
     return () => cancelAnimationFrame(frame);
   }, []);
 
-  // Zoom and pan, as on the House map.
+  // The map fills its box below the legend, centered, with the spare room as
+  // margin: the drawing is a VW × VH canvas in map units, and zoom and pan move over it.
   const boxRef = useRef<HTMLDivElement>(null);
+  const barRef = useRef<HTMLDivElement>(null);
   const svgRef = useRef<SVGSVGElement>(null);
+  const [box, setBox] = useState({ w: W, h: H, top: 0 });
+  useEffect(() => {
+    const el = boxRef.current!;
+    const measure = () => {
+      const r = el.getBoundingClientRect();
+      const bar = barRef.current!.getBoundingClientRect();
+      if (r.width > 0 && r.height > 0) setBox({ w: r.width, h: r.height, top: bar.bottom - r.top });
+    };
+    measure();
+    const ro = new ResizeObserver(measure);
+    ro.observe(el);
+    ro.observe(barRef.current!);
+    return () => ro.disconnect();
+  }, []);
+  const GAP = 12;
+  const roomH = Math.max(box.h - box.top - 2 * GAP, box.h / 2);
+  const fit = Math.min((box.w - 2 * GAP) / W, roomH / H);
+  const VW = box.w / fit;
+  const VH = box.h / fit;
+  const ox = (VW - W) / 2;
+  const oy = (box.h - roomH - GAP) / fit + (roomH / fit - H) / 2;
+
+  // Zoom and pan, as on the House map.
   const [view, setView] = useState<View>({ k: 1, x: 0, y: 0 });
   const pointers = useRef(new Map<number, { x: number; y: number }>());
   const drag = useRef<{ moved: boolean; pinch?: number } | null>(null);
   const clampView = ({ k, x, y }: View): View => {
     const kk = Math.min(8, Math.max(1, k));
-    return { k: kk, x: Math.min(0, Math.max(W - W * kk, x)), y: Math.min(0, Math.max(H - H * kk, y)) };
+    return { k: kk, x: Math.min(0, Math.max(VW - VW * kk, x)), y: Math.min(0, Math.max(VH - VH * kk, y)) };
   };
   function localPoint(clientX: number, clientY: number) {
-    const box = boxRef.current!.getBoundingClientRect();
-    const u = W / box.width;
-    return { x: (clientX - box.left) * u, y: (clientY - box.top) * u };
+    const r = boxRef.current!.getBoundingClientRect();
+    return { x: (clientX - r.left) / fit, y: (clientY - r.top) / fit };
   }
   function zoomAt(factor: number, at: { x: number; y: number }) {
     setView((v) => {
@@ -610,22 +603,27 @@ export function MetroMap({ coords }: { coords: Record<string, Point> | null }) {
       return clampView({ k, x: at.x - (at.x - v.x) * f, y: at.y - (at.y - v.y) * f });
     });
   }
-  const zoomRef = useRef({ zoomAt, W });
+  const zoomRef = useRef({ zoomAt, localPoint });
   useEffect(() => {
-    zoomRef.current = { zoomAt, W };
+    zoomRef.current = { zoomAt, localPoint };
   });
   useEffect(() => {
     const el = svgRef.current!;
     const onWheel = (e: WheelEvent) => {
-      if (!e.ctrlKey && !e.metaKey) return;
       e.preventDefault();
-      const box = el.getBoundingClientRect();
-      const u = zoomRef.current.W / box.width;
-      zoomRef.current.zoomAt(Math.exp(-e.deltaY * 0.01), { x: (e.clientX - box.left) * u, y: (e.clientY - box.top) * u });
+      const { zoomAt, localPoint } = zoomRef.current;
+      // Trackpad pinches arrive as ctrl + wheel, in bigger steps than a mouse wheel.
+      zoomAt(Math.exp(-e.deltaY * (e.ctrlKey ? 0.01 : 0.002)), localPoint(e.clientX, e.clientY));
     };
     el.addEventListener("wheel", onWheel, { passive: false });
     return () => el.removeEventListener("wheel", onWheel);
   }, []);
+  // A new window size starts over from the whole map.
+  const [seen, setSeen] = useState(box);
+  if (seen.w !== box.w || seen.h !== box.h || seen.top !== box.top) {
+    setSeen(box);
+    setView({ k: 1, x: 0, y: 0 });
+  }
   function onPointerDown(e: React.PointerEvent) {
     pointers.current.set(e.pointerId, { x: e.clientX, y: e.clientY });
     drag.current = { moved: false };
@@ -633,7 +631,6 @@ export function MetroMap({ coords }: { coords: Record<string, Point> | null }) {
   function onPointerMove(e: React.PointerEvent) {
     const prev = pointers.current.get(e.pointerId);
     if (!prev) return;
-    const u = W / boxRef.current!.getBoundingClientRect().width;
     if (pointers.current.size === 2) {
       pointers.current.set(e.pointerId, { x: e.clientX, y: e.clientY });
       const [a, b] = [...pointers.current.values()];
@@ -642,8 +639,8 @@ export function MetroMap({ coords }: { coords: Record<string, Point> | null }) {
       drag.current = { moved: true, pinch: d };
       return;
     }
-    const dx = (e.clientX - prev.x) * u;
-    const dy = (e.clientY - prev.y) * u;
+    const dx = (e.clientX - prev.x) / fit;
+    const dy = (e.clientY - prev.y) / fit;
     if (Math.abs(dx) + Math.abs(dy) > 0.5 && view.k > 1) {
       pointers.current.set(e.pointerId, { x: e.clientX, y: e.clientY });
       if (drag.current) drag.current.moved = true;
@@ -661,31 +658,103 @@ export function MetroMap({ coords }: { coords: Record<string, Point> | null }) {
   const counts = LINES.map((l) => ({ line: l, n: inService.filter((t) => t.line === l.code).length }));
   const empty = trains.length - inService.length;
 
+  // The whole width of the window, down to its bottom edge, with the legend and
+  // zoom buttons floating on top.
   return (
-    <div className="flex flex-col gap-3">
-      <div className="flex flex-wrap items-center justify-between gap-2">
-        <div className="flex overflow-hidden rounded border border-line text-sm">
-          {(
-            [
-              { mode: "diagram", label: "Diagram" },
-              { mode: "scale", label: "To scale" },
-            ] as const
-          ).map((b) => (
-            <button
-              key={b.mode}
-              type="button"
-              disabled={b.mode === "scale" && !coords}
-              aria-pressed={mode === b.mode}
-              onClick={() => switchMode(b.mode)}
-              className={`px-3 py-1.5 transition-colors disabled:opacity-40 ${
-                mode === b.mode ? "bg-accent text-background" : "text-muted hover:bg-surface hover:text-foreground"
-              }`}
-            >
-              {b.label}
-            </button>
+    <div ref={boxRef} className="relative ml-[calc(50%-50vw)] min-h-[420px] w-screen flex-1 overflow-hidden">
+      <svg
+        ref={svgRef}
+        viewBox={`0 0 ${VW} ${VH}`}
+        className={`absolute inset-0 size-full touch-none select-none ${view.k > 1 ? "cursor-grab active:cursor-grabbing" : ""}`}
+        role="img"
+        aria-label={`Map of Metrorail with ${trains.length} trains`}
+        onPointerDown={onPointerDown}
+        onPointerMove={onPointerMove}
+        onPointerUp={onPointerUp}
+        onPointerCancel={onPointerUp}
+      >
+        <g transform={`translate(${view.x} ${view.y}) scale(${view.k}) translate(${ox} ${oy})`}>
+          {paths.map((p) => (
+            <path
+              key={p.code}
+              d={p.d}
+              fill="none"
+              stroke={p.color}
+              // A hair wider than the lane so neighboring lines overlap instead of leaving a thin seam.
+              strokeWidth={layout.line + 1.2}
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            />
           ))}
+          {STATIONS.map((s) => (
+            <StationMark key={s.key} station={s} layout={layout} onHover={setHover} />
+          ))}
+          {labelled.map((s) => (
+            <Label key={s.key} station={s} layout={layout} />
+          ))}
+          {trains.map((t) => {
+            const on = t.id === selected;
+            return (
+              <g
+                key={t.id}
+                ref={(el) => {
+                  if (!el) {
+                    dots.current.delete(t.id);
+                    return;
+                  }
+                  dots.current.set(t.id, el);
+                  // Where it stands right now, before the next frame moves it.
+                  const trip = trips.current.get(t.id);
+                  const p = trip
+                    ? trainPoint(trip.line, tripAt(trip, performance.now()), trip.forward, layoutRef.current)
+                    : trainPoint(t.line, along(t), t.forward, layoutRef.current);
+                  if (p) el.setAttribute("transform", `translate(${p[0].toFixed(1)} ${p[1].toFixed(1)})`);
+                }}
+                className="cursor-pointer"
+                onClick={() => !drag.current?.moved && setSelected(on ? null : t.id)}
+              >
+                <circle
+                  r={(on ? 1.5 : 1) * layout.train}
+                  fill={t.passengers ? LINE_BY_CODE.get(t.line)!.color : EMPTY_TRAIN}
+                  stroke="var(--foreground)"
+                  strokeWidth={on ? 2.5 : 1.5}
+                />
+                <title>
+                  {t.passengers
+                    ? `${LINE_BY_CODE.get(t.line)!.name} line to ${t.destination ?? "?"}, ${t.cars} cars`
+                    : `No passengers, ${t.cars} cars`}
+                </title>
+              </g>
+            );
+          })}
+        </g>
+      </svg>
+
+      <div ref={barRef} className="pointer-events-none absolute inset-x-3 top-3 flex items-start justify-between gap-3">
+        <div className="pointer-events-auto flex flex-wrap items-center gap-x-3 gap-y-1 rounded border border-line bg-background/90 px-3 py-1.5 text-sm text-muted">
+          {error === "no-key" ? (
+            <span>Live trains show up once the WMATA key is connected.</span>
+          ) : error === "budget" ? (
+            <span>Pausing for a moment to stay under WMATA&apos;s call limit; trying again.</span>
+          ) : error ? (
+            <span>WMATA isn&apos;t answering right now; trying again.</span>
+          ) : (
+            <>
+              {counts.map(({ line, n }) => (
+                <span key={line.code} className="flex items-center gap-1.5 tabular-nums">
+                  <span className="inline-block size-2.5 rounded-full" style={{ background: line.color }} />
+                  {line.name} {n}
+                </span>
+              ))}
+              <span className="flex items-center gap-1.5 tabular-nums">
+                <span className="inline-block size-2.5 rounded-full" style={{ background: EMPTY_TRAIN }} />
+                No passengers {empty}
+              </span>
+              {updated && <Updated at={updated} />}
+            </>
+          )}
         </div>
-        <div className="flex overflow-hidden rounded border border-line text-sm">
+        <div className="pointer-events-auto flex shrink-0 overflow-hidden rounded border border-line bg-background/90 text-sm">
           {[
             { label: "Zoom in", text: "+", f: 1.6 },
             { label: "Zoom out", text: "−", f: 1 / 1.6 },
@@ -694,7 +763,7 @@ export function MetroMap({ coords }: { coords: Record<string, Point> | null }) {
               key={b.label}
               type="button"
               aria-label={b.label}
-              onClick={() => zoomAt(b.f, { x: W / 2, y: H / 2 })}
+              onClick={() => zoomAt(b.f, { x: VW / 2, y: VH / 2 })}
               className="w-8 border-r border-line py-1.5 text-muted hover:bg-surface hover:text-foreground"
             >
               {b.text}
@@ -710,112 +779,19 @@ export function MetroMap({ coords }: { coords: Record<string, Point> | null }) {
         </div>
       </div>
 
-      <div ref={boxRef} className="relative overflow-hidden rounded border border-line">
-        <svg
-          ref={svgRef}
-          viewBox={`0 0 ${W} ${H}`}
-          className={`h-auto w-full select-none ${view.k > 1 ? "cursor-grab touch-none active:cursor-grabbing" : "touch-pan-y"}`}
-          role="img"
-          aria-label={`Map of Metrorail with ${trains.length} trains${mode === "scale" ? ", to scale" : ""}`}
-          onPointerDown={onPointerDown}
-          onPointerMove={onPointerMove}
-          onPointerUp={onPointerUp}
-          onPointerCancel={onPointerUp}
-        >
-          <g transform={`translate(${view.x} ${view.y}) scale(${view.k})`}>
-            {paths.map((p) => (
-              <path
-                key={p.code}
-                d={p.d}
-                fill="none"
-                stroke={p.color}
-                // A hair wider than the lane so neighboring lines overlap instead of leaving a thin seam.
-                strokeWidth={layout.line + 1.2}
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              />
-            ))}
-            {STATIONS.map((s) => (
-              <StationMark key={s.key} station={s} layout={layout} onHover={setHover} />
-            ))}
-            {labelled.map((s) => (
-              <Label key={s.key} station={s} layout={layout} />
-            ))}
-            {trains.map((t) => {
-              const on = t.id === selected;
-              return (
-                <g
-                  key={t.id}
-                  ref={(el) => {
-                    if (!el) {
-                      dots.current.delete(t.id);
-                      return;
-                    }
-                    dots.current.set(t.id, el);
-                    // Where it stands right now, before the next frame moves it.
-                    const trip = trips.current.get(t.id);
-                    const p = trip
-                      ? trainPoint(trip.line, tripAt(trip, performance.now()), trip.forward, layoutRef.current)
-                      : trainPoint(t.line, along(t), t.forward, layoutRef.current);
-                    if (p) el.setAttribute("transform", `translate(${p[0].toFixed(1)} ${p[1].toFixed(1)})`);
-                  }}
-                  className="cursor-pointer"
-                  onClick={() => !drag.current?.moved && setSelected(on ? null : t.id)}
-                >
-                  <circle
-                    r={(on ? 1.5 : 1) * layout.train}
-                    fill={t.passengers ? LINE_BY_CODE.get(t.line)!.color : EMPTY_TRAIN}
-                    stroke="var(--foreground)"
-                    strokeWidth={on ? 2.5 : 1.5}
-                  />
-                  <title>
-                    {t.passengers
-                      ? `${LINE_BY_CODE.get(t.line)!.name} line to ${t.destination ?? "?"}, ${t.cars} cars`
-                      : `No passengers, ${t.cars} cars`}
-                  </title>
-                </g>
-              );
-            })}
-          </g>
-        </svg>
-        {picked && (
-          <div className="absolute bottom-2 left-2 rounded border border-line bg-background/95 px-3 py-2 text-sm">
-            <span
-              className="mr-2 inline-block size-2.5 rounded-full"
-              style={{ background: picked.passengers ? LINE_BY_CODE.get(picked.line)!.color : EMPTY_TRAIN }}
-            />
-            {picked.passengers
-              ? `${LINE_BY_CODE.get(picked.line)!.name} line to ${picked.destination ?? "?"}`
-              : `No passengers (on ${LINE_BY_CODE.get(picked.line)!.name} line track)`}{" "}
-            · {picked.cars} cars · train {picked.number}
-            <div className="text-muted">{status(picked)}</div>
-          </div>
-        )}
-      </div>
-
-      <div className="flex flex-wrap items-center gap-x-4 gap-y-1 text-sm text-muted">
-        {error === "no-key" ? (
-          <span>Live trains show up once the WMATA key is connected.</span>
-        ) : error === "budget" ? (
-          <span>Pausing for a moment to stay under WMATA&apos;s call limit; trying again.</span>
-        ) : error ? (
-          <span>WMATA isn&apos;t answering right now; trying again.</span>
-        ) : (
-          <>
-            {counts.map(({ line, n }) => (
-              <span key={line.code} className="flex items-center gap-1.5 tabular-nums">
-                <span className="inline-block size-2.5 rounded-full" style={{ background: line.color }} />
-                {line.name} {n}
-              </span>
-            ))}
-            <span className="flex items-center gap-1.5 tabular-nums">
-              <span className="inline-block size-2.5 rounded-full" style={{ background: EMPTY_TRAIN }} />
-              No passengers {empty}
-            </span>
-            {updated && <Updated at={updated} />}
-          </>
-        )}
-      </div>
+      {picked && (
+        <div className="absolute bottom-3 left-3 rounded border border-line bg-background/95 px-3 py-2 text-sm">
+          <span
+            className="mr-2 inline-block size-2.5 rounded-full"
+            style={{ background: picked.passengers ? LINE_BY_CODE.get(picked.line)!.color : EMPTY_TRAIN }}
+          />
+          {picked.passengers
+            ? `${LINE_BY_CODE.get(picked.line)!.name} line to ${picked.destination ?? "?"}`
+            : `No passengers (on ${LINE_BY_CODE.get(picked.line)!.name} line track)`}{" "}
+          · {picked.cars} cars · train {picked.number}
+          <div className="text-muted">{status(picked)}</div>
+        </div>
+      )}
     </div>
   );
 }
