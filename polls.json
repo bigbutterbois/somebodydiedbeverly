@@ -13684,6 +13684,18 @@
   "source": "https://en.wikipedia.org/wiki/2026_United_States_Senate_election_in_Kansas"
  },
  {
+  "state": "KS",
+  "pollster": "InsiderAdvantage",
+  "sponsor_party": "R",
+  "end_date": "2026-10-14",
+  "n": 1200,
+  "population": "LV",
+  "rep": 48.0,
+  "opp": 47.0,
+  "others": [],
+  "source": "https://en.wikipedia.org/wiki/2026_United_States_Senate_election_in_Kansas"
+ },
+ {
   "state": "KY",
   "pollster": "Public Policy Polling",
   "sponsor_party": "D",
@@ -14265,6 +14277,18 @@
   "sponsor_party": null,
   "end_date": "2026-10-11",
   "n": 500,
+  "population": "LV",
+  "rep": 47.0,
+  "opp": 49.0,
+  "others": [],
+  "source": "https://en.wikipedia.org/wiki/2026_United_States_Senate_election_in_Maine"
+ },
+ {
+  "state": "ME",
+  "pollster": "InsiderAdvantage",
+  "sponsor_party": "R",
+  "end_date": "2026-10-14",
+  "n": 1200,
   "population": "LV",
   "rep": 47.0,
   "opp": 49.0,
@@ -14933,6 +14957,18 @@
  },
  {
   "state": "MI",
+  "pollster": "The Tyson Group",
+  "sponsor_party": null,
+  "end_date": "2026-10-08",
+  "n": 600,
+  "population": "LV",
+  "rep": 46.0,
+  "opp": 44.0,
+  "others": [],
+  "source": "https://en.wikipedia.org/wiki/2026_United_States_Senate_election_in_Michigan"
+ },
+ {
+  "state": "MI",
   "pollster": "Wedgewood Polls",
   "sponsor_party": null,
   "end_date": "2026-10-09",
@@ -15526,7 +15562,7 @@
  {
   "state": "MT",
   "pollster": "Peak Insights",
-  "sponsor_party": null,
+  "sponsor_party": "R",
   "end_date": "2026-08-25",
   "n": 600,
   "population": "LV",
@@ -15540,6 +15576,20 @@
  {
   "state": "MT",
   "pollster": "Rutgers University Eagleton Institute of Politics",
+  "sponsor_party": null,
+  "end_date": "2026-09-07",
+  "n": 845,
+  "population": "RV",
+  "rep": 38.0,
+  "opp": 30.0,
+  "others": [
+   16.0
+  ],
+  "source": "https://en.wikipedia.org/wiki/2026_United_States_Senate_election_in_Montana"
+ },
+ {
+  "state": "MT",
+  "pollster": "Rutgers-Eagleton",
   "sponsor_party": null,
   "end_date": "2026-09-07",
   "n": 845,
@@ -15581,7 +15631,7 @@
  },
  {
   "state": "MT",
-  "pollster": "American Pulse Research & Polling/KULR-TV",
+  "pollster": "American Pulse Research",
   "sponsor_party": null,
   "end_date": "2026-09-24",
   "n": 604,
@@ -15591,8 +15641,21 @@
   "others": [
    19.0
   ],
-  "source": "https://www.montanarightnow.com/elections/montana-senate-race-kurt-alme-tops-bodnar-and-bankhead-in-new-poll-findings/article_cd8401fb-0470-492c-a53a-c7dfe39552ff.html",
-  "feed": "votehub"
+  "source": "https://en.wikipedia.org/wiki/2026_United_States_Senate_election_in_Montana"
+ },
+ {
+  "state": "MT",
+  "pollster": "Concord Public Opinion Partners",
+  "sponsor_party": null,
+  "end_date": "2026-10-08",
+  "n": 405,
+  "population": "LV",
+  "rep": 35.0,
+  "opp": 37.0,
+  "others": [
+   13.0
+  ],
+  "source": "https://en.wikipedia.org/wiki/2026_United_States_Senate_election_in_Montana"
  },
  {
   "state": "MT-01",
@@ -17093,6 +17156,18 @@
   "population": "LV",
   "rep": 44.0,
   "opp": 48.0,
+  "others": [],
+  "source": "https://en.wikipedia.org/wiki/2026_United_States_House_of_Representatives_elections_in_New_Mexico"
+ },
+ {
+  "state": "NM-03",
+  "pollster": "Research & Polling",
+  "sponsor_party": null,
+  "end_date": "2026-10-09",
+  "n": 362,
+  "population": "LV",
+  "rep": 39.0,
+  "opp": 53.0,
   "others": [],
   "source": "https://en.wikipedia.org/wiki/2026_United_States_House_of_Representatives_elections_in_New_Mexico"
  },
@@ -19099,6 +19174,30 @@
   "population": "LV",
   "rep": 47.0,
   "opp": 47.0,
+  "others": [],
+  "source": "https://en.wikipedia.org/wiki/2026_United_States_Senate_election_in_Texas"
+ },
+ {
+  "state": "TX",
+  "pollster": "ActiVote",
+  "sponsor_party": null,
+  "end_date": "2026-10-14",
+  "n": 400,
+  "population": "LV",
+  "rep": 48.0,
+  "opp": 52.0,
+  "others": [],
+  "source": "https://en.wikipedia.org/wiki/2026_United_States_Senate_election_in_Texas"
+ },
+ {
+  "state": "TX",
+  "pollster": "InsiderAdvantage",
+  "sponsor_party": "R",
+  "end_date": "2026-10-14",
+  "n": 1200,
+  "population": "LV",
+  "rep": 49.0,
+  "opp": 48.0,
   "others": [],
   "source": "https://en.wikipedia.org/wiki/2026_United_States_Senate_election_in_Texas"
  },
