@@ -193,6 +193,19 @@
   "feed": "votehub"
  },
  {
+  "state": "AK",
+  "pollster": "Public Policy Polling",
+  "sponsor_party": "D",
+  "end_date": "2026-10-15",
+  "n": 578,
+  "population": "RV",
+  "rep": 47.0,
+  "opp": 48.0,
+  "others": [],
+  "source": "https://x.com/AndrewSolender/status/2110867168892014803",
+  "feed": "votehub"
+ },
+ {
   "state": "AL",
   "pollster": "yes. every kid.",
   "sponsor_party": null,
@@ -12100,6 +12113,18 @@
   "source": "https://en.wikipedia.org/wiki/2026_United_States_Senate_election_in_Arkansas"
  },
  {
+  "state": "AR",
+  "pollster": "Hendrix College",
+  "sponsor_party": null,
+  "end_date": "2026-10-13",
+  "n": 709,
+  "population": "LV",
+  "rep": 50.0,
+  "opp": 41.0,
+  "others": [],
+  "source": "https://en.wikipedia.org/wiki/2026_United_States_Senate_election_in_Arkansas"
+ },
+ {
   "state": "AR-02",
   "pollster": "2040 Strategy Group",
   "sponsor_party": "D",
@@ -14885,6 +14910,18 @@
  },
  {
   "state": "MI",
+  "pollster": "The Tyson Group",
+  "sponsor_party": "R",
+  "end_date": "2026-09-27",
+  "n": 600,
+  "population": "LV",
+  "rep": 43.0,
+  "opp": 44.0,
+  "others": [],
+  "source": "https://en.wikipedia.org/wiki/2026_United_States_Senate_election_in_Michigan"
+ },
+ {
+  "state": "MI",
   "pollster": "Beacon Research (D)/ Shaw & Co. Research",
   "sponsor_party": "D",
   "end_date": "2026-09-28",
@@ -14958,7 +14995,7 @@
  {
   "state": "MI",
   "pollster": "The Tyson Group",
-  "sponsor_party": null,
+  "sponsor_party": "R",
   "end_date": "2026-10-08",
   "n": 600,
   "population": "LV",
@@ -14988,6 +15025,18 @@
   "population": "LV",
   "rep": 46.0,
   "opp": 48.0,
+  "others": [],
+  "source": "https://en.wikipedia.org/wiki/2026_United_States_Senate_election_in_Michigan"
+ },
+ {
+  "state": "MI",
+  "pollster": "Rasmussen Reports",
+  "sponsor_party": "R",
+  "end_date": "2026-10-14",
+  "n": 798,
+  "population": "LV",
+  "rep": 44.0,
+  "opp": 46.0,
   "others": [],
   "source": "https://en.wikipedia.org/wiki/2026_United_States_Senate_election_in_Michigan"
  },
@@ -15654,6 +15703,20 @@
   "opp": 37.0,
   "others": [
    13.0
+  ],
+  "source": "https://en.wikipedia.org/wiki/2026_United_States_Senate_election_in_Montana"
+ },
+ {
+  "state": "MT",
+  "pollster": "Peak Insights",
+  "sponsor_party": "R",
+  "end_date": "2026-10-12",
+  "n": 500,
+  "population": "LV",
+  "rep": 44.0,
+  "opp": 29.0,
+  "others": [
+   12.0
   ],
   "source": "https://en.wikipedia.org/wiki/2026_United_States_Senate_election_in_Montana"
  },
@@ -17784,6 +17847,18 @@
   "source": "https://en.wikipedia.org/wiki/2026_United_States_Senate_special_election_in_Ohio"
  },
  {
+  "state": "OH",
+  "pollster": "Bowling Green State University/YouGov",
+  "sponsor_party": null,
+  "end_date": "2026-10-09",
+  "n": 1000,
+  "population": "LV",
+  "rep": 42.0,
+  "opp": 48.0,
+  "others": [],
+  "source": "https://en.wikipedia.org/wiki/2026_United_States_Senate_special_election_in_Ohio"
+ },
+ {
   "state": "OH-01",
   "pollster": "Quantus Insights",
   "sponsor_party": null,
@@ -17792,6 +17867,18 @@
   "population": "LV",
   "rep": 43.0,
   "opp": 47.0,
+  "others": [],
+  "source": "https://en.wikipedia.org/wiki/2026_United_States_House_of_Representatives_elections_in_Ohio"
+ },
+ {
+  "state": "OH-01",
+  "pollster": "Torchlight Strategies",
+  "sponsor_party": null,
+  "end_date": "2026-10-02",
+  "n": 400,
+  "population": "LV",
+  "rep": 44.0,
+  "opp": 46.0,
   "others": [],
   "source": "https://en.wikipedia.org/wiki/2026_United_States_House_of_Representatives_elections_in_Ohio"
  },
@@ -18490,6 +18577,18 @@
   "population": "LV",
   "rep": 53.0,
   "opp": 47.0,
+  "others": [],
+  "source": "https://en.wikipedia.org/wiki/2026_United_States_Senate_election_in_South_Dakota"
+ },
+ {
+  "state": "SD",
+  "pollster": "Concord Public Opinion Partners",
+  "sponsor_party": "D",
+  "end_date": "2026-10-08",
+  "n": 400,
+  "population": "LV",
+  "rep": 42.0,
+  "opp": 43.0,
   "others": [],
   "source": "https://en.wikipedia.org/wiki/2026_United_States_Senate_election_in_South_Dakota"
  },
@@ -19408,38 +19507,41 @@
  {
   "state": "US",
   "pollster": "Cygnal",
-  "sponsor_party": "R",
+  "sponsor_party": null,
   "end_date": "2024-12-11",
   "n": 1500,
   "population": "LV",
-  "opp": 45.0,
-  "rep": 48.0,
+  "rep": 48.4,
+  "opp": 44.6,
   "others": [],
-  "source": "https://en.wikipedia.org/wiki/2026_United_States_elections"
+  "source": "https://www.cygn.al/poll-musk-most-effective-trump-surrogate-as-voters-rally-behind-doge-deportations-and-congressional-republicans/",
+  "feed": "votehub"
  },
  {
   "state": "US",
   "pollster": "McLaughlin & Associates",
-  "sponsor_party": "R",
+  "sponsor_party": null,
   "end_date": "2024-12-16",
   "n": 1000,
   "population": "LV",
-  "opp": 42.0,
   "rep": 47.0,
+  "opp": 42.0,
   "others": [],
-  "source": "https://en.wikipedia.org/wiki/2026_United_States_elections"
+  "source": "https://mclaughlinonline.com/2024/12/18/ma-poll-national-monthly-december-2024/",
+  "feed": "votehub"
  },
  {
   "state": "US",
   "pollster": "Cygnal",
-  "sponsor_party": "R",
+  "sponsor_party": null,
   "end_date": "2025-01-12",
   "n": 1500,
   "population": "LV",
-  "opp": 45.0,
-  "rep": 47.0,
+  "rep": 46.8,
+  "opp": 44.6,
   "others": [],
-  "source": "https://en.wikipedia.org/wiki/2026_United_States_elections"
+  "source": "https://www.cygn.al/voters-back-kingmaker-trumps-policies-on-economy-energy-and-health/",
+  "feed": "votehub"
  },
  {
   "state": "US",
@@ -19517,26 +19619,28 @@
  {
   "state": "US",
   "pollster": "Cygnal",
-  "sponsor_party": "R",
+  "sponsor_party": null,
   "end_date": "2025-02-05",
   "n": 1500,
   "population": "LV",
-  "opp": 46.0,
-  "rep": 47.0,
+  "rep": 47.2,
+  "opp": 46.2,
   "others": [],
-  "source": "https://en.wikipedia.org/wiki/2026_United_States_elections"
+  "source": "https://www.cygn.al/poll-trump-winning-over-black-men-dei-skeptics-and-border-hawks-as-democrats-lose-ground/",
+  "feed": "votehub"
  },
  {
   "state": "US",
   "pollster": "Clarity Campaign Labs",
-  "sponsor_party": "D",
+  "sponsor_party": null,
   "end_date": "2025-02-06",
   "n": 1102,
-  "population": "V",
-  "opp": 45.0,
+  "population": "RV",
   "rep": 44.0,
+  "opp": 45.0,
   "others": [],
-  "source": "https://en.wikipedia.org/wiki/2026_United_States_elections"
+  "source": "https://static1.squarespace.com/static/61ae8d5e55be5c7314b4c83a/t/67aa57a7976e415c4d212706/1739216809584/Clarity+Omnibus+Overview+-+Jan_Feb+2025.pdf",
+  "feed": "votehub"
  },
  {
   "state": "US",
@@ -19569,10 +19673,11 @@
   "end_date": "2025-02-13",
   "n": 1010,
   "population": "LV",
-  "opp": 46.0,
   "rep": 47.0,
+  "opp": 46.0,
   "others": [],
-  "source": "https://en.wikipedia.org/wiki/2026_United_States_elections"
+  "source": "https://echeloninsights.com/in-the-news/feb-2025-verified-voter-omnibus-2-2/",
+  "feed": "votehub"
  },
  {
   "state": "US",
@@ -19581,10 +19686,11 @@
   "end_date": "2025-02-17",
   "n": 2063,
   "population": "LV",
-  "opp": 44.0,
   "rep": 46.0,
+  "opp": 44.0,
   "others": [],
-  "source": "https://en.wikipedia.org/wiki/2026_United_States_elections"
+  "source": "https://coefficient.org/doge-part-2/",
+  "feed": "votehub"
  },
  {
   "state": "US",
@@ -19643,22 +19749,24 @@
   "end_date": "2025-03-03",
   "n": 1000,
   "population": "RV",
-  "opp": 44.0,
-  "rep": 41.0,
+  "rep": 41.4,
+  "opp": 44.4,
   "others": [],
-  "source": "https://en.wikipedia.org/wiki/2026_United_States_elections"
+  "source": "https://emersoncollegepolling.com/march-2025-national-poll/",
+  "feed": "votehub"
  },
  {
   "state": "US",
   "pollster": "Cygnal",
-  "sponsor_party": "R",
+  "sponsor_party": null,
   "end_date": "2025-03-05",
   "n": 1500,
   "population": "LV",
-  "opp": 47.0,
-  "rep": 46.0,
+  "rep": 45.9,
+  "opp": 47.4,
   "others": [],
-  "source": "https://en.wikipedia.org/wiki/2026_United_States_elections"
+  "source": "https://www.cygn.al/wp-content/uploads/2025/03/22915-Cygnal-National-NVT-Mar25-Deck-Public.pdf",
+  "feed": "votehub"
  },
  {
   "state": "US",
@@ -19676,14 +19784,15 @@
  {
   "state": "US",
   "pollster": "Clarity Campaign Labs",
-  "sponsor_party": "D",
+  "sponsor_party": null,
   "end_date": "2025-03-09",
   "n": 1036,
-  "population": "V",
-  "opp": 46.0,
+  "population": "RV",
   "rep": 44.0,
+  "opp": 46.0,
   "others": [],
-  "source": "https://en.wikipedia.org/wiki/2026_United_States_elections"
+  "source": "https://static1.squarespace.com/static/61ae8d5e55be5c7314b4c83a/t/67d0921f11ba8d57a17670a9/1741722147070/Clarity+Omnibus+Overview+-+March+2025+PUBLIC.pdf",
+  "feed": "votehub"
  },
  {
   "state": "US",
@@ -19704,34 +19813,37 @@
   "end_date": "2025-03-13",
   "n": 1007,
   "population": "LV",
-  "opp": 46.0,
   "rep": 47.0,
+  "opp": 46.0,
   "others": [],
-  "source": "https://en.wikipedia.org/wiki/2026_United_States_elections"
+  "source": "https://echelonin.wpenginepowered.com/wp-content/uploads/March-2025-Voter-Omnibus-Topline-External.pdf",
+  "feed": "votehub"
  },
  {
   "state": "US",
   "pollster": "Quantus Insights",
-  "sponsor_party": "R",
+  "sponsor_party": null,
   "end_date": "2025-03-27",
   "n": 1000,
   "population": "RV",
-  "opp": 45.0,
-  "rep": 46.0,
+  "rep": 46.3,
+  "opp": 45.4,
   "others": [],
-  "source": "https://en.wikipedia.org/wiki/2026_United_States_elections"
+  "source": "https://quantusinsights.org/f/trump%E2%80%99s-standing-steadies-but-crosscurrents-remain-ahead-of-2026",
+  "feed": "votehub"
  },
  {
   "state": "US",
   "pollster": "Cygnal",
-  "sponsor_party": "R",
+  "sponsor_party": null,
   "end_date": "2025-04-03",
   "n": 1500,
   "population": "LV",
-  "opp": 48.0,
   "rep": 47.0,
+  "opp": 48.0,
   "others": [],
-  "source": "https://en.wikipedia.org/wiki/2026_United_States_elections"
+  "source": "https://www.cygn.al/poll-democrats-continue-to-struggle-as-trump-maintains-strong-approval-even-in-light-of-tariffs/",
+  "feed": "votehub"
  },
  {
   "state": "US",
@@ -19937,10 +20049,11 @@
   "end_date": "2025-05-09",
   "n": 1462,
   "population": "LV",
-  "opp": 45.0,
   "rep": 42.0,
+  "opp": 45.0,
   "others": [],
-  "source": "https://en.wikipedia.org/wiki/2026_United_States_elections"
+  "source": "https://coefficient.org/national-approval-study/",
+  "feed": "votehub"
  },
  {
   "state": "US",
@@ -19949,10 +20062,11 @@
   "end_date": "2025-05-12",
   "n": 1000,
   "population": "LV",
-  "opp": 47.0,
   "rep": 48.0,
+  "opp": 47.0,
   "others": [],
-  "source": "https://en.wikipedia.org/wiki/2026_United_States_elections"
+  "source": "https://echeloninsights.com/in-the-news/may-2025-verified-voter-omnibus-2-2-2-2-2/",
+  "feed": "votehub"
  },
  {
   "state": "US",
@@ -19981,14 +20095,15 @@
  {
   "state": "US",
   "pollster": "McLaughlin & Associates",
-  "sponsor_party": "R",
+  "sponsor_party": null,
   "end_date": "2025-05-26",
   "n": 1000,
-  "population": "LV",
-  "opp": 43.0,
+  "population": "RV",
   "rep": 47.0,
+  "opp": 43.0,
   "others": [],
-  "source": "https://en.wikipedia.org/wiki/2026_United_States_elections"
+  "source": "https://mclaughlinonline.com/pols/wp-content/uploads/2025/05/National-May-Presentation-RELEASE-05-27-25.pdf",
+  "feed": "votehub"
  },
  {
   "state": "US",
@@ -19996,11 +20111,12 @@
   "sponsor_party": null,
   "end_date": "2025-05-27",
   "n": 3469,
-  "population": "A",
-  "opp": 51.0,
-  "rep": 42.0,
+  "population": "RV",
+  "rep": 41.7,
+  "opp": 50.9,
   "others": [],
-  "source": "https://en.wikipedia.org/wiki/2026_United_States_elections"
+  "source": "https://atlasintel.org/poll/usa-national-2025-05-30",
+  "feed": "votehub"
  },
  {
   "state": "US",
@@ -20106,14 +20222,15 @@
  {
   "state": "US",
   "pollster": "Clarity Campaign Labs",
-  "sponsor_party": "D",
+  "sponsor_party": null,
   "end_date": "2025-06-14",
   "n": 1000,
-  "population": "V",
-  "opp": 50.0,
+  "population": "RV",
   "rep": 45.0,
+  "opp": 50.0,
   "others": [],
-  "source": "https://en.wikipedia.org/wiki/2026_United_States_elections"
+  "source": "https://static1.squarespace.com/static/61ae8d5e55be5c7314b4c83a/t/6852fc5a3ac4c05449fc450e/1750269023826/Clarity+Omnibus+Overview+-+June+2025+%5BPUBLIC%5D.pdf",
+  "feed": "votehub"
  },
  {
   "state": "US",
@@ -20147,10 +20264,11 @@
   "end_date": "2025-06-16",
   "n": 1035,
   "population": "LV",
-  "opp": 46.0,
   "rep": 46.0,
+  "opp": 46.0,
   "others": [],
-  "source": "https://en.wikipedia.org/wiki/2026_United_States_elections"
+  "source": "https://coefficient.org/wp-content/uploads/2025/06/OBB-questions-and-methodology.pdf",
+  "feed": "votehub"
  },
  {
   "state": "US",
@@ -20167,26 +20285,28 @@
  {
   "state": "US",
   "pollster": "Cygnal",
-  "sponsor_party": "R",
+  "sponsor_party": null,
   "end_date": "2025-06-21",
   "n": 800,
   "population": "LV",
-  "opp": 48.0,
   "rep": 46.0,
+  "opp": 48.4,
   "others": [],
-  "source": "https://en.wikipedia.org/wiki/2026_United_States_elections"
+  "source": "https://www.cygn.al/wp-content/uploads/2025/06/Cygnal-National-Bitcoin-Policy-Summit-Deck.pdf",
+  "feed": "votehub"
  },
  {
   "state": "US",
   "pollster": "American Pulse Research & Polling",
-  "sponsor_party": "R",
+  "sponsor_party": null,
   "end_date": "2025-06-25",
   "n": 633,
   "population": "RV",
-  "opp": 47.0,
-  "rep": 42.0,
+  "rep": 42.4,
+  "opp": 46.6,
   "others": [],
-  "source": "https://en.wikipedia.org/wiki/2026_United_States_elections"
+  "source": "https://s3.amazonaws.com/kajabi-storefronts-production/file-uploads/sites/24373/themes/2158162839/downloads/21cb32-c88-2208-3bd4-047cb00ebdd_250626_American_Pulse_-_Iran_the_Middle_East_Survey_-_Topline_Report.pdf",
+  "feed": "votehub"
  },
  {
   "state": "US",
@@ -20194,11 +20314,12 @@
   "sponsor_party": null,
   "end_date": "2025-06-25",
   "n": 1000,
-  "population": "LV",
-  "opp": 43.0,
-  "rep": 40.0,
+  "population": "RV",
+  "rep": 39.8,
+  "opp": 42.5,
   "others": [],
-  "source": "https://en.wikipedia.org/wiki/2026_United_States_elections"
+  "source": "https://docs.google.com/spreadsheets/d/1cwlzwZ55-BHCkCuixS1F8QfAQItDbGpL/edit?gid=47272069#gid=47272069",
+  "feed": "votehub"
  },
  {
   "state": "US",
@@ -20216,14 +20337,15 @@
  {
   "state": "US",
   "pollster": "Cygnal",
-  "sponsor_party": "R",
+  "sponsor_party": null,
   "end_date": "2025-07-02",
   "n": 1500,
   "population": "LV",
-  "opp": 47.0,
-  "rep": 46.0,
+  "rep": 45.7,
+  "opp": 47.1,
   "others": [],
-  "source": "https://en.wikipedia.org/wiki/2026_United_States_elections"
+  "source": "https://www.cygn.al/wp-content/uploads/2025/07/Cygnal-National-NVT-Jul25-Deck-Public.pdf",
+  "feed": "votehub"
  },
  {
   "state": "US",
@@ -20244,22 +20366,24 @@
   "end_date": "2025-07-10",
   "n": 862,
   "population": "RV",
-  "opp": 48.0,
-  "rep": 44.0,
+  "rep": 44.4,
+  "opp": 47.7,
   "others": [],
-  "source": "https://en.wikipedia.org/wiki/2026_United_States_elections"
+  "source": "https://drive.google.com/file/d/1rWAD3mtcrfDv02JzCYf9LLJmRebMkq85/view?pli=1",
+  "feed": "votehub"
  },
  {
   "state": "US",
   "pollster": "Big Data Poll",
-  "sponsor_party": "R",
+  "sponsor_party": null,
   "end_date": "2025-07-14",
   "n": 3022,
   "population": "RV",
-  "opp": 42.0,
-  "rep": 41.0,
+  "rep": 41.1,
+  "opp": 42.3,
   "others": [],
-  "source": "https://en.wikipedia.org/wiki/2026_United_States_elections"
+  "source": "https://application.marketsight.com/app/ItemView.aspx?SharedFor=public%40bigdatapoll.com&SharedBy=34090&id=3365ed0e-4357-4944-a962-b31b01623800",
+  "feed": "votehub"
  },
  {
   "state": "US",
@@ -20268,22 +20392,24 @@
   "end_date": "2025-07-14",
   "n": 1084,
   "population": "LV",
-  "opp": 47.0,
-  "rep": 48.0,
+  "rep": 47.0,
+  "opp": 48.0,
   "others": [],
-  "source": "https://en.wikipedia.org/wiki/2026_United_States_elections"
+  "source": "https://echelonin.wpenginepowered.com/wp-content/uploads/July-2025-Voter-Omnibus-Topline-External.pdf",
+  "feed": "votehub"
  },
  {
   "state": "US",
   "pollster": "McLaughlin & Associates",
-  "sponsor_party": "R",
+  "sponsor_party": null,
   "end_date": "2025-07-14",
   "n": 1000,
   "population": "LV",
-  "opp": 42.0,
   "rep": 47.0,
+  "opp": 42.0,
   "others": [],
-  "source": "https://en.wikipedia.org/wiki/2026_United_States_elections"
+  "source": "https://mclaughlinonline.com/pols/wp-content/uploads/2025/07/National-July-Presentation-RELEASE-07-15-25.pdf",
+  "feed": "votehub"
  },
  {
   "state": "US",
@@ -20327,12 +20453,13 @@
   "pollster": "AtlasIntel",
   "sponsor_party": null,
   "end_date": "2025-07-18",
-  "n": 1935,
+  "n": 1435,
   "population": "A",
-  "opp": 51.0,
-  "rep": 43.0,
+  "rep": 42.7,
+  "opp": 51.3,
   "others": [],
-  "source": "https://en.wikipedia.org/wiki/2026_United_States_elections"
+  "source": "https://cdn.atlasintel.org/20e36f18-42bd-4a28-85f4-9f623905ba71.pdf?_gl=1*3tf2cu*_ga*Nzg1NTgxMTM2LjE3NTI4ODY1ODc.*_ga_W78QD5CNP1*czE3NTI4ODY1ODckbzEkZzAkdDE3NTI4ODY1OTQkajUzJGwwJGgw",
+  "feed": "votehub"
  },
  {
   "state": "US",
@@ -20459,14 +20586,15 @@
  {
   "state": "US",
   "pollster": "Quantus Insights",
-  "sponsor_party": "R",
+  "sponsor_party": null,
   "end_date": "2025-08-13",
   "n": 1000,
   "population": "RV",
-  "opp": 45.0,
   "rep": 42.0,
+  "opp": 45.0,
   "others": [],
-  "source": "https://en.wikipedia.org/wiki/2026_United_States_elections"
+  "source": "https://drive.google.com/file/d/1p5seXSsPUMcdYt5QC_x_ViSrSEWF261z/view?usp=sharing",
+  "feed": "votehub"
  },
  {
   "state": "US",
@@ -20488,10 +20616,11 @@
   "end_date": "2025-08-18",
   "n": 1057,
   "population": "LV",
-  "opp": 47.0,
   "rep": 46.0,
+  "opp": 47.0,
   "others": [],
-  "source": "https://en.wikipedia.org/wiki/2026_United_States_elections"
+  "source": "https://echeloninsights.com/in-the-news/august-2025-verified-voter-omnibus/",
+  "feed": "votehub"
  },
  {
   "state": "US",
@@ -20584,34 +20713,24 @@
   "end_date": "2025-08-26",
   "n": 1000,
   "population": "RV",
-  "opp": 43.0,
   "rep": 43.0,
+  "opp": 43.3,
   "others": [],
-  "source": "https://en.wikipedia.org/wiki/2026_United_States_elections"
+  "source": "https://docs.google.com/spreadsheets/d/11Pmwdv5G5pCF8yTyrQo6e2oIdwHB97rD/edit?usp=sharing&ouid=107857247170786005927&rtpof=true&sd=true",
+  "feed": "votehub"
  },
  {
   "state": "US",
   "pollster": "McLaughlin & Associates",
-  "sponsor_party": "R",
+  "sponsor_party": null,
   "end_date": "2025-08-26",
   "n": 1000,
-  "population": "RV",
-  "opp": 45.0,
+  "population": "LV",
   "rep": 47.0,
-  "others": [],
-  "source": "https://en.wikipedia.org/wiki/2026_United_States_elections"
- },
- {
-  "state": "US",
-  "pollster": "Morning Consult",
-  "sponsor_party": null,
-  "end_date": "2025-08-31",
-  "n": 2202,
-  "population": "RV",
   "opp": 45.0,
-  "rep": 41.0,
   "others": [],
-  "source": "https://en.wikipedia.org/wiki/2026_United_States_elections"
+  "source": "https://mclaughlinonline.com/pols/wp-content/uploads/2025/09/National-August-Presentation-RELEASE-8-27-25.pdf",
+  "feed": "votehub"
  },
  {
   "state": "US",
@@ -20678,14 +20797,15 @@
  {
   "state": "US",
   "pollster": "Cygnal",
-  "sponsor_party": "R",
+  "sponsor_party": null,
   "end_date": "2025-09-03",
   "n": 1500,
   "population": "LV",
-  "opp": 48.0,
-  "rep": 45.0,
+  "rep": 45.2,
+  "opp": 47.6,
   "others": [],
-  "source": "https://en.wikipedia.org/wiki/2026_United_States_elections"
+  "source": "https://www.cygn.al/wp-content/uploads/2025/09/23260-Cygnal-National-Sep25-NVT-Deck-Public.pdf",
+  "feed": "votehub"
  },
  {
   "state": "US",
@@ -20714,14 +20834,15 @@
  {
   "state": "US",
   "pollster": "Clarity Campaign Labs",
-  "sponsor_party": "D",
+  "sponsor_party": null,
   "end_date": "2025-09-11",
   "n": 1001,
   "population": "RV",
-  "opp": 50.0,
   "rep": 44.0,
+  "opp": 50.0,
   "others": [],
-  "source": "https://en.wikipedia.org/wiki/2026_United_States_elections"
+  "source": "https://www.claritycampaigns.com/clarity-omnibus-september-2025",
+  "feed": "votehub"
  },
  {
   "state": "US",
@@ -20766,10 +20887,11 @@
   "end_date": "2025-09-16",
   "n": 1066,
   "population": "A",
-  "opp": 52.0,
-  "rep": 44.0,
+  "rep": 43.5,
+  "opp": 51.8,
   "others": [],
-  "source": "https://en.wikipedia.org/wiki/2026_United_States_elections"
+  "source": "https://cdn.atlasintel.org/e734ffb6-e175-4467-b745-bd32bf1aca9a.pdf",
+  "feed": "votehub"
  },
  {
   "state": "US",
@@ -20802,22 +20924,24 @@
   "end_date": "2025-09-22",
   "n": 1071,
   "population": "LV",
-  "opp": 47.0,
   "rep": 46.0,
+  "opp": 47.0,
   "others": [],
-  "source": "https://en.wikipedia.org/wiki/2026_United_States_elections"
+  "source": "https://echelonin.wpenginepowered.com/wp-content/uploads/September-2025-Voter-Omnibus-Topline-External-1.pdf",
+  "feed": "votehub"
  },
  {
   "state": "US",
   "pollster": "McLaughlin & Associates",
-  "sponsor_party": "R",
+  "sponsor_party": null,
   "end_date": "2025-09-22",
   "n": 1000,
-  "population": "RV",
-  "opp": 41.0,
+  "population": "LV",
   "rep": 47.0,
+  "opp": 41.0,
   "others": [],
-  "source": "https://en.wikipedia.org/wiki/2026_United_States_elections"
+  "source": "https://mclaughlinonline.com/pols/wp-content/uploads/2025/09/National-September-Presentation-RELEASE-9-24-25-1.pdf",
+  "feed": "votehub"
  },
  {
   "state": "US",
@@ -20881,18 +21005,6 @@
  },
  {
   "state": "US",
-  "pollster": "Morning Consult",
-  "sponsor_party": null,
-  "end_date": "2025-10-05",
-  "n": 2200,
-  "population": "RV",
-  "opp": 46.0,
-  "rep": 43.0,
-  "others": [],
-  "source": "https://en.wikipedia.org/wiki/2026_United_States_elections"
- },
- {
-  "state": "US",
   "pollster": "Noble Predictive Insights/ The Center Square",
   "sponsor_party": null,
   "end_date": "2025-10-06",
@@ -20912,18 +21024,6 @@
   "population": "RV",
   "opp": 44.0,
   "rep": 39.0,
-  "others": [],
-  "source": "https://en.wikipedia.org/wiki/2026_United_States_elections"
- },
- {
-  "state": "US",
-  "pollster": "Cygnal",
-  "sponsor_party": "R",
-  "end_date": "2025-10-08",
-  "n": 1500,
-  "population": "LV",
-  "opp": 48.0,
-  "rep": 45.0,
   "others": [],
   "source": "https://en.wikipedia.org/wiki/2026_United_States_elections"
  },
@@ -20965,6 +21065,19 @@
  },
  {
   "state": "US",
+  "pollster": "Morning Consult",
+  "sponsor_party": null,
+  "end_date": "2025-10-12",
+  "n": 19675,
+  "population": "RV",
+  "rep": 43.0,
+  "opp": 44.0,
+  "others": [],
+  "source": "https://pro.morningconsult.com/trackers/2026-midterm-elections-tracker-generic-ballot#10-12-2025",
+  "feed": "votehub"
+ },
+ {
+  "state": "US",
   "pollster": "The Economist/YouGov",
   "sponsor_party": null,
   "end_date": "2025-10-13",
@@ -20982,10 +21095,11 @@
   "end_date": "2025-10-14",
   "n": 1000,
   "population": "RV",
-  "opp": 44.0,
-  "rep": 43.0,
+  "rep": 42.5,
+  "opp": 43.9,
   "others": [],
-  "source": "https://en.wikipedia.org/wiki/2026_United_States_elections"
+  "source": "https://docs.google.com/spreadsheets/d/1OH0jUjsnk6GYnBZgR648Qenu3UpslqAW/edit?gid=329128904#gid=329128904",
+  "feed": "votehub"
  },
  {
   "state": "US",
@@ -21007,10 +21121,24 @@
   "end_date": "2025-10-16",
   "n": 1530,
   "population": "RV",
-  "opp": 51.0,
   "rep": 49.0,
+  "opp": 51.0,
   "others": [],
-  "source": "https://en.wikipedia.org/wiki/2026_United_States_elections"
+  "source": "https://www.theargumentmag.com/p/the-immigration-problem-is-a-crime",
+  "feed": "votehub"
+ },
+ {
+  "state": "US",
+  "pollster": "The Winston Group/Winning the Issues",
+  "sponsor_party": "R",
+  "end_date": "2025-10-16",
+  "n": 1000,
+  "population": "RV",
+  "rep": 43.0,
+  "opp": 47.0,
+  "others": [],
+  "source": "https://www.winningtheissues.org/wp-content/uploads/2026/01/October-2025-WTI-National-Survey.pdf",
+  "feed": "votehub"
  },
  {
   "state": "US",
@@ -21019,10 +21147,11 @@
   "end_date": "2025-10-19",
   "n": 2200,
   "population": "RV",
-  "opp": 46.0,
   "rep": 43.0,
+  "opp": 46.0,
   "others": [],
-  "source": "https://en.wikipedia.org/wiki/2026_United_States_elections"
+  "source": "https://pro.morningconsult.com/trackers/donald-trump-congress-policy-republicans-polling#10-19-2025",
+  "feed": "votehub"
  },
  {
   "state": "US",
@@ -21031,10 +21160,11 @@
   "end_date": "2025-10-20",
   "n": 1010,
   "population": "LV",
-  "opp": 48.0,
   "rep": 46.0,
+  "opp": 48.0,
   "others": [],
-  "source": "https://en.wikipedia.org/wiki/2026_United_States_elections"
+  "source": "https://echelonin.wpenginepowered.com/wp-content/uploads/October-2025-Voter-Omnibus-Topline-External-2.pdf",
+  "feed": "votehub"
  },
  {
   "state": "US",
@@ -21056,10 +21186,11 @@
   "end_date": "2025-10-20",
   "n": 1327,
   "population": "RV",
-  "opp": 50.0,
   "rep": 41.0,
+  "opp": 50.0,
   "others": [],
-  "source": "https://en.wikipedia.org/wiki/2026_United_States_elections"
+  "source": "https://poll.qu.edu/poll-release?releaseid=3938",
+  "feed": "votehub"
  },
  {
   "state": "US",
@@ -21088,26 +21219,54 @@
  {
   "state": "US",
   "pollster": "Clarity Campaign Labs",
-  "sponsor_party": "D",
+  "sponsor_party": null,
   "end_date": "2025-10-23",
   "n": 1047,
   "population": "RV",
-  "opp": 47.0,
   "rep": 46.0,
+  "opp": 47.0,
   "others": [],
-  "source": "https://en.wikipedia.org/wiki/2026_United_States_elections"
+  "source": "https://www.claritycampaigns.com/clarity-omnibus-oct-2025",
+  "feed": "votehub"
+ },
+ {
+  "state": "US",
+  "pollster": "Ipsos/Reuters",
+  "sponsor_party": null,
+  "end_date": "2025-10-26",
+  "n": null,
+  "population": null,
+  "rep": 39.0,
+  "opp": 39.0,
+  "others": [],
+  "source": "https://www.reuters.com/data/which-party-do-americans-want-run-congress-2025-11-05#10-26-2025",
+  "feed": "votehub"
+ },
+ {
+  "state": "US",
+  "pollster": "Manhattan Institute",
+  "sponsor_party": null,
+  "end_date": "2025-10-26",
+  "n": 500,
+  "population": "RV",
+  "rep": 44.0,
+  "opp": 47.0,
+  "others": [],
+  "source": "https://media4.manhattan-institute.org/wp-content/uploads/MI-GOP-Trump-Voters-Toplines-FULL-11.19.pdf",
+  "feed": "votehub"
  },
  {
   "state": "US",
   "pollster": "McLaughlin & Associates",
-  "sponsor_party": "R",
+  "sponsor_party": null,
   "end_date": "2025-10-27",
   "n": 1000,
-  "population": "RV",
-  "opp": 44.0,
+  "population": "LV",
   "rep": 46.0,
+  "opp": 44.0,
   "others": [],
-  "source": "https://en.wikipedia.org/wiki/2026_United_States_elections"
+  "source": "https://mclaughlinonline.com/pols/wp-content/uploads/2025/10/National-October-Presentation-RELEASE.pdf",
+  "feed": "votehub"
  },
  {
   "state": "US",
@@ -21159,18 +21318,6 @@
  },
  {
   "state": "US",
-  "pollster": "Washington Post/ABC News/Ipsos",
-  "sponsor_party": null,
-  "end_date": "2025-10-28",
-  "n": 2203,
-  "population": "RV",
-  "opp": 46.0,
-  "rep": 44.0,
-  "others": [],
-  "source": "https://en.wikipedia.org/wiki/2026_United_States_elections"
- },
- {
-  "state": "US",
   "pollster": "NewsNation/DDHQ",
   "sponsor_party": null,
   "end_date": "2025-10-29",
@@ -21198,12 +21345,13 @@
   "pollster": "CNN/SSRS",
   "sponsor_party": null,
   "end_date": "2025-10-30",
-  "n": 945,
+  "n": 954,
   "population": "RV",
-  "opp": 47.0,
   "rep": 42.0,
+  "opp": 47.0,
   "others": [],
-  "source": "https://en.wikipedia.org/wiki/2026_United_States_elections"
+  "source": "https://www.cnn.com/2025/11/03/politics/cnn-poll-democrats-trump-midterms",
+  "feed": "votehub"
  },
  {
   "state": "US",
@@ -21244,27 +21392,16 @@
  },
  {
   "state": "US",
-  "pollster": "Emerson College",
-  "sponsor_party": null,
-  "end_date": "2025-11-04",
-  "n": 1000,
-  "population": "RV",
-  "opp": 44.0,
-  "rep": 40.0,
-  "others": [],
-  "source": "https://en.wikipedia.org/wiki/2026_United_States_elections"
- },
- {
-  "state": "US",
   "pollster": "Cygnal",
-  "sponsor_party": "R",
+  "sponsor_party": null,
   "end_date": "2025-11-06",
   "n": 1500,
   "population": "LV",
-  "opp": 50.0,
-  "rep": 44.0,
+  "rep": 43.6,
+  "opp": 49.7,
   "others": [],
-  "source": "https://en.wikipedia.org/wiki/2026_United_States_elections"
+  "source": "https://www.cygn.al/wp-content/uploads/2025/11/Cygnal-National-NVT-Nov25-Deck-Public.pdf",
+  "feed": "votehub"
  },
  {
   "state": "US",
@@ -21273,10 +21410,11 @@
   "end_date": "2025-11-09",
   "n": 2201,
   "population": "RV",
-  "opp": 48.0,
   "rep": 43.0,
+  "opp": 48.0,
   "others": [],
-  "source": "https://en.wikipedia.org/wiki/2026_United_States_elections"
+  "source": "https://links.morningconsult.com/s/vb/pML3dxXpq_z0HGPRnIodfYJnCrdA5pv30yFHu8yovGNrkEKsYCrN0zHjzdDyQ6wBWN0YIBIZGjicBqLObQiaEyGGtyGViptcSFlD8X4UtYodgjvUMgKnwSfn3kTdfTsm3qYyj6bgK-k185oLu3OUHtto-3du_st3ktx_3w/Jj-WgYyBcbX2NhKQBSWVc88CaP2QP8XN/14",
+  "feed": "votehub"
  },
  {
   "state": "US",
@@ -21308,24 +21446,26 @@
   "pollster": "Marquette University Law School",
   "sponsor_party": null,
   "end_date": "2025-11-12",
-  "n": 903,
-  "population": "RV",
-  "opp": 49.0,
+  "n": 602,
+  "population": "LV",
   "rep": 44.0,
+  "opp": 53.0,
   "others": [],
-  "source": "https://en.wikipedia.org/wiki/2026_United_States_elections"
+  "source": "https://law.marquette.edu/poll/wp-content/uploads/2025/11/MLSPSC29Toplines_NationalIssues.html",
+  "feed": "votehub"
  },
  {
   "state": "US",
   "pollster": "Quantus Insights",
-  "sponsor_party": "R",
+  "sponsor_party": null,
   "end_date": "2025-11-12",
   "n": 1000,
   "population": "RV",
-  "opp": 44.0,
-  "rep": 39.0,
+  "rep": 39.3,
+  "opp": 43.7,
   "others": [],
-  "source": "https://en.wikipedia.org/wiki/2026_United_States_elections"
+  "source": "https://docs.google.com/spreadsheets/d/1hWBzli7svmD7m4Ew3enKOh6A8FtTDJRaQ-fMniwlXIc/edit?gid=1563426900#gid=1563426900",
+  "feed": "votehub"
  },
  {
   "state": "US",
@@ -21365,27 +21505,29 @@
  },
  {
   "state": "US",
-  "pollster": "Morning Consult",
+  "pollster": "Verasight/Strength In Numbers",
   "sponsor_party": null,
-  "end_date": "2025-11-16",
-  "n": 2200,
+  "end_date": "2025-11-14",
+  "n": 896,
   "population": "RV",
-  "opp": 46.0,
   "rep": 44.0,
+  "opp": 49.0,
   "others": [],
-  "source": "https://en.wikipedia.org/wiki/2026_United_States_elections"
+  "source": "https://www.gelliottmorris.com/p/new-poll-democrats-lead-the-2026",
+  "feed": "votehub"
  },
  {
   "state": "US",
-  "pollster": "Echelon Insights",
+  "pollster": "Morning Consult",
   "sponsor_party": null,
-  "end_date": "2025-11-17",
-  "n": 1051,
-  "population": "LV",
-  "opp": 49.0,
-  "rep": 45.0,
+  "end_date": "2025-11-16",
+  "n": 19675,
+  "population": "RV",
+  "rep": 43.0,
+  "opp": 44.0,
   "others": [],
-  "source": "https://en.wikipedia.org/wiki/2026_United_States_elections"
+  "source": "https://pro.morningconsult.com/trackers/2026-midterm-elections-tracker-generic-ballot#11-16-2025",
+  "feed": "votehub"
  },
  {
   "state": "US",
@@ -21407,10 +21549,11 @@
   "end_date": "2025-11-17",
   "n": null,
   "population": "LV",
-  "opp": 54.0,
-  "rep": 46.0,
+  "rep": 46.2,
+  "opp": 53.8,
   "others": [],
-  "source": "https://en.wikipedia.org/wiki/2026_United_States_elections"
+  "source": "https://www.theargumentmag.com/p/2026-is-looking-terrible-for-republicans",
+  "feed": "votehub"
  },
  {
   "state": "US",
@@ -21451,18 +21594,6 @@
  },
  {
   "state": "US",
-  "pollster": "Morning Consult",
-  "sponsor_party": null,
-  "end_date": "2025-11-23",
-  "n": 2200,
-  "population": "RV",
-  "opp": 45.0,
-  "rep": 43.0,
-  "others": [],
-  "source": "https://en.wikipedia.org/wiki/2026_United_States_elections"
- },
- {
-  "state": "US",
   "pollster": "Rasmussen Reports",
   "sponsor_party": "R",
   "end_date": "2025-11-23",
@@ -21476,14 +21607,15 @@
  {
   "state": "US",
   "pollster": "McLaughlin & Associates",
-  "sponsor_party": "R",
+  "sponsor_party": null,
   "end_date": "2025-11-24",
   "n": 1000,
-  "population": "RV",
-  "opp": 45.0,
+  "population": "LV",
   "rep": 44.0,
+  "opp": 45.0,
   "others": [],
-  "source": "https://en.wikipedia.org/wiki/2026_United_States_elections"
+  "source": "https://mclaughlinonline.com/pols/wp-content/uploads/2025/11/National-November-Presentation-RELEASE-11-25-25-1.pdf",
+  "feed": "votehub"
  },
  {
   "state": "US",
@@ -21518,18 +21650,6 @@
   "population": "RV",
   "opp": 48.0,
   "rep": 42.0,
-  "others": [],
-  "source": "https://en.wikipedia.org/wiki/2026_United_States_elections"
- },
- {
-  "state": "US",
-  "pollster": "Morning Consult",
-  "sponsor_party": null,
-  "end_date": "2025-11-30",
-  "n": 2200,
-  "population": "RV",
-  "opp": 45.0,
-  "rep": 41.0,
   "others": [],
   "source": "https://en.wikipedia.org/wiki/2026_United_States_elections"
  },
@@ -21571,39 +21691,29 @@
  },
  {
   "state": "US",
-  "pollster": "Quantus Insights",
-  "sponsor_party": "R",
-  "end_date": "2025-12-05",
-  "n": 1000,
-  "population": "RV",
-  "opp": 44.0,
-  "rep": 40.0,
-  "others": [],
-  "source": "https://en.wikipedia.org/wiki/2026_United_States_elections"
- },
- {
-  "state": "US",
   "pollster": "Cygnal",
-  "sponsor_party": "R",
+  "sponsor_party": null,
   "end_date": "2025-12-07",
   "n": 1500,
   "population": "LV",
+  "rep": 44.1,
   "opp": 48.0,
-  "rep": 44.0,
   "others": [],
-  "source": "https://en.wikipedia.org/wiki/2026_United_States_elections"
+  "source": "https://www.cygn.al/wp-content/uploads/2025/12/23448-Cygnal-National-Dec25-NVT-Deck-Public.pdf",
+  "feed": "votehub"
  },
  {
   "state": "US",
   "pollster": "Morning Consult",
   "sponsor_party": null,
   "end_date": "2025-12-07",
-  "n": 2201,
+  "n": 21658,
   "population": "RV",
-  "opp": 46.0,
   "rep": 43.0,
+  "opp": 44.0,
   "others": [],
-  "source": "https://en.wikipedia.org/wiki/2026_United_States_elections"
+  "source": "https://pro.morningconsult.com/trackers/2026-midterm-election-generic-ballot-polls#12-07-2025",
+  "feed": "votehub"
  },
  {
   "state": "US",
@@ -21656,14 +21766,15 @@
  {
   "state": "US",
   "pollster": "Clarity Campaign Labs",
-  "sponsor_party": "D",
+  "sponsor_party": null,
   "end_date": "2025-12-11",
   "n": 1000,
   "population": "LV",
-  "opp": 49.0,
   "rep": 44.0,
+  "opp": 49.0,
   "others": [],
-  "source": "https://en.wikipedia.org/wiki/2026_United_States_elections"
+  "source": "https://www.claritycampaigns.com/clarity-omnibus-dec-2025",
+  "feed": "votehub"
  },
  {
   "state": "US",
@@ -21672,10 +21783,11 @@
   "end_date": "2025-12-11",
   "n": null,
   "population": "LV",
-  "opp": 52.0,
-  "rep": 48.0,
+  "rep": 47.6,
+  "opp": 52.4,
   "others": [],
-  "source": "https://en.wikipedia.org/wiki/2026_United_States_elections"
+  "source": "https://www.theargumentmag.com/p/have-democrats-lost-their-education",
+  "feed": "votehub"
  },
  {
   "state": "US",
@@ -21696,10 +21808,11 @@
   "end_date": "2025-12-15",
   "n": 1011,
   "population": "LV",
-  "opp": 48.0,
   "rep": 45.0,
+  "opp": 48.0,
   "others": [],
-  "source": "https://en.wikipedia.org/wiki/2026_United_States_elections"
+  "source": "https://echelonin.wpenginepowered.com/wp-content/uploads/December-2025-Omnibus-Topline-External.pdf",
+  "feed": "votehub"
  },
  {
   "state": "US",
@@ -21720,22 +21833,11 @@
   "end_date": "2025-12-15",
   "n": 2201,
   "population": "RV",
-  "opp": 45.0,
   "rep": 44.0,
+  "opp": 45.0,
   "others": [],
-  "source": "https://en.wikipedia.org/wiki/2026_United_States_elections"
- },
- {
-  "state": "US",
-  "pollster": "Quinnipiac University",
-  "sponsor_party": null,
-  "end_date": "2025-12-15",
-  "n": 1035,
-  "population": "RV",
-  "opp": 47.0,
-  "rep": 43.0,
-  "others": [],
-  "source": "https://en.wikipedia.org/wiki/2026_United_States_elections"
+  "source": "https://pro.morningconsult.com/trackers/donald-trump-congress-policy-republicans-polling#12-15-2025",
+  "feed": "votehub"
  },
  {
   "state": "US",
@@ -21760,6 +21862,19 @@
   "rep": 39.0,
   "others": [],
   "source": "https://en.wikipedia.org/wiki/2026_United_States_elections"
+ },
+ {
+  "state": "US",
+  "pollster": "Echelon Insights/GBAO/AARP",
+  "sponsor_party": null,
+  "end_date": "2025-12-16",
+  "n": 2023,
+  "population": "LV",
+  "rep": 43.0,
+  "opp": 47.0,
+  "others": [],
+  "source": "https://www.aarp.org/content/dam/aarp/research/topics/work-finances-retirement/financial-security-retirement/shes-the-difference-financial-security-annotated-questionnaire.doi.10.26419-2fres.01033.002.pdf",
+  "feed": "votehub"
  },
  {
   "state": "US",
@@ -21792,22 +21907,24 @@
   "end_date": "2025-12-19",
   "n": 2315,
   "population": "A",
-  "opp": 54.0,
-  "rep": 38.0,
+  "rep": 38.4,
+  "opp": 54.4,
   "others": [],
-  "source": "https://en.wikipedia.org/wiki/2026_United_States_elections"
+  "source": "https://cdn.atlasintel.org/b04a7568-81b3-478f-a785-d5e5902941d4.pdf?_gl=1*1fyq2oz*_ga*MTM0MTUwMDU0My4xNzY2MTk1NTU4*_ga_W78QD5CNP1*czE3NjYxOTU1NTckbzEkZzAkdDE3NjYxOTU5MzckajYwJGwwJGgw",
+  "feed": "votehub"
  },
  {
   "state": "US",
   "pollster": "McLaughlin & Associates",
-  "sponsor_party": "R",
+  "sponsor_party": null,
   "end_date": "2025-12-19",
   "n": 1000,
-  "population": "RV",
-  "opp": 46.0,
+  "population": "LV",
   "rep": 45.0,
+  "opp": 46.0,
   "others": [],
-  "source": "https://en.wikipedia.org/wiki/2026_United_States_elections"
+  "source": "https://mclaughlinonline.com/pols/wp-content/uploads/2025/12/National-December-Presentation-Release-12-19-25.pdf",
+  "feed": "votehub"
  },
  {
   "state": "US",
@@ -21816,10 +21933,11 @@
   "end_date": "2025-12-21",
   "n": 20240,
   "population": "RV",
-  "opp": 45.0,
   "rep": 42.0,
+  "opp": 45.0,
   "others": [],
-  "source": "https://en.wikipedia.org/wiki/2026_United_States_elections"
+  "source": "https://pro.morningconsult.com/trackers/2026-midterm-election-generic-ballot-polls#12-21-2025",
+  "feed": "votehub"
  },
  {
   "state": "US",
@@ -21887,12 +22005,13 @@
   "pollster": "Morning Consult",
   "sponsor_party": null,
   "end_date": "2026-01-04",
-  "n": 2201,
+  "n": 22709,
   "population": "RV",
-  "opp": 45.0,
   "rep": 42.0,
+  "opp": 44.0,
   "others": [],
-  "source": "https://en.wikipedia.org/wiki/2026_United_States_elections"
+  "source": "https://pro.morningconsult.com/trackers/2026-midterm-election-generic-ballot-polls#01-04-2026",
+  "feed": "votehub"
  },
  {
   "state": "US",
@@ -21909,14 +22028,15 @@
  {
   "state": "US",
   "pollster": "Cygnal",
-  "sponsor_party": "R",
+  "sponsor_party": null,
   "end_date": "2026-01-08",
   "n": 1500,
   "population": "LV",
-  "opp": 48.0,
   "rep": 45.0,
+  "opp": 48.0,
   "others": [],
-  "source": "https://en.wikipedia.org/wiki/2026_United_States_elections"
+  "source": "https://www.cygn.al/wp-content/uploads/2026/01/23520-Cygnal-National-Jan26-NVT-Deck-Public.pptx",
+  "feed": "votehub"
  },
  {
   "state": "US",
@@ -21942,30 +22062,6 @@
   "others": [],
   "source": "https://data.ddhq.io/polls/2026/01/19/Rasmussen-Reports-National",
   "feed": "votehub"
- },
- {
-  "state": "US",
-  "pollster": "CNN/SSRS",
-  "sponsor_party": null,
-  "end_date": "2026-01-12",
-  "n": 968,
-  "population": "RV",
-  "opp": 46.0,
-  "rep": 41.0,
-  "others": [],
-  "source": "https://en.wikipedia.org/wiki/2026_United_States_elections"
- },
- {
-  "state": "US",
-  "pollster": "Morning Consult",
-  "sponsor_party": null,
-  "end_date": "2026-01-12",
-  "n": 2201,
-  "population": "RV",
-  "opp": 46.0,
-  "rep": 43.0,
-  "others": [],
-  "source": "https://en.wikipedia.org/wiki/2026_United_States_elections"
  },
  {
   "state": "US",
@@ -22081,12 +22177,13 @@
   "pollster": "Morning Consult",
   "sponsor_party": null,
   "end_date": "2026-01-18",
-  "n": 2201,
+  "n": 12505,
   "population": "RV",
-  "opp": 45.0,
-  "rep": 43.0,
+  "rep": 42.0,
+  "opp": 44.0,
   "others": [],
-  "source": "https://en.wikipedia.org/wiki/2026_United_States_elections"
+  "source": "https://pro.morningconsult.com/trackers/2026-midterm-election-generic-ballot-polls#01-18-2026",
+  "feed": "votehub"
  },
  {
   "state": "US",
@@ -22095,10 +22192,11 @@
   "end_date": "2026-01-19",
   "n": 1000,
   "population": "LV",
-  "opp": 48.0,
-  "rep": 42.0,
+  "rep": 41.7,
+  "opp": 48.1,
   "others": [],
-  "source": "https://en.wikipedia.org/wiki/2026_United_States_elections"
+  "source": "https://docs.google.com/spreadsheets/d/1JN0akF_-HHyL8gVAeNm-y7r4cmyJqRsB/edit?rtpof=true&sd=true&gid=1734735931#gid=1734735931",
+  "feed": "votehub"
  },
  {
   "state": "US",
@@ -22109,18 +22207,6 @@
   "population": "RV",
   "opp": 43.0,
   "rep": 39.0,
-  "others": [],
-  "source": "https://en.wikipedia.org/wiki/2026_United_States_elections"
- },
- {
-  "state": "US",
-  "pollster": "KFF",
-  "sponsor_party": null,
-  "end_date": "2026-01-20",
-  "n": 1141,
-  "population": "RV",
-  "opp": 49.0,
-  "rep": 42.0,
   "others": [],
   "source": "https://en.wikipedia.org/wiki/2026_United_States_elections"
  },
@@ -22138,27 +22224,16 @@
  },
  {
   "state": "US",
-  "pollster": "Clarity Campaign Labs",
-  "sponsor_party": "D",
-  "end_date": "2026-01-22",
-  "n": 1147,
-  "population": "LV",
-  "opp": 51.0,
-  "rep": 42.0,
-  "others": [],
-  "source": "https://en.wikipedia.org/wiki/2026_United_States_elections"
- },
- {
-  "state": "US",
   "pollster": "Quantus Insights",
-  "sponsor_party": "R",
+  "sponsor_party": null,
   "end_date": "2026-01-22",
   "n": 1000,
   "population": "RV",
-  "opp": 47.0,
-  "rep": 41.0,
+  "rep": 40.7,
+  "opp": 47.2,
   "others": [],
-  "source": "https://en.wikipedia.org/wiki/2026_United_States_elections"
+  "source": "https://v0-quantus-insights-website.vercel.app/polls/2601412-weighted-ziw7630t?tab=toplines",
+  "feed": "votehub"
  },
  {
   "state": "US",
@@ -22169,18 +22244,6 @@
   "population": "LV",
   "opp": 48.0,
   "rep": 44.0,
-  "others": [],
-  "source": "https://en.wikipedia.org/wiki/2026_United_States_elections"
- },
- {
-  "state": "US",
-  "pollster": "Morning Consult",
-  "sponsor_party": null,
-  "end_date": "2026-01-25",
-  "n": 2201,
-  "population": "RV",
-  "opp": 45.0,
-  "rep": 43.0,
   "others": [],
   "source": "https://en.wikipedia.org/wiki/2026_United_States_elections"
  },
@@ -22205,18 +22268,6 @@
   "population": "RV",
   "opp": 52.0,
   "rep": 46.0,
-  "others": [],
-  "source": "https://en.wikipedia.org/wiki/2026_United_States_elections"
- },
- {
-  "state": "US",
-  "pollster": "Echelon Insights",
-  "sponsor_party": null,
-  "end_date": "2026-01-26",
-  "n": 1029,
-  "population": "LV",
-  "opp": 49.0,
-  "rep": 44.0,
   "others": [],
   "source": "https://en.wikipedia.org/wiki/2026_United_States_elections"
  },
@@ -22248,38 +22299,28 @@
  {
   "state": "US",
   "pollster": "McLaughlin & Associates",
-  "sponsor_party": "R",
-  "end_date": "2026-01-27",
-  "n": 1000,
-  "population": "RV",
-  "opp": 46.0,
-  "rep": 44.0,
-  "others": [],
-  "source": "https://en.wikipedia.org/wiki/2026_United_States_elections"
- },
- {
-  "state": "US",
-  "pollster": "The Argument/Verasight",
   "sponsor_party": null,
   "end_date": "2026-01-27",
-  "n": 1515,
-  "population": "RV",
-  "opp": 52.0,
-  "rep": 48.0,
+  "n": 1000,
+  "population": "LV",
+  "rep": 44.0,
+  "opp": 46.0,
   "others": [],
-  "source": "https://en.wikipedia.org/wiki/2026_United_States_elections"
+  "source": "https://mclaughlinonline.com/pols/wp-content/uploads/2026/02/National-January-2026-Presentation-RELEASE-1-1.pdf",
+  "feed": "votehub"
  },
  {
   "state": "US",
   "pollster": "Cygnal",
-  "sponsor_party": "R",
+  "sponsor_party": null,
   "end_date": "2026-01-28",
   "n": 1004,
   "population": "LV",
-  "opp": 48.0,
   "rep": 44.0,
+  "opp": 48.0,
   "others": [],
-  "source": "https://en.wikipedia.org/wiki/2026_United_States_elections"
+  "source": "https://www.cygn.al/wp-content/uploads/2026/02/Cygnal-Deportation-Poll-Data.pdf",
+  "feed": "votehub"
  },
  {
   "state": "US",
@@ -22290,18 +22331,6 @@
   "population": "RV",
   "opp": 45.0,
   "rep": 42.0,
-  "others": [],
-  "source": "https://en.wikipedia.org/wiki/2026_United_States_elections"
- },
- {
-  "state": "US",
-  "pollster": "Marquette University Law School",
-  "sponsor_party": null,
-  "end_date": "2026-01-28",
-  "n": 577,
-  "population": "LV",
-  "opp": 52.0,
-  "rep": 45.0,
   "others": [],
   "source": "https://en.wikipedia.org/wiki/2026_United_States_elections"
  },
@@ -22320,14 +22349,15 @@
  {
   "state": "US",
   "pollster": "Public Policy Polling",
-  "sponsor_party": "D",
+  "sponsor_party": null,
   "end_date": "2026-01-30",
   "n": 652,
   "population": "RV",
-  "opp": 48.0,
   "rep": 41.0,
+  "opp": 48.0,
   "others": [],
-  "source": "https://en.wikipedia.org/wiki/2026_United_States_elections"
+  "source": "https://e1.nmcdn.io/assets/ppp/wp-content/uploads/2026/01/January2026NationalSurvey.pdf",
+  "feed": "votehub"
  },
  {
   "state": "US",
@@ -22336,10 +22366,11 @@
   "end_date": "2026-02-01",
   "n": 2201,
   "population": "RV",
-  "opp": 47.0,
   "rep": 42.0,
+  "opp": 47.0,
   "others": [],
-  "source": "https://en.wikipedia.org/wiki/2026_United_States_elections"
+  "source": "https://pro.morningconsult.com/trackers/donald-trump-congress-policy-republicans-polling#02-01-2026",
+  "feed": "votehub"
  },
  {
   "state": "US",
@@ -22356,14 +22387,15 @@
  {
   "state": "US",
   "pollster": "Cygnal",
-  "sponsor_party": "R",
+  "sponsor_party": null,
   "end_date": "2026-02-04",
   "n": 1500,
   "population": "LV",
-  "opp": 48.0,
   "rep": 44.0,
+  "opp": 48.0,
   "others": [],
-  "source": "https://en.wikipedia.org/wiki/2026_United_States_elections"
+  "source": "https://www.cygn.al/wp-content/uploads/2026/02/23572-Cygnal-National-NVT-Feb26-Deck-Public.pdf",
+  "feed": "votehub"
  },
  {
   "state": "US",
@@ -22372,10 +22404,11 @@
   "end_date": "2026-02-05",
   "n": 1000,
   "population": "LV",
-  "opp": 47.0,
   "rep": 42.0,
+  "opp": 47.0,
   "others": [],
-  "source": "https://en.wikipedia.org/wiki/2026_United_States_elections"
+  "source": "https://johnzogbystrategies.com/democrats-lead-republicans-47-42-in-congressional-generic-poll",
+  "feed": "votehub"
  },
  {
   "state": "US",
@@ -22384,22 +22417,11 @@
   "end_date": "2026-02-08",
   "n": 29303,
   "population": "RV",
-  "opp": 45.0,
   "rep": 42.0,
-  "others": [],
-  "source": "https://en.wikipedia.org/wiki/2026_United_States_elections"
- },
- {
-  "state": "US",
-  "pollster": "Morning Consult",
-  "sponsor_party": null,
-  "end_date": "2026-02-09",
-  "n": 2200,
-  "population": "RV",
   "opp": 45.0,
-  "rep": 41.0,
   "others": [],
-  "source": "https://en.wikipedia.org/wiki/2026_United_States_elections"
+  "source": "https://pro.morningconsult.com/trackers/2026-midterm-election-generic-ballot-polls#02-08-2026",
+  "feed": "votehub"
  },
  {
   "state": "US",
@@ -22420,22 +22442,24 @@
   "end_date": "2026-02-10",
   "n": null,
   "population": "LV",
-  "opp": 51.0,
   "rep": 44.0,
+  "opp": 51.0,
   "others": [],
-  "source": "https://en.wikipedia.org/wiki/2026_United_States_elections"
+  "source": "https://www.focaldata.com/blog/cost-of-living-fuelling-democrat-strength-in-new-midterms-polling",
+  "feed": "votehub"
  },
  {
   "state": "US",
   "pollster": "The Argument/Verasight",
   "sponsor_party": null,
   "end_date": "2026-02-10",
-  "n": 3003,
-  "population": "RV",
-  "opp": 53.0,
+  "n": null,
+  "population": "LV",
   "rep": 47.0,
+  "opp": 53.0,
   "others": [],
-  "source": "https://en.wikipedia.org/wiki/2026_United_States_elections"
+  "source": "https://www.theargumentmag.com/p/the-trans-rights-backlash-is-real",
+  "feed": "votehub"
  },
  {
   "state": "US",
@@ -22444,10 +22468,11 @@
   "end_date": "2026-02-12",
   "n": 2000,
   "population": "RV",
-  "opp": 45.0,
   "rep": 47.0,
+  "opp": 45.0,
   "others": [],
-  "source": "https://en.wikipedia.org/wiki/2026_United_States_elections"
+  "source": "https://napolitannews.org/posts/generic-ballot-gop-44-percent-dem-41-but-dems-more-enthusiastic#02-12-2026",
+  "feed": "votehub"
  },
  {
   "state": "US",
@@ -22464,14 +22489,15 @@
  {
   "state": "US",
   "pollster": "Quantus Insights",
-  "sponsor_party": "R",
+  "sponsor_party": null,
   "end_date": "2026-02-13",
   "n": 1515,
   "population": "LV",
-  "opp": 48.0,
   "rep": 42.0,
+  "opp": 48.0,
   "others": [],
-  "source": "https://en.wikipedia.org/wiki/2026_United_States_elections"
+  "source": "https://drive.google.com/file/d/1oJf00_QCTUCxMvNoNnRMRKj97lQ5S5pP/view",
+  "feed": "votehub"
  },
  {
   "state": "US",
@@ -22589,10 +22615,11 @@
   "end_date": "2026-02-22",
   "n": 1000,
   "population": "LV",
-  "opp": 50.0,
-  "rep": 42.0,
+  "rep": 42.4,
+  "opp": 50.4,
   "others": [],
-  "source": "https://en.wikipedia.org/wiki/2026_United_States_elections"
+  "source": "https://docs.google.com/spreadsheets/d/1SS_Vfa-SArcPFS60SmvpIB-kd_sakjcX/edit?rtpof=true&sd=true",
+  "feed": "votehub"
  },
  {
   "state": "US",
@@ -22608,27 +22635,16 @@
  },
  {
   "state": "US",
-  "pollster": "Morning Consult",
-  "sponsor_party": null,
-  "end_date": "2026-02-22",
-  "n": 2202,
-  "population": "RV",
-  "opp": 46.0,
-  "rep": 42.0,
-  "others": [],
-  "source": "https://en.wikipedia.org/wiki/2026_United_States_elections"
- },
- {
-  "state": "US",
   "pollster": "Echelon Insights",
   "sponsor_party": null,
   "end_date": "2026-02-23",
   "n": 1002,
   "population": "LV",
-  "opp": 50.0,
   "rep": 46.0,
+  "opp": 50.0,
   "others": [],
-  "source": "https://en.wikipedia.org/wiki/2026_United_States_elections"
+  "source": "https://docs.google.com/spreadsheets/d/1m0IKbqTOxjH_xFQu7I8JTQeIqildMiyY/edit?rtpof=true&sd=true",
+  "feed": "votehub"
  },
  {
   "state": "US",
@@ -22733,10 +22749,11 @@
   "end_date": "2026-02-28",
   "n": 249,
   "population": "LV",
-  "opp": 50.0,
   "rep": 41.0,
+  "opp": 50.0,
   "others": [],
-  "source": "https://en.wikipedia.org/wiki/2026_United_States_elections"
+  "source": "https://docs.google.com/spreadsheets/d/1m40rnoHyDTHRmVYF9mYbAjKrriNucbiqzlIO_4nAq_w/edit?gid=1327702577#gid=1327702577",
+  "feed": "votehub"
  },
  {
   "state": "US",
@@ -22777,26 +22794,15 @@
  {
   "state": "US",
   "pollster": "Quantus Insights",
-  "sponsor_party": "R",
+  "sponsor_party": null,
   "end_date": "2026-03-03",
   "n": 1624,
   "population": "LV",
-  "opp": 48.0,
   "rep": 42.0,
+  "opp": 48.0,
   "others": [],
-  "source": "https://en.wikipedia.org/wiki/2026_United_States_elections"
- },
- {
-  "state": "US",
-  "pollster": "Cygnal",
-  "sponsor_party": "R",
-  "end_date": "2026-03-04",
-  "n": 1500,
-  "population": "LV",
-  "opp": 49.0,
-  "rep": 45.0,
-  "others": [],
-  "source": "https://en.wikipedia.org/wiki/2026_United_States_elections"
+  "source": "https://docs.google.com/spreadsheets/d/1XX2nY6R87uXlb0Ii-pcL9gFyM284UKRf/edit?gid=1938592910#gid=1938592910",
+  "feed": "votehub"
  },
  {
   "state": "US",
@@ -22809,6 +22815,19 @@
   "rep": 44.0,
   "others": [],
   "source": "https://en.wikipedia.org/wiki/2026_United_States_elections"
+ },
+ {
+  "state": "US",
+  "pollster": "Noble Predictive Insights/The Center Square",
+  "sponsor_party": null,
+  "end_date": "2026-03-05",
+  "n": 2659,
+  "population": "RV",
+  "rep": 43.0,
+  "opp": 44.0,
+  "others": [],
+  "source": "https://www.thecentersquare.com/national/article_c3795c17-be14-4566-a625-eb38b4ffc1bf.html",
+  "feed": "votehub"
  },
  {
   "state": "US",
@@ -22825,38 +22844,41 @@
  {
   "state": "US",
   "pollster": "Clarity Campaign Labs",
-  "sponsor_party": "D",
+  "sponsor_party": null,
   "end_date": "2026-03-07",
   "n": 1004,
   "population": "LV",
-  "opp": 47.0,
   "rep": 43.0,
+  "opp": 47.0,
   "others": [],
-  "source": "https://en.wikipedia.org/wiki/2026_United_States_elections"
+  "source": "https://www.claritycampaigns.com/clarity-omnibus-2026-mar",
+  "feed": "votehub"
  },
  {
   "state": "US",
   "pollster": "Morning Consult",
   "sponsor_party": null,
   "end_date": "2026-03-08",
-  "n": 25948,
+  "n": 2202,
   "population": "RV",
-  "opp": 45.0,
-  "rep": 42.0,
+  "rep": 43.0,
+  "opp": 47.0,
   "others": [],
-  "source": "https://en.wikipedia.org/wiki/2026_United_States_elections"
+  "source": "https://pro.morningconsult.com/trackers/donald-trump-congress-policy-republicans-polling#03-08-2026",
+  "feed": "votehub"
  },
  {
   "state": "US",
   "pollster": "McLaughlin & Associates",
-  "sponsor_party": "R",
+  "sponsor_party": null,
   "end_date": "2026-03-09",
   "n": 1000,
   "population": "LV",
-  "opp": 47.0,
   "rep": 43.0,
+  "opp": 47.0,
   "others": [],
-  "source": "https://en.wikipedia.org/wiki/2026_United_States_elections"
+  "source": "https://mclaughlinonline.com/pols/wp-content/uploads/2026/03/National-March-Presentation-RELEASE-03-10-26.pdf",
+  "feed": "votehub"
  },
  {
   "state": "US",
@@ -22875,12 +22897,13 @@
   "pollster": "Focaldata",
   "sponsor_party": null,
   "end_date": "2026-03-10",
-  "n": 1456,
+  "n": 1534,
   "population": "RV",
-  "opp": 50.0,
-  "rep": 44.0,
+  "rep": 42.0,
+  "opp": 48.0,
   "others": [],
-  "source": "https://en.wikipedia.org/wiki/2026_United_States_elections"
+  "source": "https://www.focaldata.com/blog/democrats-increase-lead-and-rubio-stock-surges-amid-iran-war",
+  "feed": "votehub"
  },
  {
   "state": "US",
@@ -22900,12 +22923,13 @@
   "pollster": "Morning Consult",
   "sponsor_party": null,
   "end_date": "2026-03-15",
-  "n": 2663,
+  "n": 26634,
   "population": "RV",
-  "opp": 45.0,
   "rep": 42.0,
+  "opp": 45.0,
   "others": [],
-  "source": "https://en.wikipedia.org/wiki/2026_United_States_elections"
+  "source": "https://pro.morningconsult.com/trackers/2026-midterm-election-generic-ballot-polls#03-15-2026",
+  "feed": "votehub"
  },
  {
   "state": "US",
@@ -22914,34 +22938,11 @@
   "end_date": "2026-03-15",
   "n": 1546,
   "population": "RV",
-  "opp": 48.0,
   "rep": 38.0,
-  "others": [],
-  "source": "https://en.wikipedia.org/wiki/2026_United_States_elections"
- },
- {
-  "state": "US",
-  "pollster": "Echelon Insights",
-  "sponsor_party": null,
-  "end_date": "2026-03-16",
-  "n": 1033,
-  "population": "LV",
-  "opp": 49.0,
-  "rep": 44.0,
-  "others": [],
-  "source": "https://en.wikipedia.org/wiki/2026_United_States_elections"
- },
- {
-  "state": "US",
-  "pollster": "Morning Consult",
-  "sponsor_party": null,
-  "end_date": "2026-03-16",
-  "n": 2201,
-  "population": "RV",
   "opp": 48.0,
-  "rep": 40.0,
   "others": [],
-  "source": "https://en.wikipedia.org/wiki/2026_United_States_elections"
+  "source": "https://www.survey160.com/methodological-research-blog/survey-160-tracking-poll-march-2026",
+  "feed": "votehub"
  },
  {
   "state": "US",
@@ -22974,22 +22975,11 @@
   "end_date": "2026-03-17",
   "n": 1000,
   "population": "LV",
-  "opp": 49.0,
-  "rep": 42.0,
+  "rep": 41.5,
+  "opp": 49.2,
   "others": [],
-  "source": "https://en.wikipedia.org/wiki/2026_United_States_elections"
- },
- {
-  "state": "US",
-  "pollster": "The Argument/Verasight",
-  "sponsor_party": null,
-  "end_date": "2026-03-17",
-  "n": 1519,
-  "population": "RV",
-  "opp": 54.0,
-  "rep": 46.0,
-  "others": [],
-  "source": "https://en.wikipedia.org/wiki/2026_United_States_elections"
+  "source": "https://docs.google.com/spreadsheets/d/1EfOmL-oir8Qp12WCByOuqB2fRRqtrr11/edit?rtpof=true&sd=true&gid=586600673#gid=586600673",
+  "feed": "votehub"
  },
  {
   "state": "US",
@@ -23010,22 +23000,24 @@
   "end_date": "2026-03-18",
   "n": 1000,
   "population": "LV",
-  "opp": 46.0,
   "rep": 46.0,
+  "opp": 46.0,
   "others": [],
-  "source": "https://en.wikipedia.org/wiki/2026_United_States_elections"
+  "source": "https://x.com/zogbystrategies/status/2036096236139245673?s=20",
+  "feed": "votehub"
  },
  {
   "state": "US",
   "pollster": "Quantus Insights",
-  "sponsor_party": "R",
+  "sponsor_party": null,
   "end_date": "2026-03-18",
-  "n": 1064,
+  "n": 1053,
   "population": "LV",
-  "opp": 47.0,
   "rep": 42.0,
+  "opp": 47.0,
   "others": [],
-  "source": "https://en.wikipedia.org/wiki/2026_United_States_elections"
+  "source": "https://drive.google.com/file/d/1u6X2tjztzSMI-UNX00OA-CuWAhqPcxxj/view",
+  "feed": "votehub"
  },
  {
   "state": "US",
@@ -23094,10 +23086,11 @@
   "end_date": "2026-03-23",
   "n": 1191,
   "population": "RV",
-  "opp": 51.0,
   "rep": 40.0,
+  "opp": 51.0,
   "others": [],
-  "source": "https://en.wikipedia.org/wiki/2026_United_States_elections"
+  "source": "https://poll.qu.edu/images/polling/us/us03252026_ueek31.pdf",
+  "feed": "votehub"
  },
  {
   "state": "US",
@@ -23130,10 +23123,11 @@
   "end_date": "2026-03-23",
   "n": 3429,
   "population": "RV",
-  "opp": 46.0,
   "rep": 44.0,
+  "opp": 46.0,
   "others": [],
-  "source": "https://en.wikipedia.org/wiki/2026_United_States_elections"
+  "source": "https://youthpoll.yale.edu/spring-2026-results",
+  "feed": "votehub"
  },
  {
   "state": "US",
@@ -23162,14 +23156,15 @@
  {
   "state": "US",
   "pollster": "Quantus Insights",
-  "sponsor_party": "R",
+  "sponsor_party": null,
   "end_date": "2026-03-26",
-  "n": 1472,
+  "n": 1470,
   "population": "LV",
+  "rep": 41.3,
   "opp": 47.0,
-  "rep": 41.0,
   "others": [],
-  "source": "https://en.wikipedia.org/wiki/2026_United_States_elections"
+  "source": "https://docs.google.com/spreadsheets/d/1_Fz7pWK_RfSVQ__18QujNi-QPw5jJIqX/edit?gid=1786900467#gid=1786900467",
+  "feed": "votehub"
  },
  {
   "state": "US",
@@ -23191,10 +23186,11 @@
   "end_date": "2026-03-30",
   "n": 951,
   "population": "RV",
-  "opp": 48.0,
   "rep": 42.0,
+  "opp": 48.0,
   "others": [],
-  "source": "https://en.wikipedia.org/wiki/2026_United_States_elections"
+  "source": "https://embed.documentcloud.org/documents/28014525-cnn-poll-conducted-by-ssrs-2026-midterms-parties/?embed=1&responsive=1&title=1&onlyshoworg=1",
+  "feed": "votehub"
  },
  {
   "state": "US",
@@ -23211,14 +23207,15 @@
  {
   "state": "US",
   "pollster": "Cygnal",
-  "sponsor_party": "R",
+  "sponsor_party": null,
   "end_date": "2026-04-03",
   "n": 1500,
   "population": "LV",
-  "opp": 49.0,
   "rep": 43.0,
+  "opp": 49.0,
   "others": [],
-  "source": "https://en.wikipedia.org/wiki/2026_United_States_elections"
+  "source": "https://www.cygn.al/wp-content/uploads/2026/04/23738-Cygnal-National-Apr26-NVT-Deck-Public.pdf",
+  "feed": "votehub"
  },
  {
   "state": "US",
@@ -23226,18 +23223,6 @@
   "sponsor_party": null,
   "end_date": "2026-04-04",
   "n": 2203,
-  "population": "RV",
-  "opp": 45.0,
-  "rep": 42.0,
-  "others": [],
-  "source": "https://en.wikipedia.org/wiki/2026_United_States_elections"
- },
- {
-  "state": "US",
-  "pollster": "Morning Consult",
-  "sponsor_party": null,
-  "end_date": "2026-04-05",
-  "n": 12505,
   "population": "RV",
   "opp": 45.0,
   "rep": 42.0,
@@ -23258,6 +23243,19 @@
  },
  {
   "state": "US",
+  "pollster": "Change Research",
+  "sponsor_party": null,
+  "end_date": "2026-04-07",
+  "n": 2702,
+  "population": "RV",
+  "rep": 42.0,
+  "opp": 47.0,
+  "others": [],
+  "source": "https://portal.changeresearch.com/portal/projects/25b5e88c-5e8c-4f1b-9d0e-340163792181",
+  "feed": "votehub"
+ },
+ {
+  "state": "US",
   "pollster": "Echelon Insights",
   "sponsor_party": null,
   "end_date": "2026-04-09",
@@ -23275,10 +23273,11 @@
   "end_date": "2026-04-09",
   "n": 2200,
   "population": "RV",
-  "opp": 46.0,
   "rep": 42.0,
+  "opp": 46.0,
   "others": [],
-  "source": "https://en.wikipedia.org/wiki/2026_United_States_elections"
+  "source": "https://drive.google.com/file/d/1J-vPAS1XXmBtiDUw4rDA4p3G7jHbQ6b7/view",
+  "feed": "votehub"
  },
  {
   "state": "US",
@@ -23294,27 +23293,16 @@
  },
  {
   "state": "US",
-  "pollster": "Tavern Research",
-  "sponsor_party": "D",
-  "end_date": "2026-04-09",
-  "n": 502,
-  "population": "LV",
-  "opp": 44.0,
-  "rep": 43.0,
-  "others": [],
-  "source": "https://en.wikipedia.org/wiki/2026_United_States_elections"
- },
- {
-  "state": "US",
   "pollster": "Morning Consult",
   "sponsor_party": null,
   "end_date": "2026-04-12",
   "n": 12505,
   "population": "RV",
-  "opp": 46.0,
   "rep": 42.0,
+  "opp": 46.0,
   "others": [],
-  "source": "https://en.wikipedia.org/wiki/2026_United_States_elections"
+  "source": "https://pro.morningconsult.com/trackers/2026-midterm-election-generic-ballot-polls#04-12-2026",
+  "feed": "votehub"
  },
  {
   "state": "US",
@@ -23323,10 +23311,11 @@
   "end_date": "2026-04-13",
   "n": 1539,
   "population": "RV",
-  "opp": 47.0,
   "rep": 37.0,
+  "opp": 47.0,
   "others": [],
-  "source": "https://en.wikipedia.org/wiki/2026_United_States_elections"
+  "source": "https://www.survey160.com/methodological-research-blog/survey-160-tracking-poll-april-2026",
+  "feed": "votehub"
  },
  {
   "state": "US",
@@ -23368,14 +23357,15 @@
  {
   "state": "US",
   "pollster": "McLaughlin & Associates",
-  "sponsor_party": "R",
+  "sponsor_party": null,
   "end_date": "2026-04-15",
   "n": 1000,
   "population": "LV",
-  "opp": 47.0,
   "rep": 43.0,
+  "opp": 47.0,
   "others": [],
-  "source": "https://en.wikipedia.org/wiki/2026_United_States_elections"
+  "source": "https://mclaughlinonline.com/pols/wp-content/uploads/2026/04/National-April-Release-Presentation-4-16-26.pdf",
+  "feed": "votehub"
  },
  {
   "state": "US",
@@ -23384,10 +23374,11 @@
   "end_date": "2026-04-16",
   "n": 576,
   "population": "LV",
-  "opp": 53.0,
   "rep": 43.0,
+  "opp": 53.0,
   "others": [],
-  "source": "https://en.wikipedia.org/wiki/2026_United_States_elections"
+  "source": "https://law.marquette.edu/assets/community/poll/MLSPSC31/MLSPSC31Crosstabs_NationalIssues.html",
+  "feed": "votehub"
  },
  {
   "state": "US",
@@ -23396,10 +23387,24 @@
   "end_date": "2026-04-18",
   "n": 1001,
   "population": "LV",
-  "opp": 48.0,
   "rep": 44.0,
+  "opp": 48.0,
   "others": [],
-  "source": "https://en.wikipedia.org/wiki/2026_United_States_elections"
+  "source": "https://x.com/zogbystrategies/status/2047123700990767164?s=20",
+  "feed": "votehub"
+ },
+ {
+  "state": "US",
+  "pollster": "Hart Research Associates/Public Opinion Strategies/CNBC",
+  "sponsor_party": null,
+  "end_date": "2026-04-19",
+  "n": 1000,
+  "population": "RV",
+  "rep": 45.0,
+  "opp": 49.0,
+  "others": [],
+  "source": "https://fm.cnbc.com/applications/cnbc.com/resources/editorialfiles/2026/04/23/Toplines_260142_CNBC_AAES_Q1_2026_Topline.pdf",
+  "feed": "votehub"
  },
  {
   "state": "US",
@@ -23408,10 +23413,11 @@
   "end_date": "2026-04-19",
   "n": 1107,
   "population": "RV",
-  "opp": 43.0,
   "rep": 34.0,
+  "opp": 43.0,
   "others": [],
-  "source": "https://en.wikipedia.org/wiki/2026_United_States_elections"
+  "source": "https://www.kff.org/public-opinion/kff-health-tracking-poll-health-care-costs-and-the-midterms",
+  "feed": "votehub"
  },
  {
   "state": "US",
@@ -23420,10 +23426,11 @@
   "end_date": "2026-04-19",
   "n": 27869,
   "population": "RV",
-  "opp": 45.0,
   "rep": 42.0,
+  "opp": 45.0,
   "others": [],
-  "source": "https://en.wikipedia.org/wiki/2026_United_States_elections"
+  "source": "https://pro.morningconsult.com/trackers/2026-midterm-election-generic-ballot-polls#04-19-2026",
+  "feed": "votehub"
  },
  {
   "state": "US",
@@ -23444,10 +23451,11 @@
   "end_date": "2026-04-20",
   "n": 1012,
   "population": "LV",
-  "opp": 50.0,
   "rep": 44.0,
+  "opp": 50.0,
   "others": [],
-  "source": "https://en.wikipedia.org/wiki/2026_United_States_elections"
+  "source": "https://echeloninsights.com/hubfs/_Media%20for%20Insights%20Blog/April%202026%20Voter%20Omnibus%20Topline%20-%20External.pdf",
+  "feed": "votehub"
  },
  {
   "state": "US",
@@ -23460,6 +23468,19 @@
   "opp": 52.0,
   "others": [],
   "source": "https://documents.leger360.com/hubfs/%C3%89tudes%20M%C3%A9diatiques/%C3%89tudes%20M%C3%A9diatiques%20-%202026/4.%20%C3%89M%20-%20Avril%202026/20260428%20-%20US%20Poll%20April%202026/US_POL_April_2026_338Canada_VF.pdf",
+  "feed": "votehub"
+ },
+ {
+  "state": "US",
+  "pollster": "Morning Consult",
+  "sponsor_party": null,
+  "end_date": "2026-04-20",
+  "n": 2203,
+  "population": "RV",
+  "rep": 42.0,
+  "opp": 45.0,
+  "others": [],
+  "source": "https://pro.morningconsult.com/trackers/donald-trump-congress-policy-republicans-polling#04-20-2026",
   "feed": "votehub"
  },
  {
@@ -23489,38 +23510,28 @@
  {
   "state": "US",
   "pollster": "Quantus Insights",
-  "sponsor_party": "R",
+  "sponsor_party": null,
   "end_date": "2026-04-23",
   "n": 1452,
   "population": "LV",
-  "opp": 47.0,
   "rep": 42.0,
+  "opp": 47.0,
   "others": [],
-  "source": "https://en.wikipedia.org/wiki/2026_United_States_elections"
- },
- {
-  "state": "US",
-  "pollster": "The Argument/Verasight",
-  "sponsor_party": null,
-  "end_date": "2026-04-23",
-  "n": 1516,
-  "population": "RV",
-  "opp": 53.0,
-  "rep": 47.0,
-  "others": [],
-  "source": "https://en.wikipedia.org/wiki/2026_United_States_elections"
+  "source": "https://drive.google.com/file/d/1xc5TCNWqDfyPWJbTg5Esp61oyLKRqPms/view",
+  "feed": "votehub"
  },
  {
   "state": "US",
   "pollster": "Clarity Campaign Labs",
-  "sponsor_party": "D",
+  "sponsor_party": null,
   "end_date": "2026-04-24",
   "n": 1000,
   "population": "LV",
-  "opp": 50.0,
   "rep": 45.0,
+  "opp": 50.0,
   "others": [],
-  "source": "https://en.wikipedia.org/wiki/2026_United_States_elections"
+  "source": "https://www.claritycampaigns.com/clarity-omnibus-2026-april",
+  "feed": "votehub"
  },
  {
   "state": "US",
@@ -23529,10 +23540,11 @@
   "end_date": "2026-04-26",
   "n": 1000,
   "population": "LV",
-  "opp": 50.0,
-  "rep": 40.0,
+  "rep": 40.2,
+  "opp": 50.3,
   "others": [],
-  "source": "https://en.wikipedia.org/wiki/2026_United_States_elections"
+  "source": "https://docs.google.com/spreadsheets/d/1FsVoQjT-tHeejavmtPp3dWF2UpdwGBOe/edit?gid=148203681#gid=148203681",
+  "feed": "votehub"
  },
  {
   "state": "US",
@@ -23543,18 +23555,6 @@
   "population": "RV",
   "opp": 50.0,
   "rep": 50.0,
-  "others": [],
-  "source": "https://en.wikipedia.org/wiki/2026_United_States_elections"
- },
- {
-  "state": "US",
-  "pollster": "Morning Consult",
-  "sponsor_party": null,
-  "end_date": "2026-04-27",
-  "n": 2201,
-  "population": "RV",
-  "opp": 45.0,
-  "rep": 42.0,
   "others": [],
   "source": "https://en.wikipedia.org/wiki/2026_United_States_elections"
  },
@@ -23597,14 +23597,15 @@
  {
   "state": "US",
   "pollster": "Big Data Poll",
-  "sponsor_party": "R",
+  "sponsor_party": null,
   "end_date": "2026-04-28",
   "n": 2874,
   "population": "LV",
-  "opp": 50.0,
-  "rep": 39.0,
+  "rep": 39.4,
+  "opp": 50.4,
   "others": [],
-  "source": "https://en.wikipedia.org/wiki/2026_United_States_elections"
+  "source": "https://www.bigdatapoll.com/blog/national-mood-worsens-for-republicans-in-april-2026-national-poll",
+  "feed": "votehub"
  },
  {
   "state": "US",
@@ -23625,34 +23626,24 @@
   "end_date": "2026-04-30",
   "n": 1155,
   "population": "RV",
-  "opp": 52.0,
   "rep": 42.0,
+  "opp": 52.0,
   "others": [],
-  "source": "https://en.wikipedia.org/wiki/2026_United_States_elections"
+  "source": "https://maristpoll.marist.edu/wp-content/uploads/2026/05/NPR_PBS-News_Marist-Poll_USA-NOS-and-Tables_202605011058.pdf",
+  "feed": "votehub"
  },
  {
   "state": "US",
   "pollster": "Morning Consult",
   "sponsor_party": null,
   "end_date": "2026-05-03",
-  "n": 2201,
+  "n": 2200,
   "population": "RV",
-  "opp": 46.0,
   "rep": 43.0,
+  "opp": 46.0,
   "others": [],
-  "source": "https://en.wikipedia.org/wiki/2026_United_States_elections"
- },
- {
-  "state": "US",
-  "pollster": "CNN/SSRS",
-  "sponsor_party": null,
-  "end_date": "2026-05-04",
-  "n": null,
-  "population": "RV",
-  "opp": 45.0,
-  "rep": 42.0,
-  "others": [],
-  "source": "https://en.wikipedia.org/wiki/2026_United_States_elections"
+  "source": "https://pro.morningconsult.com/trackers/donald-trump-congress-policy-republicans-polling#05-03-2026",
+  "feed": "votehub"
  },
  {
   "state": "US",
@@ -23673,34 +23664,37 @@
   "end_date": "2026-05-05",
   "n": 3017,
   "population": "RV",
-  "opp": 52.0,
-  "rep": 44.0,
+  "rep": 44.4652,
+  "opp": 51.862,
   "others": [],
-  "source": "https://en.wikipedia.org/wiki/2026_United_States_elections"
+  "source": "https://www.focaldata.com/blog/democrats-lead-economy-focaldata-financial-times-poll",
+  "feed": "votehub"
+ },
+ {
+  "state": "US",
+  "pollster": "HarrisX",
+  "sponsor_party": null,
+  "end_date": "2026-05-05",
+  "n": 1891,
+  "population": "LV",
+  "rep": 46.0,
+  "opp": 48.0,
+  "others": [],
+  "source": "https://www.harrisx.com/posts/forbes-and-harrisx-partner-on-new-american-confidence-survey-as-gallup-ends-approval-polling",
+  "feed": "votehub"
  },
  {
   "state": "US",
   "pollster": "HarrisX/Forbes",
   "sponsor_party": null,
   "end_date": "2026-05-05",
-  "n": 1891,
-  "population": "LV",
-  "opp": 48.0,
-  "rep": 42.0,
+  "n": 2359,
+  "population": "RV",
+  "rep": 45.0,
+  "opp": 46.0,
   "others": [],
-  "source": "https://en.wikipedia.org/wiki/2026_United_States_elections"
- },
- {
-  "state": "US",
-  "pollster": "Cygnal",
-  "sponsor_party": "R",
-  "end_date": "2026-05-06",
-  "n": 1500,
-  "population": "LV",
-  "opp": 49.0,
-  "rep": 42.0,
-  "others": [],
-  "source": "https://en.wikipedia.org/wiki/2026_United_States_elections"
+  "source": "https://www.harrisx.com/posts/forbes-and-harrisx-partner-on-new-american-confidence-survey-as-gallup-ends-approval-polling",
+  "feed": "votehub"
  },
  {
   "state": "US",
@@ -23721,10 +23715,11 @@
   "end_date": "2026-05-07",
   "n": 2069,
   "population": "A",
-  "opp": 55.0,
-  "rep": 40.0,
+  "rep": 40.1,
+  "opp": 54.6,
   "others": [],
-  "source": "https://en.wikipedia.org/wiki/2026_United_States_elections"
+  "source": "https://www.atlasintel.org/poll/usa-national-2026-05-11",
+  "feed": "votehub"
  },
  {
   "state": "US",
@@ -23814,42 +23809,6 @@
  },
  {
   "state": "US",
-  "pollster": "Morning Consult",
-  "sponsor_party": null,
-  "end_date": "2026-05-17",
-  "n": 2203,
-  "population": "RV",
-  "opp": 47.0,
-  "rep": 41.0,
-  "others": [],
-  "source": "https://en.wikipedia.org/wiki/2026_United_States_elections"
- },
- {
-  "state": "US",
-  "pollster": "Data for Progress",
-  "sponsor_party": "D",
-  "end_date": "2026-05-18",
-  "n": 1149,
-  "population": "LV",
-  "opp": 51.0,
-  "rep": 43.0,
-  "others": [],
-  "source": "https://en.wikipedia.org/wiki/2026_United_States_elections"
- },
- {
-  "state": "US",
-  "pollster": "Echelon Insights",
-  "sponsor_party": null,
-  "end_date": "2026-05-18",
-  "n": 1008,
-  "population": "LV",
-  "opp": 51.0,
-  "rep": 43.0,
-  "others": [],
-  "source": "https://en.wikipedia.org/wiki/2026_United_States_elections"
- },
- {
-  "state": "US",
   "pollster": "Impact Research (D)/ National Research Inc.",
   "sponsor_party": "D",
   "end_date": "2026-05-18",
@@ -23857,30 +23816,6 @@
   "population": "RV",
   "opp": 48.0,
   "rep": 40.0,
-  "others": [],
-  "source": "https://en.wikipedia.org/wiki/2026_United_States_elections"
- },
- {
-  "state": "US",
-  "pollster": "McLaughlin & Associates",
-  "sponsor_party": "R",
-  "end_date": "2026-05-18",
-  "n": 1000,
-  "population": "LV",
-  "opp": 46.0,
-  "rep": 42.0,
-  "others": [],
-  "source": "https://en.wikipedia.org/wiki/2026_United_States_elections"
- },
- {
-  "state": "US",
-  "pollster": "Quinnipiac University",
-  "sponsor_party": null,
-  "end_date": "2026-05-18",
-  "n": 1106,
-  "population": "RV",
-  "opp": 50.0,
-  "rep": 39.0,
   "others": [],
   "source": "https://en.wikipedia.org/wiki/2026_United_States_elections"
  },
@@ -23904,18 +23839,6 @@
   "n": 1375,
   "population": "RV",
   "opp": 46.0,
-  "rep": 43.0,
-  "others": [],
-  "source": "https://en.wikipedia.org/wiki/2026_United_States_elections"
- },
- {
-  "state": "US",
-  "pollster": "The Rainey Center",
-  "sponsor_party": null,
-  "end_date": "2026-05-18",
-  "n": 1010,
-  "population": "RV",
-  "opp": 45.0,
   "rep": 43.0,
   "others": [],
   "source": "https://en.wikipedia.org/wiki/2026_United_States_elections"
@@ -23946,27 +23869,16 @@
  },
  {
   "state": "US",
-  "pollster": "Rasmussen Reports",
-  "sponsor_party": "R",
-  "end_date": "2026-05-20",
-  "n": 2161,
-  "population": "LV",
-  "opp": 47.0,
-  "rep": 41.0,
-  "others": [],
-  "source": "https://en.wikipedia.org/wiki/2026_United_States_elections"
- },
- {
-  "state": "US",
   "pollster": "John Zogby Strategies",
   "sponsor_party": null,
   "end_date": "2026-05-22",
   "n": null,
   "population": "LV",
-  "opp": 49.0,
   "rep": 42.0,
+  "opp": 49.0,
   "others": [],
-  "source": "https://en.wikipedia.org/wiki/2026_United_States_elections"
+  "source": "https://johnzogbystrategies.com/the-latest-zogby-political-poll-trump-economic-concerns-war-trends-05-22-26",
+  "feed": "votehub"
  },
  {
   "state": "US",
@@ -23975,10 +23887,11 @@
   "end_date": "2026-05-25",
   "n": 1000,
   "population": "LV",
-  "opp": 50.0,
-  "rep": 41.0,
+  "rep": 41.3,
+  "opp": 49.8,
   "others": [],
-  "source": "https://en.wikipedia.org/wiki/2026_United_States_elections"
+  "source": "https://docs.google.com/spreadsheets/d/1Tw_zIv2JLeRPiZVOfoLA82rZY_RpNY9-/edit?rtpof=true&sd=true&gid=1557082126#gid=1557082126",
+  "feed": "votehub"
  },
  {
   "state": "US",
@@ -23987,10 +23900,11 @@
   "end_date": "2026-05-26",
   "n": 576,
   "population": "LV",
-  "opp": 49.0,
   "rep": 48.0,
+  "opp": 49.0,
   "others": [],
-  "source": "https://en.wikipedia.org/wiki/2026_United_States_elections"
+  "source": "https://law.marquette.edu/assets/community/poll/MLSPSC32/MLSPSC32Toplines_NationalIssues.html",
+  "feed": "votehub"
  },
  {
   "state": "US",
@@ -24054,27 +23968,16 @@
  },
  {
   "state": "US",
-  "pollster": "Morning Consult",
-  "sponsor_party": null,
-  "end_date": "2026-05-31",
-  "n": null,
-  "population": "RV",
-  "opp": 45.0,
-  "rep": 42.0,
-  "others": [],
-  "source": "https://en.wikipedia.org/wiki/2026_United_States_elections"
- },
- {
-  "state": "US",
   "pollster": "Focaldata/Financial Times",
   "sponsor_party": null,
   "end_date": "2026-06-01",
-  "n": 1483,
+  "n": 1537,
   "population": "RV",
-  "opp": 50.0,
-  "rep": 45.0,
+  "rep": 43.0,
+  "opp": 48.0,
   "others": [],
-  "source": "https://en.wikipedia.org/wiki/2026_United_States_elections"
+  "source": "http://focaldata.com/blog/trump-inflation-approval-crashes-to-record-low",
+  "feed": "votehub"
  },
  {
   "state": "US",
@@ -24090,27 +23993,16 @@
  },
  {
   "state": "US",
-  "pollster": "Quantus Insights",
-  "sponsor_party": "R",
-  "end_date": "2026-06-02",
-  "n": 1050,
-  "population": "LV",
-  "opp": 47.0,
-  "rep": 42.0,
-  "others": [],
-  "source": "https://en.wikipedia.org/wiki/2026_United_States_elections"
- },
- {
-  "state": "US",
   "pollster": "The Bullfinch Group",
   "sponsor_party": null,
   "end_date": "2026-06-02",
   "n": 1000,
   "population": "RV",
-  "opp": 42.0,
   "rep": 36.0,
+  "opp": 42.0,
   "others": [],
-  "source": "https://en.wikipedia.org/wiki/2026_United_States_elections"
+  "source": "https://www.thebullfinchgroup.com/post/public-release-of-bullfinch-q2-nationwide-survey-4",
+  "feed": "votehub"
  },
  {
   "state": "US",
@@ -24126,27 +24018,16 @@
  },
  {
   "state": "US",
-  "pollster": "Cygnal",
-  "sponsor_party": "R",
-  "end_date": "2026-06-03",
-  "n": 1500,
-  "population": "LV",
-  "opp": 49.0,
-  "rep": 44.0,
-  "others": [],
-  "source": "https://en.wikipedia.org/wiki/2026_United_States_elections"
- },
- {
-  "state": "US",
   "pollster": "The Argument/Verasight",
   "sponsor_party": null,
   "end_date": "2026-06-03",
   "n": 3008,
   "population": "RV",
-  "opp": 53.0,
   "rep": 47.0,
+  "opp": 53.0,
   "others": [],
-  "source": "https://en.wikipedia.org/wiki/2026_United_States_elections"
+  "source": "https://www.theargumentmag.com/p/the-biggest-issue-in-american-politics",
+  "feed": "votehub"
  },
  {
   "state": "US",
@@ -24174,39 +24055,29 @@
  },
  {
   "state": "US",
-  "pollster": "Clarity Campaign Labs",
-  "sponsor_party": "D",
-  "end_date": "2026-06-05",
-  "n": 1045,
-  "population": "LV",
-  "opp": 48.0,
-  "rep": 45.0,
-  "others": [],
-  "source": "https://en.wikipedia.org/wiki/2026_United_States_elections"
- },
- {
-  "state": "US",
   "pollster": "Research Co.",
   "sponsor_party": null,
   "end_date": "2026-06-06",
   "n": 1001,
   "population": "A",
-  "opp": 38.0,
   "rep": 33.0,
+  "opp": 38.0,
   "others": [],
-  "source": "https://en.wikipedia.org/wiki/2026_United_States_elections"
+  "source": "https://researchco.ca/wp-content/uploads/2026/06/Tables_Politics_USA_15Jun2026.pdf",
+  "feed": "votehub"
  },
  {
   "state": "US",
   "pollster": "HarrisX/Forbes",
   "sponsor_party": null,
   "end_date": "2026-06-07",
-  "n": 1565,
+  "n": 1137,
   "population": "LV",
-  "opp": 46.0,
   "rep": 45.0,
+  "opp": 46.0,
   "others": [],
-  "source": "https://en.wikipedia.org/wiki/2026_United_States_elections"
+  "source": "https://www.harrisx.com/content/forbes-harrisx-american-confidence-tracker-june-2026#06-07-2026",
+  "feed": "votehub"
  },
  {
   "state": "US",
@@ -24222,27 +24093,16 @@
  },
  {
   "state": "US",
-  "pollster": "Morning Consult",
-  "sponsor_party": null,
-  "end_date": "2026-06-07",
-  "n": 24849,
-  "population": "RV",
-  "opp": 46.0,
-  "rep": 42.0,
-  "others": [],
-  "source": "https://en.wikipedia.org/wiki/2026_United_States_elections"
- },
- {
-  "state": "US",
   "pollster": "Emerson College",
   "sponsor_party": null,
   "end_date": "2026-06-08",
   "n": 1200,
   "population": "LV",
-  "opp": 50.0,
-  "rep": 40.0,
+  "rep": 39.5,
+  "opp": 50.3,
   "others": [],
-  "source": "https://en.wikipedia.org/wiki/2026_United_States_elections"
+  "source": "https://docs.google.com/spreadsheets/d/1OdhDSPbsk575neEvXB2v103QdfEAE8l-/edit?gid=1710999602#gid=1710999602",
+  "feed": "votehub"
  },
  {
   "state": "US",
@@ -24288,10 +24148,11 @@
   "end_date": "2026-06-14",
   "n": 1012,
   "population": "LV",
-  "opp": 50.0,
   "rep": 44.0,
+  "opp": 50.0,
   "others": [],
-  "source": "https://en.wikipedia.org/wiki/2026_United_States_elections"
+  "source": "https://echeloninsights.com/hubfs/_Media%20for%20Insights%20Blog/June%202026%20Voter%20Omnibus%20Topline%20-%20External.pdf",
+  "feed": "votehub"
  },
  {
   "state": "US",
@@ -24300,10 +24161,11 @@
   "end_date": "2026-06-14",
   "n": 24000,
   "population": "RV",
-  "opp": 46.0,
-  "rep": 42.0,
+  "rep": 41.9,
+  "opp": 45.8,
   "others": [],
-  "source": "https://en.wikipedia.org/wiki/2026_United_States_elections"
+  "source": "https://pro-assets.morningconsult.com/wp-uploads/2026/06/MCPI-Midterm-Ballot_260622.html",
+  "feed": "votehub"
  },
  {
   "state": "US",
@@ -24370,18 +24232,6 @@
  },
  {
   "state": "US",
-  "pollster": "Quantus Insights",
-  "sponsor_party": "R",
-  "end_date": "2026-06-17",
-  "n": 1000,
-  "population": "LV",
-  "opp": 47.0,
-  "rep": 43.0,
-  "others": [],
-  "source": "https://en.wikipedia.org/wiki/2026_United_States_elections"
- },
- {
-  "state": "US",
   "pollster": "Data for Progress",
   "sponsor_party": "D",
   "end_date": "2026-06-21",
@@ -24389,30 +24239,6 @@
   "population": "LV",
   "opp": 51.0,
   "rep": 44.0,
-  "others": [],
-  "source": "https://en.wikipedia.org/wiki/2026_United_States_elections"
- },
- {
-  "state": "US",
-  "pollster": "Echelon Insights",
-  "sponsor_party": null,
-  "end_date": "2026-06-22",
-  "n": 1008,
-  "population": "LV",
-  "opp": 51.0,
-  "rep": 45.0,
-  "others": [],
-  "source": "https://en.wikipedia.org/wiki/2026_United_States_elections"
- },
- {
-  "state": "US",
-  "pollster": "Morning Consult",
-  "sponsor_party": null,
-  "end_date": "2026-06-22",
-  "n": null,
-  "population": "RV",
-  "opp": 46.0,
-  "rep": 42.0,
   "others": [],
   "source": "https://en.wikipedia.org/wiki/2026_United_States_elections"
  },
@@ -24545,18 +24371,6 @@
   "population": "RV",
   "opp": 45.0,
   "rep": 42.0,
-  "others": [],
-  "source": "https://en.wikipedia.org/wiki/2026_United_States_elections"
- },
- {
-  "state": "US",
-  "pollster": "Focaldata/Financial Times",
-  "sponsor_party": null,
-  "end_date": "2026-06-30",
-  "n": 1723,
-  "population": "RV",
-  "opp": 51.0,
-  "rep": 44.0,
   "others": [],
   "source": "https://en.wikipedia.org/wiki/2026_United_States_elections"
  },
@@ -25306,18 +25120,6 @@
  },
  {
   "state": "US",
-  "pollster": "Morning Consult",
-  "sponsor_party": null,
-  "end_date": "2026-09-06",
-  "n": 2203,
-  "population": "RV",
-  "opp": 46.0,
-  "rep": 42.0,
-  "others": [],
-  "source": "https://en.wikipedia.org/wiki/2026_United_States_elections"
- },
- {
-  "state": "US",
   "pollster": "Quinnipiac University",
   "sponsor_party": null,
   "end_date": "2026-09-06",
@@ -25726,18 +25528,6 @@
  },
  {
   "state": "US",
-  "pollster": "The Argument/Verasight",
-  "sponsor_party": null,
-  "end_date": "2026-09-22",
-  "n": null,
-  "population": "LV",
-  "opp": 55.0,
-  "rep": 45.0,
-  "others": [],
-  "source": "https://en.wikipedia.org/wiki/2026_United_States_elections"
- },
- {
-  "state": "US",
   "pollster": "Rasmussen Reports",
   "sponsor_party": "R",
   "end_date": "2026-09-23",
@@ -25901,18 +25691,6 @@
   "population": "LV",
   "opp": 50.0,
   "rep": 43.0,
-  "others": [],
-  "source": "https://en.wikipedia.org/wiki/2026_United_States_elections"
- },
- {
-  "state": "US",
-  "pollster": "Pew Research Center",
-  "sponsor_party": null,
-  "end_date": "2026-10-04",
-  "n": 3917,
-  "population": "RV",
-  "opp": 44.0,
-  "rep": 36.0,
   "others": [],
   "source": "https://en.wikipedia.org/wiki/2026_United_States_elections"
  },
