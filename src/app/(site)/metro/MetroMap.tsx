@@ -126,20 +126,6 @@ function track(layout: Layout, a: string, b: string): Point[] | null {
   return [pa, ...([a, b].sort()[0] === a ? mid : [...mid].reverse()), pb];
 }
 
-/** A path moved right of travel by ds[i] at each point, its corners kept sharp (exact for the map's 45° and 90° turns). */
-function offset(pts: Point[], ds: number | number[]): Point[] {
-  const at = (i: number) => (typeof ds === "number" ? ds : ds[i]);
-  return pts.map((p, i) => {
-    const d = at(i);
-    if (d === 0) return p;
-    const n1 = normal(pts[Math.max(0, i - 1)], pts[Math.max(1, i)]);
-    const n2 = normal(pts[Math.min(pts.length - 2, i)], pts[Math.min(pts.length - 1, i + 1)]);
-    const m = unit([n1[0] + n2[0], n1[1] + n2[1]]);
-    const k = d / Math.max(0.5, m[0] * n1[0] + m[1] * n1[1]);
-    return [p[0] + m[0] * k, p[1] + m[1] * k];
-  });
-}
-
 /**
  * An SVG path along the points with every corner rounded into a circular arc.
  * `lanes` is how far each point sits right of the shared track's middle and
@@ -178,9 +164,11 @@ function rounded(all: Point[], radius: number, line: number, allLanes: number[],
     const room = Math.min(Math.hypot(cb[0] - ca[0], cb[1] - ca[1]), Math.hypot(cc[0] - cb[0], cc[1] - cb[1])) / 2;
     // Tight spots still leave the innermost of three lanes a visible curve.
     const tc = Math.max(Math.min(radius, room), (line * 2 + 6) * half);
-    // Never run past the middle of either side, or neighboring curves would overlap into a blob.
+    // Never run past the middle of either side, or neighboring curves would overlap into a blob. A lane
+    // curving round the track's middle already fits (room is measured there), and clamping it again on its
+    // own sides would bend it tighter than its neighbors, pulling it off them.
     const fit = Math.min(Math.hypot(b[0] - pts[i - 1][0], b[1] - pts[i - 1][1]), Math.hypot(pts[i + 1][0] - b[0], pts[i + 1][1] - b[1])) / 2;
-    const t = Math.max(0.5, Math.min(fit, (steady ? tc : Math.min(radius, room)) - Math.sign(cross) * li * half));
+    const t = steady ? Math.max(0.5, tc - Math.sign(cross) * li * half) : Math.max(0.5, Math.min(fit, Math.min(radius, room)));
     const r = t / half;
     d += `L${f([b[0] - u1[0] * t, b[1] - u1[1] * t])}`;
     d += `A${r.toFixed(1)} ${r.toFixed(1)} 0 0 ${cross > 0 ? 1 : 0} ${f([b[0] + u2[0] * t, b[1] + u2[1] * t])}`;
@@ -342,66 +330,74 @@ function meet(p1: Point, u1: Point, p2: Point, u2: Point): Point | null {
   return [p1[0] + u1[0] * t, p1[1] + u1[1] * t];
 }
 
-/**
- * Each line as one path end to end, in its own lane wherever it shares track.
- * Corners are mitred so neighboring lanes stay parallel; where a line has to move
- * over a lane on a straight run, it eases across.
- */
+/** Each line as one path end to end, in its own lane wherever it shares track. */
 function linePaths(layout: Layout) {
-  return LINES.map((line) => {
-    const st = line.stations;
-    // Every straight edge of the line's track, with its lane.
-    const edges: { a: Point; b: Point; d: number }[] = [];
-    for (let i = 1; i < st.length; i++) {
-      const mid = track(layout, st[i - 1], st[i]);
-      if (!mid) continue;
-      const d = lane(line.code, st[i - 1], st[i], layout);
-      for (let k = 1; k < mid.length; k++) {
-        if (Math.hypot(mid[k][0] - mid[k - 1][0], mid[k][1] - mid[k - 1][1]) > 0.5) edges.push({ a: mid[k - 1], b: mid[k], d });
-      }
+  return LINES.map((line) => ({
+    code: line.code,
+    color: line.color,
+    d: lanePath(line.stations, (a, b) => lane(line.code, a, b, layout), layout),
+  }));
+}
+
+/**
+ * A path through stations st, each stretch a set distance right of the track's
+ * middle (laneOf, looking from a to b). Corners are mitred so neighboring lanes
+ * stay parallel and then rounded about the track's middle, so every lane's curve
+ * shares one center; where the distance changes on a straight run, it eases across.
+ */
+function lanePath(st: string[], laneOf: (a: string, b: string) => number, layout: Layout) {
+  // Every straight edge of the line's track, with its lane.
+  const edges: { a: Point; b: Point; d: number }[] = [];
+  for (let i = 1; i < st.length; i++) {
+    const mid = track(layout, st[i - 1], st[i]);
+    if (!mid) continue;
+    const d = laneOf(st[i - 1], st[i]);
+    for (let k = 1; k < mid.length; k++) {
+      if (Math.hypot(mid[k][0] - mid[k - 1][0], mid[k][1] - mid[k - 1][1]) > 0.5) edges.push({ a: mid[k - 1], b: mid[k], d });
     }
-    const pts: Point[] = [];
-    const lanes: number[] = [];
-    const centers: Point[] = [];
-    const push = (p: Point, d: number, c: Point) => {
-      const last = pts[pts.length - 1];
-      if (last && Math.hypot(p[0] - last[0], p[1] - last[1]) <= 0.5) return;
-      pts.push(p);
-      lanes.push(d);
-      centers.push(c);
-    };
-    const shifted = (e: { a: Point; b: Point; d: number }, p: Point): Point => {
-      const n = normal(e.a, e.b);
-      return [p[0] + n[0] * e.d, p[1] + n[1] * e.d];
-    };
-    if (!edges.length) return { code: line.code, color: line.color, d: "" };
-    push(shifted(edges[0], edges[0].a), edges[0].d, edges[0].a);
-    for (let k = 1; k < edges.length; k++) {
-      const [e, f] = [edges[k - 1], edges[k]];
-      const u1 = unit([e.b[0] - e.a[0], e.b[1] - e.a[1]]);
-      const u2 = unit([f.b[0] - f.a[0], f.b[1] - f.a[1]]);
-      const corner = meet(shifted(e, e.a), u1, shifted(f, f.a), u2);
-      if (corner) {
-        // Same lane round the corner curves about the track's middle; a lane change at a corner just follows the mitre.
-        push(corner, e.d === f.d ? e.d : NaN, corner && e.d === f.d ? e.b : corner);
-      } else if (e.d === f.d) {
-        push(shifted(e, e.b), e.d, e.b);
-      } else {
-        // Straight on but changing lane: slide across over a short stretch centered on the station.
-        const room = Math.min(Math.hypot(e.b[0] - e.a[0], e.b[1] - e.a[1]), Math.hypot(f.b[0] - f.a[0], f.b[1] - f.a[1])) / 2;
-        const half = Math.min(layout.line * 1.5, room * 0.8);
-        const p: Point = [e.b[0] - u1[0] * half, e.b[1] - u1[1] * half];
-        const q: Point = [f.a[0] + u2[0] * half, f.a[1] + u2[1] * half];
-        const pe = shifted(e, p);
-        const qf = shifted(f, q);
-        push(pe, NaN, pe);
-        push(qf, NaN, qf);
-      }
+  }
+  const pts: Point[] = [];
+  const lanes: number[] = [];
+  const centers: Point[] = [];
+  const push = (p: Point, d: number, c: Point) => {
+    const last = pts[pts.length - 1];
+    if (last && Math.hypot(p[0] - last[0], p[1] - last[1]) <= 0.5) return;
+    pts.push(p);
+    lanes.push(d);
+    centers.push(c);
+  };
+  const shifted = (e: { a: Point; b: Point; d: number }, p: Point): Point => {
+    const n = normal(e.a, e.b);
+    return [p[0] + n[0] * e.d, p[1] + n[1] * e.d];
+  };
+  if (!edges.length) return "";
+  push(shifted(edges[0], edges[0].a), edges[0].d, edges[0].a);
+  for (let k = 1; k < edges.length; k++) {
+    const [e, f] = [edges[k - 1], edges[k]];
+    const u1 = unit([e.b[0] - e.a[0], e.b[1] - e.a[1]]);
+    const u2 = unit([f.b[0] - f.a[0], f.b[1] - f.a[1]]);
+    const corner = meet(shifted(e, e.a), u1, shifted(f, f.a), u2);
+    if (corner) {
+      // Same lane round the corner curves about the track's middle; a lane change at a corner just follows the mitre.
+      push(corner, e.d === f.d ? e.d : NaN, corner && e.d === f.d ? e.b : corner);
+    } else if (e.d === f.d) {
+      push(shifted(e, e.b), e.d, e.b);
+    } else {
+      // Straight on but changing lane: slide across over a short stretch centered on the station.
+      const room = Math.min(Math.hypot(e.b[0] - e.a[0], e.b[1] - e.a[1]), Math.hypot(f.b[0] - f.a[0], f.b[1] - f.a[1])) / 2;
+      const half = Math.min(layout.line * 1.5, room * 0.8);
+      const p: Point = [e.b[0] - u1[0] * half, e.b[1] - u1[1] * half];
+      const q: Point = [f.a[0] + u2[0] * half, f.a[1] + u2[1] * half];
+      const pe = shifted(e, p);
+      const qf = shifted(f, q);
+      // Each end of the slide sits squarely in its own lane, so a curve just past it still counts as steady.
+      push(pe, e.d, p);
+      push(qf, f.d, q);
     }
-    const last = edges[edges.length - 1];
-    push(shifted(last, last.b), last.d, last.b);
-    return { code: line.code, color: line.color, d: pts.length > 1 ? rounded(pts, layout.radius, layout.line, lanes, centers) : "" };
-  });
+  }
+  const last = edges[edges.length - 1];
+  push(shifted(last, last.b), last.d, last.b);
+  return pts.length > 1 ? rounded(pts, layout.radius, layout.line, lanes, centers) : "";
 }
 
 /** How many lines wide the track is at a station. */
@@ -505,31 +501,82 @@ function along(train: Train) {
   return i + (j - i) * train.t;
 }
 
-/**
- * The spot `u` stations along a line (see along): on the track, just outside
- * the lines on the right-hand side of the way the train is heading, so trains
- * going opposite ways pass on opposite sides.
- */
-function trainPoint(line: LineCode, u: number, forward: boolean, layout: Layout): Point | null {
-  const stops = LINE_BY_CODE.get(line)!.stations;
-  const i = Math.max(0, Math.min(stops.length - 2, Math.floor(u)));
-  const from = stops[i];
-  const to = stops[i + 1];
-  const t = Math.max(0, Math.min(1, u - i));
-  const mid = track(layout, from, to);
-  if (!mid) return null;
-  // Just outside the outermost lane on this stretch, on the train's right.
-  const ds = layout.merged ? [0] : (SHARED.get(key2(from, to)) ?? [line]).map((l) => lane(l, from, to, layout));
+/** How far right of the track's middle a train runs from a to b: just outside the outermost lane, on its right. */
+function trainLane(line: LineCode, a: string, b: string, forward: boolean, layout: Layout) {
+  const ds = layout.merged ? [0] : (SHARED.get(key2(a, b)) ?? [line]).map((l) => lane(l, a, b, layout));
   const clear = layout.line / 2 + layout.train + 1.5;
-  const pts = offset(mid, forward ? Math.max(...ds) + clear : Math.min(...ds) - clear);
+  return forward ? Math.max(...ds) + clear : Math.min(...ds) - clear;
+}
 
-  // Walk t of the way along it.
-  const lengths = pts.slice(1).map((p, k) => Math.hypot(p[0] - pts[k][0], p[1] - pts[k][1]));
-  let left = lengths.reduce((a, b) => a + b, 0) * t;
-  let k = 0;
-  while (k < lengths.length - 1 && left > lengths[k]) left -= lengths[k++];
-  const f = lengths[k] ? left / lengths[k] : 0;
-  return [pts[k][0] + (pts[k + 1][0] - pts[k][0]) * f, pts[k][1] + (pts[k + 1][1] - pts[k][1]) * f];
+/**
+ * The path a line's trains run along in one direction, drawn like the lines
+ * themselves so it curves alongside them, with how far along it each station is.
+ */
+type Rail = { pts: Point[]; len: number[]; stops: number[] };
+
+function rail(line: LineCode, forward: boolean, layout: Layout): Rail {
+  const st = LINE_BY_CODE.get(line)!.stations;
+  const pts = trace(lanePath(st, (a, b) => trainLane(line, a, b, forward, layout), layout));
+  const len = [0];
+  for (let k = 1; k < pts.length; k++) len.push(len[k - 1] + Math.hypot(pts[k][0] - pts[k - 1][0], pts[k][1] - pts[k - 1][1]));
+  // Each station: the nearest point on the rail to where it would be on straight track, never behind the last one.
+  const stops: number[] = [];
+  let from = 0;
+  st.forEach((key, i) => {
+    const p = layout.pos.get(key);
+    const [a, b] = i < st.length - 1 ? [key, st[i + 1]] : [st[i - 1], key];
+    const mid = p && track(layout, a, b);
+    if (!p || !mid) {
+      stops.push(len[from]);
+      return;
+    }
+    const side = i < st.length - 1 ? normal(mid[0], mid[1]) : normal(mid[mid.length - 2], mid[mid.length - 1]);
+    const d = trainLane(line, a, b, forward, layout);
+    const guess: Point = [p[0] + side[0] * d, p[1] + side[1] * d];
+    let best = from;
+    let bd = Infinity;
+    for (let k = from; k < pts.length; k++) {
+      const dd = (pts[k][0] - guess[0]) ** 2 + (pts[k][1] - guess[1]) ** 2;
+      if (dd < bd) {
+        bd = dd;
+        best = k;
+      }
+    }
+    stops.push(len[best]);
+    from = best;
+  });
+  return { pts, len, stops };
+}
+
+/** Every line's rails, both ways, for one layout. */
+function rails(layout: Layout) {
+  const out = new Map<string, Rail>();
+  for (const l of LINES) for (const f of [true, false]) out.set(`${l.code}${f}`, rail(l.code, f, layout));
+  return out;
+}
+
+/**
+ * The spot `u` stations along a line (see along): beside the lines on the
+ * right-hand side of the way the train is heading, so trains going opposite ways
+ * pass on opposite sides, following the lines round their curves.
+ */
+function trainPoint(line: LineCode, u: number, forward: boolean, all: Map<string, Rail>): Point | null {
+  const r = all.get(`${line}${forward}`);
+  if (!r || r.pts.length < 2) return null;
+  const i = Math.max(0, Math.min(r.stops.length - 2, Math.floor(u)));
+  const t = Math.max(0, Math.min(1, u - i));
+  const want = r.stops[i] + (r.stops[i + 1] - r.stops[i]) * t;
+  // Binary search for the stretch of rail holding that distance.
+  let lo = 0;
+  let hi = r.len.length - 1;
+  while (hi - lo > 1) {
+    const m = (lo + hi) >> 1;
+    if (r.len[m] <= want) lo = m;
+    else hi = m;
+  }
+  const span = r.len[hi] - r.len[lo];
+  const f = span ? (want - r.len[lo]) / span : 0;
+  return [r.pts[lo][0] + (r.pts[hi][0] - r.pts[lo][0]) * f, r.pts[lo][1] + (r.pts[hi][1] - r.pts[lo][1]) * f];
 }
 
 /** A train's trip on screen: from where it was drawn when new data came in, to where WMATA now says it is. */
@@ -642,9 +689,10 @@ export function MetroMap() {
   // frame by frame outside React so the map itself doesn't re-render.
   const trips = useRef(new Map<string, Trip>());
   const dots = useRef(new Map<string, SVGGElement>());
-  const layoutRef = useRef(layout);
+  const allRails = useMemo(() => rails(layout), [layout]);
+  const railsRef = useRef(allRails);
   useEffect(() => {
-    layoutRef.current = layout;
+    railsRef.current = allRails;
   });
   useEffect(() => {
     const now = performance.now();
@@ -674,7 +722,7 @@ export function MetroMap() {
       const now = performance.now();
       for (const [id, trip] of trips.current) {
         const el = dots.current.get(id);
-        const p = el && trainPoint(trip.line, tripAt(trip, now), trip.forward, layoutRef.current);
+        const p = el && trainPoint(trip.line, tripAt(trip, now), trip.forward, railsRef.current);
         if (p) el.setAttribute("transform", `translate(${p[0].toFixed(1)} ${p[1].toFixed(1)})`);
       }
       frame = requestAnimationFrame(tick);
@@ -758,8 +806,9 @@ export function MetroMap() {
   // screen like a phone, where it starts zoomed in on downtown to fill the room
   // and the far ends are a drag away.
   function home(): View {
-    const k = Math.min(1.7, Math.max(1, (box.y1 - box.y0) / (H * fit)));
-    if (k === 1) return { k: 1, x: 0, y: 0 };
+    const tall = (box.y1 - box.y0) / (H * fit);
+    if (tall < 1.4) return { k: 1, x: 0, y: 0 };
+    const k = Math.min(1.7, tall);
     const [mx, my] = layout.pos.get("A01")!;
     const cx = (box.x0 + box.x1) / 2 / fit;
     const cy = (box.y0 + box.y1) / 2 / fit;
@@ -853,8 +902,8 @@ export function MetroMap() {
                   // Where it stands right now, before the next frame moves it.
                   const trip = trips.current.get(t.id);
                   const p = trip
-                    ? trainPoint(trip.line, tripAt(trip, performance.now()), trip.forward, layoutRef.current)
-                    : trainPoint(t.line, along(t), t.forward, layoutRef.current);
+                    ? trainPoint(trip.line, tripAt(trip, performance.now()), trip.forward, railsRef.current)
+                    : trainPoint(t.line, along(t), t.forward, railsRef.current);
                   if (p) el.setAttribute("transform", `translate(${p[0].toFixed(1)} ${p[1].toFixed(1)})`);
                 }}
                 className="cursor-pointer"
