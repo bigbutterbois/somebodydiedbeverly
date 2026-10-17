@@ -3,9 +3,9 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 
-const TABS = ["/metro", "/metro/map"];
+const TABS = ["/metro", "/metro/arrivals"];
 
-/** Arrivals / Map switch at the top of the Metro pages. */
+/** Map / Arrivals switch at the top of the Metro pages. */
 export function MetroTabs({ labels }: { labels: string[] }) {
   const pathname = usePathname();
   return (
