@@ -1,12 +1,16 @@
 import type { Metadata } from "next";
-import { getStationCoords } from "@/lib/metro/wmata";
-import { Arrivals } from "./Arrivals";
+import { redirect } from "next/navigation";
+import { MetroMap } from "./MetroMap";
 
 export const metadata: Metadata = { title: "Metro" };
 
 export default async function MetroPage({ searchParams }: PageProps<"/metro">) {
+  // Station links from before the map moved here were for arrivals.
   const { station } = await searchParams;
-  // Station locations, for finding the one nearest you. Missing until the WMATA key is set.
-  const coords = await getStationCoords().catch(() => null);
-  return <Arrivals coords={coords} requested={typeof station === "string" ? station : null} />;
+  if (typeof station === "string") redirect(`/metro/arrivals?station=${encodeURIComponent(station)}`);
+  return (
+    <div className="-mb-6 flex flex-1 flex-col">
+      <MetroMap />
+    </div>
+  );
 }

@@ -13,7 +13,8 @@ import {
   type Station,
 } from "@/lib/metro/network";
 import type { Train } from "@/lib/metro/wmata";
-import { Updated } from "../Updated";
+import { Updated } from "./Updated";
+import { useStored } from "./useStored";
 
 // Every Metrorail train, live, on WMATA's own system map, filling the screen.
 // Only the lines and stations are drawn, so the trains stand out.
@@ -38,9 +39,14 @@ type Layout = {
   font: number;
   /** How round the track's corners are. */
   radius: number;
+  /** The simple map: every line on one shared track down the middle. */
+  merged: boolean;
 };
 
 const REFRESH = 10_000;
+const STYLE_KEY = "metro.mapStyle";
+/** The simple map's one line: a grey between the page and its text, solid so overlapping lines don't darken. */
+const TRACK = "color-mix(in srgb, var(--foreground) 32%, var(--background))";
 
 // Station marks as on WMATA's map: white with a dark ring.
 const RING = "#231f20";
@@ -61,7 +67,9 @@ const DIAGRAM: Layout = {
   train: 7.5,
   font: 13,
   radius: 28 * S,
+  merged: false,
 };
+const SIMPLE: Layout = { ...DIAGRAM, merged: true };
 
 function unit([x, y]: Point): Point {
   const len = Math.hypot(x, y) || 1;
@@ -232,34 +240,98 @@ const LANES = (() => {
 
 /** How far right of the track's middle a line runs going from station a to b. */
 function lane(line: LineCode, a: string, b: string, layout: Layout) {
+  if (layout.merged) return 0;
   const d = LANES.get(key2(a, b))?.get(line) ?? 0;
   return ([a, b].sort()[0] === a ? d : -d) * layout.line;
 }
 
-/** Where the line(s) actually pass through a station, which is off the track's middle when lanes are shifted. */
-function stationPoint(key: string, layout: Layout): Point | null {
-  const p = layout.pos.get(key);
-  if (!p) return null;
-  let sx = 0;
-  let sy = 0;
-  let n = 0;
-  for (const l of LINES) {
-    const i = l.stations.indexOf(key);
-    if (i < 0) continue;
-    // The busier stretch on either side decides the lane.
-    const near = [l.stations[i - 1], l.stations[i + 1]].filter(Boolean).map((o) => key2(key, o));
-    const id = near.sort((p2, q) => SHARED.get(q)!.length - SHARED.get(p2)!.length)[0];
-    const [a, b] = id.split("|");
-    const pts = track(layout, a, b);
-    if (!pts) continue;
-    const m = pts.length;
-    const side = key === a ? normal(pts[0], pts[1]) : normal(pts[m - 2], pts[m - 1]);
-    const d = LANES.get(id)!.get(l.code)! * layout.line;
-    sx += side[0] * d;
-    sy += side[1] * d;
-    n++;
+/** Points every couple of pixels along a path made of M, L and small-arc A commands (as rounded draws them). */
+function trace(d: string): Point[] {
+  const out: Point[] = [];
+  const re = /([MLA])([^MLA]*)/g;
+  let at: Point = [0, 0];
+  for (const m of d.matchAll(re)) {
+    const n = m[2].trim().split(/[\s,]+/).map(Number);
+    if (m[1] === "M") {
+      at = [n[0], n[1]];
+      out.push(at);
+      continue;
+    }
+    const to: Point = m[1] === "L" ? [n[0], n[1]] : [n[5], n[6]];
+    const chord = Math.hypot(to[0] - at[0], to[1] - at[1]);
+    if (m[1] === "L" || chord < 0.01) {
+      const steps = Math.max(1, Math.ceil(chord / 2));
+      for (let k = 1; k <= steps; k++) out.push([at[0] + ((to[0] - at[0]) * k) / steps, at[1] + ((to[1] - at[1]) * k) / steps]);
+    } else {
+      // Small arc: the center sits right of the chord for a clockwise sweep (y points down), left otherwise.
+      const r = Math.max(n[0], chord / 2);
+      const side = n[4] === 1 ? 1 : -1;
+      const nn = normal(at, to);
+      const h = Math.sqrt(Math.max(0, r * r - (chord / 2) ** 2));
+      const c: Point = [(at[0] + to[0]) / 2 + nn[0] * h * side, (at[1] + to[1]) / 2 + nn[1] * h * side];
+      const a0 = Math.atan2(at[1] - c[1], at[0] - c[0]);
+      let a1 = Math.atan2(to[1] - c[1], to[0] - c[0]);
+      if (side === 1 && a1 < a0) a1 += 2 * Math.PI;
+      if (side === -1 && a1 > a0) a1 -= 2 * Math.PI;
+      const steps = Math.max(2, Math.ceil((Math.abs(a1 - a0) * r) / 2));
+      for (let k = 1; k <= steps; k++) {
+        const ang = a0 + ((a1 - a0) * k) / steps;
+        out.push([c[0] + Math.cos(ang) * r, c[1] + Math.sin(ang) * r]);
+      }
+    }
+    at = to;
   }
-  return n ? [p[0] + sx / n, p[1] + sy / n] : p;
+  return out;
+}
+
+function nearestOn(pts: Point[], p: Point): Point {
+  let best = pts[0];
+  let bd = Infinity;
+  for (const q of pts) {
+    const d = (q[0] - p[0]) ** 2 + (q[1] - p[1]) ** 2;
+    if (d < bd) {
+      bd = d;
+      best = q;
+    }
+  }
+  return best;
+}
+
+/**
+ * Where each station's mark goes: on each of its lines exactly as drawn (curves
+ * included), averaged across the lines that stop there, so it sits in the middle
+ * of shared track.
+ */
+function stationPoints(layout: Layout, paths: { code: LineCode; d: string }[]) {
+  const traced = new Map(paths.map((p) => [p.code, trace(p.d)]));
+  const out = new Map<string, Point>();
+  for (const st of STATIONS) {
+    const p = layout.pos.get(st.key);
+    if (!p) continue;
+    let sx = 0;
+    let sy = 0;
+    let n = 0;
+    for (const l of LINES) {
+      const i = l.stations.indexOf(st.key);
+      const pts = traced.get(l.code);
+      if (i < 0 || !pts?.length) continue;
+      // Where this line would cross the station if its stretch ran straight, pulled onto the line as drawn.
+      const next = l.stations[i + 1] ?? l.stations[i - 1];
+      const mid = track(layout, st.key, next);
+      let guess = p;
+      if (mid) {
+        const side = normal(mid[0], mid[1]);
+        const d = lane(l.code, st.key, next, layout);
+        guess = [p[0] + side[0] * d, p[1] + side[1] * d];
+      }
+      const q = nearestOn(pts, guess);
+      sx += q[0];
+      sy += q[1];
+      n++;
+    }
+    out.set(st.key, n ? [sx / n, sy / n] : p);
+  }
+  return out;
 }
 
 /** Where two offset lines meet, or null when they run parallel. */
@@ -345,14 +417,15 @@ function width(key: string) {
 
 function StationMark({
   station,
+  at: p,
   layout,
   onHover,
 }: {
   station: Station;
+  at: Point | undefined;
   layout: Layout;
   onHover: (key: string | null) => void;
 }) {
-  const p = stationPoint(station.key, layout);
   if (!p) return null;
   const w = layout.line / 4.5;
   let mark;
@@ -369,7 +442,7 @@ function StationMark({
   }
   return (
     <a
-      href={`/metro?station=${station.key}`}
+      href={`/metro/arrivals?station=${station.key}`}
       aria-label={`${station.name} arrivals`}
       onPointerEnter={() => onHover(station.key)}
       onPointerLeave={() => onHover(null)}
@@ -381,12 +454,11 @@ function StationMark({
   );
 }
 
-function Label({ station, layout }: { station: Station; layout: Layout }) {
-  const at = stationPoint(station.key, layout);
+function Label({ station, at, layout }: { station: Station; at: Point | undefined; layout: Layout }) {
   if (!at) return null;
   const font = layout.font;
   // Clear the widest thing at the station: the bullseye, or every lane of shared track.
-  const half = Math.max(HUBS.has(station.key) ? layout.line * 0.95 : 0, (width(station.key) * layout.line) / 2);
+  const half = Math.max(HUBS.has(station.key) ? layout.line * 0.95 : 0, ((layout.merged ? 1 : width(station.key)) * layout.line) / 2);
   const d = half + font * 0.4;
   // Diagonal labels start off the corner; the extra half font keeps the tops of the letters clear too.
   const c = half + font * 0.35;
@@ -447,7 +519,7 @@ function trainPoint(line: LineCode, u: number, forward: boolean, layout: Layout)
   const mid = track(layout, from, to);
   if (!mid) return null;
   // Just outside the outermost lane on this stretch, on the train's right.
-  const ds = (SHARED.get(key2(from, to)) ?? [line]).map((l) => lane(l, from, to, layout));
+  const ds = layout.merged ? [0] : (SHARED.get(key2(from, to)) ?? [line]).map((l) => lane(l, from, to, layout));
   const clear = layout.line / 2 + layout.train + 1.5;
   const pts = offset(mid, forward ? Math.max(...ds) + clear : Math.min(...ds) - clear);
 
@@ -461,11 +533,46 @@ function trainPoint(line: LineCode, u: number, forward: boolean, layout: Layout)
 }
 
 /** A train's trip on screen: from where it was drawn when new data came in, to where WMATA now says it is. */
-type Trip = { line: LineCode; u0: number; u1: number; forward: boolean; start: number };
+/**
+ * A train's trip on screen, from u0 to u1 over one refresh, leaving at speed v0
+ * and arriving at speed v1 (stations per millisecond). Speed changes smoothly
+ * between trips, so a train pulls away gently, keeps a steady pace, and eases to
+ * a stop at a platform.
+ */
+type Trip = { line: LineCode; u0: number; u1: number; v0: number; v1: number; forward: boolean; start: number };
+
+/** How long a train keeps rolling past its trip's end at its arrival speed while the next update is on its way. */
+const COAST = 3000;
 
 function tripAt(trip: Trip, now: number) {
-  const f = Math.min(1, Math.max(0, (now - trip.start) / REFRESH));
-  return trip.u0 + (trip.u1 - trip.u0) * f;
+  const ms = now - trip.start;
+  if (ms >= REFRESH) return trip.u1 + trip.v1 * Math.min(ms - REFRESH, COAST);
+  const f = Math.max(0, ms / REFRESH);
+  const [f2, f3] = [f * f, f * f * f];
+  return (
+    (2 * f3 - 3 * f2 + 1) * trip.u0 +
+    (f3 - 2 * f2 + f) * REFRESH * trip.v0 +
+    (-2 * f3 + 3 * f2) * trip.u1 +
+    (f3 - f2) * REFRESH * trip.v1
+  );
+}
+
+function speedAt(trip: Trip, now: number) {
+  const ms = now - trip.start;
+  if (ms >= REFRESH) return ms - REFRESH < COAST ? trip.v1 : 0;
+  const f = Math.max(0, ms / REFRESH);
+  const f2 = f * f;
+  return (
+    ((6 * f2 - 6 * f) * trip.u0 + (-6 * f2 + 6 * f) * trip.u1) / REFRESH +
+    (3 * f2 - 4 * f + 1) * trip.v0 +
+    (3 * f2 - 2 * f) * trip.v1
+  );
+}
+
+/** Speeds that keep a trip moving one way only: never past where it's going, never backing up. */
+function steady(du: number, v: number) {
+  if (du === 0 || Math.sign(v) !== Math.sign(du)) return 0;
+  return Math.sign(du) * Math.min(Math.abs(v), (3 * Math.abs(du)) / REFRESH);
 }
 
 /** What a train is doing, from where it is and how long it's been there. */
@@ -513,9 +620,18 @@ function useTrains() {
 }
 
 export function MetroMap() {
-  const layout = DIAGRAM;
+  // Remembered on this device; the tap still works where storage is off.
+  const [stored, store] = useStored(STYLE_KEY);
+  const [chosen, setChosen] = useState<string | null>(null);
+  const simple = (chosen ?? stored) === "simple";
+  function saveStyle(next: string) {
+    setChosen(next);
+    store(next);
+  }
+  const layout = simple ? SIMPLE : DIAGRAM;
   const { W, H } = layout;
   const paths = useMemo(() => linePaths(layout), [layout]);
+  const points = useMemo(() => stationPoints(layout, paths), [layout, paths]);
   const { trains, updated, error } = useTrains();
   const [selected, setSelected] = useState<string | null>(null);
   const [hover, setHover] = useState<string | null>(null);
@@ -535,10 +651,19 @@ export function MetroMap() {
     for (const t of trains) {
       const u1 = along(t);
       const old = trips.current.get(t.id);
-      let u0 = old && old.line === t.line ? tripAt(old, now) : u1;
+      const same = old && old.line === t.line && old.forward === t.forward;
+      let u0 = same ? tripAt(old, now) : u1;
       // A jump of more than a few stations is a train turned around or renumbered: no gliding.
       if (Math.abs(u1 - u0) > 3) u0 = u1;
-      next.set(t.id, { line: t.line, u0, u1, forward: t.forward, start: now });
+      // A train that coasted a hair past where it then turned out to stop holds still rather than backing up.
+      const heading = same ? Math.sign(old.u1 - old.u0) : 0;
+      const target = heading && Math.sign(u1 - u0) === -heading && Math.abs(u1 - u0) < 0.3 ? u0 : u1;
+      const du = target - u0;
+      // Carry on at the speed it had; arrive still if WMATA says it's stopped or at a platform.
+      const v0 = same ? steady(du, speedAt(old, now)) : 0;
+      const stops = t.still >= 20 || t.t === 0 || t.from === t.to;
+      const v1 = stops ? 0 : steady(du, du / REFRESH);
+      next.set(t.id, { line: t.line, u0, u1: target, v0, v1, forward: t.forward, start: now });
     }
     trips.current = next;
   }, [trains]);
@@ -557,32 +682,42 @@ export function MetroMap() {
     return () => cancelAnimationFrame(frame);
   }, []);
 
-  // The map fills its box below the legend, centered, with the spare room as
-  // margin: the drawing is a VW × VH canvas in map units, and zoom and pan move over it.
+  // The map fills its box beside the key (below it on a phone, where the key sits
+  // at the bottom), centered, with the spare room as margin: the drawing is a
+  // VW × VH canvas in map units, and zoom and pan move over it.
   const boxRef = useRef<HTMLDivElement>(null);
-  const barRef = useRef<HTMLDivElement>(null);
+  const keyRef = useRef<HTMLDivElement>(null);
+  const zoomBarRef = useRef<HTMLDivElement>(null);
   const svgRef = useRef<SVGSVGElement>(null);
-  const [box, setBox] = useState({ w: W, h: H, top: 0 });
+  const [box, setBox] = useState({ w: W, h: H, x0: 0, y0: 0, x1: W, y1: H });
   useEffect(() => {
     const el = boxRef.current!;
     const measure = () => {
       const r = el.getBoundingClientRect();
-      const bar = barRef.current!.getBoundingClientRect();
-      if (r.width > 0 && r.height > 0) setBox({ w: r.width, h: r.height, top: bar.bottom - r.top });
+      if (!(r.width > 0 && r.height > 0)) return;
+      const key = keyRef.current!.getBoundingClientRect();
+      const zoom = zoomBarRef.current!.getBoundingClientRect();
+      const GAP = 12;
+      const atBottom = key.bottom > r.bottom - 40 && key.width > r.width / 2;
+      const room = atBottom
+        ? { x0: GAP, y0: zoom.bottom - r.top + GAP, x1: r.width - GAP, y1: key.top - r.top - GAP }
+        : { x0: key.right - r.left + GAP, y0: GAP, x1: r.width - GAP, y1: r.height - GAP };
+      // Never squeeze the map below half the box, whatever the key does.
+      if (room.x1 - room.x0 < r.width / 2) room.x0 = GAP;
+      if (room.y1 - room.y0 < r.height / 2) room.y0 = GAP;
+      setBox({ w: r.width, h: r.height, ...room });
     };
     measure();
     const ro = new ResizeObserver(measure);
     ro.observe(el);
-    ro.observe(barRef.current!);
+    ro.observe(keyRef.current!);
     return () => ro.disconnect();
   }, []);
-  const GAP = 12;
-  const roomH = Math.max(box.h - box.top - 2 * GAP, box.h / 2);
-  const fit = Math.min((box.w - 2 * GAP) / W, roomH / H);
+  const fit = Math.min((box.x1 - box.x0) / W, (box.y1 - box.y0) / H);
   const VW = box.w / fit;
   const VH = box.h / fit;
-  const ox = (VW - W) / 2;
-  const oy = (box.h - roomH - GAP) / fit + (roomH / fit - H) / 2;
+  const ox = (box.x0 + (box.x1 - box.x0 - W * fit) / 2) / fit;
+  const oy = (box.y0 + (box.y1 - box.y0 - H * fit) / 2) / fit;
 
   // Zoom and pan, as on the House map.
   const [view, setView] = useState<View>({ k: 1, x: 0, y: 0 });
@@ -618,11 +753,22 @@ export function MetroMap() {
     el.addEventListener("wheel", onWheel, { passive: false });
     return () => el.removeEventListener("wheel", onWheel);
   }, []);
-  // A new window size starts over from the whole map.
-  const [seen, setSeen] = useState(box);
-  if (seen.w !== box.w || seen.h !== box.h || seen.top !== box.top) {
+  // Where the map opens (and Reset goes back to): the whole map, except on a tall
+  // screen like a phone, where it starts zoomed in on downtown to fill the room
+  // and the far ends are a drag away.
+  function home(): View {
+    const k = Math.min(1.7, Math.max(1, (box.y1 - box.y0) / (H * fit)));
+    if (k === 1) return { k: 1, x: 0, y: 0 };
+    const [mx, my] = layout.pos.get("A01")!;
+    const cx = (box.x0 + box.x1) / 2 / fit;
+    const cy = (box.y0 + box.y1) / 2 / fit;
+    return clampView({ k, x: cx - k * (ox + mx), y: cy - k * (oy + my) });
+  }
+  // A new window size starts over.
+  const [seen, setSeen] = useState<typeof box | null>(null);
+  if (seen?.w !== box.w || seen?.h !== box.h || seen?.x0 !== box.x0 || seen?.y1 !== box.y1) {
     setSeen(box);
-    setView({ k: 1, x: 0, y: 0 });
+    setView(home());
   }
   function onPointerDown(e: React.PointerEvent) {
     pointers.current.set(e.pointerId, { x: e.clientX, y: e.clientY });
@@ -658,8 +804,8 @@ export function MetroMap() {
   const counts = LINES.map((l) => ({ line: l, n: inService.filter((t) => t.line === l.code).length }));
   const empty = trains.length - inService.length;
 
-  // The whole width of the window, down to its bottom edge, with the legend and
-  // zoom buttons floating on top.
+  // The whole width of the window, down to its bottom edge, with the key and zoom
+  // buttons floating on top: the key down the left side, or along the bottom on a phone.
   return (
     <div ref={boxRef} className="relative ml-[calc(50%-50vw)] min-h-[420px] w-screen flex-1 overflow-hidden">
       <svg
@@ -679,7 +825,7 @@ export function MetroMap() {
               key={p.code}
               d={p.d}
               fill="none"
-              stroke={p.color}
+              stroke={simple ? TRACK : p.color}
               // A hair wider than the lane so neighboring lines overlap instead of leaving a thin seam.
               strokeWidth={layout.line + 1.2}
               strokeLinecap="round"
@@ -687,10 +833,10 @@ export function MetroMap() {
             />
           ))}
           {STATIONS.map((s) => (
-            <StationMark key={s.key} station={s} layout={layout} onHover={setHover} />
+            <StationMark key={s.key} station={s} at={points.get(s.key)} layout={layout} onHover={setHover} />
           ))}
           {labelled.map((s) => (
-            <Label key={s.key} station={s} layout={layout} />
+            <Label key={s.key} station={s} at={points.get(s.key)} layout={layout} />
           ))}
           {trains.map((t) => {
             const on = t.id === selected;
@@ -730,57 +876,87 @@ export function MetroMap() {
         </g>
       </svg>
 
-      <div ref={barRef} className="pointer-events-none absolute inset-x-3 top-3 flex items-start justify-between gap-3">
-        <div className="pointer-events-auto flex flex-wrap items-center gap-x-3 gap-y-1 rounded border border-line bg-background/90 px-3 py-1.5 text-sm text-muted">
-          {error === "no-key" ? (
-            <span>Live trains show up once the WMATA key is connected.</span>
-          ) : error === "budget" ? (
-            <span>Pausing for a moment to stay under WMATA&apos;s call limit; trying again.</span>
-          ) : error ? (
-            <span>WMATA isn&apos;t answering right now; trying again.</span>
-          ) : (
-            <>
-              {counts.map(({ line, n }) => (
-                <span key={line.code} className="flex items-center gap-1.5 tabular-nums">
-                  <span className="inline-block size-2.5 rounded-full" style={{ background: line.color }} />
-                  {line.name} {n}
-                </span>
-              ))}
-              <span className="flex items-center gap-1.5 tabular-nums">
-                <span className="inline-block size-2.5 rounded-full" style={{ background: EMPTY_TRAIN }} />
-                No passengers {empty}
-              </span>
-              {updated && <Updated at={updated} />}
-            </>
-          )}
-        </div>
-        <div className="pointer-events-auto flex shrink-0 overflow-hidden rounded border border-line bg-background/90 text-sm">
-          {[
-            { label: "Zoom in", text: "+", f: 1.6 },
-            { label: "Zoom out", text: "−", f: 1 / 1.6 },
-          ].map((b) => (
+      <div
+        ref={keyRef}
+        className="absolute inset-x-3 bottom-3 flex flex-wrap items-center gap-x-3 gap-y-1 rounded border border-line bg-background/90 px-3 py-2 text-sm text-muted md:inset-x-auto md:bottom-auto md:left-4 md:top-1/2 md:-translate-y-1/2 md:flex-col md:items-start md:gap-y-1.5 md:px-4 md:py-3"
+      >
+        <div className="flex overflow-hidden rounded border border-line text-xs md:mb-1">
+          {(
+            [
+              { style: "lines", label: "Lines" },
+              { style: "simple", label: "Simple" },
+            ] as const
+          ).map((b) => (
             <button
-              key={b.label}
+              key={b.style}
               type="button"
-              aria-label={b.label}
-              onClick={() => zoomAt(b.f, { x: VW / 2, y: VH / 2 })}
-              className="w-8 border-r border-line py-1.5 text-muted hover:bg-surface hover:text-foreground"
+              aria-pressed={simple === (b.style === "simple")}
+              onClick={() => saveStyle(b.style)}
+              className={`px-2.5 py-1 transition-colors ${
+                simple === (b.style === "simple") ? "bg-accent text-background" : "hover:bg-surface hover:text-foreground"
+              }`}
             >
-              {b.text}
+              {b.label}
             </button>
           ))}
-          <button
-            type="button"
-            onClick={() => setView({ k: 1, x: 0, y: 0 })}
-            className="px-2.5 py-1.5 text-muted hover:bg-surface hover:text-foreground"
-          >
-            Reset
-          </button>
         </div>
+        {error === "no-key" ? (
+          <span>Live trains show up once the WMATA key is connected.</span>
+        ) : error === "budget" ? (
+          <span>Pausing for a moment to stay under WMATA&apos;s call limit; trying again.</span>
+        ) : error ? (
+          <span>WMATA isn&apos;t answering right now; trying again.</span>
+        ) : (
+          <>
+            {counts.map(({ line, n }) => (
+              <span key={line.code} className="flex items-center gap-1.5 tabular-nums">
+                <span className="inline-block size-2.5 rounded-full" style={{ background: line.color }} />
+                {line.name} <span className="text-foreground">{n}</span>
+              </span>
+            ))}
+            <span className="flex items-center gap-1.5 tabular-nums">
+              <span className="inline-block size-2.5 rounded-full" style={{ background: EMPTY_TRAIN }} />
+              No passengers <span className="text-foreground">{empty}</span>
+            </span>
+          </>
+        )}
       </div>
 
+      <div
+        ref={zoomBarRef}
+        className="absolute right-3 top-3 flex overflow-hidden rounded border border-line bg-background/90 text-sm"
+      >
+        {[
+          { label: "Zoom in", text: "+", f: 1.6 },
+          { label: "Zoom out", text: "−", f: 1 / 1.6 },
+        ].map((b) => (
+          <button
+            key={b.label}
+            type="button"
+            aria-label={b.label}
+            onClick={() => zoomAt(b.f, { x: VW / 2, y: VH / 2 })}
+            className="w-8 border-r border-line py-1.5 text-muted hover:bg-surface hover:text-foreground"
+          >
+            {b.text}
+          </button>
+        ))}
+        <button
+          type="button"
+          onClick={() => setView(home())}
+          className="px-2.5 py-1.5 text-muted hover:bg-surface hover:text-foreground"
+        >
+          Reset
+        </button>
+      </div>
+
+      {updated && !error && (
+        <div className="pointer-events-none absolute left-3 top-3 text-xs text-muted opacity-60 md:left-auto md:right-4 md:top-auto md:bottom-3">
+          <Updated at={updated} />
+        </div>
+      )}
+
       {picked && (
-        <div className="absolute bottom-3 left-3 rounded border border-line bg-background/95 px-3 py-2 text-sm">
+        <div className="absolute left-3 top-10 max-w-[calc(100%-1.5rem)] rounded border border-line bg-background/95 px-3 py-2 text-sm md:left-auto md:right-4 md:top-14">
           <span
             className="mr-2 inline-block size-2.5 rounded-full"
             style={{ background: picked.passengers ? LINE_BY_CODE.get(picked.line)!.color : EMPTY_TRAIN }}

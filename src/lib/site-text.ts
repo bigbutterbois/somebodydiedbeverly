@@ -60,12 +60,6 @@ export const SITE_TEXT = {
   // Metro
   "metro.tab.arrivals": { page: "Metro", label: "Arrivals tab", default: "Arrivals", kind: "short" },
   "metro.tab.map": { page: "Metro", label: "Map tab", default: "Map", kind: "short" },
-  "metro.map.intro": {
-    page: "Metro",
-    label: "Line above the map",
-    default: "Every Metrorail train right now, from WMATA's live feed.",
-    kind: "long",
-  },
 
   // Forecast: shared
   "forecast.tab.both": { page: "Forecast", label: "Both tab", default: "Both", kind: "short" },
