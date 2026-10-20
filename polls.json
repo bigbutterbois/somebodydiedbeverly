@@ -12089,6 +12089,18 @@
   "source": "https://en.wikipedia.org/wiki/Opinion_polling_on_the_second_Trump_presidency"
  },
  {
+  "state": "APPROVAL",
+  "pollster": "Reuters/Ipsos",
+  "sponsor_party": null,
+  "end_date": "2026-10-19",
+  "n": 1679,
+  "population": null,
+  "opp": 31.0,
+  "rep": 66.0,
+  "others": [],
+  "source": "https://en.wikipedia.org/wiki/Opinion_polling_on_the_second_Trump_presidency"
+ },
+ {
   "state": "AR",
   "pollster": "GrayHouse",
   "sponsor_party": "R",
@@ -12329,6 +12341,18 @@
   "source": "https://en.wikipedia.org/wiki/2026_United_States_House_of_Representatives_elections_in_Colorado"
  },
  {
+  "state": "CT-02",
+  "pollster": "DM Strategies",
+  "sponsor_party": null,
+  "end_date": "2026-10-19",
+  "n": 279,
+  "population": "LV",
+  "rep": 33.0,
+  "opp": 52.0,
+  "others": [],
+  "source": "https://en.wikipedia.org/wiki/2026_United_States_House_of_Representatives_elections_in_Connecticut"
+ },
+ {
   "state": "FL",
   "pollster": "University of North Florida",
   "sponsor_party": null,
@@ -12545,6 +12569,18 @@
   "source": "https://en.wikipedia.org/wiki/2026_United_States_Senate_special_election_in_Florida"
  },
  {
+  "state": "FL",
+  "pollster": "Univision/YouGov",
+  "sponsor_party": null,
+  "end_date": "2026-10-15",
+  "n": 825,
+  "population": "RV",
+  "rep": 51.0,
+  "opp": 42.0,
+  "others": [],
+  "source": "https://en.wikipedia.org/wiki/2026_United_States_Senate_special_election_in_Florida"
+ },
+ {
   "state": "FL-08",
   "pollster": "Public Policy Polling",
   "sponsor_party": "D",
@@ -12577,6 +12613,18 @@
   "population": "RV",
   "rep": 41.0,
   "opp": 41.0,
+  "others": [],
+  "source": "https://en.wikipedia.org/wiki/2026_United_States_House_of_Representatives_elections_in_Florida"
+ },
+ {
+  "state": "FL-09",
+  "pollster": "SEA Polling",
+  "sponsor_party": "D",
+  "end_date": "2026-10-15",
+  "n": null,
+  "population": "LV",
+  "rep": 44.0,
+  "opp": 44.0,
   "others": [],
   "source": "https://en.wikipedia.org/wiki/2026_United_States_House_of_Representatives_elections_in_Florida"
  },
@@ -12973,6 +13021,18 @@
   "population": "LV",
   "rep": 43.0,
   "opp": 51.0,
+  "others": [],
+  "source": "https://en.wikipedia.org/wiki/2026_United_States_Senate_election_in_Georgia"
+ },
+ {
+  "state": "GA",
+  "pollster": "Quantus Insights",
+  "sponsor_party": "R",
+  "end_date": "2026-10-17",
+  "n": 755,
+  "population": "LV",
+  "rep": 45.0,
+  "opp": 52.0,
   "others": [],
   "source": "https://en.wikipedia.org/wiki/2026_United_States_Senate_election_in_Georgia"
  },
@@ -13374,6 +13434,18 @@
  },
  {
   "state": "IA",
+  "pollster": "NPA Polling",
+  "sponsor_party": null,
+  "end_date": "2026-10-12",
+  "n": 678,
+  "population": "LV",
+  "rep": 47.0,
+  "opp": 44.0,
+  "others": [],
+  "source": "https://en.wikipedia.org/wiki/2026_United_States_Senate_election_in_Iowa"
+ },
+ {
+  "state": "IA",
   "pollster": "YouGov",
   "sponsor_party": null,
   "end_date": "2026-10-12",
@@ -13393,6 +13465,18 @@
   "population": "LV",
   "rep": 46.0,
   "opp": 44.0,
+  "others": [],
+  "source": "https://en.wikipedia.org/wiki/2026_United_States_Senate_election_in_Iowa"
+ },
+ {
+  "state": "IA",
+  "pollster": "co/efficient",
+  "sponsor_party": "R",
+  "end_date": "2026-10-19",
+  "n": 863,
+  "population": "LV",
+  "rep": 48.0,
+  "opp": 45.0,
   "others": [],
   "source": "https://en.wikipedia.org/wiki/2026_United_States_Senate_election_in_Iowa"
  },
@@ -14051,8 +14135,20 @@
   "end_date": "2026-09-22",
   "n": 800,
   "population": "LV",
-  "rep": 26.0,
-  "opp": 52.0,
+  "rep": 28.0,
+  "opp": 54.0,
+  "others": [],
+  "source": "https://en.wikipedia.org/wiki/2026_United_States_Senate_election_in_Massachusetts"
+ },
+ {
+  "state": "MA",
+  "pollster": "UMass Amherst/YouGov",
+  "sponsor_party": null,
+  "end_date": "2026-10-12",
+  "n": 800,
+  "population": "RV",
+  "rep": 29.0,
+  "opp": 56.0,
   "others": [],
   "source": "https://en.wikipedia.org/wiki/2026_United_States_Senate_election_in_Massachusetts"
  },
@@ -17956,6 +18052,18 @@
  },
  {
   "state": "OH",
+  "pollster": "Rasmussen Reports",
+  "sponsor_party": "R",
+  "end_date": "2026-10-14",
+  "n": 901,
+  "population": "LV",
+  "rep": 49.0,
+  "opp": 47.0,
+  "others": [],
+  "source": "https://en.wikipedia.org/wiki/2026_United_States_Senate_special_election_in_Ohio"
+ },
+ {
+  "state": "OH",
   "pollster": "ActiVote",
   "sponsor_party": null,
   "end_date": "2026-10-18",
@@ -17963,6 +18071,18 @@
   "population": "LV",
   "rep": 50.0,
   "opp": 50.0,
+  "others": [],
+  "source": "https://en.wikipedia.org/wiki/2026_United_States_Senate_special_election_in_Ohio"
+ },
+ {
+  "state": "OH",
+  "pollster": "Marist University",
+  "sponsor_party": null,
+  "end_date": "2026-10-18",
+  "n": null,
+  "population": "LV",
+  "rep": 44.0,
+  "opp": 48.0,
   "others": [],
   "source": "https://en.wikipedia.org/wiki/2026_United_States_Senate_special_election_in_Ohio"
  },
@@ -19428,6 +19548,18 @@
   "n": 1200,
   "population": "LV",
   "rep": 49.0,
+  "opp": 48.0,
+  "others": [],
+  "source": "https://en.wikipedia.org/wiki/2026_United_States_Senate_election_in_Texas"
+ },
+ {
+  "state": "TX",
+  "pollster": "University of Houston",
+  "sponsor_party": null,
+  "end_date": "2026-10-14",
+  "n": 2000,
+  "population": "LV",
+  "rep": 46.0,
   "opp": 48.0,
   "others": [],
   "source": "https://en.wikipedia.org/wiki/2026_United_States_Senate_election_in_Texas"
@@ -26113,6 +26245,18 @@
  },
  {
   "state": "US",
+  "pollster": "I&I/TIPP Insights",
+  "sponsor_party": "R",
+  "end_date": "2026-10-01",
+  "n": 1328,
+  "population": "RV",
+  "opp": 46.0,
+  "rep": 42.0,
+  "others": [],
+  "source": "https://en.wikipedia.org/wiki/2026_United_States_elections"
+ },
+ {
+  "state": "US",
   "pollster": "ActiVote",
   "sponsor_party": null,
   "end_date": "2026-10-02",
@@ -26257,6 +26401,18 @@
  },
  {
   "state": "US",
+  "pollster": "SurveyMonkey",
+  "sponsor_party": null,
+  "end_date": "2026-10-12",
+  "n": 17649,
+  "population": "RV",
+  "opp": 55.0,
+  "rep": 45.0,
+  "others": [],
+  "source": "https://en.wikipedia.org/wiki/2026_United_States_elections"
+ },
+ {
+  "state": "US",
   "pollster": "The Economist/YouGov",
   "sponsor_party": null,
   "end_date": "2026-10-12",
@@ -26264,6 +26420,18 @@
   "population": "RV",
   "opp": 46.0,
   "rep": 39.0,
+  "others": [],
+  "source": "https://en.wikipedia.org/wiki/2026_United_States_elections"
+ },
+ {
+  "state": "US",
+  "pollster": "The Washington Post/ABC News/Ipsos",
+  "sponsor_party": null,
+  "end_date": "2026-10-13",
+  "n": 2032,
+  "population": "LV",
+  "opp": 52.0,
+  "rep": 44.0,
   "others": [],
   "source": "https://en.wikipedia.org/wiki/2026_United_States_elections"
  },
