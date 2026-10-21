@@ -20,7 +20,7 @@ races:
   - { state: AL, name: Alabama, region: south, incumbent: none, pres_2024: -30.5, pres_2020: -25.5,
       rep: { name: Barry Moore }, opp: { name: Everett Wess, party: D, caucus: D } }
   - { state: AK, name: Alaska, region: west, incumbent: R, pres_2024: -13.1, pres_2020: -10.1,
-      rep: { name: Dan Sullivan }, opp: { name: Mary Peltola, party: D, caucus: D } }
+      rep: { name: Dan Sullivan, match: "^(?!.*\\bdan j\\b).*\\bsullivan\\b" }, opp: { name: Mary Peltola, party: D, caucus: D } }
   - { state: AR, name: Arkansas, region: south, incumbent: R, pres_2024: -30.6, pres_2020: -27.6,
       rep: { name: Tom Cotton }, opp: { name: Hallie Shoffner, party: D, caucus: D } }
   - { state: CO, name: Colorado, region: west, incumbent: D, pres_2024: 11.0, pres_2020: 13.5,

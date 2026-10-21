@@ -9,6 +9,7 @@ from __future__ import annotations
 import csv
 import io
 import re
+import time
 import zipfile
 from datetime import date
 
@@ -298,21 +299,33 @@ def fetch_votehub(races: list[dict], aggregators: list[str], year: int) -> tuple
 
 def fetch_weather(election_day: date) -> tuple[dict, list[str]]:
     """Forecast election-day rain (inches) per state, once election day is within forecast range."""
-    out = {}
-    try:
-        for state, (lat, lon) in STATE_POINTS.items():
-            r = requests.get(OPEN_METEO, headers=scrape.HEADERS, timeout=30, params={
-                "latitude": lat, "longitude": lon, "daily": "precipitation_sum",
-                "precipitation_unit": "inch", "timezone": "auto", "forecast_days": 16,
-            })
+    # One request for every state (Open-Meteo takes lists of coordinates): 50 separate
+    # calls kept timing out from GitHub Actions, and one timeout lost them all.
+    states = list(STATE_POINTS)
+    params = {
+        "latitude": ",".join(str(STATE_POINTS[s][0]) for s in states),
+        "longitude": ",".join(str(STATE_POINTS[s][1]) for s in states),
+        "daily": "precipitation_sum", "precipitation_unit": "inch", "timezone": "auto", "forecast_days": 16,
+    }
+    error = None
+    for attempt in range(4):
+        try:
+            r = requests.get(OPEN_METEO, headers=scrape.HEADERS, timeout=60, params=params)
             r.raise_for_status()
-            daily = r.json()["daily"]
-            day = election_day.isoformat()
-            if day not in daily["time"]:
-                return {}, []  # too far out to forecast yet; not a problem
-            out[state] = daily["precipitation_sum"][daily["time"].index(day)] or 0.0
-    except Exception as e:
-        return {}, [f"weather: {e}"]
+            results = r.json()
+            break
+        except Exception as e:
+            error = e
+            time.sleep(5 * 2 ** attempt)
+    else:
+        return {}, [f"weather: {error}"]
+    out = {}
+    day = election_day.isoformat()
+    for state, result in zip(states, results if isinstance(results, list) else [results]):
+        daily = result["daily"]
+        if day not in daily["time"]:
+            return {}, []  # too far out to forecast yet; not a problem
+        out[state] = daily["precipitation_sum"][daily["time"].index(day)] or 0.0
     print(f"weather: election-day rain forecast for {len(out)} states")
     return out, []
 
