@@ -58,7 +58,7 @@ export default async function CountryPlatesPage({ params }: PageProps<"/plates/[
           {PLATE_FORMATS.map(({ label, plate }) => (
             <div key={label} className="contents">
               <dt className="text-muted">{label}</dt>
-              <dd>{country.plate_codes.map(plate).join(", ")}</dd>
+              <dd>{country.plate_codes.map(plate).join(", ") || "Unknown"}</dd>
             </div>
           ))}
         </dl>
