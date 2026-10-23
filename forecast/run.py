@@ -271,7 +271,7 @@ def main() -> int:
                 for d in range((today - date.fromisoformat(min(history))).days + 1)]
     result = house_result = None
     for d in days:
-        seed = int(d.strftime("%Y%m%d"))
+        seed = model.day_seed(cfg, d)
         day_extras = extras_as_of(extras, d)
         result, sims = model.simulate(facts, cfg, polls, d, seed=seed, extras=day_extras)
         if districts:

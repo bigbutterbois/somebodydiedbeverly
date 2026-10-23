@@ -99,7 +99,7 @@ def report(facts: dict, cfg: dict, polls: list[dict], extras: dict, label: str) 
     pooled = []
     for days_out in (68, 37, 24, 1):
         d = election - timedelta(days_out)
-        r = model.run(facts, cfg, polls, d, seed=int(d.strftime("%Y%m%d")), extras=extras)
+        r = model.run(facts, cfg, polls, d, seed=model.day_seed(cfg, d), extras=extras)
         # Uncontested House seats are certain either way; leave them out of the scoring.
         r["races"] = [x for x in r["races"] if not x.get("uncontested") and x["state"] in results]
         p = np.array([x["p_opp"] for x in r["races"]])
