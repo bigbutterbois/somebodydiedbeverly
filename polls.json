@@ -255,6 +255,18 @@
   "source": "https://en.wikipedia.org/wiki/2026_United_States_Senate_election_in_Alabama"
  },
  {
+  "state": "AL",
+  "pollster": "Cygnal",
+  "sponsor_party": "R",
+  "end_date": "2026-10-17",
+  "n": 500,
+  "population": "LV",
+  "rep": 50.0,
+  "opp": 35.0,
+  "others": [],
+  "source": "https://en.wikipedia.org/wiki/2026_United_States_Senate_election_in_Alabama"
+ },
+ {
   "state": "AL-02",
   "pollster": "Impact Research",
   "sponsor_party": "D",
@@ -12258,6 +12270,18 @@
   "source": "https://en.wikipedia.org/wiki/2026_United_States_House_of_Representatives_elections_in_Arkansas"
  },
  {
+  "state": "AR-02",
+  "pollster": "Emerson College",
+  "sponsor_party": null,
+  "end_date": "2026-10-14",
+  "n": 383,
+  "population": "LV",
+  "rep": 52.0,
+  "opp": 48.0,
+  "others": [],
+  "source": "https://en.wikipedia.org/wiki/2026_United_States_House_of_Representatives_elections_in_Arkansas"
+ },
+ {
   "state": "AZ-01",
   "pollster": "FirstStrategic Communications and Public Affairs",
   "sponsor_party": null,
@@ -12302,6 +12326,18 @@
   "population": "LV",
   "rep": 46.0,
   "opp": 44.0,
+  "others": [],
+  "source": "https://en.wikipedia.org/wiki/2026_United_States_House_of_Representatives_elections_in_Arizona"
+ },
+ {
+  "state": "AZ-02",
+  "pollster": "Emerson College",
+  "sponsor_party": null,
+  "end_date": "2026-10-14",
+  "n": 345,
+  "population": "LV",
+  "rep": 48.0,
+  "opp": 50.0,
   "others": [],
   "source": "https://en.wikipedia.org/wiki/2026_United_States_House_of_Representatives_elections_in_Arizona"
  },
@@ -12386,6 +12422,18 @@
   "population": "LV",
   "rep": 45.0,
   "opp": 44.0,
+  "others": [],
+  "source": "https://en.wikipedia.org/wiki/2026_United_States_House_of_Representatives_elections_in_Colorado"
+ },
+ {
+  "state": "CO-05",
+  "pollster": "Global Strategy Group",
+  "sponsor_party": "D",
+  "end_date": "2026-10-18",
+  "n": 500,
+  "population": "LV",
+  "rep": 38.0,
+  "opp": 43.0,
   "others": [],
   "source": "https://en.wikipedia.org/wiki/2026_United_States_House_of_Representatives_elections_in_Colorado"
  },
@@ -12786,6 +12834,18 @@
   "source": "https://en.wikipedia.org/wiki/2026_United_States_House_of_Representatives_elections_in_Florida"
  },
  {
+  "state": "FL-13",
+  "pollster": "Public Policy Polling",
+  "sponsor_party": "D",
+  "end_date": "2026-10-15",
+  "n": 603,
+  "population": "LV",
+  "rep": 46.0,
+  "opp": 47.0,
+  "others": [],
+  "source": "https://en.wikipedia.org/wiki/2026_United_States_House_of_Representatives_elections_in_Florida"
+ },
+ {
   "state": "FL-14",
   "pollster": "St. Pete Polls",
   "sponsor_party": null,
@@ -12794,6 +12854,18 @@
   "population": "LV",
   "rep": 38.0,
   "opp": 46.0,
+  "others": [],
+  "source": "https://en.wikipedia.org/wiki/2026_United_States_House_of_Representatives_elections_in_Florida"
+ },
+ {
+  "state": "FL-14",
+  "pollster": "Emerson College",
+  "sponsor_party": null,
+  "end_date": "2026-10-14",
+  "n": 315,
+  "population": "LV",
+  "rep": 43.0,
+  "opp": 48.0,
   "others": [],
   "source": "https://en.wikipedia.org/wiki/2026_United_States_House_of_Representatives_elections_in_Florida"
  },
@@ -12818,6 +12890,18 @@
   "population": "RV",
   "rep": 43.0,
   "opp": 39.0,
+  "others": [],
+  "source": "https://en.wikipedia.org/wiki/2026_United_States_House_of_Representatives_elections_in_Florida"
+ },
+ {
+  "state": "FL-21",
+  "pollster": "Upswing Research & Strategy",
+  "sponsor_party": "D",
+  "end_date": "2026-09-25",
+  "n": 402,
+  "population": "LV",
+  "rep": 49.0,
+  "opp": 38.0,
   "others": [],
   "source": "https://en.wikipedia.org/wiki/2026_United_States_House_of_Representatives_elections_in_Florida"
  },
@@ -12866,6 +12950,18 @@
   "population": "LV",
   "rep": 49.0,
   "opp": 42.0,
+  "others": [],
+  "source": "https://en.wikipedia.org/wiki/2026_United_States_House_of_Representatives_elections_in_Florida"
+ },
+ {
+  "state": "FL-25",
+  "pollster": "Public Policy Polling",
+  "sponsor_party": "D",
+  "end_date": "2026-10-22",
+  "n": 592,
+  "population": "LV",
+  "rep": 42.0,
+  "opp": 47.0,
   "others": [],
   "source": "https://en.wikipedia.org/wiki/2026_United_States_House_of_Representatives_elections_in_Florida"
  },
@@ -13592,6 +13688,18 @@
  },
  {
   "state": "IA",
+  "pollster": "GS Strategy Group (R)/ New River Strategies",
+  "sponsor_party": "R",
+  "end_date": "2026-10-13",
+  "n": 602,
+  "population": "LV",
+  "rep": 44.0,
+  "opp": 46.0,
+  "others": [],
+  "source": "https://en.wikipedia.org/wiki/2026_United_States_Senate_election_in_Iowa"
+ },
+ {
+  "state": "IA",
   "pollster": "GS Strategy Group (R)/New River Strategies",
   "sponsor_party": "R",
   "end_date": "2026-10-13",
@@ -13651,6 +13759,18 @@
   "source": "https://en.wikipedia.org/wiki/2026_United_States_House_of_Representatives_elections_in_Iowa"
  },
  {
+  "state": "IA-01",
+  "pollster": "Wavefield Research",
+  "sponsor_party": null,
+  "end_date": "2026-10-02",
+  "n": 297,
+  "population": "LV",
+  "rep": 29.0,
+  "opp": 45.0,
+  "others": [],
+  "source": "https://en.wikipedia.org/wiki/2026_United_States_House_of_Representatives_elections_in_Iowa"
+ },
+ {
   "state": "IA-02",
   "pollster": "Public Policy Polling",
   "sponsor_party": "D",
@@ -13671,6 +13791,18 @@
   "population": null,
   "rep": 45.0,
   "opp": 46.0,
+  "others": [],
+  "source": "https://en.wikipedia.org/wiki/2026_United_States_House_of_Representatives_elections_in_Iowa"
+ },
+ {
+  "state": "IA-02",
+  "pollster": "Emerson College",
+  "sponsor_party": null,
+  "end_date": "2026-10-14",
+  "n": 344,
+  "population": "LV",
+  "rep": 47.0,
+  "opp": 50.0,
   "others": [],
   "source": "https://en.wikipedia.org/wiki/2026_United_States_House_of_Representatives_elections_in_Iowa"
  },
@@ -14660,6 +14792,18 @@
   "source": "https://en.wikipedia.org/wiki/2026_United_States_Senate_election_in_Maine"
  },
  {
+  "state": "ME",
+  "pollster": "Beacon Research (D)/ Shaw & Co. Research",
+  "sponsor_party": "D",
+  "end_date": "2026-10-20",
+  "n": 1514,
+  "population": "LV",
+  "rep": 49.0,
+  "opp": 49.0,
+  "others": [],
+  "source": "https://en.wikipedia.org/wiki/2026_United_States_Senate_election_in_Maine"
+ },
+ {
   "state": "ME-01",
   "pollster": "University of New Hampshire",
   "sponsor_party": null,
@@ -15476,6 +15620,18 @@
   "source": "https://en.wikipedia.org/wiki/2026_United_States_House_of_Representatives_elections_in_Michigan"
  },
  {
+  "state": "MI-07",
+  "pollster": "Emerson College",
+  "sponsor_party": null,
+  "end_date": "2026-10-14",
+  "n": 314,
+  "population": "LV",
+  "rep": 45.0,
+  "opp": 53.0,
+  "others": [],
+  "source": "https://en.wikipedia.org/wiki/2026_United_States_House_of_Representatives_elections_in_Michigan"
+ },
+ {
   "state": "MI-10",
   "pollster": "Public Policy Polling",
   "sponsor_party": "D",
@@ -15704,6 +15860,18 @@
   "source": "https://en.wikipedia.org/wiki/2026_United_States_Senate_election_in_Minnesota"
  },
  {
+  "state": "MN",
+  "pollster": "Rasmussen Reports",
+  "sponsor_party": "R",
+  "end_date": "2026-10-21",
+  "n": 1182,
+  "population": "LV",
+  "rep": 45.0,
+  "opp": 48.0,
+  "others": [],
+  "source": "https://en.wikipedia.org/wiki/2026_United_States_Senate_election_in_Minnesota"
+ },
+ {
   "state": "MN-01",
   "pollster": "Public Policy Polling",
   "sponsor_party": "D",
@@ -15808,6 +15976,18 @@
   "population": "LV",
   "rep": 43.0,
   "opp": 42.0,
+  "others": [],
+  "source": "https://en.wikipedia.org/wiki/2026_United_States_House_of_Representatives_elections_in_Missouri"
+ },
+ {
+  "state": "MO-02",
+  "pollster": "Emerson College",
+  "sponsor_party": null,
+  "end_date": "2026-10-14",
+  "n": 401,
+  "population": "LV",
+  "rep": 46.0,
+  "opp": 51.0,
   "others": [],
   "source": "https://en.wikipedia.org/wiki/2026_United_States_House_of_Representatives_elections_in_Missouri"
  },
@@ -16203,6 +16383,18 @@
   "population": "LV",
   "rep": 46.0,
   "opp": 45.0,
+  "others": [],
+  "source": "https://en.wikipedia.org/wiki/2026_United_States_House_of_Representatives_elections_in_Montana"
+ },
+ {
+  "state": "MT-01",
+  "pollster": "Emerson College",
+  "sponsor_party": null,
+  "end_date": "2026-10-14",
+  "n": 329,
+  "population": "LV",
+  "rep": 46.0,
+  "opp": 50.0,
   "others": [],
   "source": "https://en.wikipedia.org/wiki/2026_United_States_House_of_Representatives_elections_in_Montana"
  },
@@ -16677,6 +16869,18 @@
  },
  {
   "state": "NC",
+  "pollster": "Harper Polling",
+  "sponsor_party": "R",
+  "end_date": "2026-09-20",
+  "n": 608,
+  "population": "LV",
+  "rep": 39.0,
+  "opp": 49.0,
+  "others": [],
+  "source": "https://en.wikipedia.org/wiki/2026_United_States_Senate_election_in_North_Carolina"
+ },
+ {
+  "state": "NC",
   "pollster": "Opinion Diagnostics",
   "sponsor_party": null,
   "end_date": "2026-09-20",
@@ -16782,6 +16986,19 @@
   "opp": 57.0,
   "others": [],
   "source": "https://en.wikipedia.org/wiki/2026_United_States_Senate_election_in_North_Carolina"
+ },
+ {
+  "state": "NC",
+  "pollster": "Harper Polling/Carolina Journal",
+  "sponsor_party": null,
+  "end_date": "2026-10-20",
+  "n": 600,
+  "population": "LV",
+  "rep": 39.0,
+  "opp": 49.0,
+  "others": [],
+  "source": "https://www.carolinajournal.com/polls/october-2026-coopers-lead-over-whatley-narrows-to-10-points-in-nc-senate-race/",
+  "feed": "votehub"
  },
  {
   "state": "NC-01",
@@ -16940,6 +17157,18 @@
   "source": "https://en.wikipedia.org/wiki/2026_United_States_House_of_Representatives_elections_in_North_Carolina"
  },
  {
+  "state": "NC-11",
+  "pollster": "Emerson College",
+  "sponsor_party": null,
+  "end_date": "2026-10-14",
+  "n": 388,
+  "population": "LV",
+  "rep": 43.0,
+  "opp": 56.0,
+  "others": [],
+  "source": "https://en.wikipedia.org/wiki/2026_United_States_House_of_Representatives_elections_in_North_Carolina"
+ },
+ {
   "state": "NC-14",
   "pollster": "Ragnar Research Partners",
   "sponsor_party": "R",
@@ -17089,6 +17318,18 @@
   "sponsor_party": "R",
   "end_date": "2026-10-05",
   "n": 800,
+  "population": "LV",
+  "rep": 46.0,
+  "opp": 43.0,
+  "others": [],
+  "source": "https://en.wikipedia.org/wiki/2026_United_States_Senate_election_in_Nebraska"
+ },
+ {
+  "state": "NE",
+  "pollster": "National Public Affairs",
+  "sponsor_party": "R",
+  "end_date": "2026-10-18",
+  "n": 598,
   "population": "LV",
   "rep": 46.0,
   "opp": 43.0,
@@ -17505,6 +17746,18 @@
   "source": "https://en.wikipedia.org/wiki/2026_United_States_Senate_election_in_New_Hampshire"
  },
  {
+  "state": "NH",
+  "pollster": "Saint Anselm College",
+  "sponsor_party": null,
+  "end_date": "2026-10-20",
+  "n": 1672,
+  "population": "LV",
+  "rep": 43.0,
+  "opp": 50.0,
+  "others": [],
+  "source": "https://en.wikipedia.org/wiki/2026_United_States_Senate_election_in_New_Hampshire"
+ },
+ {
   "state": "NH-01",
   "pollster": "University of New Hampshire",
   "sponsor_party": null,
@@ -17611,6 +17864,18 @@
   "opp": 56.0,
   "others": [],
   "source": "https://en.wikipedia.org/wiki/2026_United_States_House_of_Representatives_elections_in_New_Hampshire"
+ },
+ {
+  "state": "NJ-02",
+  "pollster": "Impact Research",
+  "sponsor_party": "D",
+  "end_date": "2025-10-10",
+  "n": null,
+  "population": "LV",
+  "rep": 50.0,
+  "opp": 40.0,
+  "others": [],
+  "source": "https://en.wikipedia.org/wiki/2026_United_States_House_of_Representatives_elections_in_New_Jersey"
  },
  {
   "state": "NJ-07",
@@ -18766,6 +19031,18 @@
   "source": "https://en.wikipedia.org/wiki/2026_United_States_House_of_Representatives_elections_in_Pennsylvania"
  },
  {
+  "state": "PA-08",
+  "pollster": "Emerson College",
+  "sponsor_party": null,
+  "end_date": "2026-10-14",
+  "n": 396,
+  "population": "LV",
+  "rep": 48.0,
+  "opp": 52.0,
+  "others": [],
+  "source": "https://en.wikipedia.org/wiki/2026_United_States_House_of_Representatives_elections_in_Pennsylvania"
+ },
+ {
   "state": "PA-10",
   "pollster": "Public Policy Polling",
   "sponsor_party": "D",
@@ -19237,6 +19514,18 @@
  },
  {
   "state": "SD",
+  "pollster": "Mason-Dixon Polling & Strategy",
+  "sponsor_party": null,
+  "end_date": "2026-10-14",
+  "n": 500,
+  "population": "RV",
+  "rep": 56.0,
+  "opp": 37.0,
+  "others": [],
+  "source": "https://en.wikipedia.org/wiki/2026_United_States_Senate_election_in_South_Dakota"
+ },
+ {
+  "state": "SD",
   "pollster": "Public Opinon Strategies",
   "sponsor_party": "R",
   "end_date": "2026-10-16",
@@ -19254,8 +19543,20 @@
   "end_date": "2026-10-19",
   "n": 633,
   "population": "LV",
-  "rep": 57.0,
+  "rep": 59.0,
   "opp": 37.0,
+  "others": [],
+  "source": "https://en.wikipedia.org/wiki/2026_United_States_Senate_election_in_South_Dakota"
+ },
+ {
+  "state": "SD",
+  "pollster": "Emerson College",
+  "sponsor_party": null,
+  "end_date": "2026-10-20",
+  "n": 803,
+  "population": "LV",
+  "rep": 50.0,
+  "opp": 42.0,
   "others": [],
   "source": "https://en.wikipedia.org/wiki/2026_United_States_Senate_election_in_South_Dakota"
  },
@@ -19993,12 +20294,37 @@
  },
  {
   "state": "TX",
+  "pollster": "Pollfinity",
+  "sponsor_party": null,
+  "end_date": "2026-10-18",
+  "n": 278,
+  "population": "LV",
+  "rep": 43.0,
+  "opp": 48.0,
+  "others": [],
+  "source": "https://www.pollfinity.com/polls/tx-governor-senate-2026-oct",
+  "feed": "votehub"
+ },
+ {
+  "state": "TX",
   "pollster": "Beacon Research (D)/ Shaw & Co. Research",
   "sponsor_party": "D",
   "end_date": "2026-10-19",
   "n": 1398,
   "population": "LV",
   "rep": 49.0,
+  "opp": 49.0,
+  "others": [],
+  "source": "https://en.wikipedia.org/wiki/2026_United_States_Senate_election_in_Texas"
+ },
+ {
+  "state": "TX",
+  "pollster": "Emerson College",
+  "sponsor_party": null,
+  "end_date": "2026-10-19",
+  "n": 1000,
+  "population": "LV",
+  "rep": 48.0,
   "opp": 49.0,
   "others": [],
   "source": "https://en.wikipedia.org/wiki/2026_United_States_Senate_election_in_Texas"
@@ -20252,6 +20578,18 @@
   "population": "LV",
   "rep": 45.0,
   "opp": 44.0,
+  "others": [],
+  "source": "https://en.wikipedia.org/wiki/2026_United_States_House_of_Representatives_elections_in_Texas"
+ },
+ {
+  "state": "TX-35",
+  "pollster": "Emerson College",
+  "sponsor_party": null,
+  "end_date": "2026-10-14",
+  "n": 417,
+  "population": "LV",
+  "rep": 49.0,
+  "opp": 51.0,
   "others": [],
   "source": "https://en.wikipedia.org/wiki/2026_United_States_House_of_Representatives_elections_in_Texas"
  },
@@ -26816,6 +27154,18 @@
  },
  {
   "state": "US",
+  "pollster": "University of Massachusetts Lowell/YouGov",
+  "sponsor_party": null,
+  "end_date": "2026-10-04",
+  "n": 1000,
+  "population": "LV",
+  "opp": 52.0,
+  "rep": 43.0,
+  "others": [],
+  "source": "https://en.wikipedia.org/wiki/2026_United_States_elections"
+ },
+ {
+  "state": "US",
   "pollster": "Focaldata",
   "sponsor_party": null,
   "end_date": "2026-10-05",
@@ -26967,6 +27317,18 @@
   "population": "RV",
   "opp": 49.0,
   "rep": 39.0,
+  "others": [],
+  "source": "https://en.wikipedia.org/wiki/2026_United_States_elections"
+ },
+ {
+  "state": "US",
+  "pollster": "Hart Research Associates (D)/Public Opinion Strategies",
+  "sponsor_party": "D",
+  "end_date": "2026-10-18",
+  "n": 1000,
+  "population": "RV",
+  "opp": 52.0,
+  "rep": 45.0,
   "others": [],
   "source": "https://en.wikipedia.org/wiki/2026_United_States_elections"
  },
@@ -27255,6 +27617,18 @@
   "population": "LV",
   "rep": 26.0,
   "opp": 25.0,
+  "others": [],
+  "source": "https://en.wikipedia.org/wiki/2026_United_States_House_of_Representatives_elections_in_Washington"
+ },
+ {
+  "state": "WA-03",
+  "pollster": "Change Research",
+  "sponsor_party": "D",
+  "end_date": "2026-10-21",
+  "n": 551,
+  "population": "LV",
+  "rep": 44.0,
+  "opp": 45.0,
   "others": [],
   "source": "https://en.wikipedia.org/wiki/2026_United_States_House_of_Representatives_elections_in_Washington"
  },
