@@ -5,10 +5,13 @@
 version: 1
 
 simulations: 20000
+# Every day's simulations use this same random seed, so a day-to-day change in the
+# odds comes from new data, not from a fresh roll of the dice (Mike, 2026-10-23).
+seed: 2026
 
 # --- Polling average -------------------------------------------------------
 polls:
-  half_life_days: 21          # a poll's weight halves every N days after it ends
+  half_life_days: 14          # a poll's weight halves every N days after it ends (21 until 2026-10-23)
   max_age_days: 120           # ignore polls older than this
   sample_size_reference: 600  # a poll of this size gets weight 1 (scales with sqrt(n))
   sample_size_cap: 1.6        # max sample-size weight, so one huge poll can't dominate
@@ -84,10 +87,10 @@ fundamentals:
   # National environment (Dem lead nationally), blended from two signals:
   # the generic ballot average, and Trump's net approval translated into an
   # expected Dem lead (intercept + slope x net disapproval).
-  generic_ballot_half_life_days: 14
+  generic_ballot_half_life_days: 10   # 14 until 2026-10-23
   generic_ballot_weight: 0.8
   approval_weight: 0.2
-  approval_half_life_days: 14
+  approval_half_life_days: 10        # 14 until 2026-10-23
   approval_intercept: 1.0       # Dem lead when Trump's net approval is 0
   approval_slope: 0.3           # extra Dem lead per point of net disapproval
   approval_stale_days: 14       # no new approval poll for this long: start fading approval out
@@ -142,6 +145,10 @@ polling_miss:
 # counts as better, rising 10-year yields and Brent crude as worse. Source: FRED.
 economy:
   lookback_days: 90
+  # The starting point is the average over this many days ending lookback_days ago,
+  # not one day's price, so a spike back then doesn't swing today's number as it
+  # leaves the window (July 2026's oil spike did; Mike, 2026-10-23).
+  baseline_days: 30
   sp500_points_per_10pct: 1.0   # S&P up 10% -> 1 pt toward the president's party
   yield_points_per_point: 1.0   # 10-year yield up 1 percentage point -> 1 pt against
   brent_points_per_10pct: 0.5   # Brent up 10% -> 0.5 pt against

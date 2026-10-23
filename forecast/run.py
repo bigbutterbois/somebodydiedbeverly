@@ -109,15 +109,18 @@ def history_entry(result: dict) -> dict:
 
 def extras_as_of(extras: dict, d: date) -> dict:
     """Fundraising and super PAC spending from the latest snapshot on or before d (else the
-    earliest); weather from d only."""
+    earliest); weather from d, else from the day before if that day's fetch failed."""
     out = {}
     for key in ("fundraising", "super_pacs"):
         snapshots = extras.get(key, {})
         if snapshots:
             earlier = [k for k in snapshots if k <= d.isoformat()]
             out[key] = snapshots[max(earlier) if earlier else min(snapshots)]
-    if d.isoformat() in extras.get("weather", {}):
-        out["weather"] = extras["weather"][d.isoformat()]
+    weather = extras.get("weather", {})
+    for day in (d, d - timedelta(1)):
+        if day.isoformat() in weather:
+            out["weather"] = weather[day.isoformat()]
+            break
     if extras.get("economy"):
         out["economy"] = extras["economy"]
     return out
@@ -271,7 +274,7 @@ def main() -> int:
                 for d in range((today - date.fromisoformat(min(history))).days + 1)]
     result = house_result = None
     for d in days:
-        seed = int(d.strftime("%Y%m%d"))
+        seed = model.day_seed(cfg, d)
         day_extras = extras_as_of(extras, d)
         result, sims = model.simulate(facts, cfg, polls, d, seed=seed, extras=day_extras)
         if districts:

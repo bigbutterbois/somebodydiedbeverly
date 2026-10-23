@@ -217,10 +217,14 @@ def economy_shift(extras: dict, as_of: date, cfg: dict, president_party: str = "
     def change(key: str, relative: bool) -> float | None:
         values = series.get(key) or {}
         now = [d for d in values if d <= as_of.isoformat()]
-        then = [d for d in values if d <= (as_of - timedelta(ec["lookback_days"])).isoformat()]
+        start = as_of - timedelta(ec["lookback_days"])
+        then = [d for d in values if d <= start.isoformat()]
         if not now or not then:
             return None
-        a, b = values[max(then)], values[max(now)]
+        # Baseline: the average over baseline_days ending at the start (else that day's value).
+        window = [values[d] for d in then if d > (start - timedelta(ec.get("baseline_days", 1))).isoformat()]
+        a = sum(window) / len(window) if window else values[max(then)]
+        b = values[max(now)]
         return 100 * (b / a - 1) if relative else b - a
 
     sp, yld, oil = change("sp500", True), change("yield_10y", False), change("brent", True)
@@ -269,6 +273,11 @@ def overperformance_shift(race: dict, cfg: dict) -> float:
         return 0.0
     cap = f.get("overperformance_cap", 4.0)
     return max(-cap, min(cap, f["overperformance_factor"] * over))
+
+
+def day_seed(cfg: dict, d: date) -> int:
+    """The simulations' random seed: config's fixed seed, else one per date."""
+    return cfg.get("seed") or int(d.strftime("%Y%m%d"))
 
 
 def prior_weight(cfg: dict, days_left: int) -> float:
@@ -424,7 +433,7 @@ def simulate(facts: dict, cfg: dict, polls: list[dict], as_of: date, seed: int |
             "poll_miss_adjustment": round(-row["miss_adj"], 2) if row["poll_avg"] is not None else 0.0,
             "prior_margin": round(row["prior"], 2),
             "fundraising_shift": round(fundraising_shift(race["state"], extras, cfg), 2),
-            "weather_shift": round(weather_shift(race["state"], extras, cfg), 2),
+            "weather_shift": round(weather_shift(race["state"][:2], extras, cfg), 2),
             "rating": rating(p_opp, cfg),
             **({"lean": round(race["lean"] * cfg["fundamentals"]["lean_factor"], 1),
                 "overperformance_shift": round(overperformance_shift(race, cfg), 2),
