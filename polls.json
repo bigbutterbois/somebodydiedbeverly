@@ -1,29 +1,51 @@
 [
  {
   "state": "AK",
-  "pollster": "Data for Progress",
+  "pollster": "Alaska Survey Research",
   "sponsor_party": null,
+  "end_date": "2023-04-25",
+  "n": 1261,
+  "population": "LV",
+  "rep": 41.0,
+  "opp": 44.0,
+  "others": [],
+  "source": "https://en.wikipedia.org/wiki/2026_United_States_Senate_election_in_Alaska"
+ },
+ {
+  "state": "AK",
+  "pollster": "Data for Progress",
+  "sponsor_party": "D",
   "end_date": "2025-07-27",
   "n": 678,
   "population": "LV",
   "rep": 46.0,
   "opp": 45.0,
   "others": [],
-  "source": "https://www.dataforprogress.org/blog/2025/8/8/mary-peltola-would-be-front-runner-for-alaska-governor",
-  "feed": "votehub"
+  "source": "https://en.wikipedia.org/wiki/2026_United_States_Senate_election_in_Alaska"
  },
  {
   "state": "AK",
   "pollster": "Alaska Survey Research",
   "sponsor_party": null,
   "end_date": "2025-08-01",
-  "n": 1613,
+  "n": 1623,
   "population": "LV",
-  "rep": 46.7,
-  "opp": 42.5,
+  "rep": 47.0,
+  "opp": 42.0,
   "others": [],
-  "source": "https://www.documentcloud.org/documents/26071481-ak-sen-alaska-survey-research-d/",
-  "feed": "votehub"
+  "source": "https://en.wikipedia.org/wiki/2026_United_States_Senate_election_in_Alaska"
+ },
+ {
+  "state": "AK",
+  "pollster": "Alaska Survey Research",
+  "sponsor_party": null,
+  "end_date": "2025-10-15",
+  "n": 1708,
+  "population": "LV",
+  "rep": 46.0,
+  "opp": 48.0,
+  "others": [],
+  "source": "https://en.wikipedia.org/wiki/2026_United_States_Senate_election_in_Alaska"
  },
  {
   "state": "AK",
@@ -35,34 +57,31 @@
   "rep": 45.0,
   "opp": 46.0,
   "others": [],
-  "source": "https://www.dataforprogress.org/blog/2025/10/31/in-the-midst-of-a-health-care-and-affordability-crisis-in-alaska-peltola-and-begich-lead-their-races",
-  "feed": "votehub"
+  "source": "https://en.wikipedia.org/wiki/2026_United_States_Senate_election_in_Alaska"
  },
  {
   "state": "AK",
   "pollster": "Alaska Survey Research",
   "sponsor_party": null,
   "end_date": "2026-01-11",
-  "n": 1681,
+  "n": 1988,
   "population": "LV",
-  "rep": 46.4,
+  "rep": 46.0,
   "opp": 48.0,
   "others": [],
-  "source": "https://x.com/The_Real_ASR/status/2011266752693616932",
-  "feed": "votehub"
+  "source": "https://en.wikipedia.org/wiki/2026_United_States_Senate_election_in_Alaska"
  },
  {
   "state": "AK",
-  "pollster": "Public Policy Polling/Democratic Senatorial Campaign Committee",
+  "pollster": "Public Policy Polling",
   "sponsor_party": "D",
   "end_date": "2026-01-17",
   "n": 611,
-  "population": "RV",
+  "population": "V",
   "rep": 47.0,
   "opp": 49.0,
   "others": [],
-  "source": "https://www.politico.com/newsletters/playbook/2026/01/21/what-davos-really-thinks-of-trump-00738555?nname=playbook&nid=0000014f-1646-d88f-a1cf-5f46b7bd0000&nrid=4d735b47-a8a7-41f4-9c35-277919f359ed",
-  "feed": "votehub"
+  "source": "https://en.wikipedia.org/wiki/2026_United_States_Senate_election_in_Alaska"
  },
  {
   "state": "AK",
@@ -95,11 +114,10 @@
   "end_date": "2026-05-17",
   "n": 1401,
   "population": "LV",
-  "rep": 43.8,
-  "opp": 48.4,
+  "rep": 44.0,
+  "opp": 48.0,
   "others": [],
-  "source": "https://x.com/PollTracker2024/status/2059342641041473797",
-  "feed": "votehub"
+  "source": "https://en.wikipedia.org/wiki/2026_United_States_Senate_election_in_Alaska"
  },
  {
   "state": "AK",
@@ -108,15 +126,14 @@
   "end_date": "2026-06-07",
   "n": 1393,
   "population": "LV",
-  "rep": 44.2,
-  "opp": 49.4,
+  "rep": 44.0,
+  "opp": 49.0,
   "others": [],
-  "source": "https://bsky.app/profile/alaskasurvey.bsky.social/post/3mo4ifkz3tc25",
-  "feed": "votehub"
+  "source": "https://en.wikipedia.org/wiki/2026_United_States_Senate_election_in_Alaska"
  },
  {
   "state": "AK",
-  "pollster": "The New York Times/Siena University",
+  "pollster": "New York Times/Siena University",
   "sponsor_party": null,
   "end_date": "2026-06-29",
   "n": 593,
@@ -124,8 +141,19 @@
   "rep": 47.0,
   "opp": 45.0,
   "others": [],
-  "source": "https://www.nytimes.com/interactive/2026/07/01/polls/times-siena-alaska-poll-crosstabs.html",
-  "feed": "votehub"
+  "source": "https://en.wikipedia.org/wiki/2026_United_States_Senate_election_in_Alaska"
+ },
+ {
+  "state": "AK",
+  "pollster": "Data for Progress",
+  "sponsor_party": "D",
+  "end_date": "2026-08-04",
+  "n": 605,
+  "population": "LV",
+  "rep": 41.0,
+  "opp": 45.0,
+  "others": [],
+  "source": "https://en.wikipedia.org/wiki/2026_United_States_Senate_election_in_Alaska"
  },
  {
   "state": "AK",
@@ -134,11 +162,10 @@
   "end_date": "2026-08-05",
   "n": 1371,
   "population": "LV",
-  "rep": 49.2,
-  "opp": 50.8,
+  "rep": 49.0,
+  "opp": 51.0,
   "others": [],
-  "source": "https://x.com/The_Real_ASR/status/2087253230548107640?s=20",
-  "feed": "votehub"
+  "source": "https://en.wikipedia.org/wiki/2026_United_States_Senate_election_in_Alaska"
  },
  {
   "state": "AK",
@@ -147,50 +174,118 @@
   "end_date": "2026-08-23",
   "n": 1495,
   "population": "LV",
-  "rep": 49.4,
-  "opp": 50.6,
+  "rep": 49.0,
+  "opp": 51.0,
   "others": [],
-  "source": "https://x.com/The_Real_ASR/status/2095186398882287632",
-  "feed": "votehub"
+  "source": "https://en.wikipedia.org/wiki/2026_United_States_Senate_election_in_Alaska"
  },
  {
   "state": "AK",
-  "pollster": "Fabrizio, Lee & Associates/Impact Research/AARP",
-  "sponsor_party": null,
+  "pollster": "Fabrizio Ward (R)/ Impact Research",
+  "sponsor_party": "R",
   "end_date": "2026-09-11",
   "n": 800,
   "population": "LV",
-  "rep": 47.0,
-  "opp": 53.0,
+  "rep": 41.0,
+  "opp": 45.0,
   "others": [],
-  "source": "https://www.aarp.org/pri/topics/voter-research/politics/2026-midterm-election-poll-alaska/",
-  "feed": "votehub"
+  "source": "https://en.wikipedia.org/wiki/2026_United_States_Senate_election_in_Alaska"
+ },
+ {
+  "state": "AK",
+  "pollster": "Alaska Survey Research",
+  "sponsor_party": null,
+  "end_date": "2026-09-12",
+  "n": 1352,
+  "population": "LV",
+  "rep": 44.0,
+  "opp": 48.0,
+  "others": [],
+  "source": "https://en.wikipedia.org/wiki/2026_United_States_Senate_election_in_Alaska"
+ },
+ {
+  "state": "AK",
+  "pollster": "Rasmussen Reports",
+  "sponsor_party": "R",
+  "end_date": "2026-09-14",
+  "n": 1188,
+  "population": "LV",
+  "rep": 39.0,
+  "opp": 39.0,
+  "others": [],
+  "source": "https://en.wikipedia.org/wiki/2026_United_States_Senate_election_in_Alaska"
  },
  {
   "state": "AK",
   "pollster": "co/efficient",
-  "sponsor_party": null,
+  "sponsor_party": "R",
   "end_date": "2026-09-17",
   "n": 799,
   "population": "LV",
-  "rep": 49.0,
+  "rep": 48.0,
   "opp": 46.0,
   "others": [],
-  "source": "https://battlegrounds.coefficient.org/ak/",
-  "feed": "votehub"
+  "source": "https://en.wikipedia.org/wiki/2026_United_States_Senate_election_in_Alaska"
+ },
+ {
+  "state": "AK",
+  "pollster": "Trafalgar Group",
+  "sponsor_party": "R",
+  "end_date": "2026-09-24",
+  "n": 1079,
+  "population": "LV",
+  "rep": 47.0,
+  "opp": 46.0,
+  "others": [],
+  "source": "https://en.wikipedia.org/wiki/2026_United_States_Senate_election_in_Alaska"
  },
  {
   "state": "AK",
   "pollster": "Quantus Insights",
-  "sponsor_party": null,
+  "sponsor_party": "R",
   "end_date": "2026-09-30",
   "n": 758,
   "population": "LV",
-  "rep": 47.8,
-  "opp": 47.2,
+  "rep": 46.0,
+  "opp": 46.0,
   "others": [],
-  "source": "https://quantusinsights.org/polling/f/quantus-insights-survey-sullivan-peltola-deadlocked-in-alaska",
-  "feed": "votehub"
+  "source": "https://en.wikipedia.org/wiki/2026_United_States_Senate_election_in_Alaska"
+ },
+ {
+  "state": "AK",
+  "pollster": "New York Times/Siena University",
+  "sponsor_party": null,
+  "end_date": "2026-10-01",
+  "n": 504,
+  "population": "LV",
+  "rep": 43.0,
+  "opp": 50.0,
+  "others": [],
+  "source": "https://en.wikipedia.org/wiki/2026_United_States_Senate_election_in_Alaska"
+ },
+ {
+  "state": "AK",
+  "pollster": "Alaska Survey Research",
+  "sponsor_party": null,
+  "end_date": "2026-10-03",
+  "n": 1512,
+  "population": "LV",
+  "rep": 45.0,
+  "opp": 47.0,
+  "others": [],
+  "source": "https://en.wikipedia.org/wiki/2026_United_States_Senate_election_in_Alaska"
+ },
+ {
+  "state": "AK",
+  "pollster": "InsiderAdvantage",
+  "sponsor_party": "R",
+  "end_date": "2026-10-10",
+  "n": 1200,
+  "population": "LV",
+  "rep": 43.0,
+  "opp": 48.0,
+  "others": [],
+  "source": "https://en.wikipedia.org/wiki/2026_United_States_Senate_election_in_Alaska"
  },
  {
   "state": "AK",
@@ -202,21 +297,19 @@
   "rep": 47.0,
   "opp": 48.0,
   "others": [],
-  "source": "https://x.com/AndrewSolender/status/2110867168892014803",
-  "feed": "votehub"
+  "source": "https://en.wikipedia.org/wiki/2026_United_States_Senate_election_in_Alaska"
  },
  {
   "state": "AK",
   "pollster": "Data for Progress",
-  "sponsor_party": null,
+  "sponsor_party": "D",
   "end_date": "2026-10-16",
-  "n": 671,
+  "n": 694,
   "population": "LV",
-  "rep": 49.0,
-  "opp": 51.0,
+  "rep": 44.0,
+  "opp": 47.0,
   "others": [],
-  "source": "https://www.dataforprogress.org/blog/2026/10/20/every-statewide-race-in-alaska-is-close-as-7-in-10-voters-worry-about-affording-gas-and-food",
-  "feed": "votehub"
+  "source": "https://en.wikipedia.org/wiki/2026_United_States_Senate_election_in_Alaska"
  },
  {
   "state": "AL",
@@ -27353,6 +27446,18 @@
   "population": "LV",
   "opp": 52.0,
   "rep": 41.0,
+  "others": [],
+  "source": "https://en.wikipedia.org/wiki/2026_United_States_elections"
+ },
+ {
+  "state": "US",
+  "pollster": "The Economist/YouGov",
+  "sponsor_party": null,
+  "end_date": "2026-10-20",
+  "n": 1179,
+  "population": "LV",
+  "opp": 52.0,
+  "rep": 43.0,
   "others": [],
   "source": "https://en.wikipedia.org/wiki/2026_United_States_elections"
  },
