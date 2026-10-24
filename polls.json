@@ -12483,6 +12483,18 @@
   "source": "https://en.wikipedia.org/wiki/2026_United_States_House_of_Representatives_elections_in_Colorado"
  },
  {
+  "state": "CO-03",
+  "pollster": "Democratic Congressional Campaign Committee",
+  "sponsor_party": null,
+  "end_date": "2026-10-21",
+  "n": 402,
+  "population": "LV",
+  "rep": 46.0,
+  "opp": 47.0,
+  "others": [],
+  "source": "https://en.wikipedia.org/wiki/2026_United_States_House_of_Representatives_elections_in_Colorado"
+ },
+ {
   "state": "CO-04",
   "pollster": "Impact Research",
   "sponsor_party": "D",
@@ -13823,6 +13835,18 @@
   "n": 863,
   "population": "LV",
   "rep": 48.0,
+  "opp": 45.0,
+  "others": [],
+  "source": "https://en.wikipedia.org/wiki/2026_United_States_Senate_election_in_Iowa"
+ },
+ {
+  "state": "IA",
+  "pollster": "InsiderAdvantage",
+  "sponsor_party": "R",
+  "end_date": "2026-10-22",
+  "n": 1200,
+  "population": "LV",
+  "rep": 47.0,
   "opp": 45.0,
   "others": [],
   "source": "https://en.wikipedia.org/wiki/2026_United_States_Senate_election_in_Iowa"
@@ -15641,6 +15665,18 @@
   "source": "https://en.wikipedia.org/wiki/2026_United_States_Senate_election_in_Michigan"
  },
  {
+  "state": "MI",
+  "pollster": "InsiderAdvantage",
+  "sponsor_party": "R",
+  "end_date": "2026-10-22",
+  "n": 1200,
+  "population": "LV",
+  "rep": 46.0,
+  "opp": 47.0,
+  "others": [],
+  "source": "https://en.wikipedia.org/wiki/2026_United_States_Senate_election_in_Michigan"
+ },
+ {
   "state": "MI-04",
   "pollster": "Public Policy Polling",
   "sponsor_party": "D",
@@ -16144,6 +16180,18 @@
   "others": [],
   "source": "https://drive.google.com/file/d/16nLOQEszQimue_N2O6G42brKUXopDLcu/view",
   "feed": "votehub"
+ },
+ {
+  "state": "MS",
+  "pollster": "Change Research",
+  "sponsor_party": "D",
+  "end_date": "2026-10-22",
+  "n": 842,
+  "population": "LV",
+  "rep": 43.0,
+  "opp": 40.0,
+  "others": [],
+  "source": "https://en.wikipedia.org/wiki/2026_United_States_Senate_election_in_Mississippi"
  },
  {
   "state": "MT",
@@ -17388,8 +17436,8 @@
   "end_date": "2026-09-30",
   "n": 1113,
   "population": "LV",
-  "rep": 48.0,
-  "opp": 43.0,
+  "rep": 45.0,
+  "opp": 40.0,
   "others": [],
   "source": "https://en.wikipedia.org/wiki/2026_United_States_Senate_election_in_Nebraska"
  },
@@ -17426,6 +17474,30 @@
   "population": "LV",
   "rep": 46.0,
   "opp": 43.0,
+  "others": [],
+  "source": "https://en.wikipedia.org/wiki/2026_United_States_Senate_election_in_Nebraska"
+ },
+ {
+  "state": "NE",
+  "pollster": "Impact Research",
+  "sponsor_party": "D",
+  "end_date": "2026-10-20",
+  "n": 600,
+  "population": "LV",
+  "rep": 49.0,
+  "opp": 47.0,
+  "others": [],
+  "source": "https://en.wikipedia.org/wiki/2026_United_States_Senate_election_in_Nebraska"
+ },
+ {
+  "state": "NE",
+  "pollster": "GBAO",
+  "sponsor_party": "D",
+  "end_date": "2026-10-22",
+  "n": 800,
+  "population": "LV",
+  "rep": 45.0,
+  "opp": 46.0,
   "others": [],
   "source": "https://en.wikipedia.org/wiki/2026_United_States_Senate_election_in_Nebraska"
  },
@@ -17863,6 +17935,18 @@
   "source": "https://en.wikipedia.org/wiki/2026_United_States_House_of_Representatives_elections_in_New_Hampshire"
  },
  {
+  "state": "NH-01",
+  "pollster": "Saint Anselm College",
+  "sponsor_party": null,
+  "end_date": "2026-10-20",
+  "n": 861,
+  "population": "LV",
+  "rep": 42.0,
+  "opp": 46.0,
+  "others": [],
+  "source": "https://en.wikipedia.org/wiki/2026_United_States_House_of_Representatives_elections_in_New_Hampshire"
+ },
+ {
   "state": "NH-02",
   "pollster": "Saint Anselm College",
   "sponsor_party": null,
@@ -17955,6 +18039,18 @@
   "population": "LV",
   "rep": 35.0,
   "opp": 56.0,
+  "others": [],
+  "source": "https://en.wikipedia.org/wiki/2026_United_States_House_of_Representatives_elections_in_New_Hampshire"
+ },
+ {
+  "state": "NH-02",
+  "pollster": "Saint Anselm College",
+  "sponsor_party": null,
+  "end_date": "2026-10-20",
+  "n": 811,
+  "population": "LV",
+  "rep": 38.0,
+  "opp": 54.0,
   "others": [],
   "source": "https://en.wikipedia.org/wiki/2026_United_States_House_of_Representatives_elections_in_New_Hampshire"
  },
@@ -18776,6 +18872,18 @@
   "source": "https://en.wikipedia.org/wiki/2026_United_States_Senate_special_election_in_Ohio"
  },
  {
+  "state": "OH",
+  "pollster": "InsiderAdvantage",
+  "sponsor_party": "R",
+  "end_date": "2026-10-22",
+  "n": 1200,
+  "population": "LV",
+  "rep": 44.0,
+  "opp": 47.0,
+  "others": [],
+  "source": "https://en.wikipedia.org/wiki/2026_United_States_Senate_special_election_in_Ohio"
+ },
+ {
   "state": "OH-01",
   "pollster": "Quantus Insights",
   "sponsor_party": null,
@@ -19060,6 +19168,18 @@
   "population": "RV",
   "rep": 49.0,
   "opp": 40.0,
+  "others": [],
+  "source": "https://en.wikipedia.org/wiki/2026_United_States_House_of_Representatives_elections_in_Pennsylvania"
+ },
+ {
+  "state": "PA-01",
+  "pollster": "Global Strategy Group",
+  "sponsor_party": "D",
+  "end_date": "2026-10-08",
+  "n": 1032,
+  "population": "LV",
+  "rep": 46.0,
+  "opp": 46.0,
   "others": [],
   "source": "https://en.wikipedia.org/wiki/2026_United_States_House_of_Representatives_elections_in_Pennsylvania"
  },
@@ -19424,6 +19544,18 @@
   "source": "https://en.wikipedia.org/wiki/2026_United_States_Senate_election_in_South_Carolina"
  },
  {
+  "state": "SC",
+  "pollster": "Impact Research",
+  "sponsor_party": "D",
+  "end_date": "2026-10-21",
+  "n": 800,
+  "population": "LV",
+  "rep": 44.0,
+  "opp": 45.0,
+  "others": [],
+  "source": "https://en.wikipedia.org/wiki/2026_United_States_Senate_election_in_South_Carolina"
+ },
+ {
   "state": "SC-01",
   "pollster": "GQR",
   "sponsor_party": "D",
@@ -19468,6 +19600,18 @@
   "population": "LV",
   "rep": 45.0,
   "opp": 48.0,
+  "others": [],
+  "source": "https://en.wikipedia.org/wiki/2026_United_States_House_of_Representatives_elections_in_South_Carolina"
+ },
+ {
+  "state": "SC-01",
+  "pollster": "Public Policy Polling",
+  "sponsor_party": "D",
+  "end_date": "2026-10-22",
+  "n": 770,
+  "population": "LV",
+  "rep": 45.0,
+  "opp": 47.0,
   "others": [],
   "source": "https://en.wikipedia.org/wiki/2026_United_States_House_of_Representatives_elections_in_South_Carolina"
  },
@@ -20387,16 +20531,27 @@
  },
  {
   "state": "TX",
-  "pollster": "Pollfinity",
+  "pollster": "Pollfinity Research",
   "sponsor_party": null,
   "end_date": "2026-10-18",
   "n": 278,
-  "population": "LV",
+  "population": "RV",
   "rep": 43.0,
   "opp": 48.0,
   "others": [],
-  "source": "https://www.pollfinity.com/polls/tx-governor-senate-2026-oct",
-  "feed": "votehub"
+  "source": "https://en.wikipedia.org/wiki/2026_United_States_Senate_election_in_Texas"
+ },
+ {
+  "state": "TX",
+  "pollster": "Texas Public Opinion Research",
+  "sponsor_party": "D",
+  "end_date": "2026-10-18",
+  "n": 969,
+  "population": "LV",
+  "rep": 47.0,
+  "opp": 51.0,
+  "others": [],
+  "source": "https://en.wikipedia.org/wiki/2026_United_States_Senate_election_in_Texas"
  },
  {
   "state": "TX",
@@ -20431,6 +20586,18 @@
   "population": "LV",
   "rep": 49.0,
   "opp": 51.0,
+  "others": [],
+  "source": "https://en.wikipedia.org/wiki/2026_United_States_Senate_election_in_Texas"
+ },
+ {
+  "state": "TX",
+  "pollster": "Rasmussen Reports",
+  "sponsor_party": null,
+  "end_date": "2026-10-21",
+  "n": 965,
+  "population": "LV",
+  "rep": 45.0,
+  "opp": 45.0,
   "others": [],
   "source": "https://en.wikipedia.org/wiki/2026_United_States_Senate_election_in_Texas"
  },
@@ -20663,6 +20830,18 @@
   "source": "https://en.wikipedia.org/wiki/2026_United_States_House_of_Representatives_elections_in_Texas"
  },
  {
+  "state": "TX-34",
+  "pollster": "Washington Post/Schar School",
+  "sponsor_party": null,
+  "end_date": "2026-10-19",
+  "n": 626,
+  "population": "LV",
+  "rep": 43.0,
+  "opp": 50.0,
+  "others": [],
+  "source": "https://en.wikipedia.org/wiki/2026_United_States_House_of_Representatives_elections_in_Texas"
+ },
+ {
   "state": "TX-35",
   "pollster": "Normington Petts",
   "sponsor_party": "D",
@@ -20694,6 +20873,18 @@
   "n": 400,
   "population": "LV",
   "rep": 45.0,
+  "opp": 47.0,
+  "others": [],
+  "source": "https://en.wikipedia.org/wiki/2026_United_States_House_of_Representatives_elections_in_Texas"
+ },
+ {
+  "state": "TX-35",
+  "pollster": "Washington Post/Schar School",
+  "sponsor_party": null,
+  "end_date": "2026-10-19",
+  "n": 606,
+  "population": "LV",
+  "rep": 48.0,
   "opp": 47.0,
   "others": [],
   "source": "https://en.wikipedia.org/wiki/2026_United_States_House_of_Representatives_elections_in_Texas"
@@ -27602,6 +27793,18 @@
   "population": "LV",
   "rep": 46.0,
   "opp": 50.0,
+  "others": [],
+  "source": "https://en.wikipedia.org/wiki/2026_United_States_House_of_Representatives_elections_in_Virginia"
+ },
+ {
+  "state": "VA-01",
+  "pollster": "Public Policy Polling",
+  "sponsor_party": "D",
+  "end_date": "2026-10-22",
+  "n": 570,
+  "population": "LV",
+  "rep": 46.0,
+  "opp": 47.0,
   "others": [],
   "source": "https://en.wikipedia.org/wiki/2026_United_States_House_of_Representatives_elections_in_Virginia"
  },
