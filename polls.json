@@ -12543,6 +12543,18 @@
   "source": "https://en.wikipedia.org/wiki/2026_United_States_House_of_Representatives_elections_in_Colorado"
  },
  {
+  "state": "CO-05",
+  "pollster": "Public Policy Polling",
+  "sponsor_party": "D",
+  "end_date": "2026-10-20",
+  "n": 577,
+  "population": "LV",
+  "rep": 47.0,
+  "opp": 47.0,
+  "others": [],
+  "source": "https://en.wikipedia.org/wiki/2026_United_States_House_of_Representatives_elections_in_Colorado"
+ },
+ {
   "state": "CO-08",
   "pollster": "McLaughlin and Associates",
   "sponsor_party": "R",
@@ -12563,6 +12575,18 @@
   "population": "LV",
   "rep": 33.0,
   "opp": 52.0,
+  "others": [],
+  "source": "https://en.wikipedia.org/wiki/2026_United_States_House_of_Representatives_elections_in_Connecticut"
+ },
+ {
+  "state": "CT-05",
+  "pollster": "OnMessage",
+  "sponsor_party": "R",
+  "end_date": "2026-10-01",
+  "n": null,
+  "population": null,
+  "rep": 45.0,
+  "opp": 51.0,
   "others": [],
   "source": "https://en.wikipedia.org/wiki/2026_United_States_House_of_Representatives_elections_in_Connecticut"
  },
@@ -14032,6 +14056,18 @@
   "source": "https://en.wikipedia.org/wiki/2026_United_States_Senate_election_in_Idaho"
  },
  {
+  "state": "ID",
+  "pollster": "VoteNexus Research",
+  "sponsor_party": null,
+  "end_date": "2026-10-22",
+  "n": 700,
+  "population": "LV",
+  "rep": 49.0,
+  "opp": 43.0,
+  "others": [],
+  "source": "https://en.wikipedia.org/wiki/2026_United_States_Senate_election_in_Idaho"
+ },
+ {
   "state": "ID-01",
   "pollster": "SurveyUSA",
   "sponsor_party": null,
@@ -14052,6 +14088,30 @@
   "population": "LV",
   "rep": 48.0,
   "opp": 27.0,
+  "others": [],
+  "source": "https://en.wikipedia.org/wiki/2026_United_States_House_of_Representatives_elections_in_Idaho"
+ },
+ {
+  "state": "ID-01",
+  "pollster": "VoteNexus Research",
+  "sponsor_party": null,
+  "end_date": "2026-10-22",
+  "n": null,
+  "population": "LV",
+  "rep": 52.0,
+  "opp": 26.0,
+  "others": [],
+  "source": "https://en.wikipedia.org/wiki/2026_United_States_House_of_Representatives_elections_in_Idaho"
+ },
+ {
+  "state": "ID-02",
+  "pollster": "VoteNexus Research",
+  "sponsor_party": null,
+  "end_date": "2026-10-22",
+  "n": null,
+  "population": "LV",
+  "rep": 46.0,
+  "opp": 31.0,
   "others": [],
   "source": "https://en.wikipedia.org/wiki/2026_United_States_House_of_Representatives_elections_in_Idaho"
  },
@@ -14283,6 +14343,18 @@
   "opp": 47.0,
   "others": [],
   "source": "https://en.wikipedia.org/wiki/2026_United_States_Senate_election_in_Kansas"
+ },
+ {
+  "state": "KS-02",
+  "pollster": "DCCC",
+  "sponsor_party": null,
+  "end_date": "2026-10-20",
+  "n": 639,
+  "population": "LV",
+  "rep": 49.0,
+  "opp": 46.0,
+  "others": [],
+  "source": "https://en.wikipedia.org/wiki/2026_United_States_House_of_Representatives_elections_in_Kansas"
  },
  {
   "state": "KY",
@@ -17015,7 +17087,7 @@
   "end_date": "2026-09-20",
   "n": 608,
   "population": "LV",
-  "rep": 39.0,
+  "rep": 34.0,
   "opp": 49.0,
   "others": [],
   "source": "https://en.wikipedia.org/wiki/2026_United_States_Senate_election_in_North_Carolina"
@@ -17130,16 +17202,15 @@
  },
  {
   "state": "NC",
-  "pollster": "Harper Polling/Carolina Journal",
-  "sponsor_party": null,
+  "pollster": "Harper Polling",
+  "sponsor_party": "R",
   "end_date": "2026-10-20",
   "n": 600,
   "population": "LV",
   "rep": 39.0,
   "opp": 49.0,
   "others": [],
-  "source": "https://www.carolinajournal.com/polls/october-2026-coopers-lead-over-whatley-narrows-to-10-points-in-nc-senate-race/",
-  "feed": "votehub"
+  "source": "https://en.wikipedia.org/wiki/2026_United_States_Senate_election_in_North_Carolina"
  },
  {
   "state": "NC-01",
@@ -18908,6 +18979,18 @@
   "source": "https://en.wikipedia.org/wiki/2026_United_States_House_of_Representatives_elections_in_Ohio"
  },
  {
+  "state": "OH-01",
+  "pollster": "Quantus Insights",
+  "sponsor_party": null,
+  "end_date": "2026-10-21",
+  "n": 561,
+  "population": "LV",
+  "rep": 42.0,
+  "opp": 47.0,
+  "others": [],
+  "source": "https://en.wikipedia.org/wiki/2026_United_States_House_of_Representatives_elections_in_Ohio"
+ },
+ {
   "state": "OH-07",
   "pollster": "GBAO",
   "sponsor_party": "D",
@@ -20376,7 +20459,7 @@
  {
   "state": "TX",
   "pollster": "Rasmussen Reports",
-  "sponsor_party": null,
+  "sponsor_party": "R",
   "end_date": "2026-09-29",
   "n": 1128,
   "population": "LV",
@@ -20592,7 +20675,7 @@
  {
   "state": "TX",
   "pollster": "Rasmussen Reports",
-  "sponsor_party": null,
+  "sponsor_party": "R",
   "end_date": "2026-10-21",
   "n": 965,
   "population": "LV",
@@ -26809,6 +26892,18 @@
   "population": "RV",
   "opp": 49.0,
   "rep": 38.0,
+  "others": [],
+  "source": "https://en.wikipedia.org/wiki/2026_United_States_elections"
+ },
+ {
+  "state": "US",
+  "pollster": "Public Religion Research Institute",
+  "sponsor_party": null,
+  "end_date": "2026-09-07",
+  "n": null,
+  "population": "RV",
+  "opp": 43.0,
+  "rep": 36.0,
   "others": [],
   "source": "https://en.wikipedia.org/wiki/2026_United_States_elections"
  },
