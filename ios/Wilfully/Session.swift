@@ -13,8 +13,9 @@ final class Session {
     private(set) var token: String?
 
     init() {
-        token = Keychain.read(Self.tokenKey)
-        state = token == nil ? .locked : .unlocked
+        let saved = Keychain.read(Self.tokenKey)
+        token = saved
+        state = saved == nil ? .locked : .unlocked
     }
 
     /// Re-checks a saved token. Offline counts as still unlocked.
