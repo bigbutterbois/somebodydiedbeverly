@@ -1,28 +1,38 @@
 import SwiftUI
 
-// The app's /enter page: the logo and one password field, checked by the site.
-struct UnlockView: View {
+// The app's /login page: the logo, then the owner's email and password,
+// checked by the site.
+struct SignInView: View {
     @Environment(Session.self) private var session
+    @State private var email = ""
     @State private var password = ""
     @State private var checking = false
     @State private var error: String?
-    @FocusState private var focused: Bool
+    @FocusState private var field: Field?
+
+    private enum Field { case email, password }
 
     var body: some View {
         VStack(spacing: 32) {
             Monogram().frame(width: 96)
 
             VStack(spacing: 12) {
+                TextField("Email", text: $email)
+                    .textContentType(.username)
+                    .keyboardType(.emailAddress)
+                    .textInputAutocapitalization(.never)
+                    .autocorrectionDisabled()
+                    .submitLabel(.next)
+                    .focused($field, equals: .email)
+                    .onSubmit { field = .password }
+                    .pill()
+
                 SecureField("Password", text: $password)
                     .textContentType(.password)
-                    .multilineTextAlignment(.center)
                     .submitLabel(.go)
-                    .focused($focused)
+                    .focused($field, equals: .password)
                     .onSubmit(submit)
-                    .padding(.horizontal, 20)
-                    .padding(.vertical, 10)
-                    .overlay(Capsule().stroke(Theme.accent))
-                    .frame(maxWidth: 280)
+                    .pill()
 
                 Group {
                     if checking {
@@ -41,16 +51,16 @@ struct UnlockView: View {
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         .background(Theme.background)
         .foregroundStyle(Theme.foreground)
-        .onAppear { focused = true }
+        .onAppear { field = .email }
     }
 
     private func submit() {
-        guard !password.isEmpty, !checking else { return }
+        guard !email.isEmpty, !password.isEmpty, !checking else { return }
         checking = true
         error = nil
         Task {
             do {
-                try await session.unlock(password: password)
+                try await session.signIn(email: email, password: password)
             } catch {
                 self.error = error.localizedDescription
             }
@@ -59,6 +69,17 @@ struct UnlockView: View {
     }
 }
 
+private extension View {
+    // The site's rounded teal-outlined input.
+    func pill() -> some View {
+        multilineTextAlignment(.center)
+            .padding(.horizontal, 20)
+            .padding(.vertical, 10)
+            .overlay(Capsule().stroke(Theme.accent))
+            .frame(maxWidth: 280)
+    }
+}
+
 #Preview {
-    UnlockView().environment(Session())
+    SignInView().environment(Session())
 }

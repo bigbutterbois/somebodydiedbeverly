@@ -6,8 +6,8 @@ struct RootView: View {
     var body: some View {
         Group {
             switch session.state {
-            case .locked: UnlockView()
-            case .unlocked: MainTabs()
+            case .signedOut: SignInView()
+            case .signedIn: MainTabs()
             }
         }
         .task { await session.verify() }
@@ -63,7 +63,7 @@ struct MoreView: View {
                     Text("Coming in a later update.")
                 }
                 Section {
-                    Button("Sign out on this phone", role: .destructive) { session.lock() }
+                    Button("Sign out", role: .destructive) { session.signOut() }
                 } footer: {
                     Text(version)
                 }

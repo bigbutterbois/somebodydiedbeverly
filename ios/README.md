@@ -1,9 +1,10 @@
 # Wilfully iPhone app
 
-A native SwiftUI app for the site. The website stays the backend: the app signs
-in with the family password at `/api/app/unlock`, keeps the token it gets back
-in the Keychain, and sends it as a bearer header on every request (see
-`src/proxy.ts`). No API keys live in the app.
+A native SwiftUI app for the site, for the owner only. The website stays the
+backend: the app signs in with the same email and password as `/login`
+(through `/api/app/login`), keeps the Supabase tokens in the Keychain, and
+sends the access token as a bearer header (see `src/proxy.ts`). Everything
+under `/api/app/` is owner-only. No API keys live in the app.
 
 ## Run it on your iPhone (free Apple ID)
 
@@ -26,4 +27,4 @@ refresh it.
 - `Wilfully/` is a synchronized folder: any file added there is part of the app,
   with no project-file edits.
 - `Theme.swift` mirrors the site's colours in `src/app/globals.css`.
-- `API.swift` and `Session.swift` handle the site and the password.
+- `API.swift` and `Session.swift` handle the site and the owner sign-in.

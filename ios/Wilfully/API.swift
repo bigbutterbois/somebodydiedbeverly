@@ -1,13 +1,13 @@
 import Foundation
 
 // Talks to the website, which stays the app's backend: the WMATA key and the
-// Supabase keys never leave the server. Requests carry the family access token
-// as a bearer header (see src/proxy.ts and src/app/api/app/).
+// Supabase keys never leave the server. Requests carry the owner's Supabase
+// access token as a bearer header (see src/proxy.ts and src/app/api/app/).
 enum API {
     static let base = URL(string: "https://www.wilfullymisunderstand.com")!
 
     enum Failure: LocalizedError {
-        /// The token was refused: the password changed, or it was never valid.
+        /// The sign-in was refused: expired, or signed out elsewhere.
         case locked
         /// The site answered with an error message of its own.
         case message(String)
@@ -15,7 +15,7 @@ enum API {
 
         var errorDescription: String? {
             switch self {
-            case .locked: "Enter the site password first."
+            case .locked: "Sign in again."
             case .message(let text): text
             case .offline: "Can't reach the site. Check your connection and try again."
             }
