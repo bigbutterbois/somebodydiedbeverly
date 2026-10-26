@@ -3,9 +3,10 @@ import { NextResponse, type NextRequest } from "next/server";
 import { isPreviewBot, previewHtml } from "@/lib/link-preview";
 import { ACCESS_COOKIE, hasSiteAccess } from "@/lib/site-access";
 
-// Pages anyone can open: the two sign-in screens, plus the home-screen app's
-// manifest and service worker, which phones fetch without cookies.
-const OPEN_PATHS = ["/enter", "/login", "/manifest.webmanifest", "/sw.js"];
+// Pages anyone can open: the two sign-in screens, the iPhone app's version of
+// /enter, plus the home-screen app's manifest and service worker, which phones
+// fetch without cookies.
+const OPEN_PATHS = ["/enter", "/login", "/api/app/unlock", "/manifest.webmanifest", "/sw.js"];
 
 // Runs before every page. Two gates:
 // - /admin needs the owner signed in (Supabase Auth).
@@ -66,10 +67,19 @@ export async function proxy(request: NextRequest) {
   if (pathname.startsWith("/admin")) {
     if (!isOwner) return redirectTo("/login");
   } else if (!OPEN_PATHS.includes(pathname) && !isOwner) {
+    // The website sends the access token as a cookie; the iPhone app sends the
+    // same token as a bearer header (see src/app/api/app/unlock).
+    const bearer = request.headers.get("authorization")?.match(/^Bearer (.+)$/)?.[1];
     const allowed = await hasSiteAccess(
-      request.cookies.get(ACCESS_COOKIE)?.value,
+      request.cookies.get(ACCESS_COOKIE)?.value ?? bearer,
     );
-    if (!allowed) return redirectTo("/enter");
+    if (!allowed) {
+      // API callers get a status they can act on instead of the password page.
+      if (pathname.startsWith("/api/")) {
+        return Response.json({ error: "Enter the site password first." }, { status: 401 });
+      }
+      return redirectTo("/enter");
+    }
   }
 
   response.headers.set("X-Robots-Tag", "noindex, nofollow");
