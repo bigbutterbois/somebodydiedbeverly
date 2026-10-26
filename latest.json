@@ -1450,7 +1450,7 @@
   }
  ],
  "p_dem_both": 0.6861,
- "generated_at": "2026-10-26T02:22:24+00:00",
+ "generated_at": "2026-10-26T02:44:29+00:00",
  "config_version": "3a18c7ff",
  "problems": [],
  "history": [
@@ -3151,7 +3151,7 @@
   {
    "name": "Generic ballot polls",
    "status": "ok",
-   "fetch": "519 polls read from Wikipedia",
+   "fetch": "518 polls read from Wikipedia",
    "latest": "2026-10-23",
    "summary": "6 polls in the last week. Average D 51.2, R 42.6."
   },
