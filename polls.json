@@ -12220,7 +12220,31 @@
  },
  {
   "state": "APPROVAL",
+  "pollster": "CNN/SSRS",
+  "sponsor_party": null,
+  "end_date": "2026-10-18",
+  "n": 1701,
+  "population": null,
+  "opp": 32.0,
+  "rep": 67.0,
+  "others": [],
+  "source": "https://en.wikipedia.org/wiki/Opinion_polling_on_the_second_Trump_presidency"
+ },
+ {
+  "state": "APPROVAL",
   "pollster": "New York Times/Siena",
+  "sponsor_party": null,
+  "end_date": "2026-10-19",
+  "n": 3494,
+  "population": null,
+  "opp": 34.0,
+  "rep": 60.0,
+  "others": [],
+  "source": "https://en.wikipedia.org/wiki/Opinion_polling_on_the_second_Trump_presidency"
+ },
+ {
+  "state": "APPROVAL",
+  "pollster": "New York Times/Siena College",
   "sponsor_party": null,
   "end_date": "2026-10-19",
   "n": 3494,
@@ -12251,6 +12275,18 @@
   "population": null,
   "opp": 29.0,
   "rep": 67.0,
+  "others": [],
+  "source": "https://en.wikipedia.org/wiki/Opinion_polling_on_the_second_Trump_presidency"
+ },
+ {
+  "state": "APPROVAL",
+  "pollster": "Financial Times/Focaldata",
+  "sponsor_party": null,
+  "end_date": "2026-10-20",
+  "n": 1845,
+  "population": null,
+  "opp": 34.0,
+  "rep": 59.0,
   "others": [],
   "source": "https://en.wikipedia.org/wiki/Opinion_polling_on_the_second_Trump_presidency"
  },
@@ -14993,6 +15029,18 @@
   "source": "https://en.wikipedia.org/wiki/2026_United_States_Senate_election_in_Maine"
  },
  {
+  "state": "ME",
+  "pollster": "Trafalgar Group",
+  "sponsor_party": "R",
+  "end_date": "2026-10-23",
+  "n": 1077,
+  "population": "LV",
+  "rep": 47.0,
+  "opp": 47.0,
+  "others": [],
+  "source": "https://en.wikipedia.org/wiki/2026_United_States_Senate_election_in_Maine"
+ },
+ {
   "state": "ME-01",
   "pollster": "University of New Hampshire",
   "sponsor_party": null,
@@ -17538,6 +17586,18 @@
  },
  {
   "state": "NE",
+  "pollster": "Concord Public Opinion Partners",
+  "sponsor_party": "D",
+  "end_date": "2026-10-18",
+  "n": 500,
+  "population": "LV",
+  "rep": 41.0,
+  "opp": 48.0,
+  "others": [],
+  "source": "https://en.wikipedia.org/wiki/2026_United_States_Senate_election_in_Nebraska"
+ },
+ {
+  "state": "NE",
   "pollster": "National Public Affairs",
   "sponsor_party": "R",
   "end_date": "2026-10-18",
@@ -19267,6 +19327,18 @@
   "source": "https://en.wikipedia.org/wiki/2026_United_States_House_of_Representatives_elections_in_Pennsylvania"
  },
  {
+  "state": "PA-01",
+  "pollster": "New York Times/The Philadelphia Inquirer/Siena University",
+  "sponsor_party": null,
+  "end_date": "2026-10-22",
+  "n": 400,
+  "population": "LV",
+  "rep": 46.0,
+  "opp": 48.0,
+  "others": [],
+  "source": "https://en.wikipedia.org/wiki/2026_United_States_House_of_Representatives_elections_in_Pennsylvania"
+ },
+ {
   "state": "PA-07",
   "pollster": "GBAO",
   "sponsor_party": "D",
@@ -19287,6 +19359,18 @@
   "population": "RV",
   "rep": 40.0,
   "opp": 45.0,
+  "others": [],
+  "source": "https://en.wikipedia.org/wiki/2026_United_States_House_of_Representatives_elections_in_Pennsylvania"
+ },
+ {
+  "state": "PA-07",
+  "pollster": "New York Times/The Philadelphia Inquirer/Siena University",
+  "sponsor_party": null,
+  "end_date": "2026-10-22",
+  "n": 400,
+  "population": "LV",
+  "rep": 44.0,
+  "opp": 49.0,
   "others": [],
   "source": "https://en.wikipedia.org/wiki/2026_United_States_House_of_Representatives_elections_in_Pennsylvania"
  },
@@ -19335,6 +19419,18 @@
   "population": "LV",
   "rep": 48.0,
   "opp": 52.0,
+  "others": [],
+  "source": "https://en.wikipedia.org/wiki/2026_United_States_House_of_Representatives_elections_in_Pennsylvania"
+ },
+ {
+  "state": "PA-08",
+  "pollster": "New York Times/The Philadelphia Inquirer/Siena University",
+  "sponsor_party": null,
+  "end_date": "2026-10-22",
+  "n": 400,
+  "population": "LV",
+  "rep": 46.0,
+  "opp": 51.0,
   "others": [],
   "source": "https://en.wikipedia.org/wiki/2026_United_States_House_of_Representatives_elections_in_Pennsylvania"
  },
@@ -19395,6 +19491,18 @@
   "population": "LV",
   "rep": 46.0,
   "opp": 49.0,
+  "others": [],
+  "source": "https://en.wikipedia.org/wiki/2026_United_States_House_of_Representatives_elections_in_Pennsylvania"
+ },
+ {
+  "state": "PA-10",
+  "pollster": "New York Times/The Philadelphia Inquirer/Siena University",
+  "sponsor_party": null,
+  "end_date": "2026-10-22",
+  "n": 400,
+  "population": "LV",
+  "rep": 48.0,
+  "opp": 48.0,
   "others": [],
   "source": "https://en.wikipedia.org/wiki/2026_United_States_House_of_Representatives_elections_in_Pennsylvania"
  },
@@ -20722,6 +20830,18 @@
  },
  {
   "state": "TX-09",
+  "pollster": "Public Policy Polling",
+  "sponsor_party": "D",
+  "end_date": "2026-09-19",
+  "n": null,
+  "population": null,
+  "rep": 45.0,
+  "opp": 39.0,
+  "others": [],
+  "source": "https://en.wikipedia.org/wiki/2026_United_States_House_of_Representatives_elections_in_Texas"
+ },
+ {
+  "state": "TX-09",
   "pollster": "University of Houston",
   "sponsor_party": null,
   "end_date": "2026-10-07",
@@ -20729,6 +20849,18 @@
   "population": "LV",
   "rep": 48.0,
   "opp": 42.0,
+  "others": [],
+  "source": "https://en.wikipedia.org/wiki/2026_United_States_House_of_Representatives_elections_in_Texas"
+ },
+ {
+  "state": "TX-09",
+  "pollster": "DCCC",
+  "sponsor_party": null,
+  "end_date": "2026-10-22",
+  "n": 490,
+  "population": "LV",
+  "rep": 48.0,
+  "opp": 47.0,
   "others": [],
   "source": "https://en.wikipedia.org/wiki/2026_United_States_House_of_Representatives_elections_in_Texas"
  },
@@ -27557,6 +27689,18 @@
  },
  {
   "state": "US",
+  "pollster": "Focaldata/Financial Times",
+  "sponsor_party": null,
+  "end_date": "2026-10-05",
+  "n": 2201,
+  "population": "LV",
+  "opp": 52.0,
+  "rep": 44.0,
+  "others": [],
+  "source": "https://en.wikipedia.org/wiki/2026_United_States_elections"
+ },
+ {
+  "state": "US",
   "pollster": "Reuters/Ipsos",
   "sponsor_party": null,
   "end_date": "2026-10-05",
@@ -27737,6 +27881,18 @@
  },
  {
   "state": "US",
+  "pollster": "Focaldata/Financial Times",
+  "sponsor_party": null,
+  "end_date": "2026-10-20",
+  "n": 1594,
+  "population": "LV",
+  "opp": 53.0,
+  "rep": 44.0,
+  "others": [],
+  "source": "https://en.wikipedia.org/wiki/2026_United_States_elections"
+ },
+ {
+  "state": "US",
   "pollster": "The Economist/YouGov",
   "sponsor_party": null,
   "end_date": "2026-10-20",
@@ -27756,6 +27912,18 @@
   "population": "LV",
   "opp": 53.0,
   "rep": 47.0,
+  "others": [],
+  "source": "https://en.wikipedia.org/wiki/2026_United_States_elections"
+ },
+ {
+  "state": "US",
+  "pollster": "CBS/YouGov",
+  "sponsor_party": null,
+  "end_date": "2026-10-23",
+  "n": 1749,
+  "population": "LV",
+  "opp": 53.0,
+  "rep": 45.0,
   "others": [],
   "source": "https://en.wikipedia.org/wiki/2026_United_States_elections"
  },
