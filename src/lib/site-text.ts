@@ -90,15 +90,7 @@ export const SITE_TEXT = {
   "forecast.patchNotes": {
     page: "Forecast: Both",
     label: "Patch notes (leave empty to hide the box)",
-    default: [
-      "Introducing the 2026 Midterms House Election Forecast!",
-      "",
-      "And a few model updates…",
-      "",
-      "- **Trump approval:** Fixed bug in data scraping to include more polls.",
-      "- **Super PAC spending:** Outside spending by super PACs now counts toward each race’s fundraising total in the fundamentals.",
-      "- **Polling weights (biggest model change):** Polls are now partially adjusted to account for historical errors. This shifted most polling averages in Republicans’ favor compared to previous model runs.",
-    ].join("\n"),
+    default: "",
     kind: "notes",
   },
   "forecast.both.details": { page: "Forecast: Both", label: "Link on each chamber card", default: "Details →", kind: "short" },
