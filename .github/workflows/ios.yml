@@ -1,0 +1,24 @@
+name: iOS
+
+# Compiles the iPhone app on a GitHub-hosted Mac, so changes to ios/ are
+# checked without anyone's own computer. Simulator build, no signing.
+on:
+  pull_request:
+    paths: ["ios/**", ".github/workflows/ios.yml"]
+  push:
+    branches: [main]
+    paths: ["ios/**", ".github/workflows/ios.yml"]
+
+jobs:
+  build:
+    runs-on: macos-15
+    steps:
+      - uses: actions/checkout@v4
+      - name: Xcode version
+        run: xcodebuild -version
+      - name: Build for the simulator
+        run: |
+          xcodebuild -project ios/Wilfully.xcodeproj -target Wilfully \
+            -sdk iphonesimulator -configuration Debug \
+            CODE_SIGNING_ALLOWED=NO build | tee build.log | grep -E "error:|warning:|BUILD (SUCCEEDED|FAILED)" || true
+          grep -q "BUILD SUCCEEDED" build.log

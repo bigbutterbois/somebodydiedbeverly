@@ -3,9 +3,17 @@ import { NextResponse, type NextRequest } from "next/server";
 import { isPreviewBot, previewHtml } from "@/lib/link-preview";
 import { ACCESS_COOKIE, hasSiteAccess } from "@/lib/site-access";
 
-// Pages anyone can open: the two sign-in screens, plus the home-screen app's
-// manifest and service worker, which phones fetch without cookies.
-const OPEN_PATHS = ["/enter", "/login", "/manifest.webmanifest", "/sw.js"];
+// Pages anyone can open: the two sign-in screens, the iPhone app's sign-in
+// routes, plus the home-screen app's manifest and service worker, which
+// phones fetch without cookies.
+const OPEN_PATHS = [
+  "/enter",
+  "/login",
+  "/api/app/login",
+  "/api/app/refresh",
+  "/manifest.webmanifest",
+  "/sw.js",
+];
 
 // Runs before every page. Two gates:
 // - /admin needs the owner signed in (Supabase Auth).
@@ -49,7 +57,10 @@ export async function proxy(request: NextRequest) {
   );
 
   // Also refreshes the owner's session cookie when it's close to expiring.
-  const { data } = await supabase.auth.getClaims();
+  // The owner's iPhone app sends its Supabase token as a bearer header instead
+  // of a cookie (see src/app/api/app/login).
+  const bearer = request.headers.get("authorization")?.match(/^Bearer (.+)$/)?.[1];
+  const { data } = await supabase.auth.getClaims(bearer);
   const isOwner = Boolean(data?.claims) && !data?.claims.is_anonymous;
 
   const { pathname, search } = request.nextUrl;
@@ -63,7 +74,10 @@ export async function proxy(request: NextRequest) {
     return redirect;
   };
 
-  if (pathname.startsWith("/admin")) {
+  if (pathname.startsWith("/api/app/") && !OPEN_PATHS.includes(pathname)) {
+    // The iPhone app is the owner's only.
+    if (!isOwner) return Response.json({ error: "Sign in again." }, { status: 401 });
+  } else if (pathname.startsWith("/admin")) {
     if (!isOwner) return redirectTo("/login");
   } else if (!OPEN_PATHS.includes(pathname) && !isOwner) {
     const allowed = await hasSiteAccess(
