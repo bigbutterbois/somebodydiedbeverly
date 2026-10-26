@@ -41,6 +41,9 @@ body {
   background: var(--background);
   color: var(--foreground);
   font-family: var(--font-work-sans), system-ui, sans-serif;
+  /* Keep clear of the notch and home bar (zero on most screens). */
+  padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom)
+    env(safe-area-inset-left);
 }
 
 ::selection {

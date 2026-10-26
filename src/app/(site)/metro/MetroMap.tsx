@@ -14,7 +14,7 @@ import {
 } from "@/lib/metro/network";
 import type { Train } from "@/lib/metro/wmata";
 import { Updated } from "./Updated";
-import { useStored } from "./useStored";
+import { useStored } from "@/lib/useStored";
 
 // Every Metrorail train, live, on WMATA's own system map, filling the screen.
 // Only the lines and stations are drawn, so the trains stand out.

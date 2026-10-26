@@ -3,8 +3,9 @@ import { NextResponse, type NextRequest } from "next/server";
 import { isPreviewBot, previewHtml } from "@/lib/link-preview";
 import { ACCESS_COOKIE, hasSiteAccess } from "@/lib/site-access";
 
-// Pages anyone can open: the two sign-in screens.
-const OPEN_PATHS = ["/enter", "/login"];
+// Pages anyone can open: the two sign-in screens, plus the home-screen app's
+// manifest and service worker, which phones fetch without cookies.
+const OPEN_PATHS = ["/enter", "/login", "/manifest.webmanifest", "/sw.js"];
 
 // Runs before every page. Two gates:
 // - /admin needs the owner signed in (Supabase Auth).

@@ -48,6 +48,12 @@ export const SITE_TEXT = {
   "home.blog.empty": { page: "Homepage", label: "Blog, with no posts", default: "No posts yet.", kind: "long" },
   "home.gallery.title": { page: "Homepage", label: "Gallery section title", default: "Gallery", kind: "short" },
   "home.gallery.empty": { page: "Homepage", label: "Gallery, with no pieces", default: "New pieces will show up here.", kind: "long" },
+  "home.installHint": {
+    page: "Homepage",
+    label: "iPhone install tip (Safari only)",
+    default: "Get this as an app: tap the Share button, then Add to Home Screen.",
+    kind: "long",
+  },
   "home.plates.title": { page: "Homepage", label: "Plates section title", default: "Diplomat plate sightings", kind: "short" },
   "home.plates.count": {
     page: "Homepage",
