@@ -15797,6 +15797,18 @@
   "source": "https://en.wikipedia.org/wiki/2026_United_States_Senate_election_in_Michigan"
  },
  {
+  "state": "MI",
+  "pollster": "RedBox Research",
+  "sponsor_party": null,
+  "end_date": "2026-10-23",
+  "n": 2696,
+  "population": "LV",
+  "rep": 44.0,
+  "opp": 49.0,
+  "others": [],
+  "source": "https://en.wikipedia.org/wiki/2026_United_States_Senate_election_in_Michigan"
+ },
+ {
   "state": "MI-04",
   "pollster": "Public Policy Polling",
   "sponsor_party": "D",
@@ -15841,6 +15853,18 @@
   "population": "LV",
   "rep": 46.0,
   "opp": 47.0,
+  "others": [],
+  "source": "https://en.wikipedia.org/wiki/2026_United_States_House_of_Representatives_elections_in_Michigan"
+ },
+ {
+  "state": "MI-04",
+  "pollster": "RedBox Research",
+  "sponsor_party": null,
+  "end_date": "2026-10-23",
+  "n": 787,
+  "population": "LV",
+  "rep": 47.0,
+  "opp": 44.0,
   "others": [],
   "source": "https://en.wikipedia.org/wiki/2026_United_States_House_of_Representatives_elections_in_Michigan"
  },
@@ -15901,6 +15925,18 @@
   "population": "LV",
   "rep": 45.0,
   "opp": 45.0,
+  "others": [],
+  "source": "https://en.wikipedia.org/wiki/2026_United_States_House_of_Representatives_elections_in_Michigan"
+ },
+ {
+  "state": "MI-10",
+  "pollster": "RedBox Research",
+  "sponsor_party": null,
+  "end_date": "2026-10-23",
+  "n": 889,
+  "population": "LV",
+  "rep": 47.0,
+  "opp": 42.0,
   "others": [],
   "source": "https://en.wikipedia.org/wiki/2026_United_States_House_of_Representatives_elections_in_Michigan"
  },
