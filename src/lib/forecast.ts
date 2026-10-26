@@ -53,7 +53,42 @@ export type Forecast = {
   sample_simulations?: SampleSimulation[];
   races: Race[];
   history?: HistoryPoint[];
+  /** The polls behind the generic ballot and approval averages, from the first chart day on. */
+  national_polls?: {
+    generic_ballot: { date: string; pollster: string; dem: number; rep: number }[];
+    approval: { date: string; pollster: string; approve: number; disapprove: number }[];
+  };
+  problems?: string[];
+  /** How each model input did in the run that made this file (admin page only). */
+  inputs?: InputCheck[];
 };
+
+export type InputCheck = {
+  name: string;
+  status: "ok" | "stale" | "failed";
+  /** How this run's fetch went. */
+  fetch: string;
+  /** Date of the newest data, YYYY-MM-DD, or "" when there is none. */
+  latest: string;
+  summary: string;
+};
+
+/** One dot per poll for a polling chart; the pollster only when asked (the admin page). */
+export function pollDots(forecast: Forecast, kind: "generic_ballot" | "approval", withPollster = false) {
+  const polls = forecast.national_polls;
+  if (!polls) return [];
+  return kind === "generic_ballot"
+    ? polls.generic_ballot.map((p) => ({
+        date: p.date,
+        values: [p.dem, p.rep],
+        ...(withPollster && { label: p.pollster }),
+      }))
+    : polls.approval.map((p) => ({
+        date: p.date,
+        values: [p.approve, p.disapprove],
+        ...(withPollster && { label: p.pollster }),
+      }));
+}
 
 /** One simulated election: Dem seats and, per race in `races` order, "D" or "R" for the winner. */
 export type SampleSimulation = { dem_seats: number; winners: string };

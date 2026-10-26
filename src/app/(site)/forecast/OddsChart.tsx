@@ -1,7 +1,7 @@
 "use client";
 
 import { APPROVE, DEM, DISAPPROVE, REP, type HistoryPoint } from "@/lib/forecast";
-import { TrendChart } from "./TrendChart";
+import { TrendChart, type TrendDot } from "./TrendChart";
 
 const pct = (v: number) => `${Math.round(v)}%`;
 
@@ -41,10 +41,13 @@ export function PollingChart({
   history,
   electionDay,
   kind,
+  polls = [],
 }: {
   history: HistoryPoint[];
   electionDay: string;
   kind: "generic_ballot" | "approval";
+  /** One dot per poll behind the average (see pollDots). */
+  polls?: TrendDot[];
 }) {
   const ballot = kind === "generic_ballot";
   const points = history.flatMap((h) => {
@@ -53,7 +56,8 @@ export function PollingChart({
     return [];
   });
   if (points.length === 0) return <p className="text-sm text-muted">No polling average yet.</p>;
-  const all = points.flatMap((p) => p.values);
+  const dots = polls.filter((d) => d.date >= points[0].date);
+  const all = [...points, ...dots].flatMap((p) => p.values);
   const lo = Math.floor((Math.min(...all) - 3) / 5) * 5;
   const hi = Math.ceil((Math.max(...all) + 3) / 5) * 5;
   const ticks = Array.from({ length: Math.floor((hi - lo) / 5) + 1 }, (_, i) => lo + i * 5);
@@ -62,6 +66,7 @@ export function PollingChart({
       label={ballot ? "Generic ballot polling average by day" : "Trump approval polling average by day"}
       electionDay={electionDay}
       points={points}
+      dots={dots}
       series={
         ballot
           ? [

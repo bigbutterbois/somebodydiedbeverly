@@ -7,6 +7,7 @@ import {
   formatUpdated,
   getForecast,
   getHistory,
+  pollDots,
   isIncumbent,
   outOf100,
   partyLetter,
@@ -168,14 +169,20 @@ export default async function ForecastPage() {
       {history.some((h) => h.generic_ballot) && (
         <section className="flex flex-col gap-4">
           <SectionTitle>{t("forecast.genericBallot")}</SectionTitle>
-          <PollingChart history={history} electionDay={forecast.election_day} kind="generic_ballot" />
+          <PollingChart history={history} electionDay={forecast.election_day}
+            kind="generic_ballot"
+            polls={pollDots(forecast, "generic_ballot")}
+          />
         </section>
       )}
 
       {history.some((h) => h.approval) && (
         <section className="flex flex-col gap-4">
           <SectionTitle>{t("forecast.approval")}</SectionTitle>
-          <PollingChart history={history} electionDay={forecast.election_day} kind="approval" />
+          <PollingChart history={history} electionDay={forecast.election_day}
+            kind="approval"
+            polls={pollDots(forecast, "approval")}
+          />
         </section>
       )}
     </div>
