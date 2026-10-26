@@ -104,16 +104,17 @@ export type HistoryPoint = {
   approval?: { approve: number; disapprove: number } | null;
 };
 
-async function getJson<T>(file: string): Promise<T | null> {
+async function getJson<T>(file: string, fresh = false): Promise<T | null> {
   try {
-    const res = await fetch(`${DATA_URL}/${file}`, { next: { revalidate: 900 } });
+    const res = await fetch(`${DATA_URL}/${file}`, fresh ? { cache: "no-store" } : { next: { revalidate: 900 } });
     return res.ok ? ((await res.json()) as T) : null;
   } catch {
     return null;
   }
 }
 
-export const getForecast = () => getJson<Forecast>("latest.json");
+// fresh skips the site's 15-minute copy (the admin page, right after a rerun).
+export const getForecast = (fresh = false) => getJson<Forecast>("latest.json", fresh);
 export const getHouseForecast = () => getJson<Forecast>("house/latest.json");
 // From latest.json when it carries it; history.json only for files published before it did.
 export const getHistory = async (forecast: Forecast) =>

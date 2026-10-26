@@ -1,6 +1,8 @@
 import { formatDay, formatUpdated, getForecast, getHistory, pollDots, type InputCheck } from "@/lib/forecast";
 import { PollingChart } from "@/app/(site)/forecast/OddsChart";
 import { SectionTitle } from "@/app/(site)/forecast/parts";
+import { latestForecastRun, rerunConfigured } from "@/lib/forecast-rerun";
+import { RerunButton } from "./RerunButton";
 
 export const metadata = { title: "Forecast" };
 
@@ -13,7 +15,7 @@ const STATUS: Record<InputCheck["status"], { label: string; className: string }>
 // The morning run's inputs at a glance, and the national polls behind the averages
 // with each pollster named on hover (the public charts show the dots unnamed).
 export default async function AdminForecastPage() {
-  const forecast = await getForecast();
+  const [forecast, run] = await Promise.all([getForecast(true), latestForecastRun()]);
   if (!forecast) {
     return <p className="text-muted">Couldn&apos;t load the forecast.</p>;
   }
@@ -27,6 +29,21 @@ export default async function AdminForecastPage() {
         <p className="text-sm text-muted">
           Run {forecast.generated_at ? formatUpdated(forecast.generated_at) : formatDay(forecast.as_of)}
         </p>
+        <div className="mt-3 flex flex-col gap-2">
+          <RerunButton disabled={!rerunConfigured()} />
+          {!rerunConfigured() ? (
+            <p className="text-xs text-muted">The rerun button needs FORECAST_RERUN_TOKEN set in Vercel.</p>
+          ) : (
+            run && (
+              <p className="text-xs text-muted">
+                Last rerun started {formatUpdated(run.created_at)}:{" "}
+                <a href={run.html_url} className="underline hover:text-foreground">
+                  {run.status === "completed" ? (run.conclusion ?? "done") : run.status.replace("_", " ")}
+                </a>
+              </p>
+            )
+          )}
+        </div>
       </header>
 
       <section className="flex flex-col gap-3">
