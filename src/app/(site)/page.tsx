@@ -1,6 +1,5 @@
 import Link from "next/link";
 import { EmptyPreview, HomeSection } from "@/components/HomeSection";
-import { InstallHint } from "@/components/InstallHint";
 import Image from "next/image";
 import { formatPostDate } from "@/lib/blog";
 import { DEM, REP, getForecast, getHouseForecast, outOf100, type Forecast } from "@/lib/forecast";
@@ -40,8 +39,6 @@ export default async function Home() {
         </h1>
         <p className="text-muted">{t("home.intro")}</p>
       </header>
-
-      <InstallHint text={t("home.installHint")} />
 
       <HomeSection title={t("home.forecast.title")} href="/forecast" more={t("home.seeAll")}>
         {senate && house ? (
