@@ -1,5 +1,6 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Work_Sans } from "next/font/google";
+import { ServiceWorker } from "@/components/ServiceWorker";
 import { PREVIEW_DESCRIPTION, SITE_NAME } from "@/lib/link-preview";
 import "./globals.css";
 
@@ -25,12 +26,27 @@ export const metadata: Metadata = {
     images: [{ url: "/og.png", width: 1200, height: 630 }],
   },
   twitter: { card: "summary_large_image" },
+  // Home-screen app on iPhone (the manifest is src/app/manifest.ts).
+  appleWebApp: { title: "Wilfully", statusBarStyle: "default" },
+};
+
+// viewport-fit=cover lets pages run edge to edge on phones with a notch;
+// globals.css pads the body by the safe areas so nothing hides under it.
+export const viewport: Viewport = {
+  viewportFit: "cover",
+  themeColor: [
+    { media: "(prefers-color-scheme: dark)", color: "#121315" },
+    { media: "(prefers-color-scheme: light)", color: "#fafaf8" },
+  ],
 };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
     <html lang="en" className={`${workSans.variable} h-full antialiased`}>
-      <body className="min-h-full flex flex-col overflow-x-clip">{children}</body>
+      <body className="min-h-full flex flex-col overflow-x-clip">
+        {children}
+        <ServiceWorker />
+      </body>
     </html>
   );
 }

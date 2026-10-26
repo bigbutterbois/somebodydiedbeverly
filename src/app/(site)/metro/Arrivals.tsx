@@ -4,7 +4,7 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import { LINE_BY_CODE, STATIONS, STATION_BY_KEY, linesAt } from "@/lib/metro/network";
 import type { Alert, Arrival } from "@/lib/metro/wmata";
 import { Updated } from "./Updated";
-import { useStored } from "./useStored";
+import { useStored } from "@/lib/useStored";
 
 // Next trains at one station, like the signs on the platform. The station is
 // the one in the link (?station=A01, from the map), else the one last viewed on
