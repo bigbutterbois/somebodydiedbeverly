@@ -7,6 +7,7 @@ import {
   formatUpdated,
   getForecast,
   getHistory,
+  pollDots,
   getHouseForecast,
   outOf100,
   type Forecast,
@@ -102,14 +103,20 @@ export default async function BothForecastPage() {
       {senateHistory.some((h) => h.generic_ballot) && (
         <section className="flex flex-col gap-4">
           <SectionTitle>{t("forecast.genericBallot")}</SectionTitle>
-          <PollingChart history={senateHistory} electionDay={senate.election_day} kind="generic_ballot" />
+          <PollingChart history={senateHistory} electionDay={senate.election_day}
+            kind="generic_ballot"
+            polls={pollDots(senate, "generic_ballot")}
+          />
         </section>
       )}
 
       {senateHistory.some((h) => h.approval) && (
         <section className="flex flex-col gap-4">
           <SectionTitle>{t("forecast.approval")}</SectionTitle>
-          <PollingChart history={senateHistory} electionDay={senate.election_day} kind="approval" />
+          <PollingChart history={senateHistory} electionDay={senate.election_day}
+            kind="approval"
+            polls={pollDots(senate, "approval")}
+          />
         </section>
       )}
     </div>

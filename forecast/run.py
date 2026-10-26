@@ -107,6 +107,94 @@ def history_entry(result: dict) -> dict:
     }
 
 
+def national_polls(polls: list[dict], since: str, today: date, cfg: dict) -> dict:
+    """The generic ballot and approval polls behind the trend charts' averages, from the
+    first chart day on: each poll's end date, pollster and both sides' shares."""
+    f = cfg["fundamentals"]
+    out = {}
+    for kind, state, half_life, keys in (
+        ("generic_ballot", "US", f["generic_ballot_half_life_days"], ("dem", "rep")),
+        ("approval", "APPROVAL", f["approval_half_life_days"], ("approve", "disapprove")),
+    ):
+        rows = model.weighted_rows([p for p in polls if p["state"] == state and p["end_date"] >= since],
+                                   today, cfg, half_life)
+        out[kind] = sorted(({"date": p["end_date"], "pollster": p["pollster"], keys[0]: p["opp"], keys[1]: p["rep"]}
+                            for _, _, p in rows), key=lambda r: r["date"])
+    return out
+
+
+def input_checks(fetched: dict, polls: list[dict], extras: dict, result: dict, districts: list[dict],
+                 today: date) -> list[dict]:
+    """One row per model input for the admin page: did this run's fetch work, how fresh
+    the newest data is, and a one-line summary of it. status is ok, stale or failed."""
+    week_ago = (today - timedelta(7)).isoformat()
+
+    def days_old(iso: str) -> int:
+        return (today - date.fromisoformat(iso)).days
+
+    def row(key: str, name: str, latest: str, summary: str, stale_days: int | None = None) -> dict:
+        ok, note = fetched.get(key, (True, "Not fetched this run (rerun on stored data)"))
+        status = "failed" if not ok else "stale" if stale_days is not None and latest and days_old(latest) > stale_days \
+            else "ok"
+        return {"name": name, "status": status, "fetch": note, "latest": latest, "summary": summary}
+
+    def poll_row(key: str, name: str, keep, stale_days: int, describe) -> dict:
+        ps = [p for p in polls if keep(p["state"]) and p["end_date"] <= today.isoformat()]
+        if not ps:
+            return row(key, name, "", "No polls", stale_days)
+        newest = max(ps, key=lambda p: p["end_date"])
+        recent = sum(1 for p in ps if p["end_date"] > week_ago)
+        return row(key, name, newest["end_date"], f"{recent} polls in the last week. {describe(newest)}", stale_days)
+
+    def money(snapshots: dict) -> tuple[str, str]:
+        if not snapshots:
+            return "", "No data"
+        day = max(snapshots)
+        senate = {k: v for k, v in snapshots[day].items() if "-" not in k}
+        dem = sum(v["opp"] for v in senate.values()) / 1e6
+        gop = sum(v["rep"] for v in senate.values()) / 1e6
+        return day, f"Senate races: Dem side ${dem:,.0f}M, GOP side ${gop:,.0f}M ({len(senate)} races)"
+
+    rows = []
+    rows.append(poll_row("senate_polls", "Senate polls", lambda s: s != "US" and s != "APPROVAL" and "-" not in s, 7,
+                         lambda p: f"Newest: {p['pollster']} in {p['state']}, {p['opp']:.0f}-{p['rep']:.0f}."))
+    rows.append(poll_row("house_polls", "House district polls", lambda s: "-" in s, 14,
+                         lambda p: f"Newest: {p['pollster']} in {p['state']}, {p['opp']:.0f}-{p['rep']:.0f}."))
+    gb = result.get("generic_ballot_levels") or {}
+    rows.append(poll_row("generic_ballot", "Generic ballot polls", lambda s: s == "US", STALE_POLL_DAYS,
+                         lambda p: f"Average D {gb.get('opp', 0):.1f}, R {gb.get('rep', 0):.1f}."))
+    ap = result.get("approval_levels") or {}
+    rows.append(poll_row("approval", "Trump approval polls", lambda s: s == "APPROVAL", STALE_POLL_DAYS,
+                         lambda p: f"Average approve {ap.get('opp', 0):.1f}, disapprove {ap.get('rep', 0):.1f}."))
+    vh = [p for p in polls if p.get("feed") == "votehub" and p["end_date"] <= today.isoformat()]
+    rows.append(row("votehub", "VoteHub (backup polls)", max((p["end_date"] for p in vh), default=""),
+                    f"{len(vh)} VoteHub polls kept that Wikipedia doesn't list"))
+    rows.append(row("districts", "House district list", today.isoformat() if "districts" in fetched else "",
+                    f"{len(districts)} districts, {sum(1 for d in districts if d.get('uncontested'))} uncontested"))
+    rows.append(row("fundraising", "FEC fundraising", *money(extras.get("fundraising", {}))))
+    rows.append(row("super_pacs", "Super PAC spending", *money(extras.get("super_pacs", {}))))
+    weather = extras.get("weather", {})
+    if weather:
+        day = max(weather)
+        wet = sorted(weather[day].items(), key=lambda kv: -kv[1])[:3]
+        summary = "Wettest on Election Day: " + ", ".join(f"{s} {v:.2f}\"" for s, v in wet if v > 0) if wet[0][1] > 0 \
+            else "No rain forecast anywhere"
+        rows.append(row("weather", "Election Day weather", day, summary, 1))
+    else:
+        rows.append(row("weather", "Election Day weather", "", "Election Day is too far out to forecast"))
+    econ = extras.get("economy", {})
+    if econ:
+        latest = {k: max(v) for k, v in econ.items()}
+        e = result.get("economy") or {}
+        rows.append(row("economy", "Economy (FRED)", min(latest.values()),
+                        f"S&P 500 {e.get('sp500_change_pct', 0):+.1f}%, 10-year yield {e.get('yield_10y_change', 0):+.2f}, "
+                        f"Brent {e.get('brent_change_pct', 0):+.0f}% vs baseline; adds {result.get('economy_shift', 0):+.1f} "
+                        f"to Dems", 7))
+    else:
+        rows.append(row("economy", "Economy (FRED)", "", "No data"))
+    return rows
+
+
 def extras_as_of(extras: dict, d: date) -> dict:
     """Fundraising and super PAC spending from the latest snapshot on or before d (else the
     earliest); weather from d, else from the day before if that day's fetch failed."""
@@ -184,15 +272,20 @@ def main() -> int:
     districts = load_json(data / "house" / "districts.json", [])
     problems: list[str] = []
     house_problems: list[str] = []
+    # How each input's fetch went this run (ok, note), for the admin input check.
+    fetched: dict[str, tuple[bool, str]] = {}
     if not args.no_scrape:
         try:
             scraped_districts, house_problems = house.fetch_districts(house_facts, verbose=args.verbose)
             if len(scraped_districts) >= 400:  # a broken scrape keeps the last good list
                 districts = scraped_districts
+                fetched["districts"] = (True, f"{len(scraped_districts)} districts parsed from Wikipedia")
             else:
                 house_problems.append(f"house: only {len(scraped_districts)} districts parsed; keeping the last list")
+                fetched["districts"] = (False, house_problems[-1])
         except Exception as e:
             house_problems.append(f"house districts: {e}")
+            fetched["districts"] = (False, house_problems[-1])
         for p in house_problems:
             print(f"  ! {p}")
     house_facts["races"] = districts
@@ -209,7 +302,19 @@ def main() -> int:
         if not scraped:
             print("scrape returned nothing; keeping the last published forecast", file=sys.stderr)
             return 1
+        senate_n = sum(1 for p in scraped if p["state"] != "US" and "-" not in p["state"])
+        gb_n = sum(1 for p in scraped if p["state"] == "US")
+        house_n = sum(1 for p in scraped if "-" in p["state"])
+        gb_errors = [p for p in problems if p.startswith("generic ballot")]
+        race_errors = [p for p in problems if not p.startswith("generic ballot")]
+        fetched["senate_polls"] = (senate_n > 0 and not race_errors, "; ".join(race_errors) or
+                                   f"{senate_n} polls read from Wikipedia")
+        fetched["generic_ballot"] = (gb_n > 0, "; ".join(gb_errors) or f"{gb_n} polls read from Wikipedia")
+        fetched["house_polls"] = (house_n > 0 and not any(p.startswith("house polls") for p in house_problems),
+                                  f"{house_n} polls read from Wikipedia")
         approval, approval_problems = extra_sources.scrape_approval(cfg["polls"]["aggregators"])
+        fetched["approval"] = (bool(approval) and not approval_problems,
+                               "; ".join(approval_problems) or f"{len(approval)} polls read from Wikipedia")
         election = facts["election_day"]
         election = election if isinstance(election, date) else date.fromisoformat(election)
         votehub, votehub_problems = extra_sources.fetch_votehub(
@@ -220,6 +325,8 @@ def main() -> int:
         # Better sources go in later so their rows replace a weaker feed's on a key collision.
         polls = drop_feed_duplicates(merge_polls(merge_polls(merge_polls(polls, votehub), rcp), scraped + approval))
         problems += approval_problems + votehub_problems
+        fetched["votehub"] = (bool(votehub) and not votehub_problems,
+                              "; ".join(votehub_problems) or f"{len(votehub)} usable polls in the feed")
         since = f"{election.year}-06-01"
         count = lambda ps, s: sum(1 for p in ps if p["end_date"] >= since and s(p["state"]))  # noqa: E731
         print(f"polls since {since} (Wikipedia only -> with RCP and VoteHub; {len(votehub)} VoteHub polls "
@@ -244,6 +351,13 @@ def main() -> int:
             house_problems += house_fund_problems + house_pac_problems
         weather, weather_problems = extra_sources.fetch_weather(election)
         economy, economy_problems = extra_sources.fetch_economy(date(election.year - 1, 1, 1))
+        fetched["fundraising"] = (bool(funds), "; ".join(p for p in fund_problems if p.startswith("fundraising"))
+                                  or "FEC candidate file read")
+        fetched["super_pacs"] = (bool(pacs), "; ".join(pac_problems) or "FEC independent expenditure file read")
+        fetched["weather"] = (not weather_problems, "; ".join(weather_problems) or
+                              (f"Forecast for {len(weather)} states" if weather else "Election Day not in range yet"))
+        fetched["economy"] = (len(economy) == len(extra_sources.ECONOMY_SERIES),
+                              "; ".join(economy_problems) or "S&P 500, 10-year yield and Brent read from FRED")
         if funds:
             extras["fundraising"][today.isoformat()] = funds
         if pacs:
@@ -292,6 +406,8 @@ def main() -> int:
         "problems": problems,
         # The by-day charts, minus per-race odds (only history.json keeps those).
         "history": [{k: v for k, v in history[day].items() if k != "races"} for day in sorted(history)],
+        "national_polls": national_polls(polls, min(history), today, cfg),
+        "inputs": input_checks(fetched, polls, extras, result, districts, today),
     })
     summarize(result)
     if house_result is not None:

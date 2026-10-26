@@ -9,11 +9,16 @@ const dayNumber = (iso: string) => Date.parse(`${iso}T00:00:00Z`) / 86_400_000;
 
 export type TrendSeries = { label: string; short: string; color: string };
 export type TrendPoint = { date: string; values: number[]; note?: string };
+/** A single poll behind an average: one faint dot per series. With a label (the pollster),
+ * hovering a dot names it; the public pages leave the label out. */
+export type TrendDot = { date: string; values: number[]; label?: string };
 
 // A line chart by day, from the first point through election day. Used for the
-// chance of control and for the generic ballot and approval averages.
+// chance of control and for the generic ballot and approval averages (with a
+// faint dot for each poll behind them).
 export function TrendChart({
   points,
+  dots = [],
   series,
   electionDay,
   domain,
@@ -24,6 +29,7 @@ export function TrendChart({
   labelWidth = PAD.right,
 }: {
   points: TrendPoint[];
+  dots?: TrendDot[];
   series: TrendSeries[];
   electionDay: string;
   domain: [number, number];
@@ -36,6 +42,7 @@ export function TrendChart({
 }) {
   const svgRef = useRef<SVGSVGElement>(null);
   const [hover, setHover] = useState<number | null>(null);
+  const [dotHover, setDotHover] = useState<number | null>(null);
   // Draw at the container's real width so text stays a readable size on phones.
   const [W, setW] = useState(720);
   const H = W < 500 ? 220 : 260;
@@ -56,7 +63,8 @@ export function TrendChart({
     points.map((p, j) => `${j ? "L" : "M"}${x(p.date).toFixed(1)},${y(p.values[i]).toFixed(1)}`).join("");
 
   const last = points[points.length - 1];
-  const point = hover === null ? null : points[hover];
+  const dot = dotHover === null ? null : dots[dotHover];
+  const point = hover === null || dot ? null : points[hover];
   const ticks = weekTicks(points[0].date, electionDay, (W - PAD.left - right) / Math.max(end - start, 1));
 
   function onMove(e: React.PointerEvent) {
@@ -115,6 +123,20 @@ export function TrendChart({
         </text>
         <line x1={x(electionDay)} x2={x(electionDay)} y1={PAD.top} y2={H - PAD.bottom} stroke="var(--line)" />
 
+        {dots.map((d, j) =>
+          series.map((s, i) => (
+            <circle
+              key={`${j}-${s.label}`}
+              cx={x(d.date)}
+              cy={y(d.values[i])}
+              r={dotHover === j ? 5 : 3.5}
+              fill={s.color}
+              fillOpacity={dotHover === j ? 0.9 : 0.28}
+              onPointerEnter={d.label ? () => setDotHover(j) : undefined}
+              onPointerLeave={d.label ? () => setDotHover(null) : undefined}
+            />
+          )),
+        )}
         {series.map((s, i) => (
           <path key={s.label} d={line(i)} fill="none" stroke={s.color} strokeWidth={2} strokeLinejoin="round" />
         ))}
@@ -159,6 +181,24 @@ export function TrendChart({
             </p>
           ))}
           {point.note && <p className="mt-1 text-muted">{point.note}</p>}
+        </div>
+      )}
+      {dot && (
+        <div
+          className="pointer-events-none absolute top-0 rounded border border-line bg-background/95 px-3 py-2 text-xs tabular-nums shadow-lg"
+          style={{
+            left: `${(x(dot.date) / W) * 100}%`,
+            transform: x(dot.date) > W / 2 ? "translateX(calc(-100% - 12px))" : "translateX(12px)",
+          }}
+        >
+          <p className="mb-1 text-foreground">{dot.label}</p>
+          <p className="mb-1 text-muted">Ended {formatDay(dot.date)}</p>
+          {series.map((s, i) => (
+            <p key={s.label} className="flex items-center gap-2">
+              <span className="inline-block h-2 w-2 rounded-full" style={{ background: s.color }} />
+              {s.label} {format(dot.values[i])}
+            </p>
+          ))}
         </div>
       )}
     </div>
