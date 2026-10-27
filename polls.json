@@ -12303,6 +12303,18 @@
   "source": "https://en.wikipedia.org/wiki/Opinion_polling_on_the_second_Trump_presidency"
  },
  {
+  "state": "APPROVAL",
+  "pollster": "Reuters/Ipsos",
+  "sponsor_party": null,
+  "end_date": "2026-10-26",
+  "n": 1679,
+  "population": null,
+  "opp": 32.0,
+  "rep": 66.0,
+  "others": [],
+  "source": "https://en.wikipedia.org/wiki/Opinion_polling_on_the_second_Trump_presidency"
+ },
+ {
   "state": "AR",
   "pollster": "GrayHouse",
   "sponsor_party": "R",
@@ -12875,6 +12887,18 @@
   "population": "LV",
   "rep": 48.0,
   "opp": 40.0,
+  "others": [],
+  "source": "https://en.wikipedia.org/wiki/2026_United_States_Senate_special_election_in_Florida"
+ },
+ {
+  "state": "FL",
+  "pollster": "RedBox Research",
+  "sponsor_party": "D",
+  "end_date": "2026-10-23",
+  "n": 4832,
+  "population": "LV",
+  "rep": 50.0,
+  "opp": 43.0,
   "others": [],
   "source": "https://en.wikipedia.org/wiki/2026_United_States_Senate_special_election_in_Florida"
  },
@@ -14381,6 +14405,18 @@
   "source": "https://en.wikipedia.org/wiki/2026_United_States_Senate_election_in_Kansas"
  },
  {
+  "state": "KS",
+  "pollster": "RedBox Research",
+  "sponsor_party": "D",
+  "end_date": "2026-10-23",
+  "n": 1301,
+  "population": "LV",
+  "rep": 46.0,
+  "opp": 45.0,
+  "others": [],
+  "source": "https://en.wikipedia.org/wiki/2026_United_States_Senate_election_in_Kansas"
+ },
+ {
   "state": "KS-02",
   "pollster": "DCCC",
   "sponsor_party": null,
@@ -15037,6 +15073,18 @@
   "population": "LV",
   "rep": 47.0,
   "opp": 47.0,
+  "others": [],
+  "source": "https://en.wikipedia.org/wiki/2026_United_States_Senate_election_in_Maine"
+ },
+ {
+  "state": "ME",
+  "pollster": "Marist University",
+  "sponsor_party": null,
+  "end_date": "2026-10-25",
+  "n": 1449,
+  "population": "RV",
+  "rep": 47.0,
+  "opp": 53.0,
   "others": [],
   "source": "https://en.wikipedia.org/wiki/2026_United_States_Senate_election_in_Maine"
  },
@@ -15786,6 +15834,18 @@
  },
  {
   "state": "MI",
+  "pollster": "Michigan State University/YouGov",
+  "sponsor_party": null,
+  "end_date": "2026-10-19",
+  "n": 836,
+  "population": "LV",
+  "rep": 44.0,
+  "opp": 48.0,
+  "others": [],
+  "source": "https://en.wikipedia.org/wiki/2026_United_States_Senate_election_in_Michigan"
+ },
+ {
+  "state": "MI",
   "pollster": "InsiderAdvantage",
   "sponsor_party": "R",
   "end_date": "2026-10-22",
@@ -15799,7 +15859,7 @@
  {
   "state": "MI",
   "pollster": "RedBox Research",
-  "sponsor_party": null,
+  "sponsor_party": "D",
   "end_date": "2026-10-23",
   "n": 2696,
   "population": "LV",
@@ -17297,6 +17357,18 @@
   "source": "https://en.wikipedia.org/wiki/2026_United_States_Senate_election_in_North_Carolina"
  },
  {
+  "state": "NC",
+  "pollster": "Quantus Insights",
+  "sponsor_party": "R",
+  "end_date": "2026-10-25",
+  "n": 722,
+  "population": "LV",
+  "rep": 43.0,
+  "opp": 51.0,
+  "others": [],
+  "source": "https://en.wikipedia.org/wiki/2026_United_States_Senate_election_in_North_Carolina"
+ },
+ {
   "state": "NC-01",
   "pollster": "GQR",
   "sponsor_party": "D",
@@ -18055,6 +18127,18 @@
  },
  {
   "state": "NH",
+  "pollster": "Rasmussen Reports",
+  "sponsor_party": "R",
+  "end_date": "2026-10-04",
+  "n": 979,
+  "population": "LV",
+  "rep": 44.0,
+  "opp": 49.0,
+  "others": [],
+  "source": "https://en.wikipedia.org/wiki/2026_United_States_Senate_election_in_New_Hampshire"
+ },
+ {
+  "state": "NH",
   "pollster": "YouGov",
   "sponsor_party": null,
   "end_date": "2026-10-05",
@@ -18085,6 +18169,18 @@
   "n": 1672,
   "population": "LV",
   "rep": 43.0,
+  "opp": 50.0,
+  "others": [],
+  "source": "https://en.wikipedia.org/wiki/2026_United_States_Senate_election_in_New_Hampshire"
+ },
+ {
+  "state": "NH",
+  "pollster": "Rasmussen Reports",
+  "sponsor_party": "R",
+  "end_date": "2026-10-23",
+  "n": 970,
+  "population": "LV",
+  "rep": 44.0,
   "opp": 50.0,
   "others": [],
   "source": "https://en.wikipedia.org/wiki/2026_United_States_Senate_election_in_New_Hampshire"
@@ -19051,6 +19147,18 @@
   "source": "https://en.wikipedia.org/wiki/2026_United_States_Senate_special_election_in_Ohio"
  },
  {
+  "state": "OH",
+  "pollster": "RedBox Research",
+  "sponsor_party": "D",
+  "end_date": "2026-10-23",
+  "n": 2998,
+  "population": "LV",
+  "rep": 44.0,
+  "opp": 47.0,
+  "others": [],
+  "source": "https://en.wikipedia.org/wiki/2026_United_States_Senate_special_election_in_Ohio"
+ },
+ {
   "state": "OH-01",
   "pollster": "Quantus Insights",
   "sponsor_party": null,
@@ -19779,6 +19887,18 @@
   "population": "LV",
   "rep": 44.0,
   "opp": 45.0,
+  "others": [],
+  "source": "https://en.wikipedia.org/wiki/2026_United_States_Senate_election_in_South_Carolina"
+ },
+ {
+  "state": "SC",
+  "pollster": "Targoz Media Research",
+  "sponsor_party": null,
+  "end_date": "2026-10-25",
+  "n": 895,
+  "population": "LV",
+  "rep": 47.0,
+  "opp": 46.0,
   "others": [],
   "source": "https://en.wikipedia.org/wiki/2026_United_States_Senate_election_in_South_Carolina"
  },
@@ -20603,7 +20723,7 @@
  {
   "state": "TX",
   "pollster": "Rasmussen Reports",
-  "sponsor_party": "R",
+  "sponsor_party": null,
   "end_date": "2026-09-29",
   "n": 1128,
   "population": "LV",
@@ -20819,7 +20939,7 @@
  {
   "state": "TX",
   "pollster": "Rasmussen Reports",
-  "sponsor_party": "R",
+  "sponsor_party": null,
   "end_date": "2026-10-21",
   "n": 965,
   "population": "LV",
