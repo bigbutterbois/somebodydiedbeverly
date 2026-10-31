@@ -9,6 +9,12 @@ simulations: 20000
 # odds comes from new data, not from a fresh roll of the dice (Mike, 2026-10-23).
 seed: 2026
 
+# The final forecast (Mike, 2026-10-31): the run at or after this time is the
+# last one. It is marked final in latest.json, and the workflow refuses every
+# later run (schedule, rerun button, merges), so the election night page
+# starts from a forecast that can't move under it.
+final_run_at: "2026-11-02T20:00:00-05:00"
+
 # --- Polling average -------------------------------------------------------
 polls:
   half_life_days: 14          # a poll's weight halves every N days after it ends (21 until 2026-10-23)

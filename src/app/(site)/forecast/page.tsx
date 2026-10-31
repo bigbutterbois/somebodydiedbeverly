@@ -43,7 +43,7 @@ export default async function BothForecastPage() {
       <header className="flex flex-col gap-3">
         <h1 className="text-4xl font-light tracking-tight">{t("forecast.both.title")}</h1>
         <p className="text-sm text-muted">
-          Updated{" "}
+          {house.final ? "Final forecast, " : "Updated "}
           {house.generated_at
             ? formatUpdated(house.generated_at)
             : formatDay(house.as_of, { weekday: "long", month: "long", day: "numeric" })}
