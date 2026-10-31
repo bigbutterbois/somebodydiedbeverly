@@ -13,6 +13,7 @@ const MODULES = [
   { href: "/forecast", text: "nav.forecast" },
   { href: "/plates", text: "nav.plates" },
   { href: "/metro", text: "nav.metro" },
+  { href: "/rogue-peon", text: "nav.peon" },
 ] as const;
 
 export default async function SiteLayout({ children }: LayoutProps<"/">) {
