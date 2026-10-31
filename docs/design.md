@@ -22,7 +22,7 @@ Defined once as CSS variables in `src/app/globals.css` and exposed as Tailwind c
 
 Always use the tokens: they flip automatically between the two modes. A raw color or a `dark:` variant will look wrong in one of them.
 
-Use the accent sparingly: links and one primary action per screen. Forecast charts use their own party colors, not the accent.
+Use the accent sparingly: links and one primary action per screen. Forecast charts use their own party colors, not the accent. The Rogue Peon card game (`/rogue-peon`) is the other exception: it keeps its own dark card-table look (felt green, teal and gold, Bungee and Rubik type) in both modes.
 
 ## Type
 

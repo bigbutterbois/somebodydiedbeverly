@@ -30,6 +30,7 @@ export const SITE_TEXT = {
   "nav.forecast": { page: "Menu", label: "Forecast link", default: "Forecast", kind: "short" },
   "nav.plates": { page: "Menu", label: "Plates link", default: "Plates", kind: "short" },
   "nav.metro": { page: "Menu", label: "Metro link", default: "Metro", kind: "short" },
+  "nav.peon": { page: "Menu", label: "Rogue Peon link", default: "Peon", kind: "short" },
 
   // Homepage
   "home.title": { page: "Homepage", label: "Headline", default: "Election forecasting and other silly projects", kind: "short" },
