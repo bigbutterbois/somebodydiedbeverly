@@ -12400,6 +12400,18 @@
  },
  {
   "state": "APPROVAL",
+  "pollster": "Targoz Market Research",
+  "sponsor_party": null,
+  "end_date": "2026-10-22",
+  "n": 1118,
+  "population": null,
+  "opp": 36.0,
+  "rep": 63.0,
+  "others": [],
+  "source": "https://en.wikipedia.org/wiki/Opinion_polling_on_the_second_Trump_presidency"
+ },
+ {
+  "state": "APPROVAL",
   "pollster": "The Argument/Verasight",
   "sponsor_party": null,
   "end_date": "2026-10-23",
@@ -12455,6 +12467,18 @@
   "population": null,
   "opp": 41.0,
   "rep": 58.0,
+  "others": [],
+  "source": "https://en.wikipedia.org/wiki/Opinion_polling_on_the_second_Trump_presidency"
+ },
+ {
+  "state": "APPROVAL",
+  "pollster": "Napolitan News Service/RMG Research",
+  "sponsor_party": null,
+  "end_date": "2026-10-27",
+  "n": 2000,
+  "population": null,
+  "opp": 43.0,
+  "rep": 55.0,
   "others": [],
   "source": "https://en.wikipedia.org/wiki/Opinion_polling_on_the_second_Trump_presidency"
  },
@@ -13162,6 +13186,54 @@
   "end_date": "2026-10-27",
   "n": 916,
   "population": "LV",
+  "rep": 49.0,
+  "opp": 45.0,
+  "others": [],
+  "source": "https://en.wikipedia.org/wiki/2026_United_States_Senate_special_election_in_Florida"
+ },
+ {
+  "state": "FL",
+  "pollster": "Political Matrix/The Listener Group",
+  "sponsor_party": null,
+  "end_date": "2026-10-28",
+  "n": 500,
+  "population": "LV",
+  "rep": 42.0,
+  "opp": 36.0,
+  "others": [],
+  "source": "https://en.wikipedia.org/wiki/2026_United_States_Senate_special_election_in_Florida"
+ },
+ {
+  "state": "FL",
+  "pollster": "InsiderAdvantage",
+  "sponsor_party": "R",
+  "end_date": "2026-10-29",
+  "n": 1200,
+  "population": "LV",
+  "rep": 49.0,
+  "opp": 43.0,
+  "others": [],
+  "source": "https://en.wikipedia.org/wiki/2026_United_States_Senate_special_election_in_Florida"
+ },
+ {
+  "state": "FL",
+  "pollster": "Big Data Poll",
+  "sponsor_party": null,
+  "end_date": "2026-10-30",
+  "n": 1067,
+  "population": "LV",
+  "rep": 52.0,
+  "opp": 45.0,
+  "others": [],
+  "source": "https://en.wikipedia.org/wiki/2026_United_States_Senate_special_election_in_Florida"
+ },
+ {
+  "state": "FL",
+  "pollster": "Stetson University",
+  "sponsor_party": null,
+  "end_date": "2026-10-30",
+  "n": 852,
+  "population": "RV",
   "rep": 49.0,
   "opp": 45.0,
   "others": [],
@@ -14579,11 +14651,10 @@
   "end_date": "2026-10-30",
   "n": 400,
   "population": "LV",
-  "rep": 44.4,
-  "opp": 55.6,
+  "rep": 44.0,
+  "opp": 56.0,
   "others": [],
-  "source": "https://www.activote.net/polls/2026/il-u-s-senate/",
-  "feed": "votehub"
+  "source": "https://en.wikipedia.org/wiki/2026_United_States_Senate_election_in_Illinois"
  },
  {
   "state": "IL-04",
@@ -15572,6 +15643,18 @@
   "source": "https://en.wikipedia.org/wiki/2026_United_States_Senate_election_in_Maine"
  },
  {
+  "state": "ME",
+  "pollster": "Data for Progress",
+  "sponsor_party": "D",
+  "end_date": "2026-10-27",
+  "n": 652,
+  "population": "LV",
+  "rep": 45.0,
+  "opp": 50.0,
+  "others": [],
+  "source": "https://en.wikipedia.org/wiki/2026_United_States_Senate_election_in_Maine"
+ },
+ {
   "state": "ME-01",
   "pollster": "University of New Hampshire",
   "sponsor_party": null,
@@ -16372,6 +16455,18 @@
   "population": "LV",
   "rep": 44.0,
   "opp": 49.0,
+  "others": [],
+  "source": "https://en.wikipedia.org/wiki/2026_United_States_Senate_election_in_Michigan"
+ },
+ {
+  "state": "MI",
+  "pollster": "Data for Progress",
+  "sponsor_party": "D",
+  "end_date": "2026-10-25",
+  "n": 622,
+  "population": "LV",
+  "rep": 46.0,
+  "opp": 50.0,
   "others": [],
   "source": "https://en.wikipedia.org/wiki/2026_United_States_Senate_election_in_Michigan"
  },
@@ -22044,6 +22139,18 @@
   "n": 1221,
   "population": "LV",
   "rep": 49.0,
+  "opp": 48.0,
+  "others": [],
+  "source": "https://en.wikipedia.org/wiki/2026_United_States_Senate_election_in_Texas"
+ },
+ {
+  "state": "TX",
+  "pollster": "Kreate Strategies",
+  "sponsor_party": null,
+  "end_date": "2026-10-30",
+  "n": 900,
+  "population": "LV",
+  "rep": 45.0,
   "opp": 48.0,
   "others": [],
   "source": "https://en.wikipedia.org/wiki/2026_United_States_Senate_election_in_Texas"
@@ -29173,6 +29280,18 @@
  },
  {
   "state": "US",
+  "pollster": "Pennsylvania State University/YouGov",
+  "sponsor_party": null,
+  "end_date": "2026-10-20",
+  "n": 724,
+  "population": "LV",
+  "opp": 47.0,
+  "rep": 43.0,
+  "others": [],
+  "source": "https://en.wikipedia.org/wiki/2026_United_States_elections"
+ },
+ {
+  "state": "US",
   "pollster": "The Economist/YouGov",
   "sponsor_party": null,
   "end_date": "2026-10-20",
@@ -29336,6 +29455,30 @@
   "population": "LV",
   "opp": 52.0,
   "rep": 40.0,
+  "others": [],
+  "source": "https://en.wikipedia.org/wiki/2026_United_States_elections"
+ },
+ {
+  "state": "US",
+  "pollster": "Ipsos",
+  "sponsor_party": null,
+  "end_date": "2026-10-28",
+  "n": 1209,
+  "population": "LV",
+  "opp": 50.0,
+  "rep": 44.0,
+  "others": [],
+  "source": "https://en.wikipedia.org/wiki/2026_United_States_elections"
+ },
+ {
+  "state": "US",
+  "pollster": "ActiVote",
+  "sponsor_party": null,
+  "end_date": "2026-10-30",
+  "n": 2000,
+  "population": "LV",
+  "opp": 53.5,
+  "rep": 46.5,
   "others": [],
   "source": "https://en.wikipedia.org/wiki/2026_United_States_elections"
  },
