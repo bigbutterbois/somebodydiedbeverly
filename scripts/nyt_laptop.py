@@ -117,7 +117,7 @@ def page_urls(year, slug):
 
 
 def data_urls(year, slug, html):
-    """JSON links in the page that look like this race's results, then the usual file names."""
+    """The usual file names for this race, then JSON links found in the page."""
     _, day = DATES[year]
     found = re.findall(r"https://static01\.nyt\.com/elections-assets/[^\"'\s\\]+?\.json", html or "")
     found = sorted(set(found), key=lambda u: (slug not in u, "senate" not in u, len(u)))
@@ -125,7 +125,9 @@ def data_urls(year, slug, html):
         f"https://static01.nyt.com/elections-assets/pages/data/{day}/results-{slug}-us-senate.json",
         f"https://static01.nyt.com/elections-assets/pages/data/{day}/results-{slug}-us-senate-special.json",
     ]
-    return found + [g for g in guesses if g not in found]
+    # The usual file names first: a page can also link other races' data (2024
+    # Nebraska's regular-race page links the special election's file).
+    return guesses + [u for u in found if u not in guesses]
 
 
 def load(year, state):
