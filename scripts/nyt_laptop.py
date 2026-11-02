@@ -209,18 +209,16 @@ def votes_of(c):
         return 0
 
 
-COUNTY_LEVELS = {"county", "subunit", "township", "town", "district", "state house district"}
-
-
 def counties(data):
     race = find_race(data)
     if not race:
         raise RuntimeError("no reporting units")
     names = candidate_names(data, race)
     units = race["reporting_units"]
-    levels = {str(first(u, "level", default="")).lower() for u in units}
-    level = next((l for l in ("county", "subunit", "township", "town", "state house district", "district") if l in levels), None)
-    pick = [u for u in units if str(first(u, "level", default="")).lower() == level] if level else []
+    # The site's baselines are by county, so only county units are sent as is.
+    # States NYT reports by town or district (Maine, New Hampshire, Alaska) go
+    # in as one statewide row, which the model treats as one big county.
+    pick = [u for u in units if str(first(u, "level", default="")).lower() == "county"]
     statewide = not pick
     if statewide:
         pick = [u for u in units if str(first(u, "level", default="")).lower() in ("state", "")][:1] or units[:1]
