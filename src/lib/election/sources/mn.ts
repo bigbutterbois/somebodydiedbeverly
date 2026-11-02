@@ -4,7 +4,10 @@
 //  3 precinct name, 4 office ID, 5 office name, 6 district, 7 candidate order,
 //  8 candidate name, 9 suffix, 10 incumbent, 11 party, 12 precincts reporting,
 //  13 precincts in the county, 14 votes, 15 percent, 16 county total.
+import baselines from "../baselines.json";
 import type { RawCounty, Reader } from "./types";
+
+const NAMES = new Map((baselines as Record<string, { name: string; fips: string }[]>).MN.map((c) => [c.fips, c.name]));
 
 const URL = "https://electionresultsfiles.sos.mn.gov/20261103/ussenatecty.txt";
 
@@ -23,7 +26,7 @@ export const mn: Reader = {
       if (!c) {
         const reported = Number(f[11]) || 0;
         const total = Number(f[12]) || 0;
-        c = { name: fips, fips, complete: total > 0 && reported >= total, candidates: [] };
+        c = { name: NAMES.get(fips) ?? fips, fips, complete: total > 0 && reported >= total, candidates: [] };
         counties.set(fips, c);
       }
       c.candidates.push({ name: f[7], party: f[10], votes: Number(f[13]) || 0 });

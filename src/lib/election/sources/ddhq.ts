@@ -115,7 +115,8 @@ export async function readDdhq(): Promise<DdhqState[]> {
         name: "Statewide",
         expected: race.topline_results.estimated_votes?.estimated_votes_mid ?? undefined,
         complete: Boolean(
-          race.topline_results.precincts?.total && race.topline_results.precincts.reporting === race.topline_results.precincts.total,
+          race.topline_results.precincts?.total &&
+          race.topline_results.precincts.reporting === race.topline_results.precincts.total,
         ),
         candidates: toCandidates(race.topline_results.votes),
       });

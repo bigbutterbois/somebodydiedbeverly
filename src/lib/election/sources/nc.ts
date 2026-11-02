@@ -9,7 +9,14 @@ import type { Fetcher, RawCounty, Reader } from "./types";
 const BASE = "https://er.ncsbe.gov/enr/20261103/data";
 const COUNTIES = (baselines as Record<string, { name: string; fips: string }[]>).NC;
 
-type Row = { cnm: string; bnm: string; pty?: string; vct: string | number; prt?: string | number; ptl?: string | number };
+type Row = {
+  cnm: string;
+  bnm: string;
+  pty?: string;
+  vct: string | number;
+  prt?: string | number;
+  ptl?: string | number;
+};
 
 async function county(fetchText: Fetcher, n: number): Promise<RawCounty> {
   const rows = JSON.parse(await fetchText(`${BASE}/results_${n}.txt`)) as Row[];

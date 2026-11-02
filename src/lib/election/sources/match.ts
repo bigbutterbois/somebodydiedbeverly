@@ -29,6 +29,14 @@ export function toCounts(raw: RawCounty[], rep: Side, opp: Side): CountyCount[] 
       else if (name.includes(oppLast) || (opp.party === "D" && PARTY_D.test(party))) o += c.votes;
       else other += c.votes;
     }
-    return { name: county.name, fips: county.fips, rep: r, opp: o, other, complete: county.complete, expected: county.expected };
+    return {
+      name: county.name,
+      fips: county.fips,
+      rep: r,
+      opp: o,
+      other,
+      complete: county.complete,
+      expected: county.expected,
+    };
   });
 }
