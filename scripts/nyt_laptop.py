@@ -27,6 +27,7 @@ import getpass
 import json
 import os
 import re
+import subprocess
 import sys
 import time
 import urllib.error
@@ -51,22 +52,59 @@ STATES = {
 }
 
 
+# Python from python.org on a Mac often has no certificate list, so every HTTPS
+# call fails with CERTIFICATE_VERIFY_FAILED. When that happens the script hands
+# the request to the Mac's own curl, which uses the system keychain.
+USE_CURL = False
+
+
+def is_cert_error(e):
+    return "CERTIFICATE_VERIFY_FAILED" in str(e)
+
+
+def curl(url, headers, data=None, timeout=60):
+    cmd = ["curl", "-sS", "-L", "--max-time", str(timeout), "-w", "\n%{http_code}"]
+    for k, v in headers.items():
+        cmd += ["-H", f"{k}: {v}"]
+    if data is not None:
+        cmd += ["-X", "POST", "--data-binary", "@-"]
+    out = subprocess.run(cmd + [url], input=data, capture_output=True, timeout=timeout + 5)
+    if out.returncode != 0:
+        raise RuntimeError(f"curl: {out.stderr.decode(errors='replace').strip()[:200]}")
+    body, _, code = out.stdout.rpartition(b"\n")
+    if not code.isdigit() or int(code) >= 400:
+        raise RuntimeError(f"HTTP {code.decode()} {body[:200]!r}")
+    return body
+
+
+def fetch(url, headers, data=None, timeout=60):
+    global USE_CURL
+    if not USE_CURL:
+        req = urllib.request.Request(url, data=data, headers=headers, method="POST" if data is not None else "GET")
+        try:
+            with urllib.request.urlopen(req, timeout=timeout) as res:
+                return res.read()
+        except urllib.error.HTTPError as e:
+            raise RuntimeError(f"HTTP {e.code} {e.read()[:200]!r}")
+        except Exception as e:
+            if not is_cert_error(e):
+                raise
+            USE_CURL = True
+    return curl(url, headers, data, timeout)
+
+
 def get(url, timeout=25):
-    req = urllib.request.Request(url, headers={"User-Agent": UA, "Accept": "*/*"})
-    with urllib.request.urlopen(req, timeout=timeout) as res:
-        return res.read().decode("utf-8", "replace")
+    return fetch(url, {"User-Agent": UA, "Accept": "*/*"}, timeout=timeout).decode("utf-8", "replace")
 
 
 def post(path, body, token=None):
     headers = {"Content-Type": "application/json"}
     if token:
         headers["Authorization"] = "Bearer " + token
-    req = urllib.request.Request(SITE + path, data=json.dumps(body).encode(), headers=headers, method="POST")
     try:
-        with urllib.request.urlopen(req, timeout=60) as res:
-            return json.loads(res.read() or b"{}")
-    except urllib.error.HTTPError as e:
-        raise RuntimeError(f"{path}: {e.code} {e.read()[:200]!r}")
+        return json.loads(fetch(SITE + path, headers, json.dumps(body).encode()) or b"{}")
+    except RuntimeError as e:
+        raise RuntimeError(f"{path}: {e}")
 
 
 # ---------------------------------------------------------------- finding the data
