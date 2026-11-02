@@ -28,7 +28,14 @@ export default async function CountySheetPage({ params }: PageProps<"/admin/elec
   const repLast = race.rep.name.split(" ").pop();
   const pct = (x: number) => `${Math.round(x * 100)}%`;
   const num = (x: number) => x.toLocaleString();
-  const tone = (d: number | null) => (d === null ? "" : d > 0 ? "text-[#4a86e8]" : d < 0 ? "text-[#e5534b]" : "");
+  // Shading: blue where the opposition runs ahead of the benchmark, red where
+  // the Republican does, deeper the bigger the gap (full at 12 points).
+  const heat = (d: number | null) =>
+    d === null || Math.abs(d) < 0.5
+      ? undefined
+      : {
+          backgroundColor: `rgba(${d > 0 ? "74,134,232" : "229,83,75"},${(0.1 + 0.55 * Math.min(1, Math.abs(d) / 12)).toFixed(2)})`,
+        };
 
   const facts: [string, string][] = [
     ["Final forecast", `${marginText(sheet.forecastMargin, o)} · ${o} win ${pct(race.p_opp)}`],
@@ -176,8 +183,12 @@ export default async function CountySheetPage({ params }: PageProps<"/admin/elec
                 <td className="py-1 pr-3">{r.live.total ? num(r.live.other) : "–"}</td>
                 <td className="py-1 pr-3">{r.live.total ? (r.live.complete ? "done" : pct(r.live.counted)) : "–"}</td>
                 <td className="py-1 pr-3">{marginText(r.live.margin, o)}</td>
-                <td className={`border-l border-line py-1 pr-3 ${tone(r.vsExpected)}`}>{diffText(r.vsExpected)}</td>
-                <td className={`py-1 pr-3 ${tone(r.vsBreakeven)}`}>{diffText(r.vsBreakeven)}</td>
+                <td className="border-l border-line py-1 pr-3" style={heat(r.vsExpected)}>
+                  {diffText(r.vsExpected)}
+                </td>
+                <td className="py-1 pr-3" style={heat(r.vsBreakeven)}>
+                  {diffText(r.vsBreakeven)}
+                </td>
                 <td className="py-1 pr-3">{marginText(r.projected.margin, o)}</td>
               </tr>
             ))}
