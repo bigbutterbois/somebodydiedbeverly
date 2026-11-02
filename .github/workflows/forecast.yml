@@ -20,6 +20,9 @@ on:
     # the gate runs only the first.
     - cron: "17,47 10-17 * * *"
     - cron: "17 18-23 * * *"
+    # The final run, Monday Nov 2 at 8pm Eastern (01:00 UTC Nov 3); see
+    # final_run_at in forecast/config.yaml.
+    - cron: "2,12,22,32,47 1-3 3 11 *"
   create:
   workflow_dispatch:
     inputs:
@@ -72,6 +75,14 @@ jobs:
           if [ "${{ github.event_name }}" = "create" ] && [ "$last" = "$today" ]; then run=false; fi
           if [ "${{ github.event_name }}" = "workflow_dispatch" ] && [ "$last" = "$today" ] \
             && [ "${{ inputs.force }}" != "true" ] && [ -z "${{ inputs.backfill_from }}" ]; then run=false; fi
+          # After final_run_at (forecast/config.yaml) exactly one more run goes,
+          # whatever started it, and it is marked final; nothing runs after that.
+          lock=$(sed -nE 's/^final_run_at: *"?([^"]+)"?.*/\1/p' forecast/config.yaml)
+          final=$(jq -r '.final // false' data/latest.json 2>/dev/null || echo false)
+          if [ -n "$lock" ] && [ "$(date +%s)" -ge "$(date -d "$lock" +%s)" ]; then
+            if [ "$final" = "true" ]; then run=false; else run=true; fi
+            echo "Past the final run time ($lock), final forecast published: $final"
+          fi
           echo "Eastern $today ${hour}h, last forecast ${last:-none}, run=$run"
           echo "run=$run" >> "$GITHUB_OUTPUT"
 

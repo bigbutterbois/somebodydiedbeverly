@@ -34,6 +34,8 @@ export type Race = {
 export type Forecast = {
   as_of: string;
   generated_at: string;
+  /** The last forecast before the election (run at config.yaml's final_run_at); no runs follow it. */
+  final?: boolean;
   election_day: string;
   simulations: number;
   national_environment: number;

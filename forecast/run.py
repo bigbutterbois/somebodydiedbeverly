@@ -409,10 +409,14 @@ def main() -> int:
         "national_polls": national_polls(polls, min(history), today, cfg),
         "inputs": input_checks(fetched, polls, extras, result, districts, today),
     })
+    final_at = cfg.get("final_run_at")
+    if final_at and datetime.now(timezone.utc) >= datetime.fromisoformat(str(final_at)):
+        result["final"] = True
     summarize(result)
     if house_result is not None:
         house_result.update({
             "generated_at": result["generated_at"],
+            "final": result.get("final", False),
             "config_version": version,
             "problems": house_problems,
             "history": [{k: v for k, v in house_history[day].items() if k != "races"} for day in sorted(house_history)],
