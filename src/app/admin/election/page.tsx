@@ -1,4 +1,6 @@
 import { ELECTION, pollsCloseAt } from "@/lib/election/config";
+import Link from "next/link";
+import { getForecast } from "@/lib/forecast";
 import { getCountRows, getLatestSnapshot } from "@/lib/election/server";
 import { READERS } from "@/lib/election/sources";
 import { Controls } from "./Controls";
@@ -22,11 +24,15 @@ function ago(iso: string | null, now: number) {
 }
 
 function clock(iso: string) {
-  return new Date(iso).toLocaleTimeString("en-US", { hour: "numeric", minute: "2-digit", timeZone: "America/New_York" });
+  return new Date(iso).toLocaleTimeString("en-US", {
+    hour: "numeric",
+    minute: "2-digit",
+    timeZone: "America/New_York",
+  });
 }
 
 export default async function AdminElectionPage() {
-  const [rows, snap] = await Promise.all([getCountRows(), getLatestSnapshot()]);
+  const [rows, snap, forecast] = await Promise.all([getCountRows(), getLatestSnapshot(), getForecast()]);
   const now = currentTime();
   const byState = new Map(rows.map((r) => [r.state, r]));
   const races = new Map((snap?.races ?? []).map((r) => [r.state, r]));
@@ -45,6 +51,20 @@ export default async function AdminElectionPage() {
         </p>
         <Controls />
       </header>
+
+      <section className="flex flex-col gap-2">
+        <h2 className="text-xs uppercase tracking-[0.12em] text-muted">County sheets</h2>
+        <p className="flex flex-wrap gap-x-3 gap-y-1 text-sm">
+          {(forecast?.races ?? [])
+            .slice()
+            .sort((a, b) => a.state.localeCompare(b.state))
+            .map((r) => (
+              <Link key={r.state} href={`/admin/election/${r.state}`} className="underline">
+                {r.state}
+              </Link>
+            ))}
+        </p>
+      </section>
 
       <div className="overflow-x-auto">
         <table className="w-full text-left text-sm tabular-nums">
@@ -91,7 +111,9 @@ export default async function AdminElectionPage() {
                   <td className="py-2 pr-4">{ago(row?.checked_at ?? null, now)}</td>
                   <td className="py-2 pr-4 text-xs">
                     {row?.error}
-                    {race?.unmatched && <span className="block text-muted">Unmatched: {race.unmatched.join(", ")}</span>}
+                    {race?.unmatched && (
+                      <span className="block text-muted">Unmatched: {race.unmatched.join(", ")}</span>
+                    )}
                   </td>
                 </tr>
               );
