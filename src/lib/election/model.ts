@@ -219,11 +219,47 @@ function countedShare(c: Prepared["counties"][number]) {
   return { v, f: v > 0 ? Math.min(1, v / c.expected) : 0 };
 }
 
+/** Share of the state's expected vote counted so far. */
+function stateCounted(p: Prepared) {
+  let counted = 0;
+  let expected = 0;
+  for (const c of p.counties) {
+    expected += c.expected;
+    if (c.count) counted += c.count.rep + c.count.opp + c.count.other;
+  }
+  return expected > 0 ? Math.min(1, counted / expected) : 0;
+}
+
+/**
+ * How much the final forecast still counts (Mike's rule): all of it with
+ * nothing counted, falling in a straight line to none once half the expected
+ * vote is in.
+ */
+export const forecastWeight = (counted: number) => Math.max(0, 1 - counted / ELECTION.forecastFadeAt);
+
 function estimateSwing(p: Prepared, priorShift = 0): SwingEstimate {
-  const cfg = ELECTION.states[p.prior.state] ?? {};
   const priorSwing = p.prior.mean - p.base2024 + priorShift;
+  const live = readResults(p, priorSwing);
+  // Blend the forecast's swing with what the counted votes alone say.
+  const w = forecastWeight(stateCounted(p));
+  const vPrior = p.prior.sd ** 2;
+  const vss = w * w * vPrior + (1 - w) * (1 - w) * live.vss;
+  return {
+    s: w * priorSwing + (1 - w) * live.s,
+    b: live.b,
+    vss,
+    vsb: (1 - w) * live.vsb,
+    vbb: live.vbb,
+    priorSwing,
+    info: Math.max(0, 1 - vss / vPrior),
+  };
+}
+
+/** The swing and early-vote lean the counted votes point to on their own (an almost flat prior on the swing). */
+function readResults(p: Prepared, priorSwing: number) {
+  const cfg = ELECTION.states[p.prior.state] ?? {};
   // Precision matrix and vector of a 2-parameter Bayesian regression.
-  let a11 = 1 / p.prior.sd ** 2;
+  let a11 = 1 / ELECTION.flatSwingSd ** 2;
   let a12 = 0;
   let a22 = 1 / ELECTION.earlyLeanSd ** 2;
   let y1 = priorSwing * a11;
@@ -244,15 +280,7 @@ function estimateSwing(p: Prepared, priorShift = 0): SwingEstimate {
   const vss = a22 / det;
   const vsb = -a12 / det;
   const vbb = a11 / det;
-  return {
-    s: vss * y1 + vsb * y2,
-    b: vsb * y1 + vbb * y2,
-    vss,
-    vsb,
-    vbb,
-    priorSwing,
-    info: 1 - vss / p.prior.sd ** 2,
-  };
+  return { s: vss * y1 + vsb * y2, b: vsb * y1 + vbb * y2, vss, vsb, vbb };
 }
 
 function simulate(p: Prepared, est: SwingEstimate, national: Float64Array, runoffRule: boolean, seed: number) {
@@ -482,4 +510,125 @@ export function inverseNormal(p: number) {
   const q = p - 0.5;
   const rr = q * q;
   return ((((((a[0] * rr + a[1]) * rr + a[2]) * rr + a[3]) * rr + a[4]) * rr + a[5]) * q) / (((((b[0] * rr + b[1]) * rr + b[2]) * rr + b[3]) * rr + b[4]) * rr + 1);
+}
+
+/** One row of the admin county sheet. Shares are percent of all votes; margins are opposition minus Republican, in points. */
+export type CountyRow = {
+  name: string;
+  fips: string;
+  margin2024: number;
+  /** The county's 2024 vote. */
+  votes2024: number;
+  expectedVotes: number;
+  /** What the final forecast implies here: 2024 margin moved by the forecast's statewide swing. */
+  expected: { opp: number; rep: number; other: number; margin: number };
+  /** What a dead-even state needs here: 2024 margin moved by the swing that makes the state 50/50. */
+  breakeven: { opp: number; rep: number; margin: number };
+  live: { opp: number; rep: number; other: number; total: number; counted: number; complete: boolean; margin: number | null };
+  /** Live margin minus the expected and breakeven margins (+ = opposition doing better). */
+  vsExpected: number | null;
+  vsBreakeven: number | null;
+  /** The county's projected final margin and vote, counted votes plus the model's guess for the rest. */
+  projected: { margin: number; votes: number };
+};
+
+export type CountySheet = {
+  state: string;
+  margin2024: number;
+  forecastMargin: number;
+  /** Statewide swing from 2024: the forecast's, and the one that makes the state 50/50. */
+  forecastSwing: number;
+  breakevenSwing: number;
+  /** The swing and early-vote lean the model is using now. */
+  swing: number;
+  earlyLean: number;
+  expectedVotes: number;
+  counted: number;
+  forecastWeight: number;
+  /** Vote-weighted live margin minus expected / breakeven, over counties with votes. */
+  vsExpected: number | null;
+  vsBreakeven: number | null;
+  unmatched: string[];
+  rows: CountyRow[];
+};
+
+const shares = (margin: number, other: number) => {
+  const two = 100 - other;
+  const opp = Math.min(two, Math.max(0, two / 2 + margin / 2));
+  return { opp: round1(opp), rep: round1(two - opp), other: round1(other) };
+};
+
+/** The admin county sheet for one race: expectations filled in before the night, live numbers as they arrive. */
+export function countySheet(prior: Prior, counts: CountyCount[] | null): CountySheet {
+  const p = prepare(prior, counts);
+  refreshTurnout(p);
+  const est = estimateSwing(p);
+  const forecastSwing = prior.mean - p.base2024;
+  const breakevenSwing = -p.base2024;
+  const otherPct = ELECTION.otherShare * 100;
+  let wVotes = 0;
+  let sumExp = 0;
+  let sumBreak = 0;
+  const rows = p.counties.map((c): CountyRow => {
+    const { v, f } = countedShare(c);
+    const opp = c.count?.opp ?? 0;
+    const rep = c.count?.rep ?? 0;
+    const other = c.count?.other ?? 0;
+    const liveMargin = v > 0 ? ((opp - rep) / v) * 100 : null;
+    const expMargin = c.base.margin + forecastSwing;
+    const breakMargin = c.base.margin + breakevenSwing;
+    // The rest of the county votes at its 2024 margin plus the swing, less the
+    // early-vote lean, plus whatever of its own quirk the count has shown.
+    const x = 1 - f;
+    const shown = v > 0 ? c.tau ** 2 / (c.tau ** 2 + (ELECTION.partialNoise * x) ** 2) : 0;
+    const quirk = liveMargin === null ? 0 : shown * (liveMargin - c.base.margin - est.s - est.b * x);
+    const restMargin = c.base.margin + est.s + quirk - est.b * f;
+    const left = Math.max(c.expected - v, 0);
+    const done = Boolean(c.count?.complete);
+    const projVotes = done ? v : v + left;
+    const projMargin = projVotes > 0 ? ((liveMargin ?? 0) * v + (done ? 0 : restMargin * left)) / projVotes : restMargin;
+    if (liveMargin !== null) {
+      wVotes += v;
+      sumExp += (liveMargin - expMargin) * v;
+      sumBreak += (liveMargin - breakMargin) * v;
+    }
+    return {
+      name: c.base.name,
+      fips: c.base.fips,
+      margin2024: c.base.margin,
+      votes2024: c.base.votes,
+      expectedVotes: Math.round(c.expected),
+      expected: { ...shares(expMargin, otherPct), margin: round1(expMargin) },
+      breakeven: { ...shares(breakMargin, otherPct), margin: round1(breakMargin) },
+      live: {
+        opp,
+        rep,
+        other,
+        total: v,
+        counted: f,
+        complete: done,
+        margin: liveMargin === null ? null : round1(liveMargin),
+      },
+      vsExpected: liveMargin === null ? null : round1(liveMargin - expMargin),
+      vsBreakeven: liveMargin === null ? null : round1(liveMargin - breakMargin),
+      projected: { margin: round1(projMargin), votes: Math.round(projVotes) },
+    };
+  });
+  const counted = stateCounted(p);
+  return {
+    state: prior.state,
+    margin2024: round1(p.base2024),
+    forecastMargin: round1(prior.mean),
+    forecastSwing: round1(forecastSwing),
+    breakevenSwing: round1(breakevenSwing),
+    swing: round1(est.s),
+    earlyLean: round1(est.b),
+    expectedVotes: Math.round(p.counties.reduce((s, c) => s + c.expected, 0)),
+    counted,
+    forecastWeight: forecastWeight(counted),
+    vsExpected: wVotes > 0 ? round1(sumExp / wVotes) : null,
+    vsBreakeven: wVotes > 0 ? round1(sumBreak / wVotes) : null,
+    unmatched: p.unmatched,
+    rows,
+  };
 }

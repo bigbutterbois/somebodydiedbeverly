@@ -40,6 +40,10 @@ export const ELECTION = {
   earlyLeanSd: 8,
   /** Extra swing uncertainty for what the model gets wrong (points, sd). */
   modelSlack: 1.5,
+  /** Share of the expected vote counted at which the forecast stops counting (Mike: 50%). */
+  forecastFadeAt: 0.5,
+  /** Prior on the swing when reading the results alone: wide enough to barely matter. */
+  flatSwingSd: 30,
   /** Turnout uncertainty: statewide and per county (log scale). */
   turnoutNoise: 0.08,
   countyTurnoutNoise: 0.1,
