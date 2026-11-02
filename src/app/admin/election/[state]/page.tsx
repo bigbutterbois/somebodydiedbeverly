@@ -2,6 +2,8 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { ELECTION } from "@/lib/election/config";
 import { getLatestSnapshot } from "@/lib/election/server";
+import { getForecast } from "@/lib/forecast";
+import { Controls } from "../Controls";
 import { diffText, loadSheet, marginText } from "./sheet";
 
 export const metadata = { title: "Election night: counties" };
@@ -12,7 +14,11 @@ export const metadata = { title: "Election night: counties" };
 // opposition candidate is doing better than that benchmark.
 export default async function CountySheetPage({ params }: PageProps<"/admin/election/[state]">) {
   const { state } = await params;
-  const [data, snap] = await Promise.all([loadSheet(state.toUpperCase()), getLatestSnapshot().catch(() => null)]);
+  const [data, snap, forecast] = await Promise.all([
+    loadSheet(state.toUpperCase()),
+    getLatestSnapshot().catch(() => null),
+    getForecast(),
+  ]);
   if (!data) notFound();
   const { race, sheet } = data;
   const settings = ELECTION.states[sheet.state] ?? {};
@@ -46,9 +52,23 @@ export default async function CountySheetPage({ params }: PageProps<"/admin/elec
   return (
     <div className="flex flex-col gap-6">
       <header className="flex flex-col gap-2">
-        <Link href="/admin/election" className="text-sm text-muted underline">
-          Election night
-        </Link>
+        <nav className="flex flex-wrap gap-x-3 gap-y-1 text-sm">
+          <Link href="/admin/election" className="text-muted underline">
+            All states
+          </Link>
+          {(forecast?.races ?? [])
+            .map((r) => r.state)
+            .sort()
+            .map((s) => (
+              <Link
+                key={s}
+                href={`/admin/election/${s}`}
+                className={s === sheet.state ? "font-medium text-accent" : "text-muted underline"}
+              >
+                {s}
+              </Link>
+            ))}
+        </nav>
         <h1 className="text-3xl font-normal tracking-tight">
           {race.name}: {race.opp.name} ({o}) vs {race.rep.name} (R)
         </h1>
@@ -59,6 +79,11 @@ export default async function CountySheetPage({ params }: PageProps<"/admin/elec
           <a href={`/admin/election/${sheet.state}/csv`} className="underline">
             Download CSV
           </a>
+        </p>
+        <Controls />
+        <p className="text-xs text-muted">
+          Updates itself every 30 seconds. Last model run:{" "}
+          {snap ? new Date(snap.at).toLocaleTimeString("en-US", { timeZone: "America/New_York" }) + " ET" : "none yet"}.
         </p>
       </header>
 
