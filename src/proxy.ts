@@ -4,13 +4,15 @@ import { isPreviewBot, previewHtml } from "@/lib/link-preview";
 import { ACCESS_COOKIE, hasSiteAccess } from "@/lib/site-access";
 
 // Pages anyone can open: the two sign-in screens, the iPhone app's sign-in
-// routes, plus the home-screen app's manifest and service worker, which
+// routes, the election night refresh, plus the home-screen app's manifest and service worker, which
 // phones fetch without cookies.
 const OPEN_PATHS = [
   "/enter",
   "/login",
   "/api/app/login",
   "/api/app/refresh",
+  // Election night: the Supabase cron job's once-a-minute nudge.
+  "/api/election/refresh",
   "/manifest.webmanifest",
   "/sw.js",
 ];

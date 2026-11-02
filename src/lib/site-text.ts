@@ -30,6 +30,7 @@ export const SITE_TEXT = {
   "nav.forecast": { page: "Menu", label: "Forecast link", default: "Forecast", kind: "short" },
   "nav.plates": { page: "Menu", label: "Plates link", default: "Plates", kind: "short" },
   "nav.metro": { page: "Menu", label: "Metro link", default: "Metro", kind: "short" },
+  "nav.election": { page: "Menu", label: "Election night link", default: "Election", kind: "short" },
 
   // Homepage
   "home.title": { page: "Homepage", label: "Headline", default: "Election forecasting and other silly projects", kind: "short" },
@@ -58,6 +59,14 @@ export const SITE_TEXT = {
   },
 
   // Metro
+  "election.title": { page: "Election night", label: "Heading", default: "Election night", kind: "short" },
+  "election.intro": {
+    page: "Election night",
+    label: "Intro",
+    default:
+      "Live Senate results. Each race starts from the final forecast and moves as county results come in. The dark band is the middle half of where the final margin could land, the light band 90%.",
+    kind: "long",
+  },
   "metro.tab.arrivals": { page: "Metro", label: "Arrivals tab", default: "Arrivals", kind: "short" },
   "metro.tab.map": { page: "Metro", label: "Map tab", default: "Map", kind: "short" },
 

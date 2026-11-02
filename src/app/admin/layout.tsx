@@ -13,6 +13,7 @@ const TOOLS = [
   { href: "/admin/blog", label: "Blog" },
   { href: "/admin/gallery", label: "Gallery" },
   { href: "/admin/forecast", label: "Forecast" },
+  { href: "/admin/election", label: "Election" },
   { href: "/admin/text", label: "Text" },
   { href: "/admin/visitors", label: "Visitors" },
 ];
