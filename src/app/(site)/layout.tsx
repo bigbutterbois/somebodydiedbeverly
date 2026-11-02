@@ -11,6 +11,7 @@ const MODULES = [
   { href: "/gallery", text: "nav.gallery" },
   { href: "/blog", text: "nav.blog" },
   { href: "/forecast", text: "nav.forecast" },
+  { href: "/election", text: "nav.election" },
   { href: "/plates", text: "nav.plates" },
   { href: "/metro", text: "nav.metro" },
 ] as const;

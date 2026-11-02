@@ -24,7 +24,7 @@ export function Nav({
       <Link href={home.href} className="font-semibold tracking-tight">
         {home.label}
       </Link>
-      <div className="order-last flex w-full justify-between gap-x-6 sm:order-none sm:w-auto sm:justify-start">
+      <div className="order-last flex w-full justify-between gap-x-3 sm:order-none sm:gap-x-6 sm:w-auto sm:justify-start">
         {links.map((link) => {
           const active = pathname === link.href || pathname.startsWith(`${link.href}/`);
           return (

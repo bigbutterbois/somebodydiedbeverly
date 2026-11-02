@@ -1,0 +1,211 @@
+import "server-only";
+import { getForecast, type Forecast } from "@/lib/forecast";
+import { contentClient } from "@/lib/supabase/content";
+import { ELECTION } from "./config";
+import { buildSnapshot, type LiveSnapshot } from "./live";
+import type { CountyCount } from "./model";
+import { READERS } from "./sources";
+import { DDHQ_URL, ddhqConfigured, readDdhq } from "./sources/ddhq";
+import { toCounts } from "./sources/match";
+import type { RawCounty } from "./sources/types";
+
+// Election night on the server: fetch each state's feed, keep the counts in
+// Supabase, run the model and save a snapshot for the page. Started every
+// minute by a Supabase cron job (see the election_night migration), by the
+// page itself when the newest snapshot is stale, and by the admin page.
+
+export type CountRow = {
+  state: string;
+  source: string | null;
+  via: "server" | "laptop";
+  counties: CountyCount[];
+  total_votes: number;
+  fetched_at: string | null;
+  changed_at: string | null;
+  checked_at: string | null;
+  error: string | null;
+};
+
+export const inWindow = (now = Date.now()) => now >= Date.parse(ELECTION.start) && now <= Date.parse(ELECTION.end);
+
+const BROWSER_UA =
+  "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/130.0 Safari/537.36";
+
+async function fetchText(url: string) {
+  const res = await fetch(url, {
+    cache: "no-store",
+    headers: { "user-agent": BROWSER_UA, accept: "*/*" },
+    signal: AbortSignal.timeout(20_000),
+  });
+  if (!res.ok) throw new Error(`${res.status} from ${new URL(url).host}`);
+  return res.text();
+}
+
+export async function getCountRows(): Promise<CountRow[]> {
+  const supabase = await contentClient();
+  const { data } = await supabase.from("election_counts").select("*").order("state");
+  return (data ?? []) as CountRow[];
+}
+
+export async function getLatestSnapshot(): Promise<LiveSnapshot | null> {
+  const supabase = await contentClient();
+  const { data } = await supabase
+    .from("election_snapshots")
+    .select("data")
+    .order("created_at", { ascending: false })
+    .limit(1)
+    .maybeSingle();
+  return (data?.data as LiveSnapshot) ?? null;
+}
+
+/** The control odds through the night, for the line under the needle. */
+export async function getControlHistory(): Promise<{ at: string; p: number }[]> {
+  const supabase = await contentClient();
+  const { data } = await supabase
+    .from("election_snapshots")
+    .select("created_at, p:data->control->pDemControl")
+    .order("created_at", { ascending: true })
+    .limit(3000);
+  return (data ?? []).map((d) => ({
+    at: d.created_at as string,
+    p: Number(d.p),
+  }));
+}
+
+/** Saves a state's counts (from the server's own read or the laptop), noting whether they moved. */
+export async function saveCounts(
+  state: string,
+  raw: RawCounty[],
+  forecast: Forecast,
+  via: CountRow["via"],
+  source: string,
+  previous?: CountRow,
+) {
+  const race = forecast.races.find((r) => r.state === state);
+  if (!race) throw new Error(`no ${state} race`);
+  const counties = toCounts(raw, race.rep, race.opp);
+  // A county the feed skipped this time (a failed file) keeps its last counts.
+  const have = new Set(counties.map((c) => c.name));
+  for (const c of previous?.counties ?? []) if (!have.has(c.name)) counties.push(c);
+  const total = counties.reduce((s, c) => s + c.rep + c.opp + c.other, 0);
+  const now = new Date().toISOString();
+  const supabase = await contentClient();
+  const { error } = await supabase.from("election_counts").upsert({
+    state,
+    source,
+    via,
+    counties,
+    total_votes: total,
+    fetched_at: now,
+    checked_at: now,
+    changed_at: previous && previous.total_votes === total ? previous.changed_at : now,
+    error: null,
+  });
+  if (error) throw new Error(error.message);
+  return total;
+}
+
+async function saveError(state: string, message: string, source: string) {
+  const supabase = await contentClient();
+  const now = new Date().toISOString();
+  const { data } = await supabase.from("election_counts").select("state").eq("state", state).maybeSingle();
+  if (data) await supabase.from("election_counts").update({ checked_at: now, error: message }).eq("state", state);
+  else await supabase.from("election_counts").insert({ state, source, checked_at: now, error: message });
+}
+
+/** Runs the model on the stored counts and saves a snapshot. */
+export async function snapshot(forecast?: Forecast) {
+  const f = forecast ?? (await getForecast(true));
+  if (!f) throw new Error("No forecast to start from.");
+  const rows = await getCountRows();
+  const counts: Record<string, CountyCount[] | undefined> = {};
+  for (const state of Object.keys(READERS)) counts[state] = [];
+  for (const row of rows) if (row.fetched_at) counts[row.state] = row.counties;
+  const snap = buildSnapshot(f, counts);
+  const supabase = await contentClient();
+  const { error } = await supabase.from("election_snapshots").insert({ data: snap });
+  if (error) throw new Error(error.message);
+  return snap;
+}
+
+/**
+ * Reads every state feed, saves the counts and a new snapshot. Skips when
+ * another refresh started under a minute ago (or, unless forced, outside
+ * election night).
+ */
+export async function refresh({ force = false } = {}) {
+  if (!force && !inWindow()) return { ran: false, reason: "not election night" };
+  const supabase = await contentClient();
+  const { data: claimed } = await supabase.rpc("election_claim_refresh", {
+    min_seconds: force ? 15 : ELECTION.refreshSeconds,
+  });
+  if (!claimed) return { ran: false, reason: "refreshed moments ago" };
+
+  const forecast = await getForecast(true);
+  if (!forecast) return { ran: false, reason: "no forecast" };
+  const rows = new Map((await getCountRows()).map((r) => [r.state, r]));
+
+  // Decision Desk HQ first, when set up: one call covers every race it has.
+  const covered = new Set<string>();
+  const ddhq: Record<string, unknown> = {};
+  if (ddhqConfigured()) {
+    const now = new Date().toISOString();
+    try {
+      const states = await readDdhq();
+      for (const s of states) {
+        if (!forecast.races.some((r) => r.state === s.state) || !s.counties.length) continue;
+        try {
+          ddhq[s.state] = await saveCounts(s.state, s.counties, forecast, "server", DDHQ_URL, rows.get(s.state));
+          covered.add(s.state);
+        } catch (e) {
+          ddhq[s.state] = e instanceof Error ? e.message : String(e);
+        }
+      }
+      await supabase.from("election_counts").upsert({
+        state: "DDHQ",
+        source: DDHQ_URL,
+        fetched_at: now,
+        checked_at: now,
+        changed_at: now,
+        error: null,
+        total_votes: states.length,
+      });
+    } catch (e) {
+      const message = e instanceof Error ? e.message : String(e);
+      ddhq.error = message;
+      await supabase.from("election_counts").upsert({
+        state: "DDHQ",
+        source: DDHQ_URL,
+        checked_at: now,
+        error: message.slice(0, 300),
+      });
+    }
+  }
+
+  const results = await Promise.all(
+    Object.entries(READERS)
+      .filter(([state]) => !covered.has(state))
+      .map(async ([state, reader]) => {
+        const previous = rows.get(state);
+        // The laptop is feeding this state (the site can't reach it): leave it be.
+        if (
+          previous?.via === "laptop" &&
+          previous.fetched_at &&
+          Date.now() - Date.parse(previous.fetched_at) < 5 * 60_000
+        ) {
+          return { state, skipped: "laptop" };
+        }
+        try {
+          const raw = await reader!.read(fetchText);
+          const votes = await saveCounts(state, raw, forecast, "server", reader!.url, previous);
+          return { state, votes };
+        } catch (e) {
+          const message = e instanceof Error ? e.message : String(e);
+          await saveError(state, message.slice(0, 300), reader!.url);
+          return { state, error: message };
+        }
+      }),
+  );
+  const snap = await snapshot(forecast);
+  return { ran: true, at: snap.at, ddhq, results };
+}
