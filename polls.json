@@ -336,6 +336,18 @@
   "source": "https://en.wikipedia.org/wiki/2026_United_States_Senate_election_in_Alaska"
  },
  {
+  "state": "AK",
+  "pollster": "New York Times/Siena University",
+  "sponsor_party": null,
+  "end_date": "2026-10-30",
+  "n": 610,
+  "population": "LV",
+  "rep": 46.0,
+  "opp": 48.0,
+  "others": [],
+  "source": "https://en.wikipedia.org/wiki/2026_United_States_Senate_election_in_Alaska"
+ },
+ {
   "state": "AL",
   "pollster": "yes. every kid.",
   "sponsor_party": null,
@@ -12340,6 +12352,18 @@
  },
  {
   "state": "APPROVAL",
+  "pollster": "Morning Consult/Deseret News and Hinckley Institute of Politics",
+  "sponsor_party": null,
+  "end_date": "2026-10-20",
+  "n": 2050,
+  "population": null,
+  "opp": 41.0,
+  "rep": 56.0,
+  "others": [],
+  "source": "https://en.wikipedia.org/wiki/Opinion_polling_on_the_second_Trump_presidency"
+ },
+ {
+  "state": "APPROVAL",
   "pollster": "NPR/PBS/Marist College",
   "sponsor_party": null,
   "end_date": "2026-10-20",
@@ -12407,6 +12431,18 @@
   "population": null,
   "opp": 36.0,
   "rep": 63.0,
+  "others": [],
+  "source": "https://en.wikipedia.org/wiki/Opinion_polling_on_the_second_Trump_presidency"
+ },
+ {
+  "state": "APPROVAL",
+  "pollster": "Wall Street Journal/Impact Research and National Research Inc.",
+  "sponsor_party": null,
+  "end_date": "2026-10-22",
+  "n": 1500,
+  "population": null,
+  "opp": 40.0,
+  "rep": 59.0,
   "others": [],
   "source": "https://en.wikipedia.org/wiki/Opinion_polling_on_the_second_Trump_presidency"
  },
@@ -12746,6 +12782,18 @@
   "opp": 47.0,
   "others": [],
   "source": "https://en.wikipedia.org/wiki/2026_United_States_House_of_Representatives_elections_in_Arizona"
+ },
+ {
+  "state": "CO",
+  "pollster": "Lake Research Partners",
+  "sponsor_party": "D",
+  "end_date": "2026-09-30",
+  "n": 600,
+  "population": "RV",
+  "rep": 38.0,
+  "opp": 52.0,
+  "others": [],
+  "source": "https://en.wikipedia.org/wiki/2026_United_States_Senate_election_in_Colorado"
  },
  {
   "state": "CO-03",
@@ -14381,6 +14429,30 @@
   "source": "https://en.wikipedia.org/wiki/2026_United_States_Senate_election_in_Iowa"
  },
  {
+  "state": "IA",
+  "pollster": "YouGov",
+  "sponsor_party": null,
+  "end_date": "2026-10-29",
+  "n": 2020,
+  "population": "LV",
+  "rep": 49.0,
+  "opp": 50.0,
+  "others": [],
+  "source": "https://en.wikipedia.org/wiki/2026_United_States_Senate_election_in_Iowa"
+ },
+ {
+  "state": "IA",
+  "pollster": "New York Times/Siena University",
+  "sponsor_party": null,
+  "end_date": "2026-11-01",
+  "n": 705,
+  "population": "LV",
+  "rep": 47.0,
+  "opp": 48.0,
+  "others": [],
+  "source": "https://en.wikipedia.org/wiki/2026_United_States_Senate_election_in_Iowa"
+ },
+ {
   "state": "IA-01",
   "pollster": "Public Policy Polling",
   "sponsor_party": "D",
@@ -14922,6 +14994,30 @@
   "source": "https://en.wikipedia.org/wiki/2026_United_States_Senate_election_in_Kansas"
  },
  {
+  "state": "KS",
+  "pollster": "YouGov",
+  "sponsor_party": null,
+  "end_date": "2026-10-29",
+  "n": 2092,
+  "population": "LV",
+  "rep": 49.0,
+  "opp": 50.0,
+  "others": [],
+  "source": "https://en.wikipedia.org/wiki/2026_United_States_Senate_election_in_Kansas"
+ },
+ {
+  "state": "KS",
+  "pollster": "New York Times/Siena University",
+  "sponsor_party": null,
+  "end_date": "2026-11-01",
+  "n": 736,
+  "population": "LV",
+  "rep": 44.0,
+  "opp": 49.0,
+  "others": [],
+  "source": "https://en.wikipedia.org/wiki/2026_United_States_Senate_election_in_Kansas"
+ },
+ {
   "state": "KS-02",
   "pollster": "DCCC",
   "sponsor_party": null,
@@ -15269,6 +15365,18 @@
   "others": [],
   "source": "https://www.uml.edu/news/press-releases/2026/102826-new-england-polls.aspx",
   "feed": "votehub"
+ },
+ {
+  "state": "MA",
+  "pollster": "University of New Hampshire",
+  "sponsor_party": null,
+  "end_date": "2026-10-31",
+  "n": 905,
+  "population": "LV",
+  "rep": 32.0,
+  "opp": 53.0,
+  "others": [],
+  "source": "https://en.wikipedia.org/wiki/2026_United_States_Senate_election_in_Massachusetts"
  },
  {
   "state": "MD-01",
@@ -15651,6 +15759,42 @@
   "population": "LV",
   "rep": 45.0,
   "opp": 50.0,
+  "others": [],
+  "source": "https://en.wikipedia.org/wiki/2026_United_States_Senate_election_in_Maine"
+ },
+ {
+  "state": "ME",
+  "pollster": "YouGov",
+  "sponsor_party": null,
+  "end_date": "2026-10-29",
+  "n": 1503,
+  "population": "LV",
+  "rep": 47.0,
+  "opp": 52.0,
+  "others": [],
+  "source": "https://en.wikipedia.org/wiki/2026_United_States_Senate_election_in_Maine"
+ },
+ {
+  "state": "ME",
+  "pollster": "University of New Hampshire",
+  "sponsor_party": null,
+  "end_date": "2026-10-31",
+  "n": 1654,
+  "population": "LV",
+  "rep": 45.0,
+  "opp": 54.0,
+  "others": [],
+  "source": "https://en.wikipedia.org/wiki/2026_United_States_Senate_election_in_Maine"
+ },
+ {
+  "state": "ME",
+  "pollster": "New York Times/Siena University",
+  "sponsor_party": null,
+  "end_date": "2026-11-01",
+  "n": 714,
+  "population": "LV",
+  "rep": 45.0,
+  "opp": 51.0,
   "others": [],
   "source": "https://en.wikipedia.org/wiki/2026_United_States_Senate_election_in_Maine"
  },
@@ -16519,6 +16663,42 @@
   "source": "https://en.wikipedia.org/wiki/2026_United_States_Senate_election_in_Michigan"
  },
  {
+  "state": "MI",
+  "pollster": "YouGov",
+  "sponsor_party": null,
+  "end_date": "2026-10-29",
+  "n": 2093,
+  "population": "LV",
+  "rep": 47.0,
+  "opp": 51.0,
+  "others": [],
+  "source": "https://en.wikipedia.org/wiki/2026_United_States_Senate_election_in_Michigan"
+ },
+ {
+  "state": "MI",
+  "pollster": "New York Times/Siena University",
+  "sponsor_party": null,
+  "end_date": "2026-11-01",
+  "n": 1011,
+  "population": "LV",
+  "rep": 42.0,
+  "opp": 53.0,
+  "others": [],
+  "source": "https://en.wikipedia.org/wiki/2026_United_States_Senate_election_in_Michigan"
+ },
+ {
+  "state": "MI",
+  "pollster": "Research Co.",
+  "sponsor_party": null,
+  "end_date": "2026-11-01",
+  "n": 450,
+  "population": "LV",
+  "rep": 46.0,
+  "opp": 48.0,
+  "others": [],
+  "source": "https://en.wikipedia.org/wiki/2026_United_States_Senate_election_in_Michigan"
+ },
+ {
   "state": "MI-04",
   "pollster": "Public Policy Polling",
   "sponsor_party": "D",
@@ -16647,6 +16827,18 @@
   "population": "LV",
   "rep": 47.0,
   "opp": 42.0,
+  "others": [],
+  "source": "https://en.wikipedia.org/wiki/2026_United_States_House_of_Representatives_elections_in_Michigan"
+ },
+ {
+  "state": "MI-13",
+  "pollster": "Center for Strategic Politics",
+  "sponsor_party": "D",
+  "end_date": "2026-10-30",
+  "n": 310,
+  "population": "LV",
+  "rep": 19.0,
+  "opp": 69.0,
   "others": [],
   "source": "https://en.wikipedia.org/wiki/2026_United_States_House_of_Representatives_elections_in_Michigan"
  },
@@ -16898,6 +17090,30 @@
   "n": 714,
   "population": "LV",
   "rep": 41.0,
+  "opp": 48.0,
+  "others": [],
+  "source": "https://en.wikipedia.org/wiki/2026_United_States_Senate_election_in_Minnesota"
+ },
+ {
+  "state": "MN",
+  "pollster": "InsiderAdvantage",
+  "sponsor_party": "R",
+  "end_date": "2026-10-30",
+  "n": 1200,
+  "population": "LV",
+  "rep": 46.0,
+  "opp": 49.0,
+  "others": [],
+  "source": "https://en.wikipedia.org/wiki/2026_United_States_Senate_election_in_Minnesota"
+ },
+ {
+  "state": "MN",
+  "pollster": "Research Co.",
+  "sponsor_party": null,
+  "end_date": "2026-11-01",
+  "n": 450,
+  "population": "LV",
+  "rep": 43.0,
   "opp": 48.0,
   "others": [],
   "source": "https://en.wikipedia.org/wiki/2026_United_States_Senate_election_in_Minnesota"
@@ -18132,6 +18348,18 @@
  },
  {
   "state": "NC",
+  "pollster": "RedBox Research",
+  "sponsor_party": "D",
+  "end_date": "2026-10-23",
+  "n": 3292,
+  "population": "LV",
+  "rep": 43.0,
+  "opp": 50.0,
+  "others": [],
+  "source": "https://en.wikipedia.org/wiki/2026_United_States_Senate_election_in_North_Carolina"
+ },
+ {
+  "state": "NC",
   "pollster": "Quantus Insights",
   "sponsor_party": "R",
   "end_date": "2026-10-25",
@@ -18139,6 +18367,18 @@
   "population": "LV",
   "rep": 43.0,
   "opp": 51.0,
+  "others": [],
+  "source": "https://en.wikipedia.org/wiki/2026_United_States_Senate_election_in_North_Carolina"
+ },
+ {
+  "state": "NC",
+  "pollster": "YouGov",
+  "sponsor_party": null,
+  "end_date": "2026-10-29",
+  "n": 2130,
+  "population": "LV",
+  "rep": 44.0,
+  "opp": 55.0,
   "others": [],
   "source": "https://en.wikipedia.org/wiki/2026_United_States_Senate_election_in_North_Carolina"
  },
@@ -18552,6 +18792,18 @@
  },
  {
   "state": "NE",
+  "pollster": "National Public Affairs",
+  "sponsor_party": "R",
+  "end_date": "2026-10-29",
+  "n": 800,
+  "population": "LV",
+  "rep": 48.0,
+  "opp": 45.0,
+  "others": [],
+  "source": "https://en.wikipedia.org/wiki/2026_United_States_Senate_election_in_Nebraska"
+ },
+ {
+  "state": "NE",
   "pollster": "New York Times/Siena University",
   "sponsor_party": null,
   "end_date": "2026-10-29",
@@ -18559,6 +18811,18 @@
   "population": "LV",
   "rep": 49.0,
   "opp": 43.0,
+  "others": [],
+  "source": "https://en.wikipedia.org/wiki/2026_United_States_Senate_election_in_Nebraska"
+ },
+ {
+  "state": "NE",
+  "pollster": "YouGov",
+  "sponsor_party": null,
+  "end_date": "2026-10-29",
+  "n": 1979,
+  "population": "LV",
+  "rep": 49.0,
+  "opp": 49.0,
   "others": [],
   "source": "https://en.wikipedia.org/wiki/2026_United_States_Senate_election_in_Nebraska"
  },
@@ -19017,6 +19281,18 @@
   "population": "LV",
   "rep": 44.0,
   "opp": 50.0,
+  "others": [],
+  "source": "https://en.wikipedia.org/wiki/2026_United_States_Senate_election_in_New_Hampshire"
+ },
+ {
+  "state": "NH",
+  "pollster": "University of New Hampshire",
+  "sponsor_party": null,
+  "end_date": "2026-10-31",
+  "n": 2040,
+  "population": "LV",
+  "rep": 42.0,
+  "opp": 54.0,
   "others": [],
   "source": "https://en.wikipedia.org/wiki/2026_United_States_Senate_election_in_New_Hampshire"
  },
@@ -20067,6 +20343,18 @@
  },
  {
   "state": "OH",
+  "pollster": "Concord Public Opinion Partners",
+  "sponsor_party": "D",
+  "end_date": "2026-10-24",
+  "n": 496,
+  "population": "LV",
+  "rep": 42.0,
+  "opp": 46.0,
+  "others": [],
+  "source": "https://en.wikipedia.org/wiki/2026_United_States_Senate_special_election_in_Ohio"
+ },
+ {
+  "state": "OH",
   "pollster": "Suffolk University",
   "sponsor_party": null,
   "end_date": "2026-10-26",
@@ -20074,6 +20362,66 @@
   "population": "LV",
   "rep": 44.0,
   "opp": 47.0,
+  "others": [],
+  "source": "https://en.wikipedia.org/wiki/2026_United_States_Senate_special_election_in_Ohio"
+ },
+ {
+  "state": "OH",
+  "pollster": "YouGov",
+  "sponsor_party": null,
+  "end_date": "2026-10-29",
+  "n": 2090,
+  "population": "LV",
+  "rep": 48.0,
+  "opp": 50.0,
+  "others": [],
+  "source": "https://en.wikipedia.org/wiki/2026_United_States_Senate_special_election_in_Ohio"
+ },
+ {
+  "state": "OH",
+  "pollster": "InsiderAdvantage",
+  "sponsor_party": "R",
+  "end_date": "2026-10-30",
+  "n": 1200,
+  "population": "LV",
+  "rep": 47.0,
+  "opp": 49.0,
+  "others": [],
+  "source": "https://en.wikipedia.org/wiki/2026_United_States_Senate_special_election_in_Ohio"
+ },
+ {
+  "state": "OH",
+  "pollster": "ActiVote",
+  "sponsor_party": null,
+  "end_date": "2026-10-31",
+  "n": 400,
+  "population": "LV",
+  "rep": 50.0,
+  "opp": 50.0,
+  "others": [],
+  "source": "https://en.wikipedia.org/wiki/2026_United_States_Senate_special_election_in_Ohio"
+ },
+ {
+  "state": "OH",
+  "pollster": "New York Times/Siena University",
+  "sponsor_party": null,
+  "end_date": "2026-11-01",
+  "n": 717,
+  "population": "LV",
+  "rep": 44.0,
+  "opp": 49.0,
+  "others": [],
+  "source": "https://en.wikipedia.org/wiki/2026_United_States_Senate_special_election_in_Ohio"
+ },
+ {
+  "state": "OH",
+  "pollster": "Research Co.",
+  "sponsor_party": null,
+  "end_date": "2026-11-01",
+  "n": 450,
+  "population": "LV",
+  "rep": 44.0,
+  "opp": 45.0,
   "others": [],
   "source": "https://en.wikipedia.org/wiki/2026_United_States_Senate_special_election_in_Ohio"
  },
@@ -20734,6 +21082,18 @@
   "population": "LV",
   "rep": 25.0,
   "opp": 59.0,
+  "others": [],
+  "source": "https://en.wikipedia.org/wiki/2026_United_States_Senate_election_in_Rhode_Island"
+ },
+ {
+  "state": "RI",
+  "pollster": "University of New Hampshire",
+  "sponsor_party": null,
+  "end_date": "2026-10-31",
+  "n": 753,
+  "population": "LV",
+  "rep": 32.0,
+  "opp": 63.0,
   "others": [],
   "source": "https://en.wikipedia.org/wiki/2026_United_States_Senate_election_in_Rhode_Island"
  },
@@ -21426,7 +21786,7 @@
  {
   "state": "TX",
   "pollster": "Quantus Insights",
-  "sponsor_party": null,
+  "sponsor_party": "R",
   "end_date": "2026-06-04",
   "n": 800,
   "population": "LV",
@@ -21894,7 +22254,7 @@
  {
   "state": "TX",
   "pollster": "Quantus Insights",
-  "sponsor_party": null,
+  "sponsor_party": "R",
   "end_date": "2026-10-11",
   "n": 854,
   "population": "LV",
@@ -22134,12 +22494,24 @@
  {
   "state": "TX",
   "pollster": "Quantus Insights",
-  "sponsor_party": null,
+  "sponsor_party": "R",
   "end_date": "2026-10-28",
   "n": 1221,
   "population": "LV",
   "rep": 49.0,
   "opp": 48.0,
+  "others": [],
+  "source": "https://en.wikipedia.org/wiki/2026_United_States_Senate_election_in_Texas"
+ },
+ {
+  "state": "TX",
+  "pollster": "YouGov",
+  "sponsor_party": null,
+  "end_date": "2026-10-29",
+  "n": 2141,
+  "population": "LV",
+  "rep": 47.0,
+  "opp": 51.0,
   "others": [],
   "source": "https://en.wikipedia.org/wiki/2026_United_States_Senate_election_in_Texas"
  },
@@ -22151,6 +22523,42 @@
   "n": 900,
   "population": "LV",
   "rep": 45.0,
+  "opp": 48.0,
+  "others": [],
+  "source": "https://en.wikipedia.org/wiki/2026_United_States_Senate_election_in_Texas"
+ },
+ {
+  "state": "TX",
+  "pollster": "AtlasIntel",
+  "sponsor_party": null,
+  "end_date": "2026-11-01",
+  "n": 1678,
+  "population": "A",
+  "rep": 45.0,
+  "opp": 51.0,
+  "others": [],
+  "source": "https://en.wikipedia.org/wiki/2026_United_States_Senate_election_in_Texas"
+ },
+ {
+  "state": "TX",
+  "pollster": "New York Times/Siena University",
+  "sponsor_party": null,
+  "end_date": "2026-11-01",
+  "n": 1215,
+  "population": "LV",
+  "rep": 43.0,
+  "opp": 50.0,
+  "others": [],
+  "source": "https://en.wikipedia.org/wiki/2026_United_States_Senate_election_in_Texas"
+ },
+ {
+  "state": "TX",
+  "pollster": "Trafalgar Group",
+  "sponsor_party": "R",
+  "end_date": "2026-11-01",
+  "n": 1089,
+  "population": "LV",
+  "rep": 48.0,
   "opp": 48.0,
   "others": [],
   "source": "https://en.wikipedia.org/wiki/2026_United_States_Senate_election_in_Texas"
@@ -29347,6 +29755,18 @@
   "population": "LV",
   "opp": 53.0,
   "rep": 42.0,
+  "others": [],
+  "source": "https://en.wikipedia.org/wiki/2026_United_States_elections"
+ },
+ {
+  "state": "US",
+  "pollster": "Targoz Market Research",
+  "sponsor_party": null,
+  "end_date": "2026-10-22",
+  "n": 1118,
+  "population": "LV",
+  "opp": 49.0,
+  "rep": 46.0,
   "others": [],
   "source": "https://en.wikipedia.org/wiki/2026_United_States_elections"
  },
