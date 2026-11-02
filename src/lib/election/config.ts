@@ -16,7 +16,10 @@ type StateSettings = {
   rankedChoice?: boolean;
 };
 
-const S = (pollsClose: number, extra: Omit<StateSettings, "pollsClose"> = {}): StateSettings => ({ pollsClose, ...extra });
+const S = (pollsClose: number, extra: Omit<StateSettings, "pollsClose"> = {}): StateSettings => ({
+  pollsClose,
+  ...extra,
+});
 
 export const ELECTION = {
   /** Election night runs from here (the first polls close at 6pm Eastern) to the end. */
@@ -27,8 +30,16 @@ export const ELECTION = {
 
   simulations: 2000,
   seed: 2026,
-  /** 2026 turnout as a share of 2024's, until finished counties say otherwise (2022 was ~70% of 2020). */
-  turnout: 0.72,
+  /**
+   * 2026 turnout as a share of 2024's, until finished counties say otherwise.
+   * Default for states without their own figure: 2022 ran ~72% of 2024 and
+   * 2026 early voting set a midterm record (46M+ by Oct 30, past all of
+   * 2022's), so a bit above. States with their own figure below: 2022 turnout
+   * as a share of 2024, times 1 + half of how far 2026 early voting runs ahead
+   * of 2022 at the same point (half, because some early voters would have
+   * voted on Election Day anyway), capped at 0.9. Researched Nov 2.
+   */
+  turnout: 0.78,
   /** Extra votes after every precinct is in, as a share of what's counted. */
   lateVotes: 0.03,
   /** A county's own swing differs from the state's by about this much (points) at countyNoiseVotes votes. */
@@ -61,37 +72,37 @@ export const ELECTION = {
 
   states: {
     AL: S(20),
-    AK: S(25, { lateVotes: 0.35, rankedChoice: true }),
+    AK: S(25, { turnout: 0.8, lateVotes: 0.35, rankedChoice: true }), // 2022 0.78, no early data
     AR: S(20.5),
     CO: S(21),
     DE: S(20),
-    FL: S(20),
-    GA: S(19, { runoff: true }),
+    FL: S(20, { turnout: 0.735 }), // 2022 0.70, early +10%
+    GA: S(19, { turnout: 0.8, runoff: true }), // 2022 0.75, record early vote ~2.8M vs ~2.5M
     ID: S(23),
     IL: S(20),
-    IA: S(21),
-    KS: S(21),
+    IA: S(21, { turnout: 0.76 }), // 2022 0.72, early up ~12% (Pottawattamie)
+    KS: S(21, { turnout: 0.86 }), // 2022 0.75, early +30%
     KY: S(19),
-    LA: S(21),
-    ME: S(20, { rankedChoice: true, lateVotes: 0.05 }),
+    LA: S(21, { turnout: 0.74 }), // 2022 0.70, no early data
+    ME: S(20, { turnout: 0.9, rankedChoice: true, lateVotes: 0.05 }), // 2022 0.82, early +44% (capped)
     MA: S(20),
-    MI: S(21),
-    MN: S(21),
+    MI: S(21, { turnout: 0.82 }), // 2022 0.79, early reports conflict (+32% / -15%)
+    MN: S(21, { turnout: 0.86 }), // 2022 0.77, early +24%
     MS: S(20),
     MT: S(22),
-    NE: S(21),
-    NH: S(20),
+    NE: S(21, { turnout: 0.74 }), // 2022 0.70, no early data, open-race interest
+    NH: S(20, { turnout: 0.81 }), // 2022 0.75, no early voting
     NJ: S(20),
     NM: S(21),
-    NC: S(19.5),
-    OH: S(19.5),
+    NC: S(19.5, { turnout: 0.76 }), // 2022 0.66, early +30%
+    OH: S(19.5, { turnout: 0.8 }), // 2022 0.72, early +21%
     OK: S(20),
     OR: S(23, { lateVotes: 0.15 }),
     RI: S(20),
-    SC: S(19),
+    SC: S(19, { turnout: 0.8 }), // 2022 0.67, early +83% (capped at +20%)
     SD: S(21),
     TN: S(20),
-    TX: S(21),
+    TX: S(21, { turnout: 0.85 }), // 2022 0.71, early +50% (capped at +20%)
     VA: S(19),
     WV: S(19.5),
     WY: S(21),
