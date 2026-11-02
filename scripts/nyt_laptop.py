@@ -209,6 +209,17 @@ def votes_of(c):
         return 0
 
 
+def sum_units(units):
+    """One unit adding up every unit's candidate votes (when there is no state-level unit)."""
+    totals = {}
+    for u in units:
+        for c in first(u, "candidates", default=[]) or []:
+            cid = str(first(c, "nyt_id", "candidate_id", "candidate_key", "id", default=""))
+            t = totals.setdefault(cid, dict(c, votes=0))
+            t["votes"] += votes_of(c)
+    return {"level": "state", "candidates": list(totals.values())}
+
+
 def counties(data):
     race = find_race(data)
     if not race:
@@ -221,7 +232,7 @@ def counties(data):
     pick = [u for u in units if str(first(u, "level", default="")).lower() == "county"]
     statewide = not pick
     if statewide:
-        pick = [u for u in units if str(first(u, "level", default="")).lower() in ("state", "")][:1] or units[:1]
+        pick = [u for u in units if str(first(u, "level", default="")).lower() in ("state", "")][:1] or [sum_units(units)]
     out = []
     for u in pick:
         reported = first(u, "precincts_reporting", "precinctsReporting", "reporting")
