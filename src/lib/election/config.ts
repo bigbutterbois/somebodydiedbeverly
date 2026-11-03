@@ -32,14 +32,15 @@ export const ELECTION = {
   seed: 2026,
   /**
    * 2026 turnout as a share of 2024's, until finished counties say otherwise.
-   * Default for states without their own figure: 2022 ran ~72% of 2024 and
-   * 2026 early voting set a midterm record (46M+ by Oct 30, past all of
-   * 2022's), so a bit above. States with their own figure below: 2022 turnout
+   * Default for states without their own figure: the same rule as below on
+   * national numbers. 2022 ran ~72% of 2024, and the final 2026 early vote
+   * was 58.7M vs 45.9M in 2022 (+28%), so 0.72 x 1.14 = 0.82. States with
+   * their own figure below: 2022 turnout
    * as a share of 2024, times 1 + half of how far 2026 early voting runs ahead
    * of 2022 at the same point (half, because some early voters would have
    * voted on Election Day anyway), capped at 0.9. Researched Nov 2.
    */
-  turnout: 0.78,
+  turnout: 0.82,
   /** Extra votes after every precinct is in, as a share of what's counted. */
   lateVotes: 0.03,
   /** A county's own swing differs from the state's by about this much (points) at countyNoiseVotes votes. */
