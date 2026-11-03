@@ -306,8 +306,9 @@ function MarginBar({ race, scale }: { race: LiveRace; scale: Scale }) {
   );
 }
 
+// Tint a row once votes are coming in, so races with real results stand out.
 const tintFor = (r: LiveRace) =>
-  r.status === "forecast" ? "transparent" : r.margin.mean >= 0 ? "rgba(74,134,232,0.07)" : "rgba(229,83,75,0.07)";
+  r.status !== "live" ? "transparent" : r.margin.mean >= 0 ? "rgba(74,134,232,0.07)" : "rgba(229,83,75,0.07)";
 
 function RaceName({ r }: { r: LiveRace }) {
   return (
