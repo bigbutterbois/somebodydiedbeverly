@@ -69,19 +69,30 @@ export default async function CountySheetPage({ params }: PageProps<"/admin/elec
   // Early-vote check: how the early-vote assumption is playing out.
   const ec = sheet.earlyCheck;
   const toward = (d: number) => (Math.abs(d) < 0.05 ? "even" : `${Math.abs(d).toFixed(1)} pts more ${d > 0 ? o : "R"}`);
-  const moved = (d: number) => (Math.abs(d) < 0.05 ? "did not move" : `moved ${Math.abs(d).toFixed(1)} pts toward ${d > 0 ? o : "R"}`);
-  const headline =
+  const party = (d: number) => (d > 0 ? o : "R");
+  const moved = (d: number) =>
+    Math.abs(d) < 0.05 ? "no change from the forecast" : `${Math.abs(d).toFixed(1)} pts toward ${party(d)} from the forecast`;
+  // Plain three-line read (Mike): how the votes compare with what was
+  // expected, what that did to the projection, and why when the two differ.
+  const headline: string[] =
     ec.partialVsExpected !== null
-      ? `Votes from counties still counting are running ${toward(ec.partialVsExpected)} than the model expected at this stage. ` +
-        `${Math.abs(ec.asLean) >= Math.abs(ec.asSwing) ? "Mostly mirage" : "Mostly real"}: the model now expects early votes to run ` +
-        `${toward(ec.learnedLean)} than Election Day (assumed ${ec.assumedLean ? toward(ec.assumedLean) : "no gap"}), ` +
-        `and its statewide estimate ${moved(ec.asSwing)} from the forecast.`
+      ? [
+          `Votes counted so far are ${toward(ec.partialVsExpected)} than the model expected at this stage (its early-vote assumption included).`,
+          `Projected final result: ${moved(ec.asSwing)}.`,
+          ...(Math.abs(ec.asSwing) < Math.abs(ec.partialVsExpected) / 2 && Math.abs(ec.partialVsExpected) >= 1
+            ? [
+                `Why it moved less: the model thinks the early vote leans further ${party(ec.partialVsExpected)} than it assumed, so the Election Day votes still to come should pull it back${
+                  ec.finishedVsForecast !== null ? ` (finished counties are ${toward(ec.finishedVsForecast)} than the forecast)` : ""
+                }.`,
+              ]
+            : []),
+        ]
       : ec.finishedVsForecast !== null
-        ? `Only finished counties so far: ${toward(ec.finishedVsForecast)} than the forecast.`
-        : "No votes yet.";
+        ? [`Only finished counties so far: ${toward(ec.finishedVsForecast)} than the forecast.`]
+        : ["No votes yet."];
   const earlyFacts: [string, string][] = [
     [
-      "Early-vote lean: assumed / read now",
+      "Early vote vs Election Day: assumed / now",
       `${ec.assumedLean ? toward(ec.assumedLean) : "none"} / ${ec.learnedLean ? toward(ec.learnedLean) : "none"}`,
     ],
     [
@@ -137,7 +148,11 @@ export default async function CountySheetPage({ params }: PageProps<"/admin/elec
 
       <section className="flex flex-col gap-2 rounded-lg border border-line p-4">
         <h2 className="text-sm font-medium">Early-vote check</h2>
-        <p className="text-sm">{headline}</p>
+        {headline.map((line) => (
+          <p key={line} className="text-sm">
+            {line}
+          </p>
+        ))}
         <dl className="grid grid-cols-1 gap-x-8 gap-y-1 text-sm sm:grid-cols-2">
           {earlyFacts.map(([k, v]) => (
             <div key={k} className="flex justify-between gap-4 border-b border-line py-1">
