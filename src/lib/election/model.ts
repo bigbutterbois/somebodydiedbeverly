@@ -121,11 +121,15 @@ type Prepared = {
     base: County;
     count: CountyCount | null;
     expected: number;
+    /** What we expected before any votes: 2024 votes times the state's assumed turnout. */
+    expected0: number;
     tau: number;
   }[];
   /** 2024 presidential margin statewide. */
   base2024: number;
   unmatched: string[];
+  /** Uncertainty left in statewide turnout (log scale), after what the counts have shown. */
+  turnoutSd: number;
 };
 
 function prepare(prior: Prior, counts: CountyCount[] | null): Prepared {
@@ -146,10 +150,27 @@ function prepare(prior: Prior, counts: CountyCount[] | null): Prepared {
   if (counts) {
     const fipsSet = new Set(units.map((u) => u.fips));
     const nameSet = new Set(units.map((u) => normName(u.name)));
+    // Two feed rows for one county (a county split in parts) add up rather than overwrite.
+    const put = (key: string, c: CountyCount) => {
+      const had = byKey.get(key);
+      byKey.set(
+        key,
+        had
+          ? {
+              ...had,
+              rep: had.rep + c.rep,
+              opp: had.opp + c.opp,
+              other: had.other + c.other,
+              complete: Boolean(had.complete && c.complete),
+              expected: had.expected && c.expected ? had.expected + c.expected : undefined,
+            }
+          : c,
+      );
+    };
     for (const c of counts) {
-      if (statewide) byKey.set(prior.state, c);
-      else if (c.fips && fipsSet.has(c.fips)) byKey.set(c.fips, c);
-      else if (nameSet.has(normName(c.name))) byKey.set(normName(c.name), c);
+      if (statewide) put(prior.state, c);
+      else if (c.fips && fipsSet.has(c.fips)) put(c.fips, c);
+      else if (nameSet.has(normName(c.name))) put(normName(c.name), c);
       else if (c.rep + c.opp + c.other > 0) unmatched.push(c.name);
     }
   }
@@ -158,40 +179,134 @@ function prepare(prior: Prior, counts: CountyCount[] | null): Prepared {
     prior,
     base2024,
     unmatched,
+    turnoutSd: ELECTION.turnoutNoise,
     counties: units.map((u) => {
       const count = statewide ? byKey.get(prior.state) ?? null : byKey.get(u.fips) ?? byKey.get(normName(u.name)) ?? null;
       const counted = count ? count.rep + count.opp + count.other : 0;
-      let expected = count?.expected && count.expected > 0 ? count.expected : u.votes * turnout;
+      const expected0 = u.votes * turnout;
+      let expected = count?.expected && count.expected > 0 ? count.expected : expected0;
       if (count?.complete) expected = counted * (1 + (cfg.lateVotes ?? ELECTION.lateVotes));
       // Never expect fewer votes than are already counted.
       expected = Math.max(expected, counted * (count?.complete ? 1 : 1.02));
       const tau = ELECTION.countyNoise * Math.min(3, Math.max(0.15, Math.sqrt(ELECTION.countyNoiseVotes / Math.max(u.votes, 1))));
-      return { base: u, count, expected, tau };
+      return { base: u, count, expected, expected0, tau };
     }),
   };
 }
 
-/** Learns this year's turnout from finished counties, so % counted improves through the night. */
-function refreshTurnout(p: Prepared) {
+const normalPdf = (z: number) => Math.exp(-0.5 * z * z) / Math.sqrt(2 * Math.PI);
+/** Standard normal upper tail, 1 - CDF (Abramowitz-Stegun 7.1.26 via erfc). */
+function upperTail(z: number) {
+  const x = Math.abs(z) / Math.SQRT2;
+  const t = 1 / (1 + 0.3275911 * x);
+  const erfc = t * (0.254829592 + t * (-0.284496736 + t * (1.421413741 + t * (-1.453152027 + t * 1.061405429)))) * Math.exp(-x * x);
+  return z >= 0 ? erfc / 2 : 1 - erfc / 2;
+}
+/** Inverse Mills ratio: the mean of a standard normal above z, E[Z | Z > z]. */
+function millsAbove(z: number) {
+  if (z > 6) return z + 1 / z;
+  const tail = upperTail(z);
+  return tail > 1e-300 ? normalPdf(z) / tail : z + 1 / Math.max(z, 1e-9);
+}
+
+/**
+ * Learns this year's turnout from the counts, live, so a state's expected
+ * vote (and so its % counted) moves as counties come in over or under what
+ * we expected for them.
+ *
+ * Each county's final vote is its expected vote times a turnout factor; on
+ * the log scale that factor is a statewide level, plus a tilt with the
+ * county's 2024 margin (blue counties can turn out more than red ones, or
+ * less), plus the county's own noise. A finished county shows its factor
+ * outright. A county still counting shows only a floor: its final vote is at
+ * least what's counted, so one already past its expected vote says turnout
+ * is up, while one a third of the way in says nothing yet. The level and tilt
+ * are fit to all of that at once (a censored regression, by EM), starting
+ * from the assumed turnout, and every county not finished gets its expected
+ * vote from the fit.
+ */
+function learnTurnout(p: Prepared) {
   const cfg = ELECTION.states[p.prior.state] ?? {};
-  const assumed = cfg.turnout ?? ELECTION.turnout;
-  let done = 0;
-  let done24 = 0;
+  const late = cfg.lateVotes ?? ELECTION.lateVotes;
+  type Obs = { c: Prepared["counties"][number]; x: number; sd: number; y: number; exact: boolean };
+  const obs: Obs[] = [];
   for (const c of p.counties) {
-    if (c.count?.complete) {
-      done += c.count.rep + c.count.opp + c.count.other;
-      done24 += c.base.votes;
+    const v = c.count ? c.count.rep + c.count.opp + c.count.other : 0;
+    const x = c.base.margin / 100;
+    const sd = ELECTION.countyTurnoutNoise * Math.min(2, Math.max(0.5, Math.sqrt(ELECTION.countyNoiseVotes / Math.max(c.base.votes, 1))));
+    if (c.count?.expected && c.count.expected > 0) {
+      // The feed's own estimate stands; it also tells us about turnout.
+      obs.push({ c, x, sd, y: Math.log(Math.max(c.count.expected, v) / c.expected0), exact: true });
+    } else if (c.count?.complete && v > 0) {
+      obs.push({ c, x, sd, y: Math.log((v * (1 + late)) / c.expected0), exact: true });
+    } else if (v > 0) {
+      obs.push({ c, x, sd, y: Math.log((v * 1.02) / c.expected0), exact: false });
     }
   }
-  if (done24 === 0) return;
-  // Shrink toward the assumed ratio until a good share of the state is done.
-  const all24 = p.counties.reduce((s, c) => s + c.base.votes, 0);
-  const w = Math.min(1, (done24 / all24) * 2);
-  const ratio = (1 - w) * assumed + (w * done) / done24;
+  if (!obs.length) return;
+
+  const pa = 1 / ELECTION.turnoutNoise ** 2;
+  const pg = 1 / ELECTION.turnoutTiltSd ** 2;
+  let a = 0;
+  let g = 0;
+  // Information matrix (for the uncertainty), rebuilt each pass.
+  let i11 = pa;
+  let i12 = 0;
+  let i22 = pg;
+  for (let iter = 0; iter < 30; iter++) {
+    let a11 = pa;
+    let a12 = 0;
+    let a22 = pg;
+    let b1 = 0;
+    let b2 = 0;
+    i11 = pa;
+    i12 = 0;
+    i22 = pg;
+    for (const o of obs) {
+      const w = 1 / o.sd ** 2;
+      const mu = a + g * o.x;
+      let y = o.y;
+      let info = 1;
+      if (!o.exact) {
+        const z = (o.y - mu) / o.sd;
+        const lam = millsAbove(z);
+        y = mu + o.sd * lam;
+        info = Math.min(1, Math.max(0, lam * (lam - z)));
+      }
+      a11 += w;
+      a12 += w * o.x;
+      a22 += w * o.x * o.x;
+      b1 += w * y;
+      b2 += w * o.x * y;
+      i11 += w * info;
+      i12 += w * info * o.x;
+      i22 += w * info * o.x * o.x;
+    }
+    const det = a11 * a22 - a12 * a12;
+    const na = (a22 * b1 - a12 * b2) / det;
+    const ng = (a11 * b2 - a12 * b1) / det;
+    const moved = Math.abs(na - a) + Math.abs(ng - g);
+    a = na;
+    g = ng;
+    if (moved < 1e-5) break;
+  }
+  const idet = i11 * i22 - i12 * i12;
+  // Turnout still unknown statewide: the level's uncertainty, never quite zero.
+  p.turnoutSd = Math.max(Math.sqrt(i22 / idet), 0.01);
+
+  const exact = new Set(obs.filter((o) => o.exact).map((o) => o.c));
   for (const c of p.counties) {
-    if (c.count?.complete || c.count?.expected) continue;
-    const counted = c.count ? c.count.rep + c.count.opp + c.count.other : 0;
-    c.expected = Math.max(c.base.votes * ratio, counted * 1.02);
+    if (exact.has(c)) continue;
+    const v = c.count ? c.count.rep + c.count.opp + c.count.other : 0;
+    const x = c.base.margin / 100;
+    const mu = a + g * x;
+    let y = mu;
+    if (v > 0) {
+      const sd = ELECTION.countyTurnoutNoise * Math.min(2, Math.max(0.5, Math.sqrt(ELECTION.countyNoiseVotes / Math.max(c.base.votes, 1))));
+      const floor = Math.log((v * 1.02) / c.expected0);
+      y = mu + sd * millsAbove((floor - mu) / sd);
+    }
+    c.expected = Math.max(c.expected0 * Math.exp(y), v * 1.02);
   }
 }
 
@@ -334,7 +449,7 @@ function simulate(p: Prepared, est: SwingEstimate, national: Float64Array, runof
     // modelSlack: room for what this simple model gets wrong, on top of its own uncertainty.
     const S = est.s + l11 * z1 + ELECTION.modelSlack * r.normal();
     const B = est.b + l21 * z1 + l22 * r.normal();
-    const turnout = Math.exp(ELECTION.turnoutNoise * r.normal());
+    const turnout = Math.exp(p.turnoutSd * r.normal());
     let opp = opp0;
     let rep = rep0;
     let other = other0;
@@ -396,7 +511,7 @@ export function runModel(input: LiveInput) {
   const prepared = input.priors.map((prior) => {
     const counts = input.counts[prior.state];
     const p = prepare(prior, counts ?? null);
-    refreshTurnout(p);
+    learnTurnout(p);
     return { p, hasFeed: counts !== undefined, swing: estimateSwing(p) };
   });
 
@@ -574,7 +689,7 @@ const shares = (margin: number, other: number) => {
 /** The admin county sheet for one race: expectations filled in before the night, live numbers as they arrive. */
 export function countySheet(prior: Prior, counts: CountyCount[] | null): CountySheet {
   const p = prepare(prior, counts);
-  refreshTurnout(p);
+  learnTurnout(p);
   const est = estimateSwing(p);
   const forecastSwing = prior.mean - p.base2024;
   const breakevenSwing = -p.base2024;
