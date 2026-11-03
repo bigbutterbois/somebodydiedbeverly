@@ -4,14 +4,11 @@ import { useEffect, useState } from "react";
 import type { ElectionPost } from "@/lib/election/posts";
 
 const POLL_MS = 60_000;
-const SHOWN = 3;
 
-// Mike's live commentary at the top of the election page. Checks for new
-// posts once a minute while the page is open; shows the newest few, with the
-// rest behind a button.
+// Mike's live commentary beside the election page's title (below it on
+// phones). Checks for new posts once a minute while the page is open.
 export function LiveBlog({ initial }: { initial: ElectionPost[] }) {
   const [posts, setPosts] = useState(initial);
-  const [open, setOpen] = useState(false);
 
   useEffect(() => {
     const tick = async () => {
@@ -32,23 +29,21 @@ export function LiveBlog({ initial }: { initial: ElectionPost[] }) {
   }, []);
 
   if (!posts.length) return null;
-  const shown = open ? posts : posts.slice(0, SHOWN);
 
+  // About two posts tall; older ones scroll inside the box.
   return (
-    <section aria-label="Live updates" className="flex max-w-2xl flex-col gap-4">
-      {shown.map((p, i) => (
-        <article key={p.id} className={`flex flex-col gap-1 border-l-2 pl-4 ${i === 0 ? "border-accent" : "border-line"}`}>
-          <p className="text-xs text-muted">
+    <section
+      aria-label="Live updates"
+      className="flex max-h-48 flex-col gap-3 overflow-y-auto rounded border border-line p-3 text-xs"
+    >
+      {posts.map((p, i) => (
+        <article key={p.id} className={`flex flex-col gap-0.5 border-l-2 pl-3 ${i === 0 ? "border-accent" : "border-line"}`}>
+          <p className="text-muted">
             <span className="font-medium text-foreground">WM Admin</span> · {stamp(p.created_at)}
           </p>
-          <p className="whitespace-pre-line text-sm leading-relaxed">{p.body}</p>
+          <p className="whitespace-pre-line leading-relaxed">{p.body}</p>
         </article>
       ))}
-      {posts.length > SHOWN && (
-        <button type="button" onClick={() => setOpen(!open)} className="self-start text-sm text-accent underline">
-          {open ? "Show fewer" : `Show all ${posts.length} updates`}
-        </button>
-      )}
     </section>
   );
 }
