@@ -369,7 +369,6 @@ function DesktopTable({ races, scale }: { races: LiveRace[]; scale: Scale }) {
       </div>
       {races.map((r) => {
         const proj = r.margin.mean;
-        const projected = r.status === "live" || r.called;
         return (
           <div key={r.state} className={`${cols} items-center gap-x-3 border-b border-line py-2 tabular-nums`} style={{ background: tintFor(r) }}>
             <RaceName r={r} />
@@ -384,7 +383,6 @@ function DesktopTable({ races, scale }: { races: LiveRace[]; scale: Scale }) {
             <WinCell r={r} />
             <span className="text-right" style={{ color: sideColor(proj) }}>
               {marginLabel(r, proj)}
-              {!projected && <span className="block text-xs text-muted">forecast</span>}
             </span>
             <MarginBar race={r} scale={scale} />
           </div>
@@ -432,14 +430,12 @@ function PhoneTables({ races, scale }: { races: LiveRace[]; scale: Scale }) {
         </div>
         {races.map((r) => {
           const proj = r.margin.mean;
-          const projected = r.status === "live" || r.called;
-          return (
+            return (
             <div key={r.state} className={`${bottom} items-center gap-x-3 border-b border-line py-1.5 tabular-nums`} style={{ background: tintFor(r) }}>
               <span className="flex min-w-0 flex-col pl-1 leading-tight">
                 <span className="truncate">{r.name}</span>
                 <span className="truncate text-xs" style={{ color: sideColor(proj) }}>
                   {marginLabel(r, proj)}
-                  {!projected && <span className="text-muted"> fcst</span>}
                 </span>
               </span>
               <MarginBar race={r} scale={scale} />
