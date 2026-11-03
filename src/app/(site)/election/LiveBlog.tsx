@@ -36,9 +36,12 @@ export function LiveBlog({ initial }: { initial: ElectionPost[] }) {
       className="flex max-h-48 max-w-2xl flex-col gap-3 overflow-y-auto rounded border border-line p-3 text-xs md:max-h-60 md:gap-4 md:p-4 md:text-sm"
     >
       {posts.map((p, i) => (
-        <article key={p.id} className={`flex flex-col gap-0.5 border-l-2 pl-3 ${i === 0 ? "border-accent" : "border-line"}`}>
+        <article
+          key={p.id}
+          className={`flex flex-col gap-0.5 border-l-2 pl-3 ${i === 0 || p.author === "WMHQ Bot" ? "border-accent" : "border-line"} ${p.author === "WMHQ Bot" ? "rounded-r bg-accent/15 py-1.5 pr-2" : ""}`}
+        >
           <p className="text-muted">
-            <span className="font-medium text-foreground">WM Admin</span> · {stamp(p.created_at)}
+            <span className="font-medium text-foreground">{p.author ?? "WM Admin"}</span> · {stamp(p.created_at)}
           </p>
           <p className="whitespace-pre-line leading-relaxed">{p.body}</p>
         </article>

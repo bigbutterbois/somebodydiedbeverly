@@ -68,7 +68,7 @@ export const ELECTION = {
   signalWeight: 0.5,
   /** Our own call: this sure, with at least this share of the vote counted. */
   callAt: 0.995,
-  callMinCounted: 0.5,
+  callMinCounted: 0.1,
 
   states: {
     AL: S(20),

@@ -59,7 +59,10 @@ function PostRow({ post }: { post: ElectionPost }) {
 
   return (
     <li className="flex items-start gap-3 border-b border-line pb-2">
-      <span className="shrink-0 text-xs text-muted tabular-nums">{time}</span>
+      <span className="shrink-0 text-xs text-muted tabular-nums">
+        {time}
+        {post.author && post.author !== "WM Admin" && <span className="block">{post.author}</span>}
+      </span>
       {editing ? (
         <div className="flex flex-1 flex-col gap-2">
           <textarea

@@ -408,12 +408,20 @@ export function runModel(input: LiveInput) {
     wSum += swing.info;
   }
   const signal = wSum > 0 ? zSum / Math.max(wSum, 1) : 0;
+  // Each state is nudged only by the *other* states (leave-one-out), so its own
+  // votes don't count twice: once in its own read and again through the signal.
+  const signalWithout = (p: Prepared, swing: SwingEstimate) => {
+    if (swing.info < ELECTION.signalMinInfo) return signal;
+    const z = zSum - (swing.info * (swing.s - swing.priorSwing)) / p.prior.sd;
+    const w = wSum - swing.info;
+    return w > 1e-9 ? z / Math.max(w, 1) : 0;
+  };
 
   const races: RaceResult[] = prepared.map(({ p, hasFeed, swing }, index) => {
     const state = p.prior.state;
     const hasVotes = p.counties.some((c) => c.count && c.count.rep + c.count.opp + c.count.other > 0);
     // Nudge states that haven't said much yet by the national signal.
-    const shift = ELECTION.signalWeight * signal * p.prior.sd * (1 - Math.max(0, swing.info));
+    const shift = ELECTION.signalWeight * signalWithout(p, swing) * p.prior.sd * (1 - Math.max(0, swing.info));
     const est = shift !== 0 ? estimateSwing(p, shift) : swing;
     const runoffRule = Boolean(ELECTION.states[state]?.runoff);
     const sim = simulate(p, est, national, runoffRule, ELECTION.seed + index + 1);

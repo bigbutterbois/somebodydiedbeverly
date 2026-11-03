@@ -39,6 +39,7 @@ export function demoCounts(forecast: Forecast, percent: number): Record<string, 
 export function demoPosts() {
   const at = (min: number) => new Date(Date.parse("2026-11-04T03:00:00Z") - min * 60_000).toISOString();
   return [
+    { id: -4, body: "RACE CALLED: Ashley Moody (R) wins in Florida", created_at: at(-2), author: "WMHQ Bot" },
     {
       id: -1,
       body: "North Carolina's early vote is in and Cooper is running about two points ahead of where he needs to be in Wake and Mecklenburg. The rural east hasn't reported much yet, so expect this to tighten.",
