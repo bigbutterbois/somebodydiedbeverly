@@ -420,8 +420,21 @@ export function runModel(input: LiveInput) {
 
     const status: RaceResult["status"] = hasVotes ? "live" : hasFeed ? "waiting" : "forecast";
     // Until votes arrive (and before any national signal), show the forecast's own odds.
-    const pOpp = !hasVotes && shift === 0 ? p.prior.pOpp : sim.pOpp;
-    const margin = sim.margin;
+    const asForecast = !hasVotes && shift === 0;
+    const pOpp = asForecast ? p.prior.pOpp : sim.pOpp;
+    // Likewise the margin: centre the simulated range on the forecast's own mean
+    // so the two pages agree to the decimal (the simulation alone lands a tenth
+    // or two off from random noise).
+    const d = asForecast ? p.prior.mean - sim.margin.mean : 0;
+    const margin = d
+      ? {
+          mean: round1(p.prior.mean),
+          p5: round1(sim.margin.p5 + d),
+          p25: round1(sim.margin.p25 + d),
+          p75: round1(sim.margin.p75 + d),
+          p95: round1(sim.margin.p95 + d),
+        }
+      : sim.margin;
     const called =
       status === "live" && sim.counted >= ELECTION.callMinCounted && input.closed.has(state)
         ? pOpp >= ELECTION.callAt
