@@ -23,17 +23,13 @@ export default async function ElectionPage({ searchParams }: PageProps<"/electio
 
   return (
     <div className="flex flex-col gap-8 py-6">
-      <header className="flex flex-col gap-2">
-        <h1 className="text-4xl font-light tracking-tight">{t("election.title")}</h1>
-        <p className="max-w-2xl text-sm text-muted">{t("election.intro")}</p>
-      </header>
+      <h1 className="text-4xl font-light tracking-tight">{t("election.title")}</h1>
       {demo > 0 && <p className="text-sm text-danger">Demo: these results are made up, about {demo}% counted.</p>}
       {snapshot ? (
         <LiveBoard
           key={demo}
           demo={demo > 0}
           initial={snapshot}
-          live={Boolean(saved) || demo > 0}
           history={demo ? [] : history}
           shapes={stateShapes}
           borders={stateBorders}

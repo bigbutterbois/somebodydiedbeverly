@@ -12,7 +12,6 @@ const POLL_MS = 60_000;
 export function LiveBoard({
   initial,
   demo,
-  live,
   history: initialHistory,
   shapes,
   borders,
@@ -21,7 +20,6 @@ export function LiveBoard({
 }: {
   initial: LiveSnapshot;
   demo?: boolean;
-  live: boolean;
   history: { at: string; p: number }[];
   shapes: Shape[];
   borders: string;
@@ -29,7 +27,6 @@ export function LiveBoard({
   height: number;
 }) {
   const [snap, setSnap] = useState(initial);
-  const [isLive, setLive] = useState(live);
   const [history, setHistory] = useState(initialHistory);
   const [all, setAll] = useState(false);
 
@@ -42,7 +39,6 @@ export function LiveBoard({
         const res = await fetch("/api/election/latest", { cache: "no-store" });
         const next = (await res.json()) as LiveSnapshot | null;
         if (!next) return;
-        setLive(true);
         setSnap((prev) => {
           if (prev.at !== next.at) setHistory((h) => [...h, { at: next.at, p: next.control.pDemControl }]);
           return next;
@@ -73,19 +69,6 @@ export function LiveBoard({
 
   return (
     <div className="flex flex-col gap-10">
-      <p className="text-sm text-muted">
-        {isLive ? (
-          <>
-            <span className="mr-1.5 inline-block size-2 animate-pulse rounded-full bg-accent align-middle" />
-            Updated {clock(snap.at)}
-          </>
-        ) : (
-          "Results start when the first polls close, 6pm Eastern on Tuesday, November 3. Until then this is the forecast's starting point."
-        )}
-        {" · "}
-        {snap.forecastFinal ? "Final forecast" : "Forecast"} from {dayClock(snap.forecastAt)}
-      </p>
-
       <section className="grid items-center gap-8 md:grid-cols-[minmax(0,22rem)_1fr]">
         <Needle snap={snap} history={history} />
         <LiveMap races={snap.races} shapes={shapes} borders={borders} width={width} height={height} />
@@ -105,15 +88,6 @@ export function LiveBoard({
 }
 
 // ---------------------------------------------------------------------------
-
-function clock(iso: string) {
-  return new Date(iso).toLocaleTimeString("en-US", { hour: "numeric", minute: "2-digit", timeZone: "America/New_York" }) + " ET";
-}
-
-function dayClock(iso: string) {
-  const d = new Date(iso);
-  return `${d.toLocaleDateString("en-US", { weekday: "short", timeZone: "America/New_York" })} ${clock(iso)}`;
-}
 
 const last = (name: string) => name.trim().split(/\s+/).pop() ?? name;
 /** A chance out of 100; only a called race shows 100, so simulated odds stop at ">99". */
