@@ -50,6 +50,11 @@ const SCENARIOS: Record<string, Scenario> = {
   // Big cities count slowly and run well over turnout.
   slowcity: { turnoutShift: 0.1, turnoutSd: 0.03, partisanTurnout: 0.15, earlyLean: 6, bigCountyDelay: 2, lateShare: 0.06 },
   // Election Day votes first: early batch leans red.
+  // No gap at all between early and Election Day votes.
+  nolean: { turnoutShift: 0, turnoutSd: 0.07, partisanTurnout: 0, earlyLean: 0, bigCountyDelay: 0.5, lateShare: 0.03 },
+  // A big mail-vs-Election-Day gap (2020 style): first votes 20 points bluer, or redder.
+  bigblue: { turnoutShift: 0, turnoutSd: 0.07, partisanTurnout: 0, earlyLean: 20, bigCountyDelay: 0.5, lateShare: 0.03 },
+  bigred: { turnoutShift: 0, turnoutSd: 0.07, partisanTurnout: 0, earlyLean: -20, bigCountyDelay: 0.5, lateShare: 0.03 },
   redfirst: { turnoutShift: 0, turnoutSd: 0.07, partisanTurnout: 0, earlyLean: -8, bigCountyDelay: 0.5, lateShare: 0.03 },
 };
 
@@ -59,6 +64,10 @@ const states = (args[1] ?? "NC,GA,TX,SC,IA,OH,MI").split(",");
 const nights = Number(args[2] ?? 40);
 
 if (process.env.CALL_MIN) ELECTION.callMinCounted = Number(process.env.CALL_MIN);
+// Knobs for trying settings without editing config: early-lean spread, and a scale on every state's earlyLean.
+if (process.env.EARLY_SD) ELECTION.earlyLeanSd = Number(process.env.EARLY_SD);
+if (process.env.LEAN_SCALE)
+  for (const s of Object.values(ELECTION.states)) if (s.earlyLean) s.earlyLean *= Number(process.env.LEAN_SCALE);
 const forecast = JSON.parse(readFileSync(process.env.FORECAST_JSON ?? "/tmp/latest.json", "utf8")) as Forecast;
 const priors = new Map(priorsFrom(forecast).map((p) => [p.state, p]));
 

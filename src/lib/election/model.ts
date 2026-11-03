@@ -317,6 +317,37 @@ function countedShare(c: Prepared["counties"][number]) {
   return { v, f: v > 0 ? Math.min(1, v / c.expected) : 0 };
 }
 
+/**
+ * A county with a city that reports on its own (Detroit in Wayne), part
+ * counted: guesses how much of the count is the city from how blue it is,
+ * given the statewide swing, and returns the 2024 margin of the votes still
+ * to come (more city left means bluer). The county's partial count then
+ * stays out of the swing estimate, since its margin mostly says which part
+ * reported. Null for any other county, or once it has finished.
+ */
+function splitRemainder(p: Prepared, c: Prepared["counties"][number], s: number, b: number) {
+  const split = ELECTION.splitCounties[p.prior.state]?.[c.base.name];
+  if (!split || !c.count || c.count.complete) return null;
+  const { v, f } = countedShare(c);
+  if (v <= 0) return null;
+  const restVotes = c.base.votes - split.votes;
+  if (restVotes <= 0) return null;
+  const restMargin = (c.base.margin * c.base.votes - split.margin * split.votes) / restVotes;
+  const seen = ((c.count.opp - c.count.rep) / v) * 100 - s - b * (1 - f);
+  const cityShare = Math.min(1, Math.max(0, (seen - restMargin) / (split.margin - restMargin)));
+  const cityExpected = (c.expected * split.votes) / c.base.votes;
+  const cityLeft = Math.max(cityExpected - cityShare * v, 0);
+  const restLeft = Math.max(c.expected - cityExpected - (1 - cityShare) * v, 0);
+  const left = cityLeft + restLeft;
+  return {
+    cityShare,
+    base: left > 0 ? (cityLeft * split.margin + restLeft * restMargin) / left : c.base.margin,
+  };
+}
+
+const isSplitPartial = (p: Prepared, c: Prepared["counties"][number]) =>
+  Boolean(ELECTION.splitCounties[p.prior.state]?.[c.base.name] && c.count && !c.count.complete);
+
 /** Share of the state's expected vote counted so far. */
 function stateCounted(p: Prepared) {
   let counted = 0;
@@ -364,7 +395,7 @@ function readResults(p: Prepared, priorSwing: number) {
   let y2 = (cfg.earlyLean ?? 0) * a22;
   for (const c of p.counties) {
     const { v, f } = countedShare(c);
-    if (!c.count || v <= 0) continue;
+    if (!c.count || v <= 0 || isSplitPartial(p, c)) continue;
     const swing = ((c.count.opp - c.count.rep) / v) * 100 - c.base.margin;
     const x = 1 - f;
     const w = 1 / (c.tau ** 2 + (ELECTION.partialNoise * x) ** 2);
@@ -416,13 +447,14 @@ function simulate(p: Prepared, est: SwingEstimate, national: Float64Array, runof
     // How much of this county's own quirk its partial count has shown.
     const shown = v > 0 ? c.tau ** 2 / (c.tau ** 2 + partial) : 0;
     const otherShare = v > 0 ? c.count!.other / v : ELECTION.otherShare;
+    const split = splitRemainder(p, c, est.s, est.b);
     return {
       done: Boolean(c.count?.complete) && c.expected <= v * 1.0001,
       left: Math.max(c.expected - v, 0),
       f,
-      quirk: shown * (swingHere - est.s - est.b * x),
-      quirkSd: c.tau * Math.sqrt(1 - shown),
-      base: c.base.margin,
+      quirk: split ? 0 : shown * (swingHere - est.s - est.b * x),
+      quirkSd: split ? c.tau : c.tau * Math.sqrt(1 - shown),
+      base: split ? split.base : c.base.margin,
       otherShare: Math.min(otherShare, 0.5),
     };
   });
@@ -700,8 +732,9 @@ export function countySheet(prior: Prior, counts: CountyCount[] | null): CountyS
     // early-vote lean, plus whatever of its own quirk the count has shown.
     const x = 1 - f;
     const shown = v > 0 ? c.tau ** 2 / (c.tau ** 2 + (ELECTION.partialNoise * x) ** 2) : 0;
-    const quirk = liveMargin === null ? 0 : shown * (liveMargin - c.base.margin - est.s - est.b * x);
-    const restMargin = c.base.margin + est.s + quirk - est.b * f;
+    const split = splitRemainder(p, c, est.s, est.b);
+    const quirk = liveMargin === null || split ? 0 : shown * (liveMargin - c.base.margin - est.s - est.b * x);
+    const restMargin = (split ? split.base : c.base.margin) + est.s + quirk - est.b * f;
     const left = Math.max(c.expected - v, 0);
     const done = Boolean(c.count?.complete);
     const projVotes = done ? v : v + left;

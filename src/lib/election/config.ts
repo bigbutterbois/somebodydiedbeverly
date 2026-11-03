@@ -47,8 +47,25 @@ export const ELECTION = {
   countyNoiseVotes: 20000,
   /** How far a partly counted county can sit from its final margin (points, at 0% counted). */
   partialNoise: 8,
-  /** How far the first votes counted can lean from the final count, statewide (points, sd). */
-  earlyLeanSd: 8,
+  /**
+   * How far the first votes counted can lean from the final count (points,
+   * sd) around each state's earlyLean below; the model learns the real lean
+   * from the counts as they come in. Research (Nov 3): most states count
+   * early and mail votes first (AP notes; NCSL), and those votes have run
+   * bluer than Election Day ones everywhere measured from precinct results
+   * by vote type: early minus Election Day margin was NC +26 in 2022 / +9 in
+   * 2024, GA +18 / +3, SC +18 / +6, IA +43 in 2022, MI +16 in 2024, and TX
+   * about 0 in 2022. The model's lean works out to roughly half to
+   * three-quarters of that gap (early votes don't all come first), and
+   * 2026's gap is uncertain (midterm-sized or presidential-sized), so each
+   * state's setting is about half the middle of its measurements (IA less:
+   * its one figure is from 2022, when few voted early there), 4 for
+   * early-first states without data, and 0 where mail is counted on or after
+   * Election Day (AK, NH, MS) or the gap was nil (TX). In stress tests, full
+   * size settings hurt whenever the real gap came in small, and the wider
+   * sd here let the model catch a 20-point gap faster with no cost elsewhere.
+   */
+  earlyLeanSd: 15,
   /** Extra swing uncertainty for what the model gets wrong (points, sd). */
   modelSlack: 1.5,
   /** Share of the expected vote counted at which the forecast stops counting (Mike: 50%). */
@@ -76,36 +93,47 @@ export const ELECTION = {
   callAt: 0.995,
   callMinCounted: 0.1,
 
+  /**
+   * Counties where one city counts on its own schedule and votes very
+   * differently from the rest, so a partial count says more about which part
+   * is in than about the swing. Detroit (2024: 246,303 votes, Harris +82.0;
+   * the rest of Wayne about +7.6) is tracked and reported separately from the
+   * suburbs and has often come in hours later (2024 general, 2024 primary).
+   */
+  splitCounties: {
+    MI: { Wayne: { part: "Detroit", votes: 246303, margin: 82.0 } },
+  } as Record<string, Record<string, { part: string; votes: number; margin: number }>>,
+
   states: {
     AL: S(20),
     AK: S(25, { turnout: 0.8, lateVotes: 0.35, rankedChoice: true }), // 2022 0.78, no early data
     AR: S(20.5),
     CO: S(21),
     DE: S(20),
-    FL: S(20, { turnout: 0.735 }), // 2022 0.70, early +10%
-    GA: S(19, { turnout: 0.8, runoff: true }), // 2022 0.75, record early vote ~2.8M vs ~2.5M
+    FL: S(20, { turnout: 0.735, earlyLean: 4 }), // 2022 0.70, early +10%
+    GA: S(19, { turnout: 0.8, runoff: true, earlyLean: 6 }), // 2022 0.75, record early vote ~2.8M vs ~2.5M
     ID: S(23),
     IL: S(20),
-    IA: S(21, { turnout: 0.76 }), // 2022 0.72, early up ~12% (Pottawattamie)
-    KS: S(21, { turnout: 0.86 }), // 2022 0.75, early +30%
+    IA: S(21, { turnout: 0.76, earlyLean: 12 }), // 2022 0.72, early up ~12% (Pottawattamie)
+    KS: S(21, { turnout: 0.86, earlyLean: 4 }), // 2022 0.75, early +30%
     KY: S(19),
     LA: S(21, { turnout: 0.74 }), // 2022 0.70, no early data
-    ME: S(20, { turnout: 0.9, rankedChoice: true, lateVotes: 0.05 }), // 2022 0.82, early +44% (capped)
+    ME: S(20, { turnout: 0.9, rankedChoice: true, lateVotes: 0.05, earlyLean: 4 }), // 2022 0.82, early +44% (capped)
     MA: S(20),
-    MI: S(21, { turnout: 0.82 }), // 2022 0.79, early reports conflict (+32% / -15%)
-    MN: S(21, { turnout: 0.86 }), // 2022 0.77, early +24%
+    MI: S(21, { turnout: 0.82, earlyLean: 8 }), // 2022 0.79, early reports conflict (+32% / -15%)
+    MN: S(21, { turnout: 0.86, earlyLean: 4 }), // 2022 0.77, early +24%
     MS: S(20),
-    MT: S(22),
-    NE: S(21, { turnout: 0.74 }), // 2022 0.70, no early data, open-race interest
+    MT: S(22, { earlyLean: 4 }),
+    NE: S(21, { turnout: 0.74, earlyLean: 4 }), // 2022 0.70, no early data, open-race interest
     NH: S(20, { turnout: 0.81 }), // 2022 0.75, no early voting
     NJ: S(20),
     NM: S(21),
-    NC: S(19.5, { turnout: 0.76 }), // 2022 0.66, early +30%
-    OH: S(19.5, { turnout: 0.8 }), // 2022 0.72, early +21%
+    NC: S(19.5, { turnout: 0.76, earlyLean: 9 }), // 2022 0.66, early +30%
+    OH: S(19.5, { turnout: 0.8, earlyLean: 4 }), // 2022 0.72, early +21%
     OK: S(20),
     OR: S(23, { lateVotes: 0.15 }),
     RI: S(20),
-    SC: S(19, { turnout: 0.8 }), // 2022 0.67, early +83% (capped at +20%)
+    SC: S(19, { turnout: 0.8, earlyLean: 6 }), // 2022 0.67, early +83% (capped at +20%)
     SD: S(21),
     TN: S(20),
     TX: S(21, { turnout: 0.85 }), // 2022 0.71, early +50% (capped at +20%)
