@@ -150,27 +150,10 @@ function prepare(prior: Prior, counts: CountyCount[] | null): Prepared {
   if (counts) {
     const fipsSet = new Set(units.map((u) => u.fips));
     const nameSet = new Set(units.map((u) => normName(u.name)));
-    // Two feed rows for one county (a county split in parts) add up rather than overwrite.
-    const put = (key: string, c: CountyCount) => {
-      const had = byKey.get(key);
-      byKey.set(
-        key,
-        had
-          ? {
-              ...had,
-              rep: had.rep + c.rep,
-              opp: had.opp + c.opp,
-              other: had.other + c.other,
-              complete: Boolean(had.complete && c.complete),
-              expected: had.expected && c.expected ? had.expected + c.expected : undefined,
-            }
-          : c,
-      );
-    };
     for (const c of counts) {
-      if (statewide) put(prior.state, c);
-      else if (c.fips && fipsSet.has(c.fips)) put(c.fips, c);
-      else if (nameSet.has(normName(c.name))) put(normName(c.name), c);
+      if (statewide) byKey.set(prior.state, c);
+      else if (c.fips && fipsSet.has(c.fips)) byKey.set(c.fips, c);
+      else if (nameSet.has(normName(c.name))) byKey.set(normName(c.name), c);
       else if (c.rep + c.opp + c.other > 0) unmatched.push(c.name);
     }
   }
