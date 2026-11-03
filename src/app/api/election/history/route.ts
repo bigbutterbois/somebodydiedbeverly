@@ -16,7 +16,7 @@ export async function GET(req: NextRequest) {
   }
   const forecast = await getForecast();
   if (!forecast) return Response.json([]);
-  // The demo page sits at 10pm Eastern; step up to it from 6pm.
+  // The demo page sits at 10pm Eastern; step up to it from 6:30pm.
   const from = Date.parse(SHARE_CHART.from);
   const until = Date.parse("2026-11-04T03:00:00Z");
   const steps = 16;
