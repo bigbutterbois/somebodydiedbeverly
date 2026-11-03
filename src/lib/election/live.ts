@@ -107,5 +107,5 @@ export function projectedShares(r: Pick<RaceResult, "margin" | "votes">): number
   return [opp(mean), opp(p5), opp(p95), rep(mean), rep(p95), rep(p5)];
 }
 
-/** The vote-share chart's time axis: 6pm to 6am Eastern on election night. */
-export const SHARE_CHART = { from: "2026-11-03T23:00:00Z", to: "2026-11-04T11:00:00Z" };
+/** The vote-share chart's time axis: 6:30pm to 6:30am Eastern on election night. */
+export const SHARE_CHART = { from: "2026-11-03T23:30:00Z", to: "2026-11-04T11:30:00Z" };

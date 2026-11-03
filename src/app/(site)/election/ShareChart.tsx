@@ -15,8 +15,8 @@ const T1 = Date.parse(SHARE_CHART.to);
 const last = (name: string) => name.trim().split(/\s+/).pop() ?? name;
 
 /**
- * One race's projected final vote share for both main candidates from 6pm to
- * 6am Eastern, with the shaded range the result should land in 9 times out
+ * One race's projected final vote share for both main candidates from 6:30pm to
+ * 6:30am Eastern, with the shaded range the result should land in 9 times out
  * of 10. The range narrows as more of the vote is counted.
  */
 export function ShareChart({ race, demo, onClose }: { race: LiveRace; demo: number; onClose: () => void }) {
@@ -68,7 +68,7 @@ export function ShareChart({ race, demo, onClose }: { race: LiveRace; demo: numb
       {history === null ? (
         <p className="py-16 text-center text-sm text-muted">Loading…</p>
       ) : points.length === 0 ? (
-        <p className="py-16 text-center text-sm text-muted">The chart starts when the first polls close at 6pm Eastern.</p>
+        <p className="py-16 text-center text-sm text-muted">The chart starts at 6:30pm Eastern.</p>
       ) : (
         <>
           <div className="hidden sm:block">
@@ -84,7 +84,7 @@ export function ShareChart({ race, demo, onClose }: { race: LiveRace; demo: numb
   );
 }
 
-/** Points from 6pm on; the last one before 6pm (the forecast) is moved to 6pm as the starting point. */
+/** Points from 6:30pm on; the last one before 6:30pm (the forecast) is moved to 6:30pm as the starting point. */
 function clip(points: Point[]): Point[] {
   const before = points.filter((p) => Date.parse(p.at) < T0);
   const after = points.filter((p) => Date.parse(p.at) >= T0 && Date.parse(p.at) <= T1);
@@ -133,7 +133,7 @@ function Chart({
   const every = size === "narrow" ? 3 : 2;
   const hours = Array.from({ length: 12 / every + 1 }, (_, i) => new Date(T0 + i * every * 3_600_000).toISOString());
   const hourLabel = (iso: string) =>
-    new Date(iso).toLocaleTimeString("en-US", { hour: "numeric", timeZone: "America/New_York" }).replace(" ", "").toLowerCase();
+    new Date(iso).toLocaleTimeString("en-US", { hour: "numeric", minute: "2-digit", timeZone: "America/New_York" }).replace(" ", "").toLowerCase();
 
   const end = points.at(-1)!;
   const ex = x(end.at);
