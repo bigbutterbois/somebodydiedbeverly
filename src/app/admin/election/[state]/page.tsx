@@ -69,12 +69,13 @@ export default async function CountySheetPage({ params }: PageProps<"/admin/elec
   // Early-vote check: how the early-vote assumption is playing out.
   const ec = sheet.earlyCheck;
   const toward = (d: number) => (Math.abs(d) < 0.05 ? "even" : `${Math.abs(d).toFixed(1)} pts more ${d > 0 ? o : "R"}`);
+  const moved = (d: number) => (Math.abs(d) < 0.05 ? "did not move" : `moved ${Math.abs(d).toFixed(1)} pts toward ${d > 0 ? o : "R"}`);
   const headline =
     ec.partialVsExpected !== null
       ? `Votes from counties still counting are running ${toward(ec.partialVsExpected)} than the model expected at this stage. ` +
-        `It reads ${toward(ec.asSwing)} as real swing from the forecast, and ${toward(ec.asLean)} as a ${
-          Math.sign(ec.asLean) === Math.sign(ec.assumedLean || 1) ? "bigger" : "smaller"
-        } early-vote lean.`
+        `${Math.abs(ec.asLean) >= Math.abs(ec.asSwing) ? "Mostly mirage" : "Mostly real"}: the model now expects early votes to run ` +
+        `${toward(ec.learnedLean)} than Election Day (assumed ${ec.assumedLean ? toward(ec.assumedLean) : "no gap"}), ` +
+        `and its statewide estimate ${moved(ec.asSwing)} from the forecast.`
       : ec.finishedVsForecast !== null
         ? `Only finished counties so far: ${toward(ec.finishedVsForecast)} than the forecast.`
         : "No votes yet.";
