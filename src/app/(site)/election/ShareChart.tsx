@@ -40,7 +40,6 @@ export function ShareChart({ race, demo, onClose }: { race: LiveRace; demo: numb
   const points = history ? withLatest(clip(history), latest, Boolean(demo)) : [];
 
   const oppColor = DEM;
-  const now = points.at(-1);
 
   return (
     <section className="flex flex-col gap-3 rounded-lg border border-line p-4" aria-label={`${race.name} projected vote share`}>
@@ -81,11 +80,6 @@ export function ShareChart({ race, demo, onClose }: { race: LiveRace; demo: numb
         </>
       )}
 
-      <p className="text-xs text-muted">
-        Shading shows the range each candidate&apos;s final share should land in 9 times out of 10. It narrows as more
-        of the vote is counted.
-        {now && race.status !== "live" && " No votes are counted here yet, so this is still the forecast."}
-      </p>
     </section>
   );
 }
