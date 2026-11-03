@@ -75,6 +75,9 @@ export const ELECTION = {
   /** Our own call: this sure, with at least this share of the vote counted. */
   callAt: 0.995,
   callMinCounted: 0.1,
+  /** A race projected closer than this many points is not called before closeCallCounted (the range runs narrow late in the count). */
+  closeCallMargin: 2,
+  closeCallCounted: 0.99,
 
   states: {
     AL: S(20),

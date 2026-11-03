@@ -542,7 +542,11 @@ export function runModel(input: LiveInput) {
         }
       : sim.margin;
     const called =
-      status === "live" && sim.counted >= ELECTION.callMinCounted && input.closed.has(state)
+      status === "live" &&
+      sim.counted >= ELECTION.callMinCounted &&
+      input.closed.has(state) &&
+      // A race this close waits for nearly every vote: the model's range runs narrow late in the count.
+      (Math.abs(margin.mean) >= ELECTION.closeCallMargin || sim.counted >= ELECTION.closeCallCounted)
         ? pOpp >= ELECTION.callAt
           ? "opp"
           : 1 - pOpp >= ELECTION.callAt
