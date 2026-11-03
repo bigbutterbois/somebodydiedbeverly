@@ -38,7 +38,7 @@ export function LiveBlog({ initial }: { initial: ElectionPost[] }) {
       {posts.map((p, i) => (
         <article key={p.id} className={`flex flex-col gap-0.5 border-l-2 pl-3 ${i === 0 ? "border-accent" : "border-line"}`}>
           <p className="text-muted">
-            <span className="font-medium text-foreground">WM Admin</span> · {stamp(p.created_at)}
+            <span className="font-medium text-foreground">{p.author ?? "WM Admin"}</span> · {stamp(p.created_at)}
           </p>
           <p className="whitespace-pre-line leading-relaxed">{p.body}</p>
         </article>

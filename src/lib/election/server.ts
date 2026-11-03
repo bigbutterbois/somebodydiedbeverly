@@ -181,7 +181,33 @@ export async function snapshot(forecast?: Forecast) {
   const odds = Object.fromEntries(snap.races.map((r) => [r.state, Math.round(r.pOpp * 1000) / 1000]));
   const { error } = await supabase.from("election_snapshots").insert({ data: { ...snap, odds } });
   if (error) throw new Error(error.message);
+  await postCalls(snap);
   return snap;
+}
+
+/**
+ * Posts "RACE CALLED: …" to the live blog as WMHQ Bot the first time each race
+ * is called. The unique call_key makes repeats a no-op, so it's safe to run on
+ * every refresh. Never fails the refresh.
+ */
+async function postCalls(snap: LiveSnapshot) {
+  const rows = snap.races
+    .filter((r) => r.called)
+    .map((r) => {
+      const winner = r.called === "opp" ? r.opp : r.rep;
+      return {
+        body: `RACE CALLED: ${winner.name} (${winner.party}) wins in ${r.name}`,
+        author: "WMHQ Bot",
+        call_key: `${r.state}:${r.called}`,
+      };
+    });
+  if (!rows.length) return;
+  try {
+    const supabase = await contentClient();
+    await supabase.from("election_posts").upsert(rows, { onConflict: "call_key", ignoreDuplicates: true });
+  } catch {
+    // The blog is a nice-to-have; the snapshot is already saved.
+  }
 }
 
 /**
