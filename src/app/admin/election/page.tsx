@@ -1,7 +1,10 @@
 import { ELECTION, pollsCloseAt } from "@/lib/election/config";
 import Link from "next/link";
 import { getForecast } from "@/lib/forecast";
-import { getCountRows, getLatestSnapshot } from "@/lib/election/server";
+import { getCountRows, getLatestSnapshot, getRaceHistory } from "@/lib/election/server";
+import { buildSnapshot } from "@/lib/election/live";
+import { MAP_HEIGHT, MAP_WIDTH, stateBorders, stateShapes } from "../../(site)/forecast/shapes";
+import { AdminOverview } from "./AdminOverview";
 import { READERS } from "@/lib/election/sources";
 import { Controls } from "./Controls";
 import { LiveBlogEditor } from "./LiveBlogEditor";
@@ -34,12 +37,15 @@ function clock(iso: string) {
 }
 
 export default async function AdminElectionPage() {
-  const [rows, snap, forecast, posts] = await Promise.all([
+  const [rows, snap, forecast, posts, raceHistory] = await Promise.all([
     getCountRows(),
     getLatestSnapshot(),
     getForecast(),
     getElectionPosts(),
+    getRaceHistory().catch(() => []),
   ]);
+  // Before the first refresh there's no snapshot, so show the forecast's odds.
+  const board = snap ?? (forecast ? buildSnapshot(forecast, {}) : null);
   const now = currentTime();
   const byState = new Map(rows.map((r) => [r.state, r]));
   const races = new Map((snap?.races ?? []).map((r) => [r.state, r]));
@@ -58,6 +64,17 @@ export default async function AdminElectionPage() {
         </p>
         <Controls />
       </header>
+
+      {board && (
+        <AdminOverview
+          races={board.races}
+          history={raceHistory}
+          shapes={stateShapes}
+          borders={stateBorders}
+          width={MAP_WIDTH}
+          height={MAP_HEIGHT}
+        />
+      )}
 
       <LiveBlogEditor posts={posts} />
 

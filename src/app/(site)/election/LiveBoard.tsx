@@ -107,7 +107,7 @@ function marginLabel(race: LiveRace, m: number) {
 
 const sideColor = (m: number) => (m >= 0 ? DEM : REP);
 
-function oddsColor(race: LiveRace) {
+export function oddsColor(race: LiveRace) {
   const p = race.called ? (race.called === "opp" ? 1 : 0) : race.pOpp;
   if (p >= 0.99) return "#2a62c9";
   if (p >= 0.85) return "#5a8fe6";
