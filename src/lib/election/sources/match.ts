@@ -43,11 +43,17 @@ export function toCounts(raw: RawCounty[], rep: Side, opp: Side): CountyCount[] 
     let r = 0;
     let o = 0;
     let other = 0;
-    for (const c of county.candidates) {
-      const name = c.name.toLowerCase();
-      const party = cleanParty(c.party);
-      if (isSide(name, party, rep, repLast) || (!name.includes(oppLast) && PARTY_R.test(party))) r += c.votes;
-      else if (isSide(name, party, opp, oppLast) || (opp.party === "D" && PARTY_D.test(party))) o += c.votes;
+    const cands = county.candidates.map((c) => ({ ...c, name: c.name.toLowerCase(), party: cleanParty(c.party) }));
+    // Party alone only counts when no candidate matches by name (a feed with
+    // odd name spellings); otherwise a second Democrat, like Maine's write-in
+    // Sigrid Olson, would be added to the Democrat's total.
+    const repNamed = cands.some((c) => isSide(c.name, c.party, rep, repLast));
+    const oppNamed = cands.some((c) => isSide(c.name, c.party, opp, oppLast));
+    for (const c of cands) {
+      if (isSide(c.name, c.party, rep, repLast) || (!repNamed && !c.name.includes(oppLast) && PARTY_R.test(c.party)))
+        r += c.votes;
+      else if (isSide(c.name, c.party, opp, oppLast) || (!oppNamed && opp.party === "D" && PARTY_D.test(c.party)))
+        o += c.votes;
       else other += c.votes;
     }
     return {
