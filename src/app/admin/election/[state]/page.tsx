@@ -44,7 +44,7 @@ export default async function CountySheetPage({ params }: PageProps<"/admin/elec
   // the ones that added the most.
   const gainHeat = (added: number, max: number) =>
     added > 0 && max > 0
-      ? { backgroundColor: `color-mix(in srgb, var(--accent) ${Math.round(15 + 45 * (added / max))}%, transparent)` }
+      ? { backgroundColor: `color-mix(in srgb, var(--accent) ${Math.round(30 + 50 * (added / max))}%, transparent)` }
       : undefined;
 
   const facts: [string, string][] = [

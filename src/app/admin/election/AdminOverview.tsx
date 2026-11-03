@@ -91,7 +91,7 @@ export function AdminOverview({
                     {pct(r.pOpp)}
                   </td>
                   <td className={`py-2 pr-4 ${change !== null && Math.abs(change) >= 0.1 ? "font-medium text-danger" : "text-muted"}`}>
-                    {change === null ? "–" : `${change >= 0 ? "+" : "−"}${Math.round(Math.abs(change) * 100)} pts`}
+                    {change === null ? "–" : pts(change)}
                   </td>
                   <td className="py-2 pr-4 text-muted">{r.status === "live" ? `${Math.round(r.counted * 100)}%` : "–"}</td>
                   <td className="py-2 pr-4">
@@ -121,6 +121,12 @@ function Spark({ series }: { series: { at: string; p: number }[] }) {
       <polyline points={pts} fill="none" stroke={lastP >= 0.5 ? DEM : REP} strokeWidth={1.5} />
     </svg>
   );
+}
+
+// "+12 pts" / "−3 pts" / "0 pts", in percentage points of the D / I odds.
+function pts(change: number) {
+  const n = Math.round(change * 100);
+  return `${n > 0 ? "+" : n < 0 ? "−" : ""}${Math.abs(n)} pts`;
 }
 
 const last = (name: string) => name.trim().split(/\s+/).pop() ?? name;
