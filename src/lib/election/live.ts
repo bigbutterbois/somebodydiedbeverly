@@ -91,3 +91,21 @@ export function buildSnapshot(
     }),
   };
 }
+
+/**
+ * Projected final vote shares (percent) for the chart under the map:
+ * [opp, opp low, opp high, rep, rep low, rep high], the range being the 90%
+ * range of the projected margin. Third parties keep their share of the votes
+ * counted so far (or the usual 2% before any are in).
+ */
+export function projectedShares(r: Pick<RaceResult, "margin" | "votes">): number[] {
+  const other = r.votes.total > 0 ? Math.min((r.votes.other / r.votes.total) * 100, 50) : ELECTION.otherShare * 100;
+  const half = (100 - other) / 2;
+  const opp = (m: number) => Math.round((half + m / 2) * 10) / 10;
+  const rep = (m: number) => Math.round((half - m / 2) * 10) / 10;
+  const { mean, p5, p95 } = r.margin;
+  return [opp(mean), opp(p5), opp(p95), rep(mean), rep(p95), rep(p5)];
+}
+
+/** The vote-share chart's time axis: 6pm to 6am Eastern on election night. */
+export const SHARE_CHART = { from: "2026-11-03T23:00:00Z", to: "2026-11-04T11:00:00Z" };
