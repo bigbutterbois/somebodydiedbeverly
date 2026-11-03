@@ -1,7 +1,11 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { ELECTION } from "@/lib/election/config";
-import { getCountRows, getLatestSnapshot, getRecentGains } from "@/lib/election/server";
+import {
+  getCountRows,
+  getLatestSnapshot,
+  getRecentGains,
+} from "@/lib/election/server";
 import { getForecast } from "@/lib/forecast";
 import { Controls } from "../Controls";
 import { diffText, loadSheet, marginText } from "./sheet";
@@ -12,7 +16,9 @@ export const metadata = { title: "Election night: counties" };
 // forecast is right (expected) and if the state is dead even (break-even),
 // against the live count. "vs" columns are in margin points; + means the
 // opposition candidate is doing better than that benchmark.
-export default async function CountySheetPage({ params }: PageProps<"/admin/election/[state]">) {
+export default async function CountySheetPage({
+  params,
+}: PageProps<"/admin/election/[state]">) {
   const { state } = await params;
   const [data, snap, forecast] = await Promise.all([
     loadSheet(state.toUpperCase()),
@@ -21,8 +27,13 @@ export default async function CountySheetPage({ params }: PageProps<"/admin/elec
   ]);
   if (!data) notFound();
   const { race, sheet } = data;
-  const countRow = (await getCountRows().catch(() => [])).find((r) => r.state === sheet.state);
-  const recent = await getRecentGains(sheet.state, countRow).catch(() => ({ gains: new Map<string, number>(), total: 0 }));
+  const countRow = (await getCountRows().catch(() => [])).find(
+    (r) => r.state === sheet.state,
+  );
+  const recent = await getRecentGains(sheet.state, countRow).catch(() => ({
+    gains: new Map<string, number>(),
+    total: 0,
+  }));
   const maxGain = Math.max(0, ...recent.gains.values());
   const settings = ELECTION.states[sheet.state] ?? {};
   const live = snap?.races.find((r) => r.state === sheet.state);
@@ -44,11 +55,16 @@ export default async function CountySheetPage({ params }: PageProps<"/admin/elec
   // the ones that added the most.
   const gainHeat = (added: number, max: number) =>
     added > 0 && max > 0
-      ? { backgroundColor: `color-mix(in srgb, var(--accent) ${Math.round(30 + 50 * (added / max))}%, transparent)` }
+      ? {
+          backgroundColor: `color-mix(in srgb, var(--accent) ${Math.round(30 + 50 * (added / max))}%, transparent)`,
+        }
       : undefined;
 
   const facts: [string, string][] = [
-    ["Final forecast", `${marginText(sheet.forecastMargin, o)} · ${o} win ${pct(race.p_opp)}`],
+    [
+      "Final forecast",
+      `${marginText(sheet.forecastMargin, o)} · ${o} win ${pct(race.p_opp)}`,
+    ],
     ["2024 president", marginText(sheet.margin2024, o)],
     ["Forecast swing from 2024", diffText(sheet.forecastSwing)],
     ["Break-even swing", diffText(sheet.breakevenSwing)],
@@ -57,12 +73,72 @@ export default async function CountySheetPage({ params }: PageProps<"/admin/elec
     ["Forecast weight now", pct(sheet.forecastWeight)],
     ["Counted votes vs expected", diffText(sheet.vsExpected)],
     ["Counted votes vs break-even", diffText(sheet.vsBreakeven)],
-    ["Model swing / early-vote lean", `${diffText(sheet.swing)} / ${diffText(sheet.earlyLean)}`],
+    [
+      "Model swing / early-vote lean",
+      `${diffText(sheet.swing)} / ${diffText(sheet.earlyLean)}`,
+    ],
     [
       "Live projection",
       live
         ? `${marginText(live.margin.mean, o)} (${marginText(live.margin.p5, o)} to ${marginText(live.margin.p95, o)}) · ${o} win ${pct(live.pOpp)}`
         : "no model run yet",
+    ],
+  ];
+
+  // Early-vote check: how the early-vote assumption is playing out.
+  const ec = sheet.earlyCheck;
+  const toward = (d: number) =>
+    Math.abs(d) < 0.05
+      ? "even"
+      : `${Math.abs(d).toFixed(1)} pts more ${d > 0 ? o : "R"}`;
+  const party = (d: number) => (d > 0 ? o : "R");
+  const moved = (d: number) =>
+    Math.abs(d) < 0.05
+      ? "no change from the forecast"
+      : `${Math.abs(d).toFixed(1)} pts toward ${party(d)} from the forecast`;
+  // Plain three-line read (Mike): how the votes compare with what was
+  // expected, what that did to the projection, and why when the two differ.
+  const headline: string[] =
+    ec.partialVsExpected !== null
+      ? [
+          `Votes counted so far are ${toward(ec.partialVsExpected)} than the model expected at this stage (its early-vote assumption included).`,
+          `Projected final result: ${moved(ec.asSwing)}.`,
+          ...(Math.abs(ec.asSwing) < Math.abs(ec.partialVsExpected) / 2 &&
+          Math.abs(ec.partialVsExpected) >= 1
+            ? [
+                `Why it moved less: the model thinks the early vote leans further ${party(ec.partialVsExpected)} than it assumed, so the Election Day votes still to come should pull it back${
+                  ec.finishedVsForecast !== null
+                    ? ` (finished counties are ${Math.abs(ec.finishedVsForecast) < 0.05 ? "right on the forecast" : `${toward(ec.finishedVsForecast)} than the forecast`})`
+                    : ""
+                }.`,
+              ]
+            : []),
+        ]
+      : ec.finishedVsForecast !== null
+        ? [
+            `Only finished counties so far: ${toward(ec.finishedVsForecast)} than the forecast.`,
+          ]
+        : ["No votes yet."];
+  const earlyFacts: [string, string][] = [
+    [
+      "Early vote vs Election Day: assumed / now",
+      `${ec.assumedLean ? toward(ec.assumedLean) : "none"} / ${ec.learnedLean ? toward(ec.learnedLean) : "none"}`,
+    ],
+    [
+      "Still counting vs expected",
+      ec.partialVsExpected === null
+        ? "–"
+        : `${diffText(ec.partialVsExpected)} (${pct(ec.partialShare)} of the vote)`,
+    ],
+    [
+      "Finished counties vs forecast",
+      ec.finishedVsForecast === null
+        ? "none finished"
+        : `${diffText(ec.finishedVsForecast)} (${ec.finishedCount} ${ec.finishedCount === 1 ? "county" : "counties"}, ${pct(ec.finishedShare)} of the vote)`,
+    ],
+    [
+      "A call needs",
+      `${pct(ec.callNeeds.counted)} counted${ec.callNeeds.finished ? `, ${pct(ec.callNeeds.finished)} in finished counties` : ""}`,
     ],
   ];
 
@@ -80,7 +156,11 @@ export default async function CountySheetPage({ params }: PageProps<"/admin/elec
               <Link
                 key={s}
                 href={`/admin/election/${s}`}
-                className={s === sheet.state ? "font-medium text-accent" : "text-muted underline"}
+                className={
+                  s === sheet.state
+                    ? "font-medium text-accent"
+                    : "text-muted underline"
+                }
               >
                 {s}
               </Link>
@@ -97,13 +177,48 @@ export default async function CountySheetPage({ params }: PageProps<"/admin/elec
         <Controls />
         <p className="text-xs text-muted">
           Updates itself every 30 seconds. Last model run:{" "}
-          {snap ? new Date(snap.at).toLocaleTimeString("en-US", { timeZone: "America/New_York" }) + " ET" : "none yet"}.
+          {snap
+            ? new Date(snap.at).toLocaleTimeString("en-US", {
+                timeZone: "America/New_York",
+              }) + " ET"
+            : "none yet"}
+          .
         </p>
       </header>
 
+      <section className="flex flex-col gap-2 rounded-lg border border-line p-4">
+        <h2 className="text-sm font-medium">Early-vote check</h2>
+        {headline.map((line) => (
+          <p key={line} className="text-sm">
+            {line}
+          </p>
+        ))}
+        <dl className="grid grid-cols-1 gap-x-8 gap-y-1 text-sm sm:grid-cols-2">
+          {earlyFacts.map(([k, v]) => (
+            <div
+              key={k}
+              className="flex justify-between gap-4 border-b border-line py-1"
+            >
+              <dt className="text-muted">{k}</dt>
+              <dd className="tabular-nums">{v}</dd>
+            </div>
+          ))}
+        </dl>
+        <p className="text-xs text-muted">
+          Feeds give county totals only, not early vs Election Day, so the lean
+          is a starting guess the model corrects as the counts come in. Finished
+          counties are the honest read: they hold every kind of vote. A big gap
+          between &quot;still counting&quot; and &quot;finished&quot; is the
+          mirage.
+        </p>
+      </section>
+
       <dl className="grid grid-cols-1 gap-x-8 gap-y-1 text-sm sm:grid-cols-2 lg:grid-cols-3">
         {facts.map(([k, v]) => (
-          <div key={k} className="flex justify-between gap-4 border-b border-line py-1">
+          <div
+            key={k}
+            className="flex justify-between gap-4 border-b border-line py-1"
+          >
             <dt className="text-muted">{k}</dt>
             <dd className="tabular-nums">{v}</dd>
           </div>
@@ -111,8 +226,9 @@ export default async function CountySheetPage({ params }: PageProps<"/admin/elec
       </dl>
       {settings.rankedChoice && (
         <p className="text-sm text-muted">
-          Ranked-choice race: these are first-choice votes. If nobody passes 50%, the instant runoff decides it later,
-          so a first-round lead can still lose.
+          Ranked-choice race: these are first-choice votes. If nobody passes
+          50%, the instant runoff decides it later, so a first-round lead can
+          still lose.
         </p>
       )}
       <p className={`text-sm ${recent.total ? "text-accent" : "text-muted"}`}>
@@ -121,16 +237,14 @@ export default async function CountySheetPage({ params }: PageProps<"/admin/elec
           : "No votes added in the last 15 minutes."}
       </p>
       {sheet.rows.length === 1 && (
-        <p className="text-sm text-muted">This feed gives statewide totals only, so the sheet is one row.</p>
-      )}
-      {settings.earlyLean ? (
         <p className="text-sm text-muted">
-          Early-vote lean setting: {diffText(settings.earlyLean)} (early counted votes expected to run that far from the
-          final margin).
+          This feed gives statewide totals only, so the sheet is one row.
         </p>
-      ) : null}
+      )}
       {sheet.unmatched.length > 0 && (
-        <p className="text-sm text-danger">Feed counties not matched: {sheet.unmatched.join(", ")}</p>
+        <p className="text-sm text-danger">
+          Feed counties not matched: {sheet.unmatched.join(", ")}
+        </p>
       )}
 
       <div className="overflow-x-auto">
@@ -146,34 +260,54 @@ export default async function CountySheetPage({ params }: PageProps<"/admin/elec
               <th className="py-1 pr-3 font-normal" rowSpan={2}>
                 Exp. votes
               </th>
-              <th className="border-l border-line py-1 pr-3 font-normal" colSpan={4}>
+              <th
+                className="border-l border-line py-1 pr-3 font-normal"
+                colSpan={4}
+              >
                 Expected (forecast)
               </th>
-              <th className="border-l border-line py-1 pr-3 font-normal" colSpan={3}>
+              <th
+                className="border-l border-line py-1 pr-3 font-normal"
+                colSpan={3}
+              >
                 Break-even
               </th>
-              <th className="border-l border-line py-1 pr-3 font-normal" colSpan={6}>
+              <th
+                className="border-l border-line py-1 pr-3 font-normal"
+                colSpan={6}
+              >
                 Live
               </th>
-              <th className="border-l border-line py-1 pr-3 font-normal" colSpan={3}>
+              <th
+                className="border-l border-line py-1 pr-3 font-normal"
+                colSpan={3}
+              >
                 Performance
               </th>
             </tr>
             <tr className="border-b border-line">
-              <th className="border-l border-line py-1 pr-3 font-normal">{oppLast}</th>
+              <th className="border-l border-line py-1 pr-3 font-normal">
+                {oppLast}
+              </th>
               <th className="py-1 pr-3 font-normal">{repLast}</th>
               <th className="py-1 pr-3 font-normal">Other</th>
               <th className="py-1 pr-3 font-normal">Margin</th>
-              <th className="border-l border-line py-1 pr-3 font-normal">{oppLast}</th>
+              <th className="border-l border-line py-1 pr-3 font-normal">
+                {oppLast}
+              </th>
               <th className="py-1 pr-3 font-normal">{repLast}</th>
               <th className="py-1 pr-3 font-normal">Margin</th>
-              <th className="border-l border-line py-1 pr-3 font-normal">{oppLast}</th>
+              <th className="border-l border-line py-1 pr-3 font-normal">
+                {oppLast}
+              </th>
               <th className="py-1 pr-3 font-normal">{repLast}</th>
               <th className="py-1 pr-3 font-normal">Other</th>
               <th className="py-1 pr-3 font-normal">Counted</th>
               <th className="py-1 pr-3 font-normal">Last 15 min</th>
               <th className="py-1 pr-3 font-normal">Margin</th>
-              <th className="border-l border-line py-1 pr-3 font-normal">vs exp.</th>
+              <th className="border-l border-line py-1 pr-3 font-normal">
+                vs exp.
+              </th>
               <th className="py-1 pr-3 font-normal">vs even</th>
               <th className="py-1 pr-3 font-normal">Proj. final</th>
             </tr>
@@ -184,28 +318,58 @@ export default async function CountySheetPage({ params }: PageProps<"/admin/elec
                 <td className="py-1 pr-3 text-left">{r.name}</td>
                 <td className="py-1 pr-3">{marginText(r.margin2024, o)}</td>
                 <td className="py-1 pr-3">{num(r.expectedVotes)}</td>
-                <td className="border-l border-line py-1 pr-3">{r.expected.opp.toFixed(1)}%</td>
+                <td className="border-l border-line py-1 pr-3">
+                  {r.expected.opp.toFixed(1)}%
+                </td>
                 <td className="py-1 pr-3">{r.expected.rep.toFixed(1)}%</td>
                 <td className="py-1 pr-3">{r.expected.other.toFixed(1)}%</td>
-                <td className="py-1 pr-3">{marginText(r.expected.margin, o)}</td>
-                <td className="border-l border-line py-1 pr-3">{r.breakeven.opp.toFixed(1)}%</td>
+                <td className="py-1 pr-3">
+                  {marginText(r.expected.margin, o)}
+                </td>
+                <td className="border-l border-line py-1 pr-3">
+                  {r.breakeven.opp.toFixed(1)}%
+                </td>
                 <td className="py-1 pr-3">{r.breakeven.rep.toFixed(1)}%</td>
-                <td className="py-1 pr-3">{marginText(r.breakeven.margin, o)}</td>
-                <td className="border-l border-line py-1 pr-3">{r.live.total ? num(r.live.opp) : "–"}</td>
-                <td className="py-1 pr-3">{r.live.total ? num(r.live.rep) : "–"}</td>
-                <td className="py-1 pr-3">{r.live.total ? num(r.live.other) : "–"}</td>
-                <td className="py-1 pr-3">{r.live.total ? (r.live.complete ? "done" : pct(r.live.counted)) : "–"}</td>
-                <td className="py-1 pr-3" style={gainHeat(recent.gains.get(r.name) ?? 0, maxGain)}>
-                  {recent.gains.get(r.name) ? `+${num(recent.gains.get(r.name)!)}` : "–"}
+                <td className="py-1 pr-3">
+                  {marginText(r.breakeven.margin, o)}
+                </td>
+                <td className="border-l border-line py-1 pr-3">
+                  {r.live.total ? num(r.live.opp) : "–"}
+                </td>
+                <td className="py-1 pr-3">
+                  {r.live.total ? num(r.live.rep) : "–"}
+                </td>
+                <td className="py-1 pr-3">
+                  {r.live.total ? num(r.live.other) : "–"}
+                </td>
+                <td className="py-1 pr-3">
+                  {r.live.total
+                    ? r.live.complete
+                      ? "done"
+                      : pct(r.live.counted)
+                    : "–"}
+                </td>
+                <td
+                  className="py-1 pr-3"
+                  style={gainHeat(recent.gains.get(r.name) ?? 0, maxGain)}
+                >
+                  {recent.gains.get(r.name)
+                    ? `+${num(recent.gains.get(r.name)!)}`
+                    : "–"}
                 </td>
                 <td className="py-1 pr-3">{marginText(r.live.margin, o)}</td>
-                <td className="border-l border-line py-1 pr-3" style={heat(r.vsExpected)}>
+                <td
+                  className="border-l border-line py-1 pr-3"
+                  style={heat(r.vsExpected)}
+                >
                   {diffText(r.vsExpected)}
                 </td>
                 <td className="py-1 pr-3" style={heat(r.vsBreakeven)}>
                   {diffText(r.vsBreakeven)}
                 </td>
-                <td className="py-1 pr-3">{marginText(r.projected.margin, o)}</td>
+                <td className="py-1 pr-3">
+                  {marginText(r.projected.margin, o)}
+                </td>
               </tr>
             ))}
           </tbody>
