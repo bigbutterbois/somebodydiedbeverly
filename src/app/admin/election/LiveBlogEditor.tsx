@@ -1,13 +1,12 @@
 "use client";
 
-import { useActionState, useEffect, useRef, useTransition } from "react";
+import { useActionState, useEffect, useRef, useState, useTransition } from "react";
 import type { ElectionPost } from "@/lib/election/posts";
-import { addPost, deletePost } from "./actions";
+import { addPost, deletePost, editPost } from "./actions";
 
-// Write a live blog post for /election, and delete earlier ones.
+// Write a live blog post for /election, and edit or delete earlier ones.
 export function LiveBlogEditor({ posts }: { posts: ElectionPost[] }) {
   const [state, action, pending] = useActionState(addPost, null);
-  const [deleting, startDelete] = useTransition();
   const form = useRef<HTMLFormElement>(null);
   useEffect(() => {
     if (state?.ok) form.current?.reset();
@@ -38,29 +37,95 @@ export function LiveBlogEditor({ posts }: { posts: ElectionPost[] }) {
       {posts.length > 0 && (
         <ul className="flex max-w-2xl flex-col gap-2 text-sm">
           {posts.map((p) => (
-            <li key={p.id} className="flex items-start gap-3 border-b border-line pb-2">
-              <span className="shrink-0 text-xs text-muted tabular-nums">
-                {new Date(p.created_at).toLocaleTimeString("en-US", {
-                  hour: "numeric",
-                  minute: "2-digit",
-                  timeZone: "America/New_York",
-                })}
-              </span>
-              <span className="flex-1 whitespace-pre-line">{p.body}</span>
-              <button
-                type="button"
-                disabled={deleting}
-                onClick={() => {
-                  if (confirm("Delete this post?")) startDelete(() => deletePost(p.id));
-                }}
-                className="shrink-0 text-xs text-muted hover:text-danger"
-              >
-                Delete
-              </button>
-            </li>
+            <PostRow key={p.id} post={p} />
           ))}
         </ul>
       )}
     </section>
+  );
+}
+
+function PostRow({ post }: { post: ElectionPost }) {
+  const [editing, setEditing] = useState(false);
+  const [text, setText] = useState(post.body);
+  const [error, setError] = useState<string | null>(null);
+  const [busy, start] = useTransition();
+  const time = new Date(post.created_at).toLocaleTimeString("en-US", {
+    hour: "numeric",
+    minute: "2-digit",
+    timeZone: "America/New_York",
+  });
+  const button = "shrink-0 text-xs text-muted disabled:opacity-50";
+
+  return (
+    <li className="flex items-start gap-3 border-b border-line pb-2">
+      <span className="shrink-0 text-xs text-muted tabular-nums">{time}</span>
+      {editing ? (
+        <div className="flex flex-1 flex-col gap-2">
+          <textarea
+            value={text}
+            onChange={(e) => setText(e.target.value)}
+            rows={3}
+            className="rounded border border-line bg-transparent p-2 text-sm"
+          />
+          <div className="flex items-center gap-3">
+            <button
+              type="button"
+              disabled={busy}
+              onClick={() =>
+                start(async () => {
+                  const res = await editPost(post.id, text);
+                  if (res.ok) {
+                    setEditing(false);
+                    setError(null);
+                  } else setError(res.message);
+                })
+              }
+              className="rounded border border-line px-3 py-1 text-sm hover:border-accent hover:text-accent disabled:opacity-50"
+            >
+              {busy ? "Saving…" : "Save"}
+            </button>
+            <button
+              type="button"
+              disabled={busy}
+              onClick={() => {
+                setText(post.body);
+                setEditing(false);
+                setError(null);
+              }}
+              className={`${button} hover:text-foreground`}
+            >
+              Cancel
+            </button>
+            {error && <p className="text-sm text-danger">{error}</p>}
+          </div>
+        </div>
+      ) : (
+        <>
+          <span className="flex-1 whitespace-pre-line">{post.body}</span>
+          <button
+            type="button"
+            disabled={busy}
+            onClick={() => {
+              setText(post.body);
+              setEditing(true);
+            }}
+            className={`${button} hover:text-accent`}
+          >
+            Edit
+          </button>
+          <button
+            type="button"
+            disabled={busy}
+            onClick={() => {
+              if (confirm("Delete this post?")) start(() => deletePost(post.id));
+            }}
+            className={`${button} hover:text-danger`}
+          >
+            Delete
+          </button>
+        </>
+      )}
+    </li>
   );
 }
