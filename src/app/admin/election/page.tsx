@@ -4,6 +4,8 @@ import { getForecast } from "@/lib/forecast";
 import { getCountRows, getLatestSnapshot } from "@/lib/election/server";
 import { READERS } from "@/lib/election/sources";
 import { Controls } from "./Controls";
+import { LiveBlogEditor } from "./LiveBlogEditor";
+import { getElectionPosts } from "@/lib/election/posts";
 
 export const metadata = { title: "Election night" };
 
@@ -32,7 +34,12 @@ function clock(iso: string) {
 }
 
 export default async function AdminElectionPage() {
-  const [rows, snap, forecast] = await Promise.all([getCountRows(), getLatestSnapshot(), getForecast()]);
+  const [rows, snap, forecast, posts] = await Promise.all([
+    getCountRows(),
+    getLatestSnapshot(),
+    getForecast(),
+    getElectionPosts(),
+  ]);
   const now = currentTime();
   const byState = new Map(rows.map((r) => [r.state, r]));
   const races = new Map((snap?.races ?? []).map((r) => [r.state, r]));
@@ -51,6 +58,8 @@ export default async function AdminElectionPage() {
         </p>
         <Controls />
       </header>
+
+      <LiveBlogEditor posts={posts} />
 
       <section className="flex flex-col gap-2">
         <h2 className="text-xs uppercase tracking-[0.12em] text-muted">County sheets</h2>
