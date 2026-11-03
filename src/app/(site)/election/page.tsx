@@ -38,7 +38,7 @@ export default async function ElectionPage({ searchParams }: PageProps<"/electio
       {snapshot ? (
         <LiveBoard
           key={demo}
-          demo={demo > 0}
+          demo={demo}
           initial={snapshot}
           history={demo ? [] : history}
           shapes={stateShapes}

@@ -4,6 +4,7 @@ import { useEffect, useMemo, useState } from "react";
 import { DEM, REP } from "@/lib/forecast";
 import type { LiveRace, LiveSnapshot } from "@/lib/election/live";
 import { ELECTION } from "@/lib/election/config";
+import { ShareChart } from "./ShareChart";
 
 type Shape = { name: string; d: string; cx: number; cy: number };
 
@@ -19,7 +20,8 @@ export function LiveBoard({
   height,
 }: {
   initial: LiveSnapshot;
-  demo?: boolean;
+  /** The ?demo percentage (0 for the real night). */
+  demo?: number;
   history: { at: string; p: number }[];
   shapes: Shape[];
   borders: string;
@@ -29,6 +31,8 @@ export function LiveBoard({
   const [snap, setSnap] = useState(initial);
   const [history, setHistory] = useState(initialHistory);
   const [all, setAll] = useState(false);
+  const [picked, setPicked] = useState<string | null>(null);
+  const pickedRace = snap.races.find((r) => r.state === picked) ?? null;
 
   // Once a minute from just before the first polls close, fetch the newest snapshot.
   useEffect(() => {
@@ -71,8 +75,18 @@ export function LiveBoard({
     <div className="flex flex-col gap-10">
       <section className="grid items-center gap-8 md:grid-cols-[minmax(0,22rem)_1fr]">
         <Needle snap={snap} history={history} />
-        <LiveMap races={snap.races} shapes={shapes} borders={borders} width={width} height={height} />
+        <LiveMap
+          races={snap.races}
+          shapes={shapes}
+          borders={borders}
+          width={width}
+          height={height}
+          picked={picked}
+          onPick={(state) => setPicked((p) => (p === state ? null : state))}
+        />
       </section>
+
+      {pickedRace && <ShareChart race={pickedRace} demo={demo ?? 0} onClose={() => setPicked(null)} />}
 
       <section className="flex flex-col gap-3">
         <div className="flex items-baseline justify-between gap-4">
@@ -193,7 +207,23 @@ function Spark({ history }: { history: { at: string; p: number }[] }) {
 
 // ---------------------------------------------------------------------------
 
-function LiveMap({ races, shapes, borders, width, height }: { races: LiveRace[]; shapes: Shape[]; borders: string; width: number; height: number }) {
+function LiveMap({
+  races,
+  shapes,
+  borders,
+  width,
+  height,
+  picked,
+  onPick,
+}: {
+  races: LiveRace[];
+  shapes: Shape[];
+  borders: string;
+  width: number;
+  height: number;
+  picked: string | null;
+  onPick: (state: string) => void;
+}) {
   const byName = new Map(races.map((r) => [r.name, r]));
   const [active, setActive] = useState<LiveRace | null>(null);
   return (
@@ -210,10 +240,16 @@ function LiveMap({ races, shapes, borders, width, height }: { races: LiveRace[];
               className="cursor-pointer"
               onPointerEnter={() => setActive(race)}
               onPointerDown={() => setActive(race)}
+              onClick={() => onPick(race.state)}
             />
           );
         })}
         <path d={borders} fill="none" stroke="var(--background)" strokeWidth={1} pointerEvents="none" />
+        {shapes
+          .filter((s) => byName.get(s.name)?.state === picked)
+          .map((s) => (
+            <path key={s.name} d={s.d} fill="none" stroke="var(--foreground)" strokeWidth={2.5} pointerEvents="none" />
+          ))}
         {races
           .filter((r) => r.called)
           .map((r) => {
@@ -230,7 +266,7 @@ function LiveMap({ races, shapes, borders, width, height }: { races: LiveRace[];
             <span style={{ color: sideColor(active.pOpp - 0.5) }}>{winText(active)}</span>
           </>
         ) : (
-          <span className="text-muted">Circles mark races WMHQ has called.</span>
+          <span className="text-muted">Click a state for its live vote-share chart. Circles mark races WMHQ has called.</span>
         )}
       </p>
     </div>

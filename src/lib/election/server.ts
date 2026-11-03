@@ -2,7 +2,7 @@ import "server-only";
 import { getForecast, type Forecast } from "@/lib/forecast";
 import { contentClient } from "@/lib/supabase/content";
 import { ELECTION } from "./config";
-import { buildSnapshot, type LiveSnapshot } from "./live";
+import { buildSnapshot, projectedShares, type LiveSnapshot } from "./live";
 import type { CountyCount } from "./model";
 import { READERS } from "./sources";
 import { DDHQ_URL, ddhqConfigured, readDdhq } from "./sources/ddhq";
@@ -159,6 +159,21 @@ export async function getRaceHistory(): Promise<{ at: string; odds: Record<strin
     .map((d) => ({ at: d.created_at as string, odds: d.odds as Record<string, number> }));
 }
 
+/** One race's projected vote shares after every refresh (see projectedShares). */
+export async function getShareHistory(state: string): Promise<{ at: string; s: number[] }[]> {
+  if (!/^[A-Z]{2}$/.test(state)) return [];
+  const supabase = await contentClient();
+  // The column path is built at runtime, so the client can't type the rows.
+  const { data } = (await supabase
+    .from("election_snapshots")
+    .select(`created_at, s:data->shares->${state}` as string)
+    .order("created_at", { ascending: true })
+    .limit(3000)) as unknown as { data: { created_at: string; s: unknown }[] | null };
+  return (data ?? [])
+    .filter((d) => Array.isArray(d.s))
+    .map((d) => ({ at: d.created_at as string, s: d.s as number[] }));
+}
+
 async function saveError(state: string, message: string, source: string) {
   const supabase = await contentClient();
   const now = new Date().toISOString();
@@ -179,7 +194,9 @@ export async function snapshot(forecast?: Forecast) {
   const supabase = await contentClient();
   // A compact copy of every race's odds rides along for the admin's charts.
   const odds = Object.fromEntries(snap.races.map((r) => [r.state, Math.round(r.pOpp * 1000) / 1000]));
-  const { error } = await supabase.from("election_snapshots").insert({ data: { ...snap, odds } });
+  // And every race's projected vote shares, for the public chart under the map.
+  const shares = Object.fromEntries(snap.races.map((r) => [r.state, projectedShares(r)]));
+  const { error } = await supabase.from("election_snapshots").insert({ data: { ...snap, odds, shares } });
   if (error) throw new Error(error.message);
   await postCalls(snap);
   return snap;
