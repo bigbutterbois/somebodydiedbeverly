@@ -226,8 +226,14 @@ function LiveMap({
 }) {
   const byName = new Map(races.map((r) => [r.name, r]));
   const [active, setActive] = useState<LiveRace | null>(null);
+  const [at, setAt] = useState<{ x: number; y: number; w: number; h: number } | null>(null);
+  const track = (e: React.PointerEvent<HTMLDivElement>) => {
+    const box = e.currentTarget.getBoundingClientRect();
+    setAt({ x: e.clientX - box.left, y: e.clientY - box.top, w: box.width, h: box.height });
+  };
   return (
     <div className="flex flex-col gap-2" onPointerLeave={() => setActive(null)}>
+      <div className="relative" onPointerMove={track} onPointerDown={track}>
       <svg viewBox={`0 0 ${width} ${height}`} className="h-auto w-full" role="img" aria-label="Map of Senate races by live odds">
         {shapes.map((s) => {
           const race = byName.get(s.name);
@@ -257,6 +263,8 @@ function LiveMap({
             return s ? <circle key={r.state} cx={s.cx} cy={s.cy} r={7} fill="var(--background)" stroke="var(--foreground)" strokeWidth={2} pointerEvents="none" /> : null;
           })}
       </svg>
+      {active && at && <Tally race={active} at={at} />}
+      </div>
       <p className="min-h-5 text-center text-sm tabular-nums">
         {active ? (
           <>
@@ -268,6 +276,60 @@ function LiveMap({
         ) : (
           <span className="text-muted">Click a state for its live vote-share chart. Circles mark races WMHQ has called.</span>
         )}
+      </p>
+    </div>
+  );
+}
+
+/** The current count for the state under the pointer, like a results table: Dem, Rep and everyone else. */
+function Tally({ race, at }: { race: LiveRace; at: { x: number; y: number; w: number; h: number } }) {
+  const { rep, opp, other, total } = race.votes;
+  const rows = [
+    { name: race.opp.name, party: race.opp.party === "I" ? "Ind." : "Dem.", votes: opp, color: DEM },
+    { name: race.rep.name, party: "Rep.", votes: rep, color: REP },
+    { name: "Others", party: "", votes: other, color: "var(--muted)" },
+  ].sort((a, b) => b.votes - a.votes || (a.name === "Others" ? 1 : b.name === "Others" ? -1 : 0));
+  const share = (v: number) => (total > 0 ? Math.round((v / total) * 100) : 0);
+  const left = at.x > at.w / 2;
+  const up = at.y > at.h * 0.55;
+  return (
+    <div
+      className="pointer-events-none absolute z-10 w-72 max-w-[85vw] rounded-md border border-line bg-background p-3 text-sm shadow-lg"
+      style={{
+        left: at.x + (left ? -14 : 14),
+        top: at.y + (up ? -14 : 14),
+        transform: `translate(${left ? "-100%" : "0"}, ${up ? "-100%" : "0"})`,
+      }}
+    >
+      <p className="mb-1 text-base font-semibold">{race.name}{race.special && <span className="font-normal text-muted"> (special)</span>}</p>
+      <table className="w-full tabular-nums">
+        <thead className="text-xs text-muted">
+          <tr className="border-b border-line">
+            <th className="py-1 text-left font-normal">Candidate</th>
+            <th className="py-1 text-left font-normal">Party</th>
+            <th className="py-1 text-right font-normal">Votes</th>
+            <th className="py-1 text-right font-normal">Pct.</th>
+          </tr>
+        </thead>
+        <tbody>
+          {rows.map((r, i) => (
+            <tr key={r.name} className="border-b border-line">
+              <td className="py-1 pr-2">
+                <span className="mr-2 inline-block h-4 w-1 align-middle" style={{ background: r.color }} />
+                {r.name}
+              </td>
+              <td className="py-1 pr-2 text-muted">{r.party}</td>
+              <td className="py-1 text-right">{Math.round(r.votes).toLocaleString()}</td>
+              <td className="py-1 text-right font-semibold">
+                {share(r.votes)}
+                {i === 0 && "%"}
+              </td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+      <p className="mt-1 text-xs text-muted">
+        {race.status === "live" ? `${Math.round(race.counted * 100)}% of votes in` : statusText(race)}
       </p>
     </div>
   );
