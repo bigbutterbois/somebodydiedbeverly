@@ -36,6 +36,8 @@ type Scenario = {
   bigCountyDelay: number;
   /** Late mail after "complete", as a share of the county's vote. */
   lateShare: number;
+  /** Early/mail share of each county's vote: low end and spread (default 0.35 + 0.3). */
+  earlyShare?: [number, number];
 };
 
 const SCENARIOS: Record<string, Scenario> = {
@@ -55,6 +57,8 @@ const SCENARIOS: Record<string, Scenario> = {
   // A big mail-vs-Election-Day gap (2020 style): first votes 20 points bluer, or redder.
   bigblue: { turnoutShift: 0, turnoutSd: 0.07, partisanTurnout: 0, earlyLean: 20, bigCountyDelay: 0.5, lateShare: 0.03 },
   bigred: { turnoutShift: 0, turnoutSd: 0.07, partisanTurnout: 0, earlyLean: -20, bigCountyDelay: 0.5, lateShare: 0.03 },
+  // NYT's 2026 read: early vote far bluer than Election Day (Cooper/Ossoff up ~20 in the early vote), and early is ~2/3 of the vote.
+  nyt: { turnoutShift: 0, turnoutSd: 0.07, partisanTurnout: 0, earlyLean: 28, bigCountyDelay: 0.5, lateShare: 0.03, earlyShare: [0.55, 0.2] },
   redfirst: { turnoutShift: 0, turnoutSd: 0.07, partisanTurnout: 0, earlyLean: -8, bigCountyDelay: 0.5, lateShare: 0.03 },
 };
 
@@ -88,7 +92,7 @@ function night(state: string, prior: Prior, sc: Scenario) {
     const tau = 4 * Math.min(3, Math.max(0.15, Math.sqrt(20000 / c.votes)));
     const margin = c.margin + swing + tau * norm();
     const final = c.votes * stateT * Math.exp(0.08 * norm() + (sc.partisanTurnout * c.margin) / 100);
-    const early = 0.35 + 0.3 * uni();
+    const early = (sc.earlyShare?.[0] ?? 0.35) + (sc.earlyShare?.[1] ?? 0.3) * uni();
     const late = sc.lateShare * (0.5 + uni());
     const ed = 1 - early - late;
     // Early batch leans earlyLean, the late batch votes like the county as a

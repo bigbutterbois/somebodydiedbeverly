@@ -349,6 +349,48 @@ const isSplitPartial = (p: Prepared, c: Prepared["counties"][number]) =>
   Boolean(ELECTION.splitCounties[p.prior.state]?.[c.base.name] && c.count && !c.count.complete);
 
 /** Share of the state's expected vote counted so far. */
+/** Share of the expected vote that sits in counties marked finished. */
+function finishedShare(p: Prepared) {
+  let done = 0;
+  let expected = 0;
+  for (const c of p.counties) {
+    expected += c.expected;
+    if (c.count?.complete) done += c.count.rep + c.count.opp + c.count.other;
+  }
+  return expected > 0 ? Math.min(1, done / expected) : 0;
+}
+
+/**
+ * How sure the forecast was going in, from 0 (a tossup, or under
+ * callCloseOdds) to 1 (callSafeOdds or more), and so how much counted vote a
+ * call needs (Mike's rule): safe races from callMinCounted (10%), close ones
+ * from callCloseCounted (50%), the rest in between. A race running well off
+ * its forecast (callWayOffSd forecast sds) is treated as close.
+ */
+export function callNeeds(prior: Prior, projected: number | null) {
+  const sure = Math.max(prior.pOpp, 1 - prior.pOpp);
+  let t = Math.min(1, Math.max(0, (sure - ELECTION.callCloseOdds) / (ELECTION.callSafeOdds - ELECTION.callCloseOdds)));
+  if (projected !== null && Math.abs(projected - prior.mean) > ELECTION.callWayOffSd * prior.sd) t = 0;
+  const mirage = Boolean(ELECTION.states[prior.state]?.earlyLean);
+  return {
+    counted: ELECTION.callCloseCounted - (ELECTION.callCloseCounted - ELECTION.callMinCounted) * t,
+    // Where the first votes counted lean one way (a mirage), the closer half
+    // of races also wait for some counties to finish, so Election Day votes
+    // are in the read.
+    finished: mirage && t < 0.5 ? ELECTION.callMinFinished : 0,
+  };
+}
+
+function callReady(p: Prepared, counted: number, projected: number) {
+  const need = callNeeds(p.prior, projected);
+  return (
+    counted >= need.counted &&
+    finishedShare(p) >= need.finished &&
+    // A race this close waits for nearly every vote: the model's range runs narrow late in the count.
+    (Math.abs(projected) >= ELECTION.closeCallMargin || counted >= ELECTION.closeCallCounted)
+  );
+}
+
 function stateCounted(p: Prepared) {
   let counted = 0;
   let expected = 0;
@@ -574,7 +616,7 @@ export function runModel(input: LiveInput) {
         }
       : sim.margin;
     const called =
-      status === "live" && sim.counted >= ELECTION.callMinCounted && input.closed.has(state)
+      status === "live" && input.closed.has(state) && callReady(p, sim.counted, sim.margin.mean)
         ? pOpp >= ELECTION.callAt
           ? "opp"
           : 1 - pOpp >= ELECTION.callAt
@@ -700,7 +742,32 @@ export type CountySheet = {
   vsExpected: number | null;
   vsBreakeven: number | null;
   unmatched: string[];
+  /** How the early-vote assumption is playing out (admin box at the top of the state page). */
+  earlyCheck: EarlyCheck;
   rows: CountyRow[];
+};
+
+export type EarlyCheck = {
+  /** The state's early-vote lean setting, and the lean the model reads now. */
+  assumedLean: number;
+  learnedLean: number;
+  /**
+   * Counted votes in counties still counting, against what the model
+   * expected them to look like at this stage (forecast plus the assumed
+   * lean), vote-weighted: + = bluer (opposition) than expected. Null with no
+   * such votes.
+   */
+  partialVsExpected: number | null;
+  partialShare: number;
+  /** Of that surprise: how much the model reads as real swing, and how much as a bigger (or smaller) early lean. */
+  asSwing: number;
+  asLean: number;
+  /** Finished counties against the forecast, and their share of the expected vote. */
+  finishedVsForecast: number | null;
+  finishedShare: number;
+  finishedCount: number;
+  /** What a call needs now, given the forecast odds and the projection. */
+  callNeeds: { counted: number; finished: number };
 };
 
 const shares = (margin: number, other: number) => {
@@ -720,6 +787,8 @@ export function countySheet(prior: Prior, counts: CountyCount[] | null): CountyS
   let wVotes = 0;
   let sumExp = 0;
   let sumBreak = 0;
+  const assumedLean = ELECTION.states[prior.state]?.earlyLean ?? 0;
+  const early = { v: 0, surprise: 0, x: 0, doneV: 0, doneDiff: 0, done: 0 };
   const rows = p.counties.map((c): CountyRow => {
     const { v, f } = countedShare(c);
     const opp = c.count?.opp ?? 0;
@@ -743,6 +812,15 @@ export function countySheet(prior: Prior, counts: CountyCount[] | null): CountyS
       wVotes += v;
       sumExp += (liveMargin - expMargin) * v;
       sumBreak += (liveMargin - breakMargin) * v;
+      if (done) {
+        early.doneV += v;
+        early.doneDiff += (liveMargin - expMargin) * v;
+        early.done++;
+      } else if (!split) {
+        early.v += v;
+        early.surprise += (liveMargin - expMargin - assumedLean * x) * v;
+        early.x += x * v;
+      }
     }
     return {
       name: c.base.name,
@@ -781,6 +859,18 @@ export function countySheet(prior: Prior, counts: CountyCount[] | null): CountyS
     vsExpected: wVotes > 0 ? round1(sumExp / wVotes) : null,
     vsBreakeven: wVotes > 0 ? round1(sumBreak / wVotes) : null,
     unmatched: p.unmatched,
+    earlyCheck: {
+      assumedLean,
+      learnedLean: round1(est.b),
+      partialVsExpected: early.v > 0 ? round1(early.surprise / early.v) : null,
+      partialShare: early.v / Math.max(1, p.counties.reduce((s, c) => s + c.expected, 0)),
+      asSwing: round1(est.s - forecastSwing),
+      asLean: round1(early.v > 0 ? (est.b - assumedLean) * (early.x / early.v) : 0),
+      finishedVsForecast: early.doneV > 0 ? round1(early.doneDiff / early.doneV) : null,
+      finishedShare: finishedShare(p),
+      finishedCount: early.done,
+      callNeeds: callNeeds(prior, null),
+    },
     rows,
   };
 }

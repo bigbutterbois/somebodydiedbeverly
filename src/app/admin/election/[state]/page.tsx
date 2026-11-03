@@ -66,6 +66,39 @@ export default async function CountySheetPage({ params }: PageProps<"/admin/elec
     ],
   ];
 
+  // Early-vote check: how the early-vote assumption is playing out.
+  const ec = sheet.earlyCheck;
+  const toward = (d: number) => (Math.abs(d) < 0.05 ? "even" : `${Math.abs(d).toFixed(1)} pts more ${d > 0 ? o : "R"}`);
+  const headline =
+    ec.partialVsExpected !== null
+      ? `Votes from counties still counting are running ${toward(ec.partialVsExpected)} than the model expected at this stage. ` +
+        `It reads ${toward(ec.asSwing)} as real swing from the forecast, and ${toward(ec.asLean)} as a ${
+          Math.sign(ec.asLean) === Math.sign(ec.assumedLean || 1) ? "bigger" : "smaller"
+        } early-vote lean.`
+      : ec.finishedVsForecast !== null
+        ? `Only finished counties so far: ${toward(ec.finishedVsForecast)} than the forecast.`
+        : "No votes yet.";
+  const earlyFacts: [string, string][] = [
+    [
+      "Early-vote lean: assumed / read now",
+      `${ec.assumedLean ? toward(ec.assumedLean) : "none"} / ${ec.learnedLean ? toward(ec.learnedLean) : "none"}`,
+    ],
+    [
+      "Still counting vs expected",
+      ec.partialVsExpected === null ? "–" : `${diffText(ec.partialVsExpected)} (${pct(ec.partialShare)} of the vote)`,
+    ],
+    [
+      "Finished counties vs forecast",
+      ec.finishedVsForecast === null
+        ? "none finished"
+        : `${diffText(ec.finishedVsForecast)} (${ec.finishedCount} ${ec.finishedCount === 1 ? "county" : "counties"}, ${pct(ec.finishedShare)} of the vote)`,
+    ],
+    [
+      "A call needs",
+      `${pct(ec.callNeeds.counted)} counted${ec.callNeeds.finished ? `, ${pct(ec.callNeeds.finished)} in finished counties` : ""}`,
+    ],
+  ];
+
   return (
     <div className="flex flex-col gap-6">
       <header className="flex flex-col gap-2">
@@ -101,6 +134,24 @@ export default async function CountySheetPage({ params }: PageProps<"/admin/elec
         </p>
       </header>
 
+      <section className="flex flex-col gap-2 rounded-lg border border-line p-4">
+        <h2 className="text-sm font-medium">Early-vote check</h2>
+        <p className="text-sm">{headline}</p>
+        <dl className="grid grid-cols-1 gap-x-8 gap-y-1 text-sm sm:grid-cols-2">
+          {earlyFacts.map(([k, v]) => (
+            <div key={k} className="flex justify-between gap-4 border-b border-line py-1">
+              <dt className="text-muted">{k}</dt>
+              <dd className="tabular-nums">{v}</dd>
+            </div>
+          ))}
+        </dl>
+        <p className="text-xs text-muted">
+          Feeds give county totals only, not early vs Election Day, so the lean is a starting guess the model corrects
+          as the counts come in. Finished counties are the honest read: they hold every kind of vote. A big gap
+          between &quot;still counting&quot; and &quot;finished&quot; is the mirage.
+        </p>
+      </section>
+
       <dl className="grid grid-cols-1 gap-x-8 gap-y-1 text-sm sm:grid-cols-2 lg:grid-cols-3">
         {facts.map(([k, v]) => (
           <div key={k} className="flex justify-between gap-4 border-b border-line py-1">
@@ -123,12 +174,6 @@ export default async function CountySheetPage({ params }: PageProps<"/admin/elec
       {sheet.rows.length === 1 && (
         <p className="text-sm text-muted">This feed gives statewide totals only, so the sheet is one row.</p>
       )}
-      {settings.earlyLean ? (
-        <p className="text-sm text-muted">
-          Early-vote lean setting: {diffText(settings.earlyLean)} (early counted votes expected to run that far from the
-          final margin).
-        </p>
-      ) : null}
       {sheet.unmatched.length > 0 && (
         <p className="text-sm text-danger">Feed counties not matched: {sheet.unmatched.join(", ")}</p>
       )}

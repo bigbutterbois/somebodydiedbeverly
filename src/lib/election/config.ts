@@ -91,7 +91,29 @@ export const ELECTION = {
   signalWeight: 0.5,
   /** Our own call: this sure, with at least this share of the vote counted. */
   callAt: 0.995,
+  /**
+   * How much of the vote must be counted before a call depends on how sure
+   * the forecast was (Mike, Nov 3): races the forecast had at callSafeOdds or
+   * more can be called from callMinCounted, races under callCloseOdds wait
+   * for callCloseCounted, and the rest slide in between. A race running more
+   * than callWayOffSd forecast sds from its forecast waits like a close one.
+   */
   callMinCounted: 0.1,
+  callCloseCounted: 0.5,
+  callSafeOdds: 0.99,
+  callCloseOdds: 0.75,
+  callWayOffSd: 2,
+  /**
+   * In states whose first-counted votes lean one way (earlyLean set), a
+   * close race (forecast odds nearer callCloseOdds than callSafeOdds) also
+   * waits until this share of the expected vote is in finished counties. The NYT Needle does
+   * the same where it lacks results by vote type: it waits for counties to
+   * finish before it swings.
+   */
+  callMinFinished: 0.25,
+  /** A race projected closer than this many points is not called before closeCallCounted (the range runs narrow late in the count). */
+  closeCallMargin: 2,
+  closeCallCounted: 0.99,
 
   /**
    * Counties where one city counts on its own schedule and votes very
@@ -106,19 +128,19 @@ export const ELECTION = {
 
   states: {
     AL: S(20),
-    AK: S(25, { turnout: 0.8, lateVotes: 0.35, rankedChoice: true }), // 2022 0.78, no early data
+    AK: S(25, { turnout: 0.8, lateVotes: 0.35, rankedChoice: true, earlyLean: -5 }), // 2022 0.78, no early data
     AR: S(20.5),
     CO: S(21),
     DE: S(20),
     FL: S(20, { turnout: 0.735, earlyLean: 4 }), // 2022 0.70, early +10%
-    GA: S(19, { turnout: 0.8, runoff: true, earlyLean: 6 }), // 2022 0.75, record early vote ~2.8M vs ~2.5M
+    GA: S(19, { turnout: 0.8, runoff: true, earlyLean: 15 }), // 2022 0.75, record early vote ~2.8M vs ~2.5M
     ID: S(23),
     IL: S(20),
-    IA: S(21, { turnout: 0.76, earlyLean: 12 }), // 2022 0.72, early up ~12% (Pottawattamie)
-    KS: S(21, { turnout: 0.86, earlyLean: 4 }), // 2022 0.75, early +30%
+    IA: S(21, { turnout: 0.76, earlyLean: 15 }), // 2022 0.72, early up ~12% (Pottawattamie)
+    KS: S(21, { turnout: 0.86, earlyLean: 10 }), // 2022 0.75, early +30%
     KY: S(19),
     LA: S(21, { turnout: 0.74 }), // 2022 0.70, no early data
-    ME: S(20, { turnout: 0.9, rankedChoice: true, lateVotes: 0.05, earlyLean: 4 }), // 2022 0.82, early +44% (capped)
+    ME: S(20, { turnout: 0.9, rankedChoice: true, lateVotes: 0.05 }), // 2022 0.82, early +44% (capped)
     MA: S(20),
     MI: S(21, { turnout: 0.82, earlyLean: 8 }), // 2022 0.79, early reports conflict (+32% / -15%)
     MN: S(21, { turnout: 0.86, earlyLean: 4 }), // 2022 0.77, early +24%
@@ -128,15 +150,15 @@ export const ELECTION = {
     NH: S(20, { turnout: 0.81 }), // 2022 0.75, no early voting
     NJ: S(20),
     NM: S(21),
-    NC: S(19.5, { turnout: 0.76, earlyLean: 9 }), // 2022 0.66, early +30%
-    OH: S(19.5, { turnout: 0.8, earlyLean: 4 }), // 2022 0.72, early +21%
+    NC: S(19.5, { turnout: 0.76, earlyLean: 18 }), // 2022 0.66, early +30%
+    OH: S(19.5, { turnout: 0.8, earlyLean: 10 }), // 2022 0.72, early +21%
     OK: S(20),
     OR: S(23, { lateVotes: 0.15 }),
     RI: S(20),
-    SC: S(19, { turnout: 0.8, earlyLean: 6 }), // 2022 0.67, early +83% (capped at +20%)
+    SC: S(19, { turnout: 0.8, earlyLean: 12 }), // 2022 0.67, early +83% (capped at +20%)
     SD: S(21),
     TN: S(20),
-    TX: S(21, { turnout: 0.85 }), // 2022 0.71, early +50% (capped at +20%)
+    TX: S(21, { turnout: 0.85, earlyLean: 12 }), // 2022 0.71, early +50% (capped at +20%)
     VA: S(19),
     WV: S(19.5),
     WY: S(21),
