@@ -55,6 +55,8 @@ export default async function AdminElectionPage() {
 
   return (
     <div className="flex flex-col gap-8">
+      <LiveBlogEditor posts={posts} />
+
       <header className="flex flex-col gap-2">
         <h1 className="text-3xl font-normal tracking-tight">Election night</h1>
         <p className="text-sm text-muted">
@@ -75,8 +77,6 @@ export default async function AdminElectionPage() {
           height={MAP_HEIGHT}
         />
       )}
-
-      <LiveBlogEditor posts={posts} />
 
       <section className="flex flex-col gap-2">
         <h2 className="text-xs uppercase tracking-[0.12em] text-muted">County sheets</h2>
