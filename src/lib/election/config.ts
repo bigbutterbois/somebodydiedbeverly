@@ -58,6 +58,12 @@ export const ELECTION = {
   /** Turnout uncertainty: statewide and per county (log scale). */
   turnoutNoise: 0.08,
   countyTurnoutNoise: 0.1,
+  /**
+   * How much turnout can tilt toward one party's counties, learned live: log
+   * turnout per 100 points of 2024 margin (sd). 0.15 lets a D+50 county run
+   * about 7% over a tied one while an R+50 county runs 7% under.
+   */
+  turnoutTiltSd: 0.15,
   /** Third-party share assumed in counties with no votes yet. */
   otherShare: 0.02,
   /** How tightly races move together (share of their uncertainty that is national). */
