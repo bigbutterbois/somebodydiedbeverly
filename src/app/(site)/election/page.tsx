@@ -30,7 +30,7 @@ export default async function ElectionPage({ searchParams }: PageProps<"/electio
 
   return (
     <div className="flex flex-col gap-8 py-6">
-      <header className="grid items-start gap-4 md:grid-cols-[1fr_minmax(0,24rem)]">
+      <header className="flex flex-col gap-4">
         <h1 className="text-4xl font-light tracking-tight">{t("election.title")}</h1>
         <LiveBlog initial={posts} />
       </header>

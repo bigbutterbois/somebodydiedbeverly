@@ -5,8 +5,8 @@ import type { ElectionPost } from "@/lib/election/posts";
 
 const POLL_MS = 60_000;
 
-// Mike's live commentary beside the election page's title (below it on
-// phones). Checks for new posts once a minute while the page is open.
+// Mike's live commentary under the election page's title, in a box about
+// two posts tall; older posts scroll inside it. Checks for new posts once a minute while the page is open.
 export function LiveBlog({ initial }: { initial: ElectionPost[] }) {
   const [posts, setPosts] = useState(initial);
 
@@ -30,11 +30,10 @@ export function LiveBlog({ initial }: { initial: ElectionPost[] }) {
 
   if (!posts.length) return null;
 
-  // About two posts tall; older ones scroll inside the box.
   return (
     <section
       aria-label="Live updates"
-      className="flex max-h-48 flex-col gap-3 overflow-y-auto rounded border border-line p-3 text-xs"
+      className="flex max-h-48 max-w-2xl flex-col gap-3 overflow-y-auto rounded border border-line p-3 text-xs md:max-h-60 md:gap-4 md:p-4 md:text-sm"
     >
       {posts.map((p, i) => (
         <article key={p.id} className={`flex flex-col gap-0.5 border-l-2 pl-3 ${i === 0 ? "border-accent" : "border-line"}`}>
