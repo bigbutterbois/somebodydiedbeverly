@@ -90,9 +90,6 @@ export default async function CountySheetPage({ params }: PageProps<"/admin/elec
           {race.name}: {race.opp.name} ({o}) vs {race.rep.name} (R)
         </h1>
         <p className="text-sm text-muted">
-          Expected = 2024 margin moved by the final forecast&apos;s swing. Break-even = moved by the swing that makes
-          the state 50/50. &quot;vs&quot; columns are margin points; + is better for {oppLast}. The forecast counts
-          fully at 0% counted and fades to nothing at 50%.{" "}
           <a href={`/admin/election/${sheet.state}/csv`} className="underline">
             Download CSV
           </a>
