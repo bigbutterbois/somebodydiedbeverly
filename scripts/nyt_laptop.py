@@ -24,6 +24,7 @@ state comes back empty, run --inspect on it and send me the output.
 """
 
 import getpass
+import gzip
 import json
 import os
 import re
@@ -32,6 +33,7 @@ import sys
 import time
 import urllib.error
 import urllib.request
+from concurrent.futures import ThreadPoolExecutor
 
 SITE = os.environ.get("SITE", "https://www.wilfullymisunderstand.com")
 EVERY = 60
@@ -63,7 +65,7 @@ def is_cert_error(e):
 
 
 def curl(url, headers, data=None, timeout=60):
-    cmd = ["curl", "-sS", "-L", "--max-time", str(timeout), "-w", "\n%{http_code}"]
+    cmd = ["curl", "-sS", "-L", "--compressed", "--max-time", str(timeout), "-w", "\n%{http_code}"]
     for k, v in headers.items():
         cmd += ["-H", f"{k}: {v}"]
     if data is not None:
@@ -80,10 +82,14 @@ def curl(url, headers, data=None, timeout=60):
 def fetch(url, headers, data=None, timeout=60):
     global USE_CURL
     if not USE_CURL:
-        req = urllib.request.Request(url, data=data, headers=headers, method="POST" if data is not None else "GET")
+        h = dict(headers, **({"Accept-Encoding": "gzip"} if data is None else {}))
+        req = urllib.request.Request(url, data=data, headers=h, method="POST" if data is not None else "GET")
         try:
             with urllib.request.urlopen(req, timeout=timeout) as res:
-                return res.read()
+                body = res.read()
+                if res.headers.get("Content-Encoding", "").lower() == "gzip":
+                    body = gzip.decompress(body)
+                return body
         except urllib.error.HTTPError as e:
             raise RuntimeError(f"HTTP {e.code} {e.read()[:200]!r}")
         except Exception as e:
@@ -93,7 +99,7 @@ def fetch(url, headers, data=None, timeout=60):
     return curl(url, headers, data, timeout)
 
 
-def get(url, timeout=25):
+def get(url, timeout=90):
     return fetch(url, {"User-Agent": UA, "Accept": "*/*"}, timeout=timeout).decode("utf-8", "replace")
 
 
@@ -130,24 +136,58 @@ def data_urls(year, slug, html):
     return guesses + [u for u in found if u not in guesses]
 
 
+# Where each state's data was found last time, so later rounds go straight there.
+FOUND = {}
+
+
 def load(year, state):
     slug = STATES[state]
+    errors = []
+    tried = set()
+
+    def attempt(urls):
+        for url in urls:
+            if url in tried:
+                continue
+            tried.add(url)
+            try:
+                data = json.loads(get(url))
+                if find_race(data):
+                    FOUND[(year, state)] = url
+                    return url, data
+            except Exception as e:
+                errors.append(f"{url.rsplit('/', 1)[-1]}: {e}")
+        return None
+
+    # The usual file names first; the results page (slow) only if neither works.
+    known = [FOUND[(year, state)]] if (year, state) in FOUND else []
+    hit = attempt(known + data_urls(year, slug, ""))
+    if hit:
+        return hit
     html = ""
     for url in page_urls(year, slug):
         try:
-            html = get(url)
+            html = get(url, timeout=30)
             break
         except Exception:
             continue
-    errors = []
-    for url in data_urls(year, slug, html):
-        try:
-            data = json.loads(get(url))
-            if find_race(data):
-                return url, data
-        except Exception as e:
-            errors.append(f"{url.rsplit('/', 1)[-1]}: {e}")
+    hit = attempt(data_urls(year, slug, html))
+    if hit:
+        return hit
     raise RuntimeError("no results data found (" + "; ".join(errors[-2:]) + ")")
+
+
+def load_all(year, states):
+    """Reads every state at once (8 at a time), so one slow file doesn't hold up the rest."""
+
+    def one(state):
+        try:
+            return state, load(year, state), None
+        except Exception as e:
+            return state, None, e
+
+    with ThreadPoolExecutor(max_workers=8) as pool:
+        return list(pool.map(one, states))
 
 
 # ---------------------------------------------------------------- reading it
@@ -300,9 +340,11 @@ def main():
         sys.exit(f"Unknown state(s): {', '.join(bad)}")
 
     if mode != "run":
-        for state in wanted:
+        for state, hit, err in load_all(year, wanted):
             try:
-                url, data = load(year, state)
+                if err:
+                    raise err
+                url, data = hit
                 print(f"\n{state}: {url}")
                 if mode == "inspect":
                     inspect(data)
@@ -330,9 +372,11 @@ def main():
         except Exception as e:
             print("token refresh failed:", e)
         batch, failed, waiting = [], [], []
-        for state in wanted:
+        for state, hit, err in load_all(year, wanted):
             try:
-                url, data = load(year, state)
+                if err:
+                    raise err
+                url, data = hit
                 rows = counties(data)
                 if sum(c["votes"] for r in rows for c in r["candidates"]) > 0:
                     batch.append({"state": state, "source": url, "counties": rows})
