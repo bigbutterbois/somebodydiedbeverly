@@ -88,6 +88,14 @@ export const SITE_TEXT = {
     kind: "short",
   },
 
+  "forecast.final.note": {
+    page: "Forecast",
+    label: "Note at the top once the final forecast is out",
+    default: "This is the final forecast. The model is locked and no longer updating.",
+    kind: "long",
+  },
+  "forecast.final.link": { page: "Forecast", label: "Link to live results in that note", default: "Follow live election results →", kind: "short" },
+
   // Forecast: Both
   "forecast.both.title": { page: "Forecast: Both", label: "Title", default: "2026 midterms", kind: "short" },
   "forecast.both.empty": {
