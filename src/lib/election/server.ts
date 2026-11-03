@@ -291,3 +291,50 @@ export async function refresh({ force = false } = {}) {
   const snap = await snapshot(forecast);
   return { ran: true, at: snap.at, ddhq, results };
 }
+
+export type LaptopState = {
+  state: string;
+  /** County rows sent (one "Statewide" row where NYT has no county breakdown). */
+  units: number;
+  /** Of those, how many have any votes. */
+  reporting: number;
+  votes: number;
+  statewide: boolean;
+  /** The saved total, or the error saving it. */
+  saved: number | string;
+};
+export type LaptopCheckin = {
+  at: string;
+  states: LaptopState[];
+  failed: { state: string; error: string }[];
+  waiting: string[];
+};
+
+/** Notes a laptop check-in for the admin page. Best effort: never fails the post. */
+export async function saveLaptopCheckin(
+  states: LaptopState[],
+  failed: LaptopCheckin["failed"],
+  waiting: string[],
+) {
+  try {
+    const supabase = await contentClient();
+    await supabase.from("election_laptop_checkins").insert({ states, failed, waiting });
+    await supabase
+      .from("election_laptop_checkins")
+      .delete()
+      .lt("at", new Date(Date.now() - 2 * 3600_000).toISOString());
+  } catch {}
+}
+
+/** The laptop's check-ins in the last `minutes`, newest first (empty before the table exists). */
+export async function getLaptopCheckins(minutes = 120): Promise<LaptopCheckin[]> {
+  const supabase = await contentClient();
+  const { data, error } = await supabase
+    .from("election_laptop_checkins")
+    .select("at, states, failed, waiting")
+    .gte("at", new Date(Date.now() - minutes * 60_000).toISOString())
+    .order("at", { ascending: false })
+    .limit(200);
+  if (error) return [];
+  return (data ?? []) as LaptopCheckin[];
+}

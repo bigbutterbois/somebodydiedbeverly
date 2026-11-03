@@ -329,23 +329,32 @@ def main():
                 tokens = post("/api/app/refresh", {"refresh_token": tokens["refresh_token"]})
         except Exception as e:
             print("token refresh failed:", e)
-        batch = []
+        batch, failed, waiting = [], [], []
         for state in wanted:
             try:
                 url, data = load(year, state)
                 rows = counties(data)
                 if sum(c["votes"] for r in rows for c in r["candidates"]) > 0:
                     batch.append({"state": state, "source": url, "counties": rows})
+                else:
+                    waiting.append(state)
             except Exception as e:
                 print(f"{state}: {e}")
-        if batch:
-            try:
-                res = post("/api/app/election/ingest", {"states": batch}, tokens["access_token"])
+                failed.append({"state": state, "error": str(e)[:200]})
+        # Posts every round, even with nothing new, so Admin -> Election can see
+        # the script is alive and which states it couldn't read.
+        try:
+            res = post(
+                "/api/app/election/ingest",
+                {"states": batch, "failed": failed, "waiting": waiting},
+                tokens["access_token"],
+            )
+            if batch:
                 print(time.strftime("%H:%M:%S"), json.dumps(res.get("saved", res))[:400])
-            except Exception as e:
-                print(time.strftime("%H:%M:%S"), "post failed:", e)
-        else:
-            print(time.strftime("%H:%M:%S"), "no states with votes yet")
+            else:
+                print(time.strftime("%H:%M:%S"), "checked in; no states with votes yet")
+        except Exception as e:
+            print(time.strftime("%H:%M:%S"), "post failed:", e)
         time.sleep(max(5, EVERY - (time.time() - started)))
 
 

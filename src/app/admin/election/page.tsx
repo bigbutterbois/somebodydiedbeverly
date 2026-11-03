@@ -1,13 +1,14 @@
 import { ELECTION, pollsCloseAt } from "@/lib/election/config";
 import Link from "next/link";
 import { getForecast } from "@/lib/forecast";
-import { getCountRows, getLatestSnapshot, getRaceHistory } from "@/lib/election/server";
+import { getCountRows, getLaptopCheckins, getLatestSnapshot, getRaceHistory } from "@/lib/election/server";
 import { buildSnapshot } from "@/lib/election/live";
 import { MAP_HEIGHT, MAP_WIDTH, stateBorders, stateShapes } from "../../(site)/forecast/shapes";
 import { AdminOverview } from "./AdminOverview";
 import { READERS } from "@/lib/election/sources";
 import { Controls } from "./Controls";
 import { LiveBlogEditor } from "./LiveBlogEditor";
+import { LaptopStatus } from "./LaptopStatus";
 import { getElectionPosts } from "@/lib/election/posts";
 
 export const metadata = { title: "Election night" };
@@ -37,12 +38,13 @@ function clock(iso: string) {
 }
 
 export default async function AdminElectionPage() {
-  const [rows, snap, forecast, posts, raceHistory] = await Promise.all([
+  const [rows, snap, forecast, posts, raceHistory, checkins] = await Promise.all([
     getCountRows(),
     getLatestSnapshot(),
     getForecast(),
     getElectionPosts(),
     getRaceHistory().catch(() => []),
+    getLaptopCheckins().catch(() => []),
   ]);
   // Before the first refresh there's no snapshot, so show the forecast's odds.
   const board = snap ?? (forecast ? buildSnapshot(forecast, {}) : null);
@@ -66,6 +68,8 @@ export default async function AdminElectionPage() {
         </p>
         <Controls />
       </header>
+
+      <LaptopStatus checkins={checkins} now={now} />
 
       {board && (
         <AdminOverview
