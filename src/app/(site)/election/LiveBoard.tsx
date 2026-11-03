@@ -230,7 +230,7 @@ function LiveMap({ races, shapes, borders, width, height }: { races: LiveRace[];
             <span style={{ color: sideColor(active.pOpp - 0.5) }}>{winText(active)}</span>
           </>
         ) : (
-          <span className="text-muted">Circles mark races the model has called.</span>
+          <span className="text-muted">Circles mark races WMHQ has called.</span>
         )}
       </p>
     </div>
