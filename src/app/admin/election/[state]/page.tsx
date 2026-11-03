@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { ELECTION } from "@/lib/election/config";
-import { getLatestSnapshot } from "@/lib/election/server";
+import { getCountRows, getLatestSnapshot, getRecentGains } from "@/lib/election/server";
 import { getForecast } from "@/lib/forecast";
 import { Controls } from "../Controls";
 import { diffText, loadSheet, marginText } from "./sheet";
@@ -21,6 +21,9 @@ export default async function CountySheetPage({ params }: PageProps<"/admin/elec
   ]);
   if (!data) notFound();
   const { race, sheet } = data;
+  const countRow = (await getCountRows().catch(() => [])).find((r) => r.state === sheet.state);
+  const recent = await getRecentGains(sheet.state, countRow).catch(() => ({ gains: new Map<string, number>(), total: 0 }));
+  const maxGain = Math.max(0, ...recent.gains.values());
   const settings = ELECTION.states[sheet.state] ?? {};
   const live = snap?.races.find((r) => r.state === sheet.state);
   const o = race.opp.party === "D" ? "D" : race.opp.party;
@@ -36,6 +39,13 @@ export default async function CountySheetPage({ params }: PageProps<"/admin/elec
       : {
           backgroundColor: `rgba(${d > 0 ? "74,134,232" : "229,83,75"},${(0.1 + 0.55 * Math.min(1, Math.abs(d) / 12)).toFixed(2)})`,
         };
+
+  // Teal behind counties that added votes in the last 15 minutes, deeper for
+  // the ones that added the most.
+  const gainHeat = (added: number, max: number) =>
+    added > 0 && max > 0
+      ? { backgroundColor: `color-mix(in srgb, var(--accent) ${Math.round(30 + 50 * (added / max))}%, transparent)` }
+      : undefined;
 
   const facts: [string, string][] = [
     ["Final forecast", `${marginText(sheet.forecastMargin, o)} · ${o} win ${pct(race.p_opp)}`],
@@ -80,9 +90,6 @@ export default async function CountySheetPage({ params }: PageProps<"/admin/elec
           {race.name}: {race.opp.name} ({o}) vs {race.rep.name} (R)
         </h1>
         <p className="text-sm text-muted">
-          Expected = 2024 margin moved by the final forecast&apos;s swing. Break-even = moved by the swing that makes
-          the state 50/50. &quot;vs&quot; columns are margin points; + is better for {oppLast}. The forecast counts
-          fully at 0% counted and fades to nothing at 50%.{" "}
           <a href={`/admin/election/${sheet.state}/csv`} className="underline">
             Download CSV
           </a>
@@ -108,6 +115,11 @@ export default async function CountySheetPage({ params }: PageProps<"/admin/elec
           so a first-round lead can still lose.
         </p>
       )}
+      <p className={`text-sm ${recent.total ? "text-accent" : "text-muted"}`}>
+        {recent.total
+          ? `${num(recent.total)} votes added in the last 15 minutes, across ${recent.gains.size} ${recent.gains.size === 1 ? "county" : "counties"}. Shaded in the "Last 15 min" column.`
+          : "No votes added in the last 15 minutes."}
+      </p>
       {sheet.rows.length === 1 && (
         <p className="text-sm text-muted">This feed gives statewide totals only, so the sheet is one row.</p>
       )}
@@ -140,7 +152,7 @@ export default async function CountySheetPage({ params }: PageProps<"/admin/elec
               <th className="border-l border-line py-1 pr-3 font-normal" colSpan={3}>
                 Break-even
               </th>
-              <th className="border-l border-line py-1 pr-3 font-normal" colSpan={5}>
+              <th className="border-l border-line py-1 pr-3 font-normal" colSpan={6}>
                 Live
               </th>
               <th className="border-l border-line py-1 pr-3 font-normal" colSpan={3}>
@@ -159,6 +171,7 @@ export default async function CountySheetPage({ params }: PageProps<"/admin/elec
               <th className="py-1 pr-3 font-normal">{repLast}</th>
               <th className="py-1 pr-3 font-normal">Other</th>
               <th className="py-1 pr-3 font-normal">Counted</th>
+              <th className="py-1 pr-3 font-normal">Last 15 min</th>
               <th className="py-1 pr-3 font-normal">Margin</th>
               <th className="border-l border-line py-1 pr-3 font-normal">vs exp.</th>
               <th className="py-1 pr-3 font-normal">vs even</th>
@@ -182,6 +195,9 @@ export default async function CountySheetPage({ params }: PageProps<"/admin/elec
                 <td className="py-1 pr-3">{r.live.total ? num(r.live.rep) : "–"}</td>
                 <td className="py-1 pr-3">{r.live.total ? num(r.live.other) : "–"}</td>
                 <td className="py-1 pr-3">{r.live.total ? (r.live.complete ? "done" : pct(r.live.counted)) : "–"}</td>
+                <td className="py-1 pr-3" style={gainHeat(recent.gains.get(r.name) ?? 0, maxGain)}>
+                  {recent.gains.get(r.name) ? `+${num(recent.gains.get(r.name)!)}` : "–"}
+                </td>
                 <td className="py-1 pr-3">{marginText(r.live.margin, o)}</td>
                 <td className="border-l border-line py-1 pr-3" style={heat(r.vsExpected)}>
                   {diffText(r.vsExpected)}

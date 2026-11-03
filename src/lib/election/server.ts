@@ -102,7 +102,61 @@ export async function saveCounts(
     error: null,
   });
   if (error) throw new Error(error.message);
+  // Keep a copy each time the total moves, for the admin's "last 15 minutes"
+  // column, and drop copies over two hours old. Best effort: the live page
+  // doesn't depend on it.
+  if (!previous || previous.total_votes !== total) {
+    await supabase.from("election_count_history").insert({ state, at: now, counties, total_votes: total });
+    await supabase
+      .from("election_count_history")
+      .delete()
+      .eq("state", state)
+      .lt("at", new Date(Date.now() - 2 * 3600_000).toISOString());
+  }
   return total;
+}
+
+/**
+ * Votes each county added in the last `minutes`, by county name, plus the
+ * statewide total. Compares the current counts with the newest copy from
+ * before the window; a state that hasn't moved in the window added nothing,
+ * and one that started reporting inside it added everything it has.
+ */
+export async function getRecentGains(state: string, current: CountRow | undefined, minutes = 15) {
+  const gains = new Map<string, number>();
+  if (!current?.counties.length) return { gains, total: 0 };
+  const since = new Date(Date.now() - minutes * 60_000).toISOString();
+  if (current.changed_at && current.changed_at < since) return { gains, total: 0 };
+  const supabase = await contentClient();
+  const { data } = await supabase
+    .from("election_count_history")
+    .select("counties")
+    .eq("state", state)
+    .lte("at", since)
+    .order("at", { ascending: false })
+    .limit(1)
+    .maybeSingle();
+  const before = new Map(((data?.counties ?? []) as CountyCount[]).map((c) => [c.name, c.rep + c.opp + c.other]));
+  let total = 0;
+  for (const c of current.counties) {
+    const added = c.rep + c.opp + c.other - (before.get(c.name) ?? 0);
+    if (added) gains.set(c.name, added);
+    total += added;
+  }
+  return { gains, total };
+}
+
+/** Each race's opposition odds after every refresh, for the admin's small charts. */
+export async function getRaceHistory(): Promise<{ at: string; odds: Record<string, number> }[]> {
+  const supabase = await contentClient();
+  const { data } = await supabase
+    .from("election_snapshots")
+    .select("created_at, odds:data->odds")
+    .order("created_at", { ascending: true })
+    .limit(3000);
+  return (data ?? [])
+    .filter((d) => d.odds)
+    .map((d) => ({ at: d.created_at as string, odds: d.odds as Record<string, number> }));
 }
 
 async function saveError(state: string, message: string, source: string) {
@@ -123,7 +177,9 @@ export async function snapshot(forecast?: Forecast) {
   for (const row of rows) if (row.fetched_at) counts[row.state] = row.counties;
   const snap = buildSnapshot(f, counts);
   const supabase = await contentClient();
-  const { error } = await supabase.from("election_snapshots").insert({ data: snap });
+  // A compact copy of every race's odds rides along for the admin's charts.
+  const odds = Object.fromEntries(snap.races.map((r) => [r.state, Math.round(r.pOpp * 1000) / 1000]));
+  const { error } = await supabase.from("election_snapshots").insert({ data: { ...snap, odds } });
   if (error) throw new Error(error.message);
   return snap;
 }

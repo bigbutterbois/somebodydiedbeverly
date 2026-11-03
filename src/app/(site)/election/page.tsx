@@ -1,10 +1,12 @@
 import type { Metadata } from "next";
 import { getForecast } from "@/lib/forecast";
-import { demoCounts } from "@/lib/election/demo";
+import { demoCounts, demoPosts } from "@/lib/election/demo";
 import { buildSnapshot } from "@/lib/election/live";
+import { getElectionPosts } from "@/lib/election/posts";
 import { getControlHistory, getLatestSnapshot } from "@/lib/election/server";
 import { getSiteText } from "@/lib/supabase/site-text";
 import { MAP_HEIGHT, MAP_WIDTH, stateBorders, stateShapes } from "../forecast/shapes";
+import { LiveBlog } from "./LiveBlog";
 import { LiveBoard } from "./LiveBoard";
 
 export const metadata: Metadata = { title: "Election night" };
@@ -14,7 +16,12 @@ export const metadata: Metadata = { title: "Election night" };
 // ?demo=40 shows made-up results about 40% counted, to preview the page.
 export default async function ElectionPage({ searchParams }: PageProps<"/election">) {
   const demo = Number((await searchParams).demo) || 0;
-  const [t, saved, history] = await Promise.all([getSiteText(), demo ? null : getLatestSnapshot(), getControlHistory()]);
+  const [t, saved, history, posts] = await Promise.all([
+    getSiteText(),
+    demo ? null : getLatestSnapshot(),
+    getControlHistory(),
+    demo ? demoPosts() : getElectionPosts(),
+  ]);
   let snapshot = saved;
   if (!snapshot) {
     const forecast = await getForecast();
@@ -23,9 +30,9 @@ export default async function ElectionPage({ searchParams }: PageProps<"/electio
 
   return (
     <div className="flex flex-col gap-8 py-6">
-      <header className="flex flex-col gap-2">
+      <header className="flex flex-col gap-4">
         <h1 className="text-4xl font-light tracking-tight">{t("election.title")}</h1>
-        <p className="max-w-2xl text-sm text-muted">{t("election.intro")}</p>
+        <LiveBlog initial={posts} />
       </header>
       {demo > 0 && <p className="text-sm text-danger">Demo: these results are made up, about {demo}% counted.</p>}
       {snapshot ? (
@@ -33,7 +40,6 @@ export default async function ElectionPage({ searchParams }: PageProps<"/electio
           key={demo}
           demo={demo > 0}
           initial={snapshot}
-          live={Boolean(saved) || demo > 0}
           history={demo ? [] : history}
           shapes={stateShapes}
           borders={stateBorders}

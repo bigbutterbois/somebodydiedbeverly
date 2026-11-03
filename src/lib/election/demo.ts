@@ -34,3 +34,25 @@ export function demoCounts(forecast: Forecast, percent: number): Record<string, 
   }
   return out;
 }
+
+/** Made-up live blog posts for the ?demo preview. */
+export function demoPosts() {
+  const at = (min: number) => new Date(Date.parse("2026-11-04T03:00:00Z") - min * 60_000).toISOString();
+  return [
+    {
+      id: -1,
+      body: "North Carolina's early vote is in and Cooper is running about two points ahead of where he needs to be in Wake and Mecklenburg. The rural east hasn't reported much yet, so expect this to tighten.",
+      created_at: at(0),
+    },
+    {
+      id: -2,
+      body: "Georgia's first batch is mostly mail ballots from metro Atlanta. Ossoff's big lead here is expected; the needle is barely moving because the model already knew these would lean his way.",
+      created_at: at(14),
+    },
+    {
+      id: -3,
+      body: "Polls are closed in Georgia, Virginia and South Carolina. First results should start coming in within the next half hour.",
+      created_at: at(31),
+    },
+  ];
+}

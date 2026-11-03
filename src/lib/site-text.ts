@@ -59,14 +59,7 @@ export const SITE_TEXT = {
   },
 
   // Metro
-  "election.title": { page: "Election night", label: "Heading", default: "Election night", kind: "short" },
-  "election.intro": {
-    page: "Election night",
-    label: "Intro",
-    default:
-      "Live Senate results. Each race starts from the final forecast and moves as county results come in. The dark band is the middle half of where the final margin could land, the light band 90%.",
-    kind: "long",
-  },
+  "election.title": { page: "Election night", label: "Heading", default: "Election night LIVE", kind: "short" },
   "metro.tab.arrivals": { page: "Metro", label: "Arrivals tab", default: "Arrivals", kind: "short" },
   "metro.tab.map": { page: "Metro", label: "Map tab", default: "Map", kind: "short" },
 

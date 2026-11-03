@@ -12,7 +12,6 @@ const POLL_MS = 60_000;
 export function LiveBoard({
   initial,
   demo,
-  live,
   history: initialHistory,
   shapes,
   borders,
@@ -21,7 +20,6 @@ export function LiveBoard({
 }: {
   initial: LiveSnapshot;
   demo?: boolean;
-  live: boolean;
   history: { at: string; p: number }[];
   shapes: Shape[];
   borders: string;
@@ -29,7 +27,6 @@ export function LiveBoard({
   height: number;
 }) {
   const [snap, setSnap] = useState(initial);
-  const [isLive, setLive] = useState(live);
   const [history, setHistory] = useState(initialHistory);
   const [all, setAll] = useState(false);
 
@@ -42,7 +39,6 @@ export function LiveBoard({
         const res = await fetch("/api/election/latest", { cache: "no-store" });
         const next = (await res.json()) as LiveSnapshot | null;
         if (!next) return;
-        setLive(true);
         setSnap((prev) => {
           if (prev.at !== next.at) setHistory((h) => [...h, { at: next.at, p: next.control.pDemControl }]);
           return next;
@@ -73,19 +69,6 @@ export function LiveBoard({
 
   return (
     <div className="flex flex-col gap-10">
-      <p className="text-sm text-muted">
-        {isLive ? (
-          <>
-            <span className="mr-1.5 inline-block size-2 animate-pulse rounded-full bg-accent align-middle" />
-            Updated {clock(snap.at)}
-          </>
-        ) : (
-          "Results start when the first polls close, 6pm Eastern on Tuesday, November 3. Until then this is the forecast's starting point."
-        )}
-        {" · "}
-        {snap.forecastFinal ? "Final forecast" : "Forecast"} from {dayClock(snap.forecastAt)}
-      </p>
-
       <section className="grid items-center gap-8 md:grid-cols-[minmax(0,22rem)_1fr]">
         <Needle snap={snap} history={history} />
         <LiveMap races={snap.races} shapes={shapes} borders={borders} width={width} height={height} />
@@ -106,15 +89,6 @@ export function LiveBoard({
 
 // ---------------------------------------------------------------------------
 
-function clock(iso: string) {
-  return new Date(iso).toLocaleTimeString("en-US", { hour: "numeric", minute: "2-digit", timeZone: "America/New_York" }) + " ET";
-}
-
-function dayClock(iso: string) {
-  const d = new Date(iso);
-  return `${d.toLocaleDateString("en-US", { weekday: "short", timeZone: "America/New_York" })} ${clock(iso)}`;
-}
-
 const last = (name: string) => name.trim().split(/\s+/).pop() ?? name;
 /** A chance out of 100; only a called race shows 100, so simulated odds stop at ">99". */
 const pct = (raw: number) => {
@@ -133,7 +107,7 @@ function marginLabel(race: LiveRace, m: number) {
 
 const sideColor = (m: number) => (m >= 0 ? DEM : REP);
 
-function oddsColor(race: LiveRace) {
+export function oddsColor(race: LiveRace) {
   const p = race.called ? (race.called === "opp" ? 1 : 0) : race.pOpp;
   if (p >= 0.99) return "#2a62c9";
   if (p >= 0.85) return "#5a8fe6";
@@ -256,7 +230,7 @@ function LiveMap({ races, shapes, borders, width, height }: { races: LiveRace[];
             <span style={{ color: sideColor(active.pOpp - 0.5) }}>{winText(active)}</span>
           </>
         ) : (
-          <span className="text-muted">Circles mark races the model has called.</span>
+          <span className="text-muted">Circles mark races WMHQ has called.</span>
         )}
       </p>
     </div>
@@ -395,7 +369,6 @@ function DesktopTable({ races, scale }: { races: LiveRace[]; scale: Scale }) {
       </div>
       {races.map((r) => {
         const proj = r.margin.mean;
-        const projected = r.status === "live" || r.called;
         return (
           <div key={r.state} className={`${cols} items-center gap-x-3 border-b border-line py-2 tabular-nums`} style={{ background: tintFor(r) }}>
             <RaceName r={r} />
@@ -410,7 +383,6 @@ function DesktopTable({ races, scale }: { races: LiveRace[]; scale: Scale }) {
             <WinCell r={r} />
             <span className="text-right" style={{ color: sideColor(proj) }}>
               {marginLabel(r, proj)}
-              {!projected && <span className="block text-xs text-muted">forecast</span>}
             </span>
             <MarginBar race={r} scale={scale} />
           </div>
@@ -458,14 +430,12 @@ function PhoneTables({ races, scale }: { races: LiveRace[]; scale: Scale }) {
         </div>
         {races.map((r) => {
           const proj = r.margin.mean;
-          const projected = r.status === "live" || r.called;
-          return (
+            return (
             <div key={r.state} className={`${bottom} items-center gap-x-3 border-b border-line py-1.5 tabular-nums`} style={{ background: tintFor(r) }}>
               <span className="flex min-w-0 flex-col pl-1 leading-tight">
                 <span className="truncate">{r.name}</span>
                 <span className="truncate text-xs" style={{ color: sideColor(proj) }}>
                   {marginLabel(r, proj)}
-                  {!projected && <span className="text-muted"> fcst</span>}
                 </span>
               </span>
               <MarginBar race={r} scale={scale} />
