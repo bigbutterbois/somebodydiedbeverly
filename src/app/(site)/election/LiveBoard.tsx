@@ -312,7 +312,7 @@ function Tally({ race, at }: { race: LiveRace; at: { x: number; y: number; w: nu
           </tr>
         </thead>
         <tbody>
-          {rows.map((r, i) => (
+          {rows.map((r) => (
             <tr key={r.name} className="border-b border-line">
               <td className="py-1 pr-2">
                 <span className="mr-2 inline-block h-4 w-1 align-middle" style={{ background: r.color }} />
@@ -322,7 +322,6 @@ function Tally({ race, at }: { race: LiveRace; at: { x: number; y: number; w: nu
               <td className="py-1 text-right">{Math.round(r.votes).toLocaleString()}</td>
               <td className="py-1 text-right font-semibold">
                 {share(r.votes)}
-                {i === 0 && "%"}
               </td>
             </tr>
           ))}
