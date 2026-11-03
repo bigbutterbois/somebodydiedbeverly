@@ -306,10 +306,6 @@ function MarginBar({ race, scale }: { race: LiveRace; scale: Scale }) {
   );
 }
 
-// Tint a row once votes are coming in, so races with real results stand out.
-const tintFor = (r: LiveRace) =>
-  r.status !== "live" ? "transparent" : r.margin.mean >= 0 ? "rgba(74,134,232,0.07)" : "rgba(229,83,75,0.07)";
-
 function RaceName({ r }: { r: LiveRace }) {
   return (
     <span className="truncate pl-1">
@@ -336,7 +332,8 @@ function WinCell({ r }: { r: LiveRace }) {
   );
 }
 
-const counted = (r: LiveRace) => (r.status === "live" ? `${Math.round(r.counted * 100)}%` : statusShort(r));
+// Share of the expected vote counted so far, for every race (0% before results).
+const counted = (r: LiveRace) => `${Math.round((r.status === "live" ? r.counted : 0) * 100)}%`;
 
 /** "D+4.1" / "R+2.0": the current count's margin, short for phones. */
 function shortMargin(r: LiveRace, m: number) {
@@ -371,7 +368,7 @@ function DesktopTable({ races, scale }: { races: LiveRace[]; scale: Scale }) {
       {races.map((r) => {
         const proj = r.margin.mean;
         return (
-          <div key={r.state} className={`${cols} items-center gap-x-3 border-b border-line py-2 tabular-nums`} style={{ background: tintFor(r) }}>
+          <div key={r.state} className={`${cols} items-center gap-x-3 border-b border-line py-2 tabular-nums`}>
             <RaceName r={r} />
             <span className="text-right text-muted">{counted(r)}</span>
             <span className="text-right">
@@ -408,7 +405,7 @@ function PhoneTables({ races, scale }: { races: LiveRace[]; scale: Scale }) {
           <span className="text-right">Win prob.</span>
         </div>
         {races.map((r) => (
-          <div key={r.state} className={`${top} items-center gap-x-2 border-b border-line py-2 tabular-nums`} style={{ background: tintFor(r) }}>
+          <div key={r.state} className={`${top} items-center gap-x-2 border-b border-line py-2 tabular-nums`}>
             <RaceName r={r} />
             <span className="text-right text-muted">{counted(r)}</span>
             <span className="text-right">
@@ -432,7 +429,7 @@ function PhoneTables({ races, scale }: { races: LiveRace[]; scale: Scale }) {
         {races.map((r) => {
           const proj = r.margin.mean;
             return (
-            <div key={r.state} className={`${bottom} items-center gap-x-3 border-b border-line py-1.5 tabular-nums`} style={{ background: tintFor(r) }}>
+            <div key={r.state} className={`${bottom} items-center gap-x-3 border-b border-line py-1.5 tabular-nums`}>
               <span className="flex min-w-0 flex-col pl-1 leading-tight">
                 <span className="truncate">{r.name}</span>
                 <span className="truncate text-xs" style={{ color: sideColor(proj) }}>
@@ -446,14 +443,6 @@ function PhoneTables({ races, scale }: { races: LiveRace[]; scale: Scale }) {
       </div>
     </div>
   );
-}
-
-function statusShort(r: LiveRace) {
-  if (r.status === "forecast") return "No feed";
-  if (Date.now() < Date.parse(r.pollsClose)) {
-    return new Date(r.pollsClose).toLocaleTimeString("en-US", { hour: "numeric", minute: "2-digit", timeZone: "America/New_York" }).replace(":00", "");
-  }
-  return "0%";
 }
 
 function Band({ from, to, m, opacity, height }: { from: number; to: number; m: number; opacity: number; height: string }) {
