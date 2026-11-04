@@ -4,7 +4,6 @@ import { contentClient } from "@/lib/supabase/content";
 import { ELECTION } from "./config";
 import { buildSnapshot, projectedShares, type LiveSnapshot } from "./live";
 import type { CountyCount } from "./model";
-import { trailsCount } from "./model";
 import { READERS } from "./sources";
 import { DDHQ_URL, ddhqConfigured, readDdhq } from "./sources/ddhq";
 import { toCounts } from "./sources/match";
@@ -203,7 +202,7 @@ export async function snapshot(forecast?: Forecast) {
     const prev = was.get(r.state);
     if (r.called || !prev || r.status !== "live") continue;
     const p = prev === "opp" ? r.pOpp : 1 - r.pOpp;
-    if (p >= ELECTION.callKeepAt && !trailsCount(prev, r.votes, r.counted)) r.called = prev;
+    if (p >= ELECTION.callKeepAt) r.called = prev;
   }
   const supabase = await contentClient();
   // A compact copy of every race's odds rides along for the admin's charts.
