@@ -414,9 +414,11 @@ export function callNeeds(prior: Prior, projected: number | null) {
 }
 
 /**
- * A race is never called for the candidate behind in the votes counted so far
- * until nearly every vote is in (Louisiana was called for the Democrat while
- * trailing by 4 points with 78% counted).
+ * A race is never newly called for the candidate behind in the votes counted
+ * so far until nearly every vote is in (Louisiana was called for the Democrat
+ * while trailing by 4 points with 78% counted). A call already made is kept
+ * (see callKeepAt): Minnesota's Democrat trailed early while rural counties
+ * reported, and taking that call back only to make it again looked broken.
  */
 export function trailsCount(winner: "opp" | "rep", votes: { opp: number; rep: number }, counted: number) {
   const lead = winner === "opp" ? votes.opp - votes.rep : votes.rep - votes.opp;
