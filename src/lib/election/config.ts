@@ -88,6 +88,9 @@ export const ELECTION = {
    * about 7% over a tied one while an R+50 county runs 7% under.
    */
   turnoutTiltSd: 0.15,
+  /** The feed's expected vote for a county is kept within these multiples of ours. */
+  feedExpectedMin: 0.6,
+  feedExpectedMax: 1.25,
   /** A county the feed marks done is trusted only with at least this share of its expected vote in. */
   doneMinShare: 0.6,
   /** Third-party share assumed in counties with no votes yet. */

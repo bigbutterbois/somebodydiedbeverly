@@ -183,12 +183,18 @@ function prepare(prior: Prior, counts: CountyCount[] | null): Prepared {
       let count = statewide ? byKey.get(prior.state) ?? null : byKey.get(u.fips) ?? byKey.get(normName(u.name)) ?? null;
       const counted = count ? count.rep + count.opp + count.other : 0;
       const expected0 = u.votes * turnout;
+      // The feed's own expected vote is used only within a band around ours:
+      // the NYT's Louisiana file expected 267k votes from Orleans (159k in
+      // 2024), which made the uncounted rest of Orleans swing the state.
+      const feedExpected =
+        count?.expected && count.expected > 0
+          ? Math.min(expected0 * ELECTION.feedExpectedMax, Math.max(expected0 * ELECTION.feedExpectedMin, count.expected))
+          : null;
       // A county marked done with far fewer votes than expected isn't done: the
       // NYT's Michigan file had every Saginaw precinct "reporting" at 14.6k of
       // ~94k votes (precincts report before their absentee ballots are added).
-      if (count?.complete && counted < ELECTION.doneMinShare * (count.expected && count.expected > 0 ? count.expected : expected0))
-        count = { ...count, complete: false };
-      let expected = count?.expected && count.expected > 0 ? count.expected : expected0;
+      if (count?.complete && counted < ELECTION.doneMinShare * (feedExpected ?? expected0)) count = { ...count, complete: false };
+      let expected = feedExpected ?? expected0;
       if (count?.complete) expected = counted * (1 + (cfg.lateVotes ?? ELECTION.lateVotes));
       // Never expect fewer votes than are already counted.
       expected = Math.max(expected, counted * (count?.complete ? 1 : 1.02));
@@ -405,6 +411,16 @@ export function callNeeds(prior: Prior, projected: number | null) {
     // are in the read.
     finished: mirage && t < 0.5 ? ELECTION.callMinFinished : 0,
   };
+}
+
+/**
+ * A race is never called for the candidate behind in the votes counted so far
+ * until nearly every vote is in (Louisiana was called for the Democrat while
+ * trailing by 4 points with 78% counted).
+ */
+export function trailsCount(winner: "opp" | "rep", votes: { opp: number; rep: number }, counted: number) {
+  const lead = winner === "opp" ? votes.opp - votes.rep : votes.rep - votes.opp;
+  return lead <= 0 && counted < ELECTION.closeCallCounted;
 }
 
 function callReady(p: Prepared, counted: number, projected: number) {
@@ -643,7 +659,7 @@ export function runModel(input: LiveInput) {
           p95: round1(sim.margin.p95 + d),
         }
       : sim.margin;
-    const called =
+    let called: "opp" | "rep" | null =
       status === "live" && input.closed.has(state) && callReady(p, sim.counted, sim.margin.mean)
         ? pOpp >= ELECTION.callAt
           ? "opp"
@@ -651,6 +667,7 @@ export function runModel(input: LiveInput) {
             ? "rep"
             : null
         : null;
+    if (called && trailsCount(called, sim.votes, sim.counted)) called = null;
     return {
       state,
       status,
