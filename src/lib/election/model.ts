@@ -384,7 +384,12 @@ function finishedShare(p: Prepared) {
 export function callNeeds(prior: Prior, projected: number | null) {
   const sure = Math.max(prior.pOpp, 1 - prior.pOpp);
   let t = Math.min(1, Math.max(0, (sure - ELECTION.callCloseOdds) / (ELECTION.callSafeOdds - ELECTION.callCloseOdds)));
-  if (projected !== null && Math.abs(projected - prior.mean) > ELECTION.callWayOffSd * prior.sd) t = 0;
+  // Only a projection that has moved toward the trailing candidate waits like a
+  // close race; a favorite winning by even more than forecast (New Jersey's
+  // early count ran D+39 against a D+~20 forecast) doesn't.
+  const towardTrailing =
+    projected !== null && (Math.sign(projected) !== Math.sign(prior.mean) || Math.abs(projected) < Math.abs(prior.mean));
+  if (projected !== null && towardTrailing && Math.abs(projected - prior.mean) > ELECTION.callWayOffSd * prior.sd) t = 0;
   const mirage = Boolean(ELECTION.states[prior.state]?.earlyLean);
   return {
     counted: ELECTION.callCloseCounted - (ELECTION.callCloseCounted - ELECTION.callMinCounted) * t,

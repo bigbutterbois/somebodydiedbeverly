@@ -98,6 +98,8 @@ export const ELECTION = {
   signalWeight: 0.5,
   /** Our own call: this sure, with at least this share of the vote counted. */
   callAt: 0.995,
+  /** Once called, a race stays called until the winner's odds drop below this (Mike: no going back and forth). */
+  callKeepAt: 0.95,
   /**
    * How much of the vote must be counted before a call depends on how sure
    * the forecast was (Mike, Nov 3): races the forecast had at callSafeOdds or
