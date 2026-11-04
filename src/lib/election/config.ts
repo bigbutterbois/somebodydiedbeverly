@@ -88,6 +88,8 @@ export const ELECTION = {
    * about 7% over a tied one while an R+50 county runs 7% under.
    */
   turnoutTiltSd: 0.15,
+  /** A county the feed marks done is trusted only with at least this share of its expected vote in. */
+  doneMinShare: 0.6,
   /** Third-party share assumed in counties with no votes yet. */
   otherShare: 0.02,
   /** How tightly races move together (share of their uncertainty that is national). */
@@ -120,6 +122,8 @@ export const ELECTION = {
    * finish before it swings.
    */
   callMinFinished: 0.25,
+  /** ...unless the projection is at least this many points from a tie (Mike, Nov 3: Texas at D+10 with 57% counted). */
+  callFinishedMargin: 5,
   /** A race projected closer than this many points is not called before closeCallCounted (the range runs narrow late in the count). */
   closeCallMargin: 2,
   closeCallCounted: 0.99,

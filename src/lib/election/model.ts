@@ -180,9 +180,14 @@ function prepare(prior: Prior, counts: CountyCount[] | null): Prepared {
     unmatched,
     turnoutSd: ELECTION.turnoutNoise,
     counties: units.map((u) => {
-      const count = statewide ? byKey.get(prior.state) ?? null : byKey.get(u.fips) ?? byKey.get(normName(u.name)) ?? null;
+      let count = statewide ? byKey.get(prior.state) ?? null : byKey.get(u.fips) ?? byKey.get(normName(u.name)) ?? null;
       const counted = count ? count.rep + count.opp + count.other : 0;
       const expected0 = u.votes * turnout;
+      // A county marked done with far fewer votes than expected isn't done: the
+      // NYT's Michigan file had every Saginaw precinct "reporting" at 14.6k of
+      // ~94k votes (precincts report before their absentee ballots are added).
+      if (count?.complete && counted < ELECTION.doneMinShare * (count.expected && count.expected > 0 ? count.expected : expected0))
+        count = { ...count, complete: false };
       let expected = count?.expected && count.expected > 0 ? count.expected : expected0;
       if (count?.complete) expected = counted * (1 + (cfg.lateVotes ?? ELECTION.lateVotes));
       // Never expect fewer votes than are already counted.
@@ -406,7 +411,7 @@ function callReady(p: Prepared, counted: number, projected: number) {
   const need = callNeeds(p.prior, projected);
   return (
     counted >= need.counted &&
-    finishedShare(p) >= need.finished &&
+    (finishedShare(p) >= need.finished || Math.abs(projected) >= ELECTION.callFinishedMargin) &&
     // A race this close waits for nearly every vote: the model's range runs narrow late in the count.
     (Math.abs(projected) >= ELECTION.closeCallMargin || counted >= ELECTION.closeCallCounted)
   );
