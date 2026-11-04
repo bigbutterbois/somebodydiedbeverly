@@ -12,6 +12,8 @@ import { LaptopStatus } from "./LaptopStatus";
 import { getElectionPosts } from "@/lib/election/posts";
 
 export const metadata = { title: "Election night" };
+// Room for the chart history rebuild, which runs in batches of about 40 seconds.
+export const maxDuration = 60;
 
 // When each state's results last moved, so a lagging feed stands out. A state
 // is flagged when its polls have closed, it isn't nearly done, and its vote

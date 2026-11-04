@@ -1,7 +1,7 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
-import { refresh } from "@/lib/election/server";
+import { rebuildShares, refresh } from "@/lib/election/server";
 import { ownerClient } from "@/lib/supabase/owner";
 
 export async function refreshNow(): Promise<{ ok: boolean; message: string }> {
@@ -12,6 +12,18 @@ export async function refreshNow(): Promise<{ ok: boolean; message: string }> {
     return { ok: result.ran, message: result.ran ? "Refreshed." : `Skipped: ${result.reason}.` };
   } catch (e) {
     return { ok: false, message: e instanceof Error ? e.message : String(e) };
+  }
+}
+
+/** Reruns tonight's chart history through the current model, a batch at a time. */
+export async function rebuildChartHistory(): Promise<{ ok: boolean; message: string; left: number }> {
+  await ownerClient(); // owner only
+  try {
+    const { done, left } = await rebuildShares();
+    if (left === 0) revalidatePath("/election");
+    return { ok: true, message: left ? `Rebuilt ${done}, ${left} to go…` : "Chart history rebuilt.", left };
+  } catch (e) {
+    return { ok: false, message: e instanceof Error ? e.message : String(e), left: 0 };
   }
 }
 

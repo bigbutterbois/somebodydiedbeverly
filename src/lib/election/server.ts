@@ -103,15 +103,15 @@ export async function saveCounts(
   });
   if (error) throw new Error(error.message);
   // Keep a copy each time the total moves, for the admin's "last 15 minutes"
-  // column, and drop copies over two hours old. Best effort: the live page
-  // doesn't depend on it.
+  // column and for rebuilding the chart history (rebuildShares), and drop
+  // copies over 14 hours old. Best effort: the live page doesn't depend on it.
   if (!previous || previous.total_votes !== total) {
     await supabase.from("election_count_history").insert({ state, at: now, counties, total_votes: total });
     await supabase
       .from("election_count_history")
       .delete()
       .eq("state", state)
-      .lt("at", new Date(Date.now() - 2 * 3600_000).toISOString());
+      .lt("at", new Date(Date.now() - 14 * 3600_000).toISOString());
   }
   return total;
 }
@@ -182,6 +182,9 @@ async function saveError(state: string, message: string, source: string) {
   else await supabase.from("election_counts").insert({ state, source, checked_at: now, error: message });
 }
 
+/** Version of the model whose shares a snapshot carries; bump to rebuild the chart history again. */
+const SHARES_VERSION = 2;
+
 /** Runs the model on the stored counts and saves a snapshot. */
 export async function snapshot(forecast?: Forecast) {
   const f = forecast ?? (await getForecast(true));
@@ -196,7 +199,7 @@ export async function snapshot(forecast?: Forecast) {
   const odds = Object.fromEntries(snap.races.map((r) => [r.state, Math.round(r.pOpp * 1000) / 1000]));
   // And every race's projected vote shares, for the public chart under the map.
   const shares = Object.fromEntries(snap.races.map((r) => [r.state, projectedShares(r)]));
-  const { error } = await supabase.from("election_snapshots").insert({ data: { ...snap, odds, shares } });
+  const { error } = await supabase.from("election_snapshots").insert({ data: { ...snap, odds, shares, sharesVersion: SHARES_VERSION } });
   if (error) throw new Error(error.message);
   await postCalls(snap);
   return snap;
@@ -339,7 +342,7 @@ export async function saveLaptopCheckin(
     await supabase
       .from("election_laptop_checkins")
       .delete()
-      .lt("at", new Date(Date.now() - 2 * 3600_000).toISOString());
+      .lt("at", new Date(Date.now() - 14 * 3600_000).toISOString());
   } catch {}
 }
 
@@ -354,4 +357,71 @@ export async function getLaptopCheckins(minutes = 120): Promise<LaptopCheckin[]>
     .limit(200);
   if (error) return [];
   return (data ?? []) as LaptopCheckin[];
+}
+
+/**
+ * Reruns the model over the night's saved snapshots, from the counts saved in
+ * election_count_history at each one's time, and rewrites only their chart
+ * shares. A state with no saved counts that early keeps its old shares. Works
+ * in batches within `budgetMs`; returns how many snapshots are left.
+ */
+export async function rebuildShares(budgetMs = 40_000): Promise<{ done: number; left: number }> {
+  const started = Date.now();
+  const f = await getForecast(true);
+  if (!f) throw new Error("No forecast to start from.");
+  const supabase = await contentClient();
+  const { data: rows, error: historyError } = await supabase
+    .from("election_count_history")
+    .select("state, at, counties")
+    .order("at", { ascending: true })
+    .limit(20000);
+  if (historyError) throw new Error(historyError.message);
+  const history = (rows ?? []) as { state: string; at: string; counties: CountyCount[] }[];
+  const first = new Map<string, number>();
+  for (const h of history) if (!first.has(h.state)) first.set(h.state, Date.parse(h.at));
+
+  const todo = () =>
+    supabase
+      .from("election_snapshots")
+      .select("id", { count: "exact", head: true })
+      .gte("created_at", ELECTION.start)
+      .or(`data->>sharesVersion.is.null,data->>sharesVersion.neq.${SHARES_VERSION}`);
+
+  let done = 0;
+  while (Date.now() - started < budgetMs) {
+    const { data: batch, error } = await supabase
+      .from("election_snapshots")
+      .select("id, created_at, data")
+      .gte("created_at", ELECTION.start)
+      .or(`data->>sharesVersion.is.null,data->>sharesVersion.neq.${SHARES_VERSION}`)
+      .order("created_at", { ascending: true })
+      .limit(5);
+    if (error) throw new Error(error.message);
+    if (!batch?.length) break;
+    for (const row of batch) {
+      const t = Date.parse(row.created_at as string);
+      // Each state's counts as they stood when this snapshot was saved (they
+      // are written a moment before the snapshot in the same refresh).
+      const counts: Record<string, CountyCount[] | undefined> = {};
+      for (const state of Object.keys(READERS)) counts[state] = [];
+      for (const h of history) if (Date.parse(h.at) <= t) counts[h.state] = h.counties;
+      const snap = buildSnapshot(f, counts, new Date(t));
+      const data = row.data as { shares?: Record<string, number[]> } & Record<string, unknown>;
+      const shares: Record<string, number[]> = { ...(data.shares ?? {}) };
+      for (const r of snap.races) {
+        const since = first.get(r.state);
+        // Saved counts reach back to this time (or the state had none at all yet).
+        if (since === undefined || since <= t || !data.shares?.[r.state]) shares[r.state] = projectedShares(r);
+      }
+      const { error: saveError } = await supabase
+        .from("election_snapshots")
+        .update({ data: { ...data, shares, sharesVersion: SHARES_VERSION } })
+        .eq("id", row.id);
+      if (saveError) throw new Error(saveError.message);
+      done++;
+      if (Date.now() - started >= budgetMs) break;
+    }
+  }
+  const { count } = await todo();
+  return { done, left: count ?? 0 };
 }

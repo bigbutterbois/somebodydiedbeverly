@@ -16,8 +16,7 @@ const last = (name: string) => name.trim().split(/\s+/).pop() ?? name;
 
 /**
  * One race's projected final vote share for both main candidates from 6:30pm to
- * 6:30am Eastern, with the shaded range the result should land in 9 times out
- * of 10. The range narrows as more of the vote is counted.
+ * 6:30am Eastern.
  */
 export function ShareChart({ race, demo, onClose }: { race: LiveRace; demo: number; onClose: () => void }) {
   const [loaded, setLoaded] = useState<{ state: string; points: Point[] } | null>(null);
@@ -114,8 +113,8 @@ function Chart({
   repName: string;
 }) {
   const { W, H } = SIZES[size];
-  const lows = points.flatMap((p) => [p.s[1], p.s[4]]);
-  const highs = points.flatMap((p) => [p.s[2], p.s[5]]);
+  const lows = points.flatMap((p) => [p.s[0], p.s[3]]);
+  const highs = lows;
   const range = Math.max(...highs) - Math.min(...lows);
   const step = range > 40 ? 10 : range > 20 ? 5 : range > 12 && size === "narrow" ? 4 : 2;
   const y0 = Math.max(0, Math.floor(Math.min(...lows) / step) * step);
@@ -127,8 +126,6 @@ function Chart({
   const y = (v: number) => PAD.top + (1 - (v - y0) / Math.max(y1 - y0, 1)) * (H - PAD.top - PAD.bottom);
 
   const line = (i: number) => points.map((p) => `${x(p.at).toFixed(1)},${y(p.s[i]).toFixed(1)}`).join(" ");
-  const band = (lo: number, hi: number) =>
-    [...points.map((p) => `${x(p.at).toFixed(1)},${y(p.s[hi]).toFixed(1)}`), ...points.toReversed().map((p) => `${x(p.at).toFixed(1)},${y(p.s[lo]).toFixed(1)}`)].join(" ");
 
   const every = size === "narrow" ? 3 : 2;
   const hours = Array.from({ length: 12 / every + 1 }, (_, i) => new Date(T0 + i * every * 3_600_000).toISOString());
@@ -166,8 +163,6 @@ function Chart({
           {hourLabel(h)}
         </text>
       ))}
-      <polygon points={band(4, 5)} fill={REP} opacity={0.18} />
-      <polygon points={band(1, 2)} fill={oppColor} opacity={0.18} />
       {lines.map((l) => (
         <g key={l.i}>
           <polyline points={line(l.i)} fill="none" stroke="var(--background)" strokeWidth={5} strokeLinejoin="round" />

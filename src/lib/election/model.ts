@@ -153,8 +153,15 @@ function prepare(prior: Prior, counts: CountyCount[] | null): Prepared {
     for (const c of counts) {
       if (statewide) byKey.set(prior.state, c);
       else if (c.fips && fipsSet.has(c.fips)) byKey.set(c.fips, c);
-      else if (nameSet.has(normName(c.name))) byKey.set(normName(c.name), c);
-      else if (c.rep + c.opp + c.other > 0) unmatched.push(c.name);
+      else {
+        // Virginia's independent cities are "Norfolk city" in the baselines but
+        // plain "Norfolk" in the NYT feed (which says "Roanoke City" only where
+        // a county shares the name, and that county matches exactly first).
+        const k = normName(c.name);
+        const key = nameSet.has(k) ? k : nameSet.has(`${k}city`) ? `${k}city` : null;
+        if (key) byKey.set(key, c);
+        else if (c.rep + c.opp + c.other > 0) unmatched.push(c.name);
+      }
     }
   }
 
