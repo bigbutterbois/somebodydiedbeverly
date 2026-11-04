@@ -13,7 +13,6 @@ const POLL_MS = 60_000;
 export function LiveBoard({
   initial,
   demo,
-  history: initialHistory,
   shapes,
   borders,
   width,
@@ -22,14 +21,12 @@ export function LiveBoard({
   initial: LiveSnapshot;
   /** The ?demo percentage (0 for the real night). */
   demo?: number;
-  history: { at: string; p: number }[];
   shapes: Shape[];
   borders: string;
   width: number;
   height: number;
 }) {
   const [snap, setSnap] = useState(initial);
-  const [history, setHistory] = useState(initialHistory);
   const [all, setAll] = useState(false);
   const [picked, setPicked] = useState<string | null>(null);
   const pickedRace = snap.races.find((r) => r.state === picked) ?? null;
@@ -43,10 +40,7 @@ export function LiveBoard({
         const res = await fetch("/api/election/latest", { cache: "no-store" });
         const next = (await res.json()) as LiveSnapshot | null;
         if (!next) return;
-        setSnap((prev) => {
-          if (prev.at !== next.at) setHistory((h) => [...h, { at: next.at, p: next.control.pDemControl }]);
-          return next;
-        });
+        setSnap(next);
       } catch {
         // Try again next minute.
       }
@@ -74,7 +68,7 @@ export function LiveBoard({
   return (
     <div className="flex flex-col gap-10">
       <section className="grid items-center gap-8 md:grid-cols-[minmax(0,22rem)_1fr]">
-        <Needle snap={snap} history={history} />
+        <Needle snap={snap} />
         <LiveMap
           races={snap.races}
           shapes={shapes}
@@ -134,7 +128,7 @@ export function oddsColor(race: LiveRace) {
 
 // ---------------------------------------------------------------------------
 
-function Needle({ snap, history }: { snap: LiveSnapshot; history: { at: string; p: number }[] }) {
+function Needle({ snap }: { snap: LiveSnapshot }) {
   const p = snap.control.pDemControl;
   const angle = (p - 0.5) * 180; // -90 = certain Republican, +90 = certain Democratic
   const r = 120;
@@ -186,22 +180,7 @@ function Needle({ snap, history }: { snap: LiveSnapshot; history: { at: string; 
       <p className="text-xs text-muted">
         Forecast said Democrats {pct(snap.control.forecastPDem)}% · about {Math.round(snap.control.demSeatsMean)} Democratic seats
       </p>
-      {history.length > 1 && <Spark history={history} />}
     </div>
-  );
-}
-
-function Spark({ history }: { history: { at: string; p: number }[] }) {
-  const w = 280;
-  const h = 48;
-  const t0 = Date.parse(history[0].at);
-  const t1 = Math.max(Date.parse(history[history.length - 1].at), t0 + 1);
-  const pts = history.map((d) => `${((Date.parse(d.at) - t0) / (t1 - t0)) * w},${(1 - d.p) * h}`).join(" ");
-  return (
-    <svg viewBox={`0 0 ${w} ${h}`} className="w-full max-w-80" aria-label="Democratic control odds through the night">
-      <line x1={0} x2={w} y1={h / 2} y2={h / 2} stroke="var(--line)" strokeDasharray="3 3" />
-      <polyline points={pts} fill="none" stroke="var(--foreground)" strokeWidth={1.5} />
-    </svg>
   );
 }
 

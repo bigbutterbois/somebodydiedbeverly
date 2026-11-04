@@ -414,7 +414,9 @@ function estimateSwing(p: Prepared, priorShift = 0): SwingEstimate {
   // Blend the forecast's swing with what the counted votes alone say.
   const w = forecastWeight(stateCounted(p));
   const vPrior = p.prior.sd ** 2;
-  const vss = w * w * vPrior + (1 - w) * (1 - w) * live.vss;
+  // Mix the two uncertainties in proportion rather than as independent
+  // estimates, which made the range shrink faster than the forecast faded.
+  const vss = w * vPrior + (1 - w) * live.vss;
   return {
     s: w * priorSwing + (1 - w) * live.s,
     b: live.b,
