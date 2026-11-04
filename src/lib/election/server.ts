@@ -5,7 +5,6 @@ import { ELECTION } from "./config";
 import { buildSnapshot, projectedShares, type LiveSnapshot } from "./live";
 import type { CountyCount } from "./model";
 import { READERS } from "./sources";
-import { DDHQ_URL, ddhqConfigured, readDdhq } from "./sources/ddhq";
 import { toCounts } from "./sources/match";
 import type { RawCounty } from "./sources/types";
 
@@ -27,19 +26,6 @@ export type CountRow = {
 };
 
 export const inWindow = (now = Date.now()) => now >= Date.parse(ELECTION.start) && now <= Date.parse(ELECTION.end);
-
-const BROWSER_UA =
-  "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/130.0 Safari/537.36";
-
-async function fetchText(url: string) {
-  const res = await fetch(url, {
-    cache: "no-store",
-    headers: { "user-agent": BROWSER_UA, accept: "*/*" },
-    signal: AbortSignal.timeout(20_000),
-  });
-  if (!res.ok) throw new Error(`${res.status} from ${new URL(url).host}`);
-  return res.text();
-}
 
 export async function getCountRows(): Promise<CountRow[]> {
   const supabase = await contentClient();
@@ -174,14 +160,6 @@ export async function getShareHistory(state: string): Promise<{ at: string; s: n
     .map((d) => ({ at: d.created_at as string, s: d.s as number[] }));
 }
 
-async function saveError(state: string, message: string, source: string) {
-  const supabase = await contentClient();
-  const now = new Date().toISOString();
-  const { data } = await supabase.from("election_counts").select("state").eq("state", state).maybeSingle();
-  if (data) await supabase.from("election_counts").update({ checked_at: now, error: message }).eq("state", state);
-  else await supabase.from("election_counts").insert({ state, source, checked_at: now, error: message });
-}
-
 /** Version of the model whose shares a snapshot carries; bump to rebuild the chart history again. */
 const SHARES_VERSION = 2;
 
@@ -246,7 +224,7 @@ async function postCalls(snap: LiveSnapshot) {
 }
 
 /**
- * Reads every state feed, saves the counts and a new snapshot. Skips when
+ * Runs the model on the saved NYT counts and saves a new snapshot. Skips when
  * another refresh started under a minute ago (or, unless forced, outside
  * election night).
  */
@@ -260,71 +238,10 @@ export async function refresh({ force = false } = {}) {
 
   const forecast = await getForecast(true);
   if (!forecast) return { ran: false, reason: "no forecast" };
-  const rows = new Map((await getCountRows()).map((r) => [r.state, r]));
-
-  // Decision Desk HQ first, when set up: one call covers every race it has.
-  const covered = new Set<string>();
-  const ddhq: Record<string, unknown> = {};
-  if (ddhqConfigured()) {
-    const now = new Date().toISOString();
-    try {
-      const states = await readDdhq();
-      for (const s of states) {
-        if (!forecast.races.some((r) => r.state === s.state) || !s.counties.length) continue;
-        try {
-          ddhq[s.state] = await saveCounts(s.state, s.counties, forecast, "server", DDHQ_URL, rows.get(s.state));
-          covered.add(s.state);
-        } catch (e) {
-          ddhq[s.state] = e instanceof Error ? e.message : String(e);
-        }
-      }
-      await supabase.from("election_counts").upsert({
-        state: "DDHQ",
-        source: DDHQ_URL,
-        fetched_at: now,
-        checked_at: now,
-        changed_at: now,
-        error: null,
-        total_votes: states.length,
-      });
-    } catch (e) {
-      const message = e instanceof Error ? e.message : String(e);
-      ddhq.error = message;
-      await supabase.from("election_counts").upsert({
-        state: "DDHQ",
-        source: DDHQ_URL,
-        checked_at: now,
-        error: message.slice(0, 300),
-      });
-    }
-  }
-
-  const results = await Promise.all(
-    Object.entries(READERS)
-      .filter(([state]) => !covered.has(state))
-      .map(async ([state, reader]) => {
-        const previous = rows.get(state);
-        // The laptop is feeding this state (the site can't reach it): leave it be.
-        if (
-          previous?.via === "laptop" &&
-          previous.fetched_at &&
-          Date.now() - Date.parse(previous.fetched_at) < 5 * 60_000
-        ) {
-          return { state, skipped: "laptop" };
-        }
-        try {
-          const raw = await reader!.read(fetchText);
-          const votes = await saveCounts(state, raw, forecast, "server", reader!.url, previous);
-          return { state, votes };
-        } catch (e) {
-          const message = e instanceof Error ? e.message : String(e);
-          await saveError(state, message.slice(0, 300), reader!.url);
-          return { state, error: message };
-        }
-      }),
-  );
+  // Counts come only from the NYT data the laptop script posts (Mike, Nov 4:
+  // no state feeds or DDHQ). This just reruns the model on what is saved.
   const snap = await snapshot(forecast);
-  return { ran: true, at: snap.at, ddhq, results };
+  return { ran: true, at: snap.at };
 }
 
 export type LaptopState = {
