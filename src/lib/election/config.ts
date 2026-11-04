@@ -120,6 +120,8 @@ export const ELECTION = {
    * finish before it swings.
    */
   callMinFinished: 0.25,
+  /** ...unless the projection is at least this many points from a tie (Mike, Nov 3: Texas at D+10 with 57% counted). */
+  callFinishedMargin: 5,
   /** A race projected closer than this many points is not called before closeCallCounted (the range runs narrow late in the count). */
   closeCallMargin: 2,
   closeCallCounted: 0.99,

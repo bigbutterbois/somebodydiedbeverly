@@ -406,7 +406,7 @@ function callReady(p: Prepared, counted: number, projected: number) {
   const need = callNeeds(p.prior, projected);
   return (
     counted >= need.counted &&
-    finishedShare(p) >= need.finished &&
+    (finishedShare(p) >= need.finished || Math.abs(projected) >= ELECTION.callFinishedMargin) &&
     // A race this close waits for nearly every vote: the model's range runs narrow late in the count.
     (Math.abs(projected) >= ELECTION.closeCallMargin || counted >= ELECTION.closeCallCounted)
   );
