@@ -67,8 +67,14 @@ export const ELECTION = {
    * sd here let the model catch a 20-point gap faster with no cost elsewhere.
    */
   earlyLeanSd: 15,
-  /** Extra swing uncertainty for what the model gets wrong (points, sd). */
-  modelSlack: 1.5,
+  /**
+   * Extra swing uncertainty for what the model gets wrong (points, sd). Raised
+   * from 1.5 on election night: Florida's range shrank to about +/-3 points at
+   * half counted and then jumped 5 points when Election Day votes came in; in
+   * stress tests with a big early-vote lean the 90% range held the truth only
+   * 70% of the time at 1.5, and 95% at 3.
+   */
+  modelSlack: 3,
   /** Share of the expected vote counted at which the forecast stops counting (Mike: 50%). */
   forecastFadeAt: 0.5,
   /** Prior on the swing when reading the results alone: wide enough to barely matter. */

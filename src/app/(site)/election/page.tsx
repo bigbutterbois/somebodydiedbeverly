@@ -3,7 +3,7 @@ import { getForecast } from "@/lib/forecast";
 import { demoCounts, demoPosts } from "@/lib/election/demo";
 import { buildSnapshot } from "@/lib/election/live";
 import { getElectionPosts } from "@/lib/election/posts";
-import { getControlHistory, getLatestSnapshot } from "@/lib/election/server";
+import { getLatestSnapshot } from "@/lib/election/server";
 import { getSiteText } from "@/lib/supabase/site-text";
 import { MAP_HEIGHT, MAP_WIDTH, stateBorders, stateShapes } from "../forecast/shapes";
 import { LiveBlog } from "./LiveBlog";
@@ -16,10 +16,9 @@ export const metadata: Metadata = { title: "Election night" };
 // ?demo=40 shows made-up results about 40% counted, to preview the page.
 export default async function ElectionPage({ searchParams }: PageProps<"/election">) {
   const demo = Number((await searchParams).demo) || 0;
-  const [t, saved, history, posts] = await Promise.all([
+  const [t, saved, posts] = await Promise.all([
     getSiteText(),
     demo ? null : getLatestSnapshot(),
-    getControlHistory(),
     demo ? demoPosts() : getElectionPosts(),
   ]);
   let snapshot = saved;
@@ -40,7 +39,6 @@ export default async function ElectionPage({ searchParams }: PageProps<"/electio
           key={demo}
           demo={demo}
           initial={snapshot}
-          history={demo ? [] : history}
           shapes={stateShapes}
           borders={stateBorders}
           width={MAP_WIDTH}
