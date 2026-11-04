@@ -100,6 +100,8 @@ export function normName(name: string) {
     .replace(/\b(county|parish|borough|city and county)\b/g, "")
     .replace(/\bst\.?\s/g, "saint ")
     .replace(/\bste\.?\s/g, "sainte ")
+    // NYT says "Jeff Davis" where Mississippi's baseline says "Jefferson Davis".
+    .replace(/\bjeff\b/g, "jefferson")
     .replace(/[^a-z0-9]/g, "");
   // Alaska reports by state House district: "District 7", "HD 07", "State House District 7".
   const district = n.match(/^(?:statehouse)?(?:district|hd)0*(\d+)$/);
