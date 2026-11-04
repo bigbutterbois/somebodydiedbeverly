@@ -147,19 +147,26 @@ function prepare(prior: Prior, counts: CountyCount[] | null): Prepared {
 
   const byKey = new Map<string, CountyCount>();
   const unmatched: string[] = [];
+  // A feed can list a county twice (NYT's Texas file has "Dallas" with votes
+  // and an empty "DALLAS"): keep whichever copy has more votes.
+  const total = (c: CountyCount) => c.rep + c.opp + c.other;
+  const put = (key: string, c: CountyCount) => {
+    const had = byKey.get(key);
+    if (!had || total(c) > total(had)) byKey.set(key, c);
+  };
   if (counts) {
     const fipsSet = new Set(units.map((u) => u.fips));
     const nameSet = new Set(units.map((u) => normName(u.name)));
     for (const c of counts) {
       if (statewide) byKey.set(prior.state, c);
-      else if (c.fips && fipsSet.has(c.fips)) byKey.set(c.fips, c);
+      else if (c.fips && fipsSet.has(c.fips)) put(c.fips, c);
       else {
         // Virginia's independent cities are "Norfolk city" in the baselines but
         // plain "Norfolk" in the NYT feed (which says "Roanoke City" only where
         // a county shares the name, and that county matches exactly first).
         const k = normName(c.name);
         const key = nameSet.has(k) ? k : nameSet.has(`${k}city`) ? `${k}city` : null;
-        if (key) byKey.set(key, c);
+        if (key) put(key, c);
         else if (c.rep + c.opp + c.other > 0) unmatched.push(c.name);
       }
     }
