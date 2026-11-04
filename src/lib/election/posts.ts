@@ -3,9 +3,9 @@ import { contentClient } from "@/lib/supabase/content";
 
 export type ElectionPost = { id: number; body: string; created_at: string; author?: string };
 
-// The live blog's posts, newest first. Empty if the table can't be read, so
+// Every live blog post since the start of the night (Mike), newest first. Empty if the table can't be read, so
 // the page still works without them.
-export async function getElectionPosts(limit = 50): Promise<ElectionPost[]> {
+export async function getElectionPosts(limit = 2000): Promise<ElectionPost[]> {
   try {
     const supabase = await contentClient();
     const { data } = await supabase
