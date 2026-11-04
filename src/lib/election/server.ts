@@ -194,6 +194,16 @@ export async function snapshot(forecast?: Forecast) {
   for (const state of Object.keys(READERS)) counts[state] = [];
   for (const row of rows) if (row.fetched_at) counts[row.state] = row.counties;
   const snap = buildSnapshot(f, counts);
+  // A call sticks until the winner's odds fall below callKeepAt, well under
+  // the bar to make the call, so races don't go back and forth.
+  const before = await getLatestSnapshot();
+  const was = new Map((before?.races ?? []).map((r) => [r.state, r.called]));
+  for (const r of snap.races) {
+    const prev = was.get(r.state);
+    if (r.called || !prev || r.status !== "live") continue;
+    const p = prev === "opp" ? r.pOpp : 1 - r.pOpp;
+    if (p >= ELECTION.callKeepAt) r.called = prev;
+  }
   const supabase = await contentClient();
   // A compact copy of every race's odds rides along for the admin's charts.
   const odds = Object.fromEntries(snap.races.map((r) => [r.state, Math.round(r.pOpp * 1000) / 1000]));
@@ -207,8 +217,9 @@ export async function snapshot(forecast?: Forecast) {
 
 /**
  * Posts "RACE CALLED: …" to the live blog as WMHQ Bot the first time each race
- * is called. The unique call_key makes repeats a no-op, so it's safe to run on
- * every refresh. Never fails the refresh.
+ * is called, and deletes the post if the call is later taken back. The unique
+ * call_key makes repeats a no-op, so it's safe to run on every refresh. Never
+ * fails the refresh.
  */
 async function postCalls(snap: LiveSnapshot) {
   const rows = snap.races
@@ -221,10 +232,14 @@ async function postCalls(snap: LiveSnapshot) {
         call_key: `${r.state}:${r.called}`,
       };
     });
-  if (!rows.length) return;
   try {
     const supabase = await contentClient();
-    await supabase.from("election_posts").upsert(rows, { onConflict: "call_key", ignoreDuplicates: true });
+    // A call that no longer stands (rescinded or flipped) takes its post with it.
+    const keep = new Set(rows.map((r) => r.call_key));
+    const { data: posted } = await supabase.from("election_posts").select("id, call_key").not("call_key", "is", null);
+    const stale = (posted ?? []).filter((p) => !keep.has(p.call_key as string)).map((p) => p.id as number);
+    if (stale.length) await supabase.from("election_posts").delete().in("id", stale);
+    if (rows.length) await supabase.from("election_posts").upsert(rows, { onConflict: "call_key", ignoreDuplicates: true });
   } catch {
     // The blog is a nice-to-have; the snapshot is already saved.
   }
