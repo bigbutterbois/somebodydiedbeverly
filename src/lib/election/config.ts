@@ -148,7 +148,7 @@ export const ELECTION = {
     IA: S(21, { turnout: 0.76, earlyLean: 15 }), // 2022 0.72, early up ~12% (Pottawattamie)
     KS: S(21, { turnout: 0.86, earlyLean: 10 }), // 2022 0.75, early +30%
     KY: S(19),
-    LA: S(21, { turnout: 0.74 }), // 2022 0.70, no early data
+    LA: S(21, { turnout: 0.74, earlyLean: 12 }), // 2022 0.70; counts early votes first (election night Nov 3: +13 D vs expected everywhere), so calls wait for finished parishes
     ME: S(20, { turnout: 0.9, rankedChoice: true, lateVotes: 0.05 }), // 2022 0.82, early +44% (capped)
     MA: S(20),
     MI: S(21, { turnout: 0.82, earlyLean: 8 }), // 2022 0.79, early reports conflict (+32% / -15%)
