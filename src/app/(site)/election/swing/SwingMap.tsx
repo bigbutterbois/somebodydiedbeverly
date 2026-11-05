@@ -88,28 +88,90 @@ export function SwingMap({
     return [(x0 + x1) / 2 - w / 2, (y0 + y1) / 2 - h / 2, w, h];
   }, [zoomed]);
 
-  // Glide the frame from wherever it is now to the new target.
-  const [box, setBox] = useState<Box>(target);
+  // Glide the frame from wherever it is now to the new target. The viewBox is set straight on the
+  // svg each frame, so React doesn't redraw thousands of counties 60 times a second.
+  const svgRef = useRef<SVGSVGElement>(null);
   const boxRef = useRef<Box>(target);
   useEffect(() => {
+    const svg = svgRef.current;
     const from = boxRef.current;
-    if (from.every((v, i) => v === target[i])) return;
+    if (!svg || from.every((v, i) => v === target[i])) return;
     const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-    const start = performance.now();
+    const [fx, fy, fw, fh] = from;
+    const [tx, ty, tw, th] = target;
+    const fc = [fx + fw / 2, fy + fh / 2];
+    const tc = [tx + tw / 2, ty + th / 2];
+    let start: number | null = null;
     let frame = 0;
     const step = (now: number) => {
+      // Start the clock on the first frame, so a slow first paint doesn't eat the opening of the zoom.
+      start ??= now;
       const t = reduce ? 1 : Math.min((now - start) / ZOOM_MS, 1);
       const k = ease(t);
-      const next = from.map((v, i) => v + (target[i] - v) * k) as Box;
+      // Scale geometrically so zooming in feels as even as zooming out, and move the center in step
+      // with the scale so the map grows toward the state instead of sliding then popping.
+      const w = fw * (tw / fw) ** k;
+      const h = fh * (th / fh) ** k;
+      const m = Math.abs(tw - fw) > 1e-6 ? (fw - w) / (fw - tw) : k;
+      const cx = fc[0] + (tc[0] - fc[0]) * m;
+      const cy = fc[1] + (tc[1] - fc[1]) * m;
+      const next: Box = [cx - w / 2, cy - h / 2, w, h];
       boxRef.current = next;
-      setBox(next);
+      svg.setAttribute("viewBox", next.join(" "));
       if (t < 1) frame = requestAnimationFrame(step);
     };
     frame = requestAnimationFrame(step);
     return () => cancelAnimationFrame(frame);
   }, [target]);
-  const viewBox = box.join(" ");
-  const scale = WIDTH / box[2];
+
+  // Strokes don't scale with the zoom; this keeps them the same on-screen width they'd have unzoomed.
+  const [px, setPx] = useState(1);
+  useEffect(() => {
+    const svg = svgRef.current;
+    if (!svg) return;
+    const ro = new ResizeObserver(([e]) => setPx(e.contentRect.width / WIDTH || 1));
+    ro.observe(svg);
+    return () => ro.disconnect();
+  }, []);
+
+  // Only redrawn when the view or stroke size changes: not on hover, and not on zoom (the dimming of
+  // other states is a style rule below), so clicking a state starts the zoom right away.
+  const zoomRef = useRef(zoom);
+  useEffect(() => {
+    zoomRef.current = zoom;
+  }, [zoom]);
+  const countyLayer = useMemo(
+    () =>
+      counties.map((c) => {
+        const state = byCode.get(c.state)!;
+        return (
+          <path
+            key={c.fips}
+            d={c.d}
+            fill={shiftColor(valueFor(c, base), fullFor(base))}
+            stroke="var(--background)"
+            strokeWidth={0.3 * px}
+            vectorEffect="non-scaling-stroke"
+            data-state={c.state}
+            className="cursor-pointer"
+            onPointerEnter={() =>
+              setHover({ county: zoomRef.current === c.state && !state.statewide ? c : null, state })
+            }
+            onClick={() => {
+              if (zoomRef.current !== c.state) {
+                setZoom(c.state);
+                setPinned(null);
+                setHover({ county: null, state });
+              } else if (!state.statewide) {
+                setPinned((p) => (p?.fips === c.fips ? null : c));
+                setHover({ county: c, state });
+              }
+            }}
+          />
+        );
+      }),
+    [counties, byCode, base, px],
+  );
 
   const zoomTo = (code: string | null) => {
     setZoom(code);
@@ -171,47 +233,26 @@ export function SwingMap({
           )}
         </div>
         <svg
-          viewBox={viewBox}
+          ref={svgRef}
+          viewBox={`0 0 ${WIDTH} ${HEIGHT}`}
           className="h-auto w-full touch-manipulation"
           role="img"
           aria-label={base === "2026" ? "2026 margin by county" : "County swing to 2026"}
           onPointerLeave={(e) => e.pointerType === "mouse" && setHover(null)}
         >
+          {zoom && <style>{`path[data-state]:not([data-state="${zoom}"]){fill-opacity:.35}`}</style>}
           <path d={others} fill="var(--surface)" />
-          {counties.map((c) => {
-            const state = byCode.get(c.state)!;
-            return (
-              <path
-                key={c.fips}
-                d={c.d}
-                fill={shiftColor(valueFor(c, base), fullFor(base))}
-                stroke="var(--background)"
-                strokeWidth={0.3 / scale}
-                opacity={zoom && zoom !== c.state ? 0.35 : 1}
-                className="cursor-pointer"
-                onPointerEnter={() =>
-                  setHover({ county: zoom === c.state && !state.statewide ? c : null, state })
-                }
-                onClick={() => {
-                  if (zoom !== c.state) {
-                    zoomTo(c.state);
-                    setHover({ county: null, state });
-                  } else if (!state.statewide) {
-                    setPinned((p) => (p?.fips === c.fips ? null : c));
-                    setHover({ county: c, state });
-                  }
-                }}
-              />
-            );
-          })}
-          <path d={borders} fill="none" stroke="var(--background)" strokeWidth={1.2 / scale} pointerEvents="none" />
+          {countyLayer}
+          <path d={borders} fill="none" stroke="var(--background)" strokeWidth={1.2 * px}
+              vectorEffect="non-scaling-stroke" pointerEvents="none" />
           {litState && (
             <path
               d={litState.d}
               fill="var(--foreground)"
               fillOpacity={0.12}
               stroke="var(--foreground)"
-              strokeWidth={2 / scale}
+              strokeWidth={2 * px}
+              vectorEffect="non-scaling-stroke"
               strokeLinejoin="round"
               pointerEvents="none"
             />
@@ -221,7 +262,8 @@ export function SwingMap({
               d={hover.county.d}
               fill="none"
               stroke="var(--foreground)"
-              strokeWidth={1.5 / scale}
+              strokeWidth={1.5 * px}
+              vectorEffect="non-scaling-stroke"
               pointerEvents="none"
             />
           )}
@@ -231,7 +273,8 @@ export function SwingMap({
               fill="var(--foreground)"
               fillOpacity={0.15}
               stroke="var(--foreground)"
-              strokeWidth={2.5 / scale}
+              strokeWidth={2.5 * px}
+              vectorEffect="non-scaling-stroke"
               strokeLinejoin="round"
               pointerEvents="none"
             />
