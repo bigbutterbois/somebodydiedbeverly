@@ -14,20 +14,28 @@ function stamp(iso: string) {
 }
 
 /**
- * Top of both election tabs: the title, the live blog, the tab switch, and
+ * Top of every election tab: the title, the tab switch, the live blog (Senate Projections only), and
  * when the results last changed (the newest count from any state).
  */
-export async function ElectionHeader({ demo }: { demo: number }) {
+export async function ElectionHeader({
+  demo,
+  showUpdated = true,
+  blog = false,
+}: {
+  demo: number;
+  showUpdated?: boolean;
+  /** The live blog sits under the tabs, on the Senate Projections tab only. */
+  blog?: boolean;
+}) {
   const [t, posts, rows] = await Promise.all([
     getSiteText(),
-    demo ? demoPosts() : getElectionPosts(),
-    demo ? [] : getCountRows().catch(() => []),
+    !blog ? [] : demo ? demoPosts() : getElectionPosts(),
+    demo || !showUpdated ? [] : getCountRows().catch(() => []),
   ]);
   const updated = rows.reduce((at, r) => (r.changed_at && r.changed_at > at ? r.changed_at : at), "");
   return (
     <header className="flex flex-col gap-4">
       <h1 className="text-4xl font-light tracking-tight">{t("election.title")}</h1>
-      <LiveBlog initial={posts} />
       <div className="flex flex-wrap items-center justify-between gap-x-4 gap-y-2">
         <Suspense>
           <ElectionTabs />
@@ -35,6 +43,7 @@ export async function ElectionHeader({ demo }: { demo: number }) {
         {updated && <p className="text-sm text-muted tabular-nums">Last updated {stamp(updated)}</p>}
       </div>
       {demo > 0 && <p className="text-sm text-danger">Demo: these results are made up, about {demo}% counted.</p>}
+      {blog && <LiveBlog initial={posts} />}
     </header>
   );
 }

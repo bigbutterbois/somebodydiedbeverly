@@ -3,7 +3,7 @@ import { ElectionHeader } from "./ElectionHeader";
 import { loadSwing } from "./swing/data";
 import { SwingMap } from "./swing/SwingMap";
 
-export const metadata: Metadata = { title: "Election night" };
+export const metadata: Metadata = { title: "2026 Midterms" };
 
 // The election page opens on the county swing map; live results are the
 // second tab (/election/live). ?demo=70 previews with made-up counts.

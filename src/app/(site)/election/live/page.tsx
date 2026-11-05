@@ -3,11 +3,11 @@ import { getForecast } from "@/lib/forecast";
 import { demoCounts } from "@/lib/election/demo";
 import { buildSnapshot } from "@/lib/election/live";
 import { getLatestSnapshot } from "@/lib/election/server";
-import { MAP_HEIGHT, MAP_WIDTH, stateBorders, stateShapes } from "../../forecast/shapes";
+import { MAP_HEIGHT, MAP_WIDTH, stateBorders, stateShapes } from "../forecast/shapes";
 import { ElectionHeader } from "../ElectionHeader";
 import { LiveBoard } from "../LiveBoard";
 
-export const metadata: Metadata = { title: "Election night" };
+export const metadata: Metadata = { title: "2026 Midterms" };
 
 // Live Senate results on election night. Before any snapshot exists (until the
 // first refresh on Nov 3), shows the starting point straight from the forecast.
@@ -22,7 +22,7 @@ export default async function LiveResultsPage({ searchParams }: PageProps<"/elec
 
   return (
     <div className="flex flex-col gap-8 py-6">
-      <ElectionHeader demo={demo} />
+      <ElectionHeader demo={demo} blog />
       {snapshot ? (
         <LiveBoard
           key={demo}

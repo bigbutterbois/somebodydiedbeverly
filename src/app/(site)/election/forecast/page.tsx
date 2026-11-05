@@ -58,14 +58,14 @@ export default async function BothForecastPage() {
       <section className="grid gap-6 sm:grid-cols-2">
         <Chamber
           name="Senate"
-          href="/forecast/senate"
+          href="/election/forecast/senate"
           details={t("forecast.both.details")}
           forecast={senate}
           seats={t("forecast.both.seats", { seats: senate.dem_seats_mean.toFixed(0), total: 100 })}
         />
         <Chamber
           name="House"
-          href="/forecast/house"
+          href="/election/forecast/house"
           details={t("forecast.both.details")}
           forecast={house}
           seats={t("forecast.both.seats", { seats: house.dem_seats_mean.toFixed(0), total: house.races.length })}

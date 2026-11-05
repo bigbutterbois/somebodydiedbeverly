@@ -4,18 +4,19 @@ import Link from "next/link";
 import { usePathname, useSearchParams } from "next/navigation";
 
 const TABS = [
-  { href: "/election", label: "County swing" },
-  { href: "/election/live", label: "Live results" },
+  { href: "/election", label: "Blue Tsunami" },
+  { href: "/election/live", label: "Senate Projections" },
+  { href: "/election/forecast", label: "Pre-Election Forecast" },
 ];
 
-/** County swing / Live results switch at the top of the election page. Keeps ?demo= across tabs. */
+/** The election page's tabs: Blue Tsunami, Senate Projections, Pre-Election Forecast. Keeps ?demo= across tabs. */
 export function ElectionTabs() {
   const pathname = usePathname();
   const demo = useSearchParams().get("demo");
   return (
     <nav className="flex gap-1 text-sm" aria-label="Election">
       {TABS.map(({ href, label }) => {
-        const active = pathname === href;
+        const active = href === "/election" ? pathname === href : pathname.startsWith(href);
         return (
           <Link
             key={href}

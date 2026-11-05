@@ -3,7 +3,7 @@ import Link from "next/link";
 import { getForecast } from "@/lib/forecast";
 import { getCountRows, getLaptopCheckins, getLatestSnapshot, getRaceHistory } from "@/lib/election/server";
 import { buildSnapshot } from "@/lib/election/live";
-import { MAP_HEIGHT, MAP_WIDTH, stateBorders, stateShapes } from "../../(site)/forecast/shapes";
+import { MAP_HEIGHT, MAP_WIDTH, stateBorders, stateShapes } from "../../(site)/election/forecast/shapes";
 import { AdminOverview } from "./AdminOverview";
 import { READERS } from "@/lib/election/sources";
 import { Controls } from "./Controls";

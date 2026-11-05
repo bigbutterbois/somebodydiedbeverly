@@ -1,6 +1,6 @@
 import { formatDay, formatUpdated, getForecast, getHistory, pollDots, type InputCheck } from "@/lib/forecast";
-import { PollingChart } from "@/app/(site)/forecast/OddsChart";
-import { SectionTitle } from "@/app/(site)/forecast/parts";
+import { PollingChart } from "@/app/(site)/election/forecast/OddsChart";
+import { SectionTitle } from "@/app/(site)/election/forecast/parts";
 
 export const metadata = { title: "Forecast" };
 

@@ -59,7 +59,7 @@ export const SITE_TEXT = {
   },
 
   // Metro
-  "election.title": { page: "Election night", label: "Heading", default: "Election night LIVE", kind: "short" },
+  "election.title": { page: "Election night", label: "Heading", default: "2026 Midterms", kind: "short" },
   "metro.tab.arrivals": { page: "Metro", label: "Arrivals tab", default: "Arrivals", kind: "short" },
   "metro.tab.map": { page: "Metro", label: "Map tab", default: "Map", kind: "short" },
 
@@ -81,16 +81,8 @@ export const SITE_TEXT = {
     kind: "short",
   },
 
-  "forecast.final.note": {
-    page: "Forecast",
-    label: "Note at the top once the final forecast is out",
-    default: "This is the final forecast. The model is locked and no longer updating.",
-    kind: "long",
-  },
-  "forecast.final.link": { page: "Forecast", label: "Link to live results in that note", default: "Follow live election results →", kind: "short" },
-
   // Forecast: Both
-  "forecast.both.title": { page: "Forecast: Both", label: "Title", default: "2026 midterms", kind: "short" },
+  "forecast.both.title": { page: "Forecast: Both", label: "Title", default: "2026 midterms forecast", kind: "short" },
   "forecast.both.empty": {
     page: "Forecast: Both",
     label: "Before the first run",

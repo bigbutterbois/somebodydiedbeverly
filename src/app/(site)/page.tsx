@@ -4,8 +4,8 @@ import Image from "next/image";
 import { formatPostDate } from "@/lib/blog";
 import { DEM, REP, getForecast, getHouseForecast, outOf100, type Forecast } from "@/lib/forecast";
 import { galleryImageUrl } from "@/lib/gallery";
-import { CircleGrid } from "./forecast/CircleGrid";
-import { OUTCOMES, outcomeOdds } from "./forecast/outcomes";
+import { CircleGrid } from "./election/forecast/CircleGrid";
+import { OUTCOMES, outcomeOdds } from "./election/forecast/outcomes";
 import { getGalleryItems } from "@/lib/supabase/gallery";
 import { contentClient } from "@/lib/supabase/content";
 import { getSiteText } from "@/lib/supabase/site-text";
@@ -40,9 +40,9 @@ export default async function Home() {
         <p className="text-muted">{t("home.intro")}</p>
       </header>
 
-      <HomeSection title={t("home.forecast.title")} href="/forecast" more={t("home.seeAll")}>
+      <HomeSection title={t("home.forecast.title")} href="/election/forecast" more={t("home.seeAll")}>
         {senate && house ? (
-          <Link href="/forecast" className="flex flex-col gap-6 tabular-nums">
+          <Link href="/election/forecast" className="flex flex-col gap-6 tabular-nums">
             <div className="flex flex-wrap gap-x-10 gap-y-4">
               <ChamberOdds label={t("home.forecast.chance", { chamber: "Senate" })} forecast={senate} />
               <ChamberOdds label={t("home.forecast.chance", { chamber: "House" })} forecast={house} />
