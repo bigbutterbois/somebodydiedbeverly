@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import type { SwingCounty, SwingState } from "./data";
 
 const WIDTH = 975;
@@ -32,6 +32,9 @@ const shiftText = (s: number | null) =>
 const last = (n: string) => n.split(" ").pop();
 
 type Hover = { county: SwingCounty | null; state: SwingState };
+type Box = [number, number, number, number];
+const ZOOM_MS = 450;
+const ease = (t: number) => (t < 0.5 ? 4 * t * t * t : 1 - (-2 * t + 2) ** 3 / 2);
 type Base = "2024" | "2020" | "2026";
 type Margins = { margin2024: number; margin2020: number | null; margin2026: number | null };
 
@@ -68,12 +71,13 @@ export function SwingMap({
   const [base, setBase] = useState<Base>("2024");
   const [zoom, setZoom] = useState<string | null>(null);
   const [hover, setHover] = useState<Hover | null>(null);
+  const [pinned, setPinned] = useState<SwingCounty | null>(null);
   const mapRef = useRef<HTMLElement>(null);
   const byCode = useMemo(() => new Map(states.map((s) => [s.code, s])), [states]);
   const zoomed = zoom ? byCode.get(zoom) : undefined;
 
-  const viewBox = useMemo(() => {
-    if (!zoomed) return `0 0 ${WIDTH} ${HEIGHT}`;
+  const target = useMemo<Box>(() => {
+    if (!zoomed) return [0, 0, WIDTH, HEIGHT];
     const [x0, y0, x1, y1] = zoomed.box;
     const pad = Math.max(x1 - x0, y1 - y0) * 0.06;
     let w = x1 - x0 + pad * 2;
@@ -81,15 +85,47 @@ export function SwingMap({
     // Keep the map's shape so the frame doesn't jump around.
     if (w / h > WIDTH / HEIGHT) h = (w * HEIGHT) / WIDTH;
     else w = (h * WIDTH) / HEIGHT;
-    return `${(x0 + x1) / 2 - w / 2} ${(y0 + y1) / 2 - h / 2} ${w} ${h}`;
+    return [(x0 + x1) / 2 - w / 2, (y0 + y1) / 2 - h / 2, w, h];
   }, [zoomed]);
-  const scale = zoomed ? WIDTH / Number(viewBox.split(" ")[2]) : 1;
+
+  // Glide the frame from wherever it is now to the new target.
+  const [box, setBox] = useState<Box>(target);
+  const boxRef = useRef<Box>(target);
+  useEffect(() => {
+    const from = boxRef.current;
+    if (from.every((v, i) => v === target[i])) return;
+    const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    const start = performance.now();
+    let frame = 0;
+    const step = (now: number) => {
+      const t = reduce ? 1 : Math.min((now - start) / ZOOM_MS, 1);
+      const k = ease(t);
+      const next = from.map((v, i) => v + (target[i] - v) * k) as Box;
+      boxRef.current = next;
+      setBox(next);
+      if (t < 1) frame = requestAnimationFrame(step);
+    };
+    frame = requestAnimationFrame(step);
+    return () => cancelAnimationFrame(frame);
+  }, [target]);
+  const viewBox = box.join(" ");
+  const scale = WIDTH / box[2];
+
+  const zoomTo = (code: string | null) => {
+    setZoom(code);
+    setPinned(null);
+  };
 
   const sorted = states
     .map((s) => ({ s, shift: valueFor(s, base) }))
     .sort((a, b) => (b.shift ?? -999) - (a.shift ?? -999));
 
-  const info = hover ?? (zoomed ? { county: null, state: zoomed } : null);
+  const pinnedState = pinned ? byCode.get(pinned.state)! : null;
+  const info: Hover | null = pinned
+    ? { county: pinned, state: pinnedState! }
+    : hover ?? (zoomed ? { county: null, state: zoomed } : null);
+  // A whole state lights up when the pointer is on it and its counties aren't the thing being explored.
+  const litState = hover && !hover.county && hover.state.code !== zoom ? hover.state : null;
 
   return (
     <div className="flex flex-col gap-6">
@@ -122,13 +158,16 @@ export function SwingMap({
         <div className="flex min-h-6 items-center gap-3 text-sm">
           {zoomed ? (
             <>
-              <button type="button" onClick={() => setZoom(null)} className="underline">
+              <button type="button" onClick={() => zoomTo(null)} className="underline">
                 ← All states
               </button>
-              <span className="text-muted">{zoomed.name}</span>
+              <span className="text-muted">
+                {zoomed.name}
+                {!zoomed.statewide && " · click a county to keep its numbers up, click it again to let go"}
+              </span>
             </>
           ) : (
-            <span className="text-muted">Click a state to zoom in. Hover a county for its numbers.</span>
+            <span className="text-muted">Hover a state for its totals. Click it to zoom in to its counties.</span>
           )}
         </div>
         <svg
@@ -149,17 +188,35 @@ export function SwingMap({
                 stroke="var(--background)"
                 strokeWidth={0.3 / scale}
                 opacity={zoom && zoom !== c.state ? 0.35 : 1}
-                className={zoom === c.state ? "" : "cursor-pointer"}
-                onPointerEnter={() => setHover({ county: state.statewide ? null : c, state })}
+                className="cursor-pointer"
+                onPointerEnter={() =>
+                  setHover({ county: zoom === c.state && !state.statewide ? c : null, state })
+                }
                 onClick={() => {
-                  setHover({ county: state.statewide ? null : c, state });
-                  if (zoom !== c.state) setZoom(c.state);
+                  if (zoom !== c.state) {
+                    zoomTo(c.state);
+                    setHover({ county: null, state });
+                  } else if (!state.statewide) {
+                    setPinned((p) => (p?.fips === c.fips ? null : c));
+                    setHover({ county: c, state });
+                  }
                 }}
               />
             );
           })}
           <path d={borders} fill="none" stroke="var(--background)" strokeWidth={1.2 / scale} pointerEvents="none" />
-          {hover?.county && (
+          {litState && (
+            <path
+              d={litState.d}
+              fill="var(--foreground)"
+              fillOpacity={0.12}
+              stroke="var(--foreground)"
+              strokeWidth={2 / scale}
+              strokeLinejoin="round"
+              pointerEvents="none"
+            />
+          )}
+          {hover?.county && hover.county.fips !== pinned?.fips && (
             <path
               d={hover.county.d}
               fill="none"
@@ -168,9 +225,20 @@ export function SwingMap({
               pointerEvents="none"
             />
           )}
+          {pinned && (
+            <path
+              d={pinned.d}
+              fill="var(--foreground)"
+              fillOpacity={0.15}
+              stroke="var(--foreground)"
+              strokeWidth={2.5 / scale}
+              strokeLinejoin="round"
+              pointerEvents="none"
+            />
+          )}
         </svg>
         <Legend base={base} />
-        <Readout info={info} base={base} />
+        <Readout info={info} base={base} pinned={!!pinned} onUnpin={() => setPinned(null)} />
       </section>
 
       <section className="flex flex-col gap-2">
@@ -191,7 +259,7 @@ export function SwingMap({
                 <tr key={s.code} className="border-b border-line">
                   <td className="py-1.5 pr-4">
                     <button type="button" className="underline" onClick={() => {
-                        setZoom(s.code);
+                        zoomTo(s.code);
                         setHover(null);
                         mapRef.current?.scrollIntoView({ behavior: "smooth" });
                       }}>
@@ -251,7 +319,17 @@ function Legend({ base }: { base: Base }) {
   );
 }
 
-function Readout({ info, base }: { info: Hover | null; base: Base }) {
+function Readout({
+  info,
+  base,
+  pinned,
+  onUnpin,
+}: {
+  info: Hover | null;
+  base: Base;
+  pinned: boolean;
+  onUnpin: () => void;
+}) {
   if (!info) return <p className="min-h-16 text-sm text-muted">&nbsp;</p>;
   const { county: c, state: s } = info;
   const x = c ?? s;
@@ -266,6 +344,11 @@ function Readout({ info, base }: { info: Hover | null; base: Base }) {
       <p className="font-medium">
         {c ? `${c.name}, ${s.code}` : s.name}
         {!c && s.statewide && <span className="ml-2 text-xs text-muted">statewide total only, no county results</span>}
+        {pinned && (
+          <button type="button" onClick={onUnpin} className="ml-2 text-xs text-muted underline">
+            clear
+          </button>
+        )}
       </p>
       <dl className="flex flex-wrap gap-x-5 gap-y-1 tabular-nums">
         {rows.map(([k, v]) => (
