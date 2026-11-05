@@ -1,7 +1,7 @@
 // Lays out the 435 House districts as a hex tile map: one equal-size hex per
 // district, each state a compact blob near where the state really is.
 //
-//   node scripts/district-tiles.mjs house-latest.json > src/app/admin/forecast/house/districtTiles.json
+//   node scripts/district-tiles.mjs house-latest.json > src/app/(site)/election/forecast/house/districtTiles.json
 //
 // The input is the forecast's house/latest.json (or districts.json); only the
 // district ids are read. Re-run it if a state's seat count changes (after the

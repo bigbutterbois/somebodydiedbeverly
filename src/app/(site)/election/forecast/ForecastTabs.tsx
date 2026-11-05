@@ -3,9 +3,9 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 
-const TABS = ["/forecast", "/forecast/senate", "/forecast/house"];
+const TABS = ["/election/forecast", "/election/forecast/senate", "/election/forecast/house"];
 
-/** Both / Senate / House switch at the top of every admin forecast page. */
+/** Both / Senate / House switch under the Pre-Election Forecast tab. */
 export function ForecastTabs({ labels }: { labels: string[] }) {
   const pathname = usePathname();
   return (
@@ -18,7 +18,7 @@ export function ForecastTabs({ labels }: { labels: string[] }) {
             href={href}
             aria-current={active ? "page" : undefined}
             className={`rounded-full border px-3 py-1 transition-colors ${
-              active ? "border-accent bg-accent text-background" : "border-line text-muted hover:text-foreground"
+              active ? "border-foreground text-foreground" : "border-line text-muted hover:text-foreground"
             }`}
           >
             {labels[i]}
