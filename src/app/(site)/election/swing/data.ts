@@ -9,11 +9,25 @@ import { countySheet } from "@/lib/election/model";
 import { getCountRows } from "@/lib/election/server";
 import baselines from "@/lib/election/baselines.json";
 import { demoCounts } from "@/lib/election/demo";
+import akDistricts from "@/lib/election/ak-districts.json";
+import senate2020 from "@/lib/election/senate2020.json";
 
-// Admin → Election → Swing map: every county in a state with a Senate race,
-// with the shift from Harris's 2024 margin to the Democrat's (or the
-// independent's) 2026 margin. Shapes come from us-atlas, already projected to
-// Albers USA (975 x 610), the same frame as the other election maps.
+/** 2020 Senate margins (Democrat or independent minus Republican), from scripts/senate-2020.mjs. */
+const S2020 = senate2020 as Record<string, { margin: number; counties: Record<string, number> }>;
+const AK = akDistricts as Record<string, string>;
+
+/** A county's 2020 Senate margin; where 2020 has only a statewide number (Alaska), that. */
+function margin2020(state: string, fips: string) {
+  const s = S2020[state];
+  if (!s) return null;
+  return Object.keys(s.counties).length ? (s.counties[fips] ?? null) : s.margin;
+}
+
+// The election page's County swing tab: every county in a state with a Senate
+// race, with the shift from Harris's 2024 margin (or the 2020 Senate race's) to
+// the Democrat's (or the independent's) 2026 margin. Shapes come from us-atlas,
+// already projected to Albers USA (975 x 610), the same frame as the other
+// election maps; Alaska uses its state House districts (scripts/ak-districts.mjs).
 
 const topology = us as unknown as Topology<{
   counties: GeometryCollection<{ name: string }>;
@@ -28,6 +42,8 @@ export type SwingCounty = {
   d: string;
   /** Margins are opposition minus Republican, in points. Null before any votes. */
   margin2024: number;
+  /** The 2020 Senate margin here, null where there was no 2020 race or no county result. */
+  margin2020: number | null;
   margin2026: number | null;
   shift: number | null;
   votes: number;
@@ -44,6 +60,7 @@ export type SwingState = {
   /** True when the results only have a statewide total, no county breakdown. */
   statewide: boolean;
   margin2024: number;
+  margin2020: number | null;
   margin2026: number | null;
   shift: number | null;
   votes: number;
@@ -84,6 +101,7 @@ export async function loadSwing(demo?: number) {
           state: race.state,
           d: "",
           margin2024: r.margin2024,
+          margin2020: margin2020(race.state, r.fips),
           margin2026: r.live.margin,
           shift: Math.round((r.live.margin - r.margin2024) * 10) / 10,
           votes: r.live.total,
@@ -96,7 +114,7 @@ export async function loadSwing(demo?: number) {
         if (!byFips.has(r.fips)) {
           byFips.set(r.fips, {
             fips: r.fips, name: r.name, state: race.state, d: "",
-            margin2024: r.margin2024, margin2026: null, shift: null, votes: 0, counted: 0,
+            margin2024: r.margin2024, margin2020: margin2020(race.state, r.fips), margin2026: null, shift: null, votes: 0, counted: 0,
           });
         }
       }
@@ -112,6 +130,7 @@ export async function loadSwing(demo?: number) {
       rep: { name: race.rep.name },
       statewide,
       margin2024: sheet.margin2024,
+      margin2020: S2020[race.state]?.margin ?? null,
       margin2026,
       shift: margin2026 === null ? null : Math.round((margin2026 - sheet.margin2024) * 10) / 10,
       votes: v,
@@ -133,12 +152,22 @@ export async function loadSwing(demo?: number) {
     else if (st.statewide) {
       counties.push({
         fips: id, name: f.properties.name, state: code, d,
-        margin2024: st.margin2024, margin2026: st.margin2026, shift: st.shift, votes: 0, counted: st.counted,
+        margin2024: st.margin2024, margin2020: st.margin2020, margin2026: st.margin2026, shift: st.shift, votes: 0, counted: st.counted,
       });
+    }
+  }
+
+  // Alaska reports by state House district, not borough: swap in those shapes.
+  const ak = states.find((s) => s.code === "AK");
+  if (ak && !ak.statewide) {
+    for (let i = counties.length - 1; i >= 0; i--) if (counties[i].state === "AK") counties.splice(i, 1);
+    for (const [fips, d] of Object.entries(AK)) {
+      const c = byFips.get(fips);
+      if (c) counties.push({ ...c, d });
     }
   }
 
   const others = usStates.filter((f) => !stateFips.has(String(f.id))).map((f) => path(f) ?? "").join("");
   const borders = path(mesh(topology, topology.objects.states, (a, b) => a !== b)) ?? "";
-  return { states, counties, others, borders, at: demoed ? "" : rows.reduce((t, r) => (r.changed_at && r.changed_at > t ? r.changed_at : t), "") };
+  return { states, counties, others, borders, has2020: Object.keys(S2020).length > 0 };
 }

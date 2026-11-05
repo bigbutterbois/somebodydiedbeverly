@@ -10,7 +10,6 @@ import { Controls } from "./Controls";
 import { LiveBlogEditor } from "./LiveBlogEditor";
 import { LaptopStatus } from "./LaptopStatus";
 import { getElectionPosts } from "@/lib/election/posts";
-import { ElectionTabs } from "./ElectionTabs";
 
 export const metadata = { title: "Election night" };
 // Room for the chart history rebuild, which runs in batches of about 40 seconds.
@@ -60,7 +59,6 @@ export default async function AdminElectionPage() {
 
   return (
     <div className="flex flex-col gap-8">
-      <ElectionTabs active="overview" />
       <LiveBlogEditor posts={posts} />
 
       <header className="flex flex-col gap-2">

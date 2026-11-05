@@ -30,18 +30,35 @@ const shiftText = (s: number | null) =>
 const last = (n: string) => n.split(" ").pop();
 
 type Hover = { county: SwingCounty | null; state: SwingState };
+type Base = "2024" | "2020";
+type Margins = { margin2024: number; margin2020: number | null; margin2026: number | null };
+
+/** The 2026 margin minus the chosen baseline's, rounded to a tenth. */
+function shiftFrom(x: Margins, base: Base) {
+  const from = base === "2024" ? x.margin2024 : x.margin2020;
+  if (x.margin2026 === null || from === null) return null;
+  return Math.round((x.margin2026 - from) * 10) / 10;
+}
+
+const BASES: { key: Base; label: string }[] = [
+  { key: "2024", label: "vs. Harris 2024" },
+  { key: "2020", label: "vs. 2020 Senate" },
+];
 
 export function SwingMap({
   states,
   counties,
   others,
   borders,
+  compare2020,
 }: {
   states: SwingState[];
   counties: SwingCounty[];
   others: string;
   borders: string;
+  compare2020: boolean;
 }) {
+  const [base, setBase] = useState<Base>("2024");
   const [zoom, setZoom] = useState<string | null>(null);
   const [hover, setHover] = useState<Hover | null>(null);
   const mapRef = useRef<HTMLElement>(null);
@@ -61,15 +78,39 @@ export function SwingMap({
   }, [zoomed]);
   const scale = zoomed ? WIDTH / Number(viewBox.split(" ")[2]) : 1;
 
-  const sorted = [...states]
-    .filter((s) => s.shift !== null)
-    .sort((a, b) => (b.shift ?? 0) - (a.shift ?? 0));
+  const sorted = states
+    .map((s) => ({ s, shift: shiftFrom(s, base) }))
+    .sort((a, b) => (b.shift ?? -999) - (a.shift ?? -999));
 
   const info = hover ?? (zoomed ? { county: null, state: zoomed } : null);
 
   return (
     <div className="flex flex-col gap-6">
       <section ref={mapRef} className="flex scroll-mt-4 flex-col gap-2">
+        <h2 className="text-2xl font-light tracking-tight">Blue tsunami map</h2>
+        <p className="text-sm text-muted">
+          Each county shaded by how much the Democrat&apos;s (or independent&apos;s) 2026 margin moved from{" "}
+          {base === "2024" ? "Harris's 2024 margin" : "the 2020 Senate race"}, using the votes counted so far.
+          {base === "2020" && " Florida and Ohio had no 2020 Senate race; Alaska's districts were redrawn, so it uses its statewide margin."}
+        </p>
+        {compare2020 && (
+          <div className="flex gap-1 text-sm" role="tablist" aria-label="Compare with">
+            {BASES.map((b) => (
+              <button
+                key={b.key}
+                type="button"
+                role="tab"
+                aria-selected={base === b.key}
+                onClick={() => setBase(b.key)}
+                className={`rounded-full border px-3 py-1 transition-colors ${
+                  base === b.key ? "border-foreground text-foreground" : "border-line text-muted hover:text-foreground"
+                }`}
+              >
+                {b.label}
+              </button>
+            ))}
+          </div>
+        )}
         <div className="flex min-h-6 items-center gap-3 text-sm">
           {zoomed ? (
             <>
@@ -96,7 +137,7 @@ export function SwingMap({
               <path
                 key={c.fips}
                 d={c.d}
-                fill={shiftColor(c.shift)}
+                fill={shiftColor(shiftFrom(c, base))}
                 stroke="var(--background)"
                 strokeWidth={0.3 / scale}
                 opacity={zoom && zoom !== c.state ? 0.35 : 1}
@@ -120,8 +161,8 @@ export function SwingMap({
             />
           )}
         </svg>
-        <Legend />
-        <Readout info={info} />
+        <Legend base={base} />
+        <Readout info={info} base={base} />
       </section>
 
       <section className="flex flex-col gap-2">
@@ -131,14 +172,14 @@ export function SwingMap({
             <thead className="text-xs uppercase tracking-[0.12em] text-muted">
               <tr className="border-b border-line">
                 <th className="py-2 pr-4 font-normal">State</th>
-                <th className="py-2 pr-4 font-normal">Harris 2024</th>
+                <th className="py-2 pr-4 font-normal">{base === "2024" ? "Harris 2024" : "Senate 2020"}</th>
                 <th className="py-2 pr-4 font-normal">2026</th>
                 <th className="py-2 pr-4 font-normal">Shift</th>
                 <th className="py-2 pr-4 font-normal">Counted</th>
               </tr>
             </thead>
             <tbody>
-              {sorted.map((s) => (
+              {sorted.map(({ s, shift }) => (
                 <tr key={s.code} className="border-b border-line">
                   <td className="py-1.5 pr-4">
                     <button type="button" className="underline" onClick={() => {
@@ -150,16 +191,16 @@ export function SwingMap({
                     </button>
                     {s.statewide && <span className="ml-1 text-xs text-muted">statewide only</span>}
                   </td>
-                  <td className="py-1.5 pr-4">{margin(s.margin2024, "D")}</td>
+                  <td className="py-1.5 pr-4">{margin(base === "2024" ? s.margin2024 : s.margin2020, "D")}</td>
                   <td className="py-1.5 pr-4">
                     {margin(s.margin2026, s.opp.party)} <span className="text-muted">{last(s.opp.name)}</span>
                   </td>
                   <td className="py-1.5 pr-4">
                     <span
                       className="mr-2 inline-block h-3 w-3 rounded-sm align-middle"
-                      style={{ background: shiftColor(s.shift) }}
+                      style={{ background: shiftColor(shift) }}
                     />
-                    {shiftText(s.shift)}
+                    {shift === null && base === "2020" ? "no 2020 race" : shiftText(shift)}
                   </td>
                   <td className="py-1.5 pr-4">{Math.round(s.counted * 100)}%</td>
                 </tr>
@@ -172,7 +213,7 @@ export function SwingMap({
   );
 }
 
-function Legend() {
+function Legend({ base }: { base: Base }) {
   const ticks = [-FULL, -FULL / 2, 0, FULL / 2, FULL];
   const stops = Array.from({ length: 21 }, (_, i) => -FULL + (i * 2 * FULL) / 20);
   return (
@@ -186,27 +227,21 @@ function Legend() {
           <span key={t}>{t === 0 ? "0" : `${t > 0 ? "D" : "R"}+${Math.abs(t)}${Math.abs(t) === FULL ? "+" : ""}`}</span>
         ))}
       </div>
-      <p>Shift in margin from Harris 2024 to the 2026 Democrat or independent. Grey: no votes yet.</p>
+      <p>Shift in margin from {base === "2024" ? "Harris 2024" : "the 2020 Senate race"} to the 2026 Democrat or independent.</p>
     </div>
   );
 }
 
-function Readout({ info }: { info: Hover | null }) {
+function Readout({ info, base }: { info: Hover | null; base: Base }) {
   if (!info) return <p className="min-h-16 text-sm text-muted">&nbsp;</p>;
   const { county: c, state: s } = info;
-  const rows: [string, string][] = c
-    ? [
-        ["Harris 2024", margin(c.margin2024, "D")],
-        [`${last(s.opp.name)} 2026`, margin(c.margin2026, s.opp.party)],
-        ["Shift", shiftText(c.shift)],
-        ["Votes", `${Math.round(c.votes).toLocaleString()} (${Math.round(c.counted * 100)}% counted)`],
-      ]
-    : [
-        ["Harris 2024", margin(s.margin2024, "D")],
-        [`${last(s.opp.name)} 2026`, margin(s.margin2026, s.opp.party)],
-        ["Shift", shiftText(s.shift)],
-        ["Votes", `${Math.round(s.votes).toLocaleString()} (${Math.round(s.counted * 100)}% counted)`],
-      ];
+  const x = c ?? s;
+  const rows: [string, string][] = [
+    base === "2024" ? ["Harris 2024", margin(x.margin2024, "D")] : ["Senate 2020", margin(x.margin2020, "D")],
+    [`${last(s.opp.name)} 2026`, margin(x.margin2026, s.opp.party)],
+    ["Shift", shiftText(shiftFrom(x, base))],
+    ["Votes", `${Math.round(x.votes).toLocaleString()} (${Math.round(x.counted * 100)}% counted)`],
+  ];
   return (
     <div className="min-h-16 text-sm">
       <p className="font-medium">
