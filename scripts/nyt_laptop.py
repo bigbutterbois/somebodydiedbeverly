@@ -308,10 +308,17 @@ def towns_to_counties(units):
     groups = {}
     for u in units:
         level = str(first(u, "level", default="")).lower()
-        if level in ("state", "") or "district" in level:
+        # Wards (NH) are already counted in their towns; "other" is overseas absentee.
+        if level in ("state", "", "other", "ward") or "district" in level:
             continue
-        fips = str(first(u, "county_fips", "fips_code", "fips", default="") or "")
-        key = fips[:5] if len(fips) >= 5 and fips[:5].isdigit() else None
+        if str(first(u, "name", default="")).lower().startswith("overseas"):
+            continue
+        fs, fc = first(u, "fips_state"), first(u, "fips_county")
+        if fs and fc:
+            key = str(fs).zfill(2) + str(fc).zfill(3)
+        else:
+            fips = str(first(u, "county_fips", "fips_code", "fips", default="") or "")
+            key = fips[:5] if len(fips) >= 5 and fips[:5].isdigit() else None
         if not key:
             cname = first(u, "county_name", "county")
             key = next((f for f, n in TOWN_STATE_COUNTIES.items() if cname and n.lower() == str(cname).lower()), None)
