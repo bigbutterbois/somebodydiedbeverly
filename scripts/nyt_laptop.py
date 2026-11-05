@@ -252,6 +252,92 @@ def votes_of(c):
         return 0
 
 
+# County names for the states NYT reports by town (fips -> name, as in the site baselines).
+TOWN_STATE_COUNTIES = {
+    "23001": "Androscoggin",
+    "23003": "Aroostook",
+    "23005": "Cumberland",
+    "23007": "Franklin",
+    "23009": "Hancock",
+    "23011": "Kennebec",
+    "23013": "Knox",
+    "23015": "Lincoln",
+    "23017": "Oxford",
+    "23019": "Penobscot",
+    "23021": "Piscataquis",
+    "23023": "Sagadahoc",
+    "23025": "Somerset",
+    "23027": "Waldo",
+    "23029": "Washington",
+    "23031": "York",
+    "33001": "Belknap",
+    "33003": "Carroll",
+    "33005": "Cheshire",
+    "33007": "Coos",
+    "33009": "Grafton",
+    "33011": "Hillsborough",
+    "33013": "Merrimack",
+    "33015": "Rockingham",
+    "33017": "Strafford",
+    "33019": "Sullivan",
+    "25001": "Barnstable",
+    "25003": "Berkshire",
+    "25005": "Bristol",
+    "25007": "Dukes",
+    "25009": "Essex",
+    "25011": "Franklin",
+    "25013": "Hampden",
+    "25015": "Hampshire",
+    "25017": "Middlesex",
+    "25019": "Nantucket",
+    "25021": "Norfolk",
+    "25023": "Plymouth",
+    "25025": "Suffolk",
+    "25027": "Worcester",
+    "44001": "Bristol",
+    "44003": "Kent",
+    "44005": "Newport",
+    "44007": "Providence",
+    "44009": "Washington",
+}
+
+
+def towns_to_counties(units):
+    """Sums town units into county units (by the first five digits of each town's fips,
+    or a county field). None if any town can't be placed in a county."""
+    groups = {}
+    for u in units:
+        level = str(first(u, "level", default="")).lower()
+        if level in ("state", "") or "district" in level:
+            continue
+        fips = str(first(u, "county_fips", "fips_code", "fips", default="") or "")
+        key = fips[:5] if len(fips) >= 5 and fips[:5].isdigit() else None
+        if not key:
+            cname = first(u, "county_name", "county")
+            key = next((f for f, n in TOWN_STATE_COUNTIES.items() if cname and n.lower() == str(cname).lower()), None)
+        if not key:
+            return None
+        g = groups.setdefault(key, {"level": "county", "name": TOWN_STATE_COUNTIES.get(key, key), "fips_code": key,
+                                    "_cands": {}, "precincts_reporting": 0, "total_precincts": 0,
+                                    "total_expected_vote": 0})
+        for c in first(u, "candidates", default=[]) or []:
+            cid = str(first(c, "nyt_id", "candidate_id", "candidate_key", "id", default=""))
+            t = g["_cands"].setdefault(cid, dict(c, votes=0))
+            t["votes"] += votes_of(c)
+        for k, keys in (("precincts_reporting", ("precincts_reporting", "precinctsReporting", "reporting")),
+                        ("total_precincts", ("total_precincts", "precincts_total", "precinctsTotal", "precincts")),
+                        ("total_expected_vote", ("total_expected_vote", "expected_votes", "expectedVotes"))):
+            try:
+                g[k] += int(first(u, *keys, default=0) or 0)
+            except (TypeError, ValueError):
+                pass
+    if not groups:
+        return None
+    for g in groups.values():
+        g["candidates"] = list(g.pop("_cands").values())
+    return list(groups.values())
+
+
 def sum_units(units):
     """One unit adding up every unit's candidate votes (when there is no state-level unit)."""
     totals = {}
@@ -270,8 +356,9 @@ def counties(data):
     names = candidate_names(data, race)
     units = race["reporting_units"]
     # The site's baselines are by county, so only county units are sent as is.
-    # States NYT reports by town (Maine, New Hampshire) go
-    # in as one statewide row, which the model treats as one big county.
+    # States NYT reports by town are summed into counties; if any town can't be
+    # placed in a county the state goes in as one statewide row, which the model
+    # treats as one big county.
     pick = [u for u in units if str(first(u, "level", default="")).lower() == "county"]
     # Alaska has no counties: NYT reports it by state House district, and the
     # site's Alaska baselines use the same "State House District N" names.
@@ -283,6 +370,9 @@ def counties(data):
             districts[u.get("name")] = int(m.group(1))
     if not pick and districts:
         pick = [u for u in units if u.get("name") in districts]
+    if not pick and not districts:
+        # Maine, New Hampshire, Massachusetts and Rhode Island: NYT reports towns.
+        pick = towns_to_counties(units) or []
     statewide = not pick
     if statewide:
         pick = [u for u in units if str(first(u, "level", default="")).lower() in ("state", "")][:1] or [sum_units(units)]
