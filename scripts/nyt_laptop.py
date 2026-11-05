@@ -11,6 +11,9 @@ no extra packages.
     python3 scripts/nyt_laptop.py --inspect 2024 NE  # show the data file's layout (for fixing the parser)
     python3 scripts/nyt_laptop.py                  # election night: every state, every 60s, posts
     python3 scripts/nyt_laptop.py GA MI KS         # only these states
+    python3 scripts/nyt_laptop.py --once           # one round for every state, post, then exit
+    python3 scripts/nyt_laptop.py --save           # one round, no sign-in, no post: write the batch to
+                                                   # ~/dev/election/nyt2026/latest.json (+ a timestamped copy)
 
 It asks for the site's owner email and password once (or set OWNER_EMAIL and
 OWNER_PASSWORD). SITE=http://localhost:3000 points it at a local copy.
@@ -249,6 +252,99 @@ def votes_of(c):
         return 0
 
 
+# County names for the states NYT reports by town (fips -> name, as in the site baselines).
+TOWN_STATE_COUNTIES = {
+    "23001": "Androscoggin",
+    "23003": "Aroostook",
+    "23005": "Cumberland",
+    "23007": "Franklin",
+    "23009": "Hancock",
+    "23011": "Kennebec",
+    "23013": "Knox",
+    "23015": "Lincoln",
+    "23017": "Oxford",
+    "23019": "Penobscot",
+    "23021": "Piscataquis",
+    "23023": "Sagadahoc",
+    "23025": "Somerset",
+    "23027": "Waldo",
+    "23029": "Washington",
+    "23031": "York",
+    "33001": "Belknap",
+    "33003": "Carroll",
+    "33005": "Cheshire",
+    "33007": "Coos",
+    "33009": "Grafton",
+    "33011": "Hillsborough",
+    "33013": "Merrimack",
+    "33015": "Rockingham",
+    "33017": "Strafford",
+    "33019": "Sullivan",
+    "25001": "Barnstable",
+    "25003": "Berkshire",
+    "25005": "Bristol",
+    "25007": "Dukes",
+    "25009": "Essex",
+    "25011": "Franklin",
+    "25013": "Hampden",
+    "25015": "Hampshire",
+    "25017": "Middlesex",
+    "25019": "Nantucket",
+    "25021": "Norfolk",
+    "25023": "Plymouth",
+    "25025": "Suffolk",
+    "25027": "Worcester",
+    "44001": "Bristol",
+    "44003": "Kent",
+    "44005": "Newport",
+    "44007": "Providence",
+    "44009": "Washington",
+}
+
+
+def towns_to_counties(units):
+    """Sums town units into county units (by the first five digits of each town's fips,
+    or a county field). None if any town can't be placed in a county."""
+    groups = {}
+    for u in units:
+        level = str(first(u, "level", default="")).lower()
+        # Wards (NH) are already counted in their towns; "other" is overseas absentee.
+        if level in ("state", "", "other", "ward") or "district" in level:
+            continue
+        if str(first(u, "name", default="")).lower().startswith("overseas"):
+            continue
+        fs, fc = first(u, "fips_state"), first(u, "fips_county")
+        if fs and fc:
+            key = str(fs).zfill(2) + str(fc).zfill(3)
+        else:
+            fips = str(first(u, "county_fips", "fips_code", "fips", default="") or "")
+            key = fips[:5] if len(fips) >= 5 and fips[:5].isdigit() else None
+        if not key:
+            cname = first(u, "county_name", "county")
+            key = next((f for f, n in TOWN_STATE_COUNTIES.items() if cname and n.lower() == str(cname).lower()), None)
+        if not key:
+            return None
+        g = groups.setdefault(key, {"level": "county", "name": TOWN_STATE_COUNTIES.get(key, key), "fips_code": key,
+                                    "_cands": {}, "precincts_reporting": 0, "total_precincts": 0,
+                                    "total_expected_vote": 0})
+        for c in first(u, "candidates", default=[]) or []:
+            cid = str(first(c, "nyt_id", "candidate_id", "candidate_key", "id", default=""))
+            t = g["_cands"].setdefault(cid, dict(c, votes=0))
+            t["votes"] += votes_of(c)
+        for k, keys in (("precincts_reporting", ("precincts_reporting", "precinctsReporting", "reporting")),
+                        ("total_precincts", ("total_precincts", "precincts_total", "precinctsTotal", "precincts")),
+                        ("total_expected_vote", ("total_expected_vote", "expected_votes", "expectedVotes"))):
+            try:
+                g[k] += int(first(u, *keys, default=0) or 0)
+            except (TypeError, ValueError):
+                pass
+    if not groups:
+        return None
+    for g in groups.values():
+        g["candidates"] = list(g.pop("_cands").values())
+    return list(groups.values())
+
+
 def sum_units(units):
     """One unit adding up every unit's candidate votes (when there is no state-level unit)."""
     totals = {}
@@ -267,9 +363,23 @@ def counties(data):
     names = candidate_names(data, race)
     units = race["reporting_units"]
     # The site's baselines are by county, so only county units are sent as is.
-    # States NYT reports by town or district (Maine, New Hampshire, Alaska) go
-    # in as one statewide row, which the model treats as one big county.
+    # States NYT reports by town are summed into counties; if any town can't be
+    # placed in a county the state goes in as one statewide row, which the model
+    # treats as one big county.
     pick = [u for u in units if str(first(u, "level", default="")).lower() == "county"]
+    # Alaska has no counties: NYT reports it by state House district, and the
+    # site's Alaska baselines use the same "State House District N" names.
+    # The few overseas absentee votes have no district and are left out.
+    districts = {}
+    for u in units:
+        m = re.match(r"\s*state house district (\d+)\s*$", str(first(u, "name", default="")), re.I)
+        if m:
+            districts[u.get("name")] = int(m.group(1))
+    if not pick and districts:
+        pick = [u for u in units if u.get("name") in districts]
+    if not pick and not districts:
+        # Maine, New Hampshire, Massachusetts and Rhode Island: NYT reports towns.
+        pick = towns_to_counties(units) or []
     statewide = not pick
     if statewide:
         pick = [u for u in units if str(first(u, "level", default="")).lower() in ("state", "")][:1] or [sum_units(units)]
@@ -290,6 +400,8 @@ def counties(data):
             "candidates": cands,
         }
         fips = first(u, "fips_code", "fips", "county_fips")
+        if u.get("name") in districts:
+            fips = f"02{districts[u.get('name')]:03d}"
         if fips and not statewide:
             row["fips"] = str(fips).zfill(5)
         try:
@@ -326,8 +438,30 @@ def inspect(data):
 # ---------------------------------------------------------------- main
 
 
+def one_round(year, wanted):
+    """Reads every wanted state once: the batch to post, the failures, and states with no votes yet."""
+    batch, failed, waiting = [], [], []
+    for state, hit, err in load_all(year, wanted):
+        try:
+            if err:
+                raise err
+            url, data = hit
+            rows = counties(data)
+            if sum(c["votes"] for r in rows for c in r["candidates"]) > 0:
+                batch.append({"state": state, "source": url, "counties": rows})
+            else:
+                waiting.append(state)
+        except Exception as e:
+            print(f"{state}: {e}")
+            failed.append({"state": state, "error": str(e)[:200]})
+    return batch, failed, waiting
+
+
 def main():
     args = sys.argv[1:]
+    once = "--once" in args
+    save = "--save" in args
+    args = [a for a in args if a not in ("--once", "--save")]
     year = "2026"
     mode = "run"
     if args and args[0] in ("--test", "--inspect"):
@@ -359,10 +493,30 @@ def main():
                 print(f"\n{state}: FAILED {e}")
         return
 
+    if save:
+        batch, failed, waiting = one_round(year, wanted)
+        folder = os.path.expanduser("~/dev/election/nyt2026")
+        os.makedirs(folder, exist_ok=True)
+        payload = {
+            "fetched_at": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()),
+            "states": batch,
+            "failed": failed,
+            "waiting": waiting,
+        }
+        stamp = time.strftime("%Y%m%d-%H%M%S")
+        for name in ("latest.json", f"nyt-{stamp}.json"):
+            with open(os.path.join(folder, name), "w") as f:
+                json.dump(payload, f, indent=1)
+        print(f"Saved {len(batch)} states ({len(failed)} failed) to {folder}/latest.json and nyt-{stamp}.json")
+        return
+
     email = os.environ.get("OWNER_EMAIL") or input("Email: ").strip()
     password = os.environ.get("OWNER_PASSWORD") or getpass.getpass("Password: ")
     tokens = post("/api/app/login", {"email": email, "password": password})
-    print(f"Feeding {len(wanted)} states from NYT to {SITE} every {EVERY}s. Ctrl-C to stop.")
+    if once:
+        print(f"Sending {len(wanted)} states from NYT to {SITE} once.")
+    else:
+        print(f"Feeding {len(wanted)} states from NYT to {SITE} every {EVERY}s. Ctrl-C to stop.")
 
     while True:
         started = time.time()
@@ -371,20 +525,7 @@ def main():
                 tokens = post("/api/app/refresh", {"refresh_token": tokens["refresh_token"]})
         except Exception as e:
             print("token refresh failed:", e)
-        batch, failed, waiting = [], [], []
-        for state, hit, err in load_all(year, wanted):
-            try:
-                if err:
-                    raise err
-                url, data = hit
-                rows = counties(data)
-                if sum(c["votes"] for r in rows for c in r["candidates"]) > 0:
-                    batch.append({"state": state, "source": url, "counties": rows})
-                else:
-                    waiting.append(state)
-            except Exception as e:
-                print(f"{state}: {e}")
-                failed.append({"state": state, "error": str(e)[:200]})
+        batch, failed, waiting = one_round(year, wanted)
         # Posts every round, even with nothing new, so Admin -> Election can see
         # the script is alive and which states it couldn't read.
         try:
@@ -399,6 +540,9 @@ def main():
                 print(time.strftime("%H:%M:%S"), "checked in; no states with votes yet")
         except Exception as e:
             print(time.strftime("%H:%M:%S"), "post failed:", e)
+        if once:
+            print(f"Done: {len(batch)} states sent, {len(failed)} failed.")
+            return
         time.sleep(max(5, EVERY - (time.time() - started)))
 
 
