@@ -1,9 +1,7 @@
 import {
   DEM,
   REP,
-  formatDay,
   formatMargin,
-  formatUpdated,
   RATINGS,
   getHistory,
   getHouseForecast,
@@ -40,21 +38,9 @@ export default async function HouseForecastPage() {
   const tipping = ranked[majority - 1]?.state;
   const shown = ranked.filter((r) => Math.abs(r.rating) < 3 || r.state === tipping);
   const safe = (side: 1 | -1) => ranked.filter((r) => r.rating === 3 * side && r.state !== tipping).length;
-  const daysLeft = Math.round((Date.parse(forecast.election_day) - Date.parse(forecast.as_of)) / 86_400_000);
 
   return (
     <div className="flex flex-col gap-14 py-6">
-      <header className="flex flex-col gap-3">
-        <h1 className="text-4xl font-light tracking-tight">{t("forecast.house.title")}</h1>
-        <p className="text-sm text-muted">
-          Updated{" "}
-          {forecast.generated_at
-            ? formatUpdated(forecast.generated_at)
-            : formatDay(forecast.as_of, { weekday: "long", month: "long", day: "numeric" })}
-          {daysLeft > 0 && ` · ${daysLeft} days to Election Day`}
-        </p>
-      </header>
-
       <section className="flex flex-col gap-3">
         <Topline forecast={forecast}>
           {t("forecast.house.topline", { majority, total })}

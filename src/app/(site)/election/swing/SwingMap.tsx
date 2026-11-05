@@ -173,6 +173,10 @@ export function SwingMap({
     [counties, byCode, base, px],
   );
 
+  const readout = (className: string) => (
+    <Readout info={info} base={base} pinned={!!pinned} onUnpin={() => setPinned(null)} className={className} />
+  );
+
   const zoomTo = (code: string | null) => {
     setZoom(code);
     setPinned(null);
@@ -193,14 +197,6 @@ export function SwingMap({
     <div className="flex flex-col gap-6">
       <section ref={mapRef} className="flex scroll-mt-4 flex-col gap-2">
         <h2 className="text-2xl font-light tracking-tight">Blue tsunami map</h2>
-        <p className="text-sm text-muted">
-          {base === "2026"
-            ? "Each county shaded by the 2026 margin between the Democrat (or independent) and the Republican, using the votes counted so far."
-            : `Each county shaded by how much the Democrat's (or independent's) 2026 margin moved from ${
-                base === "2024" ? "Harris's 2024 margin" : "the 2020 Senate race"
-              }, using the votes counted so far.`}
-          {base === "2020" && " Florida and Ohio had no 2020 Senate race; Alaska's districts were redrawn, so it uses its statewide margin."}
-        </p>
           <div className="flex flex-wrap gap-1 text-sm" role="tablist" aria-label="Map view">
             {BASES.filter((b) => compare2020 || b.key !== "2020").map((b) => (
               <button
@@ -232,6 +228,8 @@ export function SwingMap({
             <span className="text-muted">Hover a state for its totals. Click it to zoom in to its counties.</span>
           )}
         </div>
+        {/* The numbers sit above the map on desktop and below it on phones. */}
+        {readout("hidden sm:block")}
         <svg
           ref={svgRef}
           viewBox={`0 0 ${WIDTH} ${HEIGHT}`}
@@ -281,11 +279,10 @@ export function SwingMap({
           )}
         </svg>
         <Legend base={base} />
-        <Readout info={info} base={base} pinned={!!pinned} onUnpin={() => setPinned(null)} />
+        {readout("sm:hidden")}
       </section>
 
       <section className="flex flex-col gap-2">
-        <h2 className="text-xs uppercase tracking-[0.12em] text-muted">{base === "2026" ? "Statewide margin" : "Statewide shift"}</h2>
         <div className="overflow-x-auto">
           <table className="w-full text-left text-sm tabular-nums">
             <thead className="text-xs uppercase tracking-[0.12em] text-muted">
@@ -367,13 +364,15 @@ function Readout({
   base,
   pinned,
   onUnpin,
+  className = "",
 }: {
   info: Hover | null;
   base: Base;
   pinned: boolean;
   onUnpin: () => void;
+  className?: string;
 }) {
-  if (!info) return <p className="min-h-16 text-sm text-muted">&nbsp;</p>;
+  if (!info) return <p className={`min-h-16 text-sm text-muted ${className}`}>&nbsp;</p>;
   const { county: c, state: s } = info;
   const x = c ?? s;
   const rows: [string, string][] = [
@@ -383,7 +382,7 @@ function Readout({
     ["Votes", `${Math.round(x.votes).toLocaleString()} (${Math.round(x.counted * 100)}% counted)`],
   ];
   return (
-    <div className="min-h-16 text-sm">
+    <div className={`min-h-16 text-sm ${className}`}>
       <p className="font-medium">
         {c ? `${c.name}, ${s.code}` : s.name}
         {!c && s.statewide && <span className="ml-2 text-xs text-muted">statewide total only, no county results</span>}

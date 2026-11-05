@@ -3,8 +3,6 @@ import { PollingChart } from "./OddsChart";
 import {
   DEM,
   REP,
-  formatDay,
-  formatUpdated,
   getForecast,
   getHistory,
   pollDots,
@@ -36,19 +34,10 @@ export default async function BothForecastPage() {
   }
   const [senateHistory, houseHistory] = await Promise.all([getHistory(senate), getHistory(house)]);
   const today = outcomeOdds(senate.p_dem_control, house.p_dem_control, house.p_dem_both ?? null);
-  const daysLeft = Math.round((Date.parse(house.election_day) - Date.parse(house.as_of)) / 86_400_000);
 
   return (
     <div className="flex flex-col gap-14 py-6">
       <header className="flex flex-col gap-3">
-        <h1 className="text-4xl font-light tracking-tight">{t("forecast.both.title")}</h1>
-        <p className="text-sm text-muted">
-          {house.final ? "Final forecast, " : "Updated "}
-          {house.generated_at
-            ? formatUpdated(house.generated_at)
-            : formatDay(house.as_of, { weekday: "long", month: "long", day: "numeric" })}
-          {daysLeft > 0 && ` · ${daysLeft} days to Election Day`}
-        </p>
         <Notes
           text={t("forecast.patchNotes")}
           className="flex flex-col gap-2 border-l-2 border-accent pl-3 text-sm text-muted [&>p:first-child]:text-foreground"

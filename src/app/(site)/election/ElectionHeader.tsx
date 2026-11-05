@@ -21,9 +21,12 @@ export async function ElectionHeader({
   demo,
   showUpdated = true,
   blog = false,
+  note,
 }: {
   demo: number;
   showUpdated?: boolean;
+  /** Shown where "Last updated" sits, in its place (the forecast tab's run time). */
+  note?: string;
   /** The live blog sits under the tabs, on the Senate Projections tab only. */
   blog?: boolean;
 }) {
@@ -40,7 +43,11 @@ export async function ElectionHeader({
         <Suspense>
           <ElectionTabs />
         </Suspense>
-        {updated && <p className="text-sm text-muted tabular-nums">Last updated {stamp(updated)}</p>}
+        {note ? (
+          <p className="text-sm text-muted tabular-nums">{note}</p>
+        ) : (
+          updated && <p className="text-sm text-muted tabular-nums">Last updated {stamp(updated)}</p>
+        )}
       </div>
       {demo > 0 && <p className="text-sm text-danger">Demo: these results are made up, about {demo}% counted.</p>}
       {blog && <LiveBlog initial={posts} />}
