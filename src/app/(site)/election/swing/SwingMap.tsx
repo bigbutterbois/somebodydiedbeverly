@@ -7,15 +7,17 @@ const WIDTH = 975;
 const HEIGHT = 610;
 /** A shift this big (points of margin) or more gets the darkest color. */
 const FULL = 20;
+/** On the 2026 margins view, a margin this big or more gets the darkest color. */
+const FULL_MARGIN = 40;
 
 // White at no movement, through the party color at half, to a deep shade at FULL.
 const BLUE: [number, number, number][] = [[255, 255, 255], [74, 134, 232], [12, 42, 110]];
 const RED: [number, number, number][] = [[255, 255, 255], [229, 83, 75], [110, 16, 12]];
 
-export function shiftColor(shift: number | null) {
+export function shiftColor(shift: number | null, full = FULL) {
   if (shift === null) return "var(--line)";
   const stops = shift >= 0 ? BLUE : RED;
-  const t = Math.min(Math.abs(shift) / FULL, 1) * 2;
+  const t = Math.min(Math.abs(shift) / full, 1) * 2;
   const i = Math.min(Math.floor(t), 1);
   const f = t - i;
   const [a, b] = [stops[i], stops[i + 1]];
@@ -30,19 +32,24 @@ const shiftText = (s: number | null) =>
 const last = (n: string) => n.split(" ").pop();
 
 type Hover = { county: SwingCounty | null; state: SwingState };
-type Base = "2024" | "2020";
+type Base = "2024" | "2020" | "2026";
 type Margins = { margin2024: number; margin2020: number | null; margin2026: number | null };
 
 /** The 2026 margin minus the chosen baseline's, rounded to a tenth. */
 function shiftFrom(x: Margins, base: Base) {
-  const from = base === "2024" ? x.margin2024 : x.margin2020;
+  const from = base === "2020" ? x.margin2020 : x.margin2024;
   if (x.margin2026 === null || from === null) return null;
   return Math.round((x.margin2026 - from) * 10) / 10;
 }
 
+/** What a view colors by: the shift from its baseline, or on the 2026 view the margin itself. */
+const valueFor = (x: Margins, base: Base) => (base === "2026" ? x.margin2026 : shiftFrom(x, base));
+const fullFor = (base: Base) => (base === "2026" ? FULL_MARGIN : FULL);
+
 const BASES: { key: Base; label: string }[] = [
   { key: "2024", label: "vs. Harris 2024" },
   { key: "2020", label: "vs. 2020 Senate" },
+  { key: "2026", label: "2026 margins" },
 ];
 
 export function SwingMap({
@@ -79,7 +86,7 @@ export function SwingMap({
   const scale = zoomed ? WIDTH / Number(viewBox.split(" ")[2]) : 1;
 
   const sorted = states
-    .map((s) => ({ s, shift: shiftFrom(s, base) }))
+    .map((s) => ({ s, shift: valueFor(s, base) }))
     .sort((a, b) => (b.shift ?? -999) - (a.shift ?? -999));
 
   const info = hover ?? (zoomed ? { county: null, state: zoomed } : null);
@@ -89,13 +96,15 @@ export function SwingMap({
       <section ref={mapRef} className="flex scroll-mt-4 flex-col gap-2">
         <h2 className="text-2xl font-light tracking-tight">Blue tsunami map</h2>
         <p className="text-sm text-muted">
-          Each county shaded by how much the Democrat&apos;s (or independent&apos;s) 2026 margin moved from{" "}
-          {base === "2024" ? "Harris's 2024 margin" : "the 2020 Senate race"}, using the votes counted so far.
+          {base === "2026"
+            ? "Each county shaded by the 2026 margin between the Democrat (or independent) and the Republican, using the votes counted so far."
+            : `Each county shaded by how much the Democrat's (or independent's) 2026 margin moved from ${
+                base === "2024" ? "Harris's 2024 margin" : "the 2020 Senate race"
+              }, using the votes counted so far.`}
           {base === "2020" && " Florida and Ohio had no 2020 Senate race; Alaska's districts were redrawn, so it uses its statewide margin."}
         </p>
-        {compare2020 && (
-          <div className="flex gap-1 text-sm" role="tablist" aria-label="Compare with">
-            {BASES.map((b) => (
+          <div className="flex flex-wrap gap-1 text-sm" role="tablist" aria-label="Map view">
+            {BASES.filter((b) => compare2020 || b.key !== "2020").map((b) => (
               <button
                 key={b.key}
                 type="button"
@@ -110,7 +119,6 @@ export function SwingMap({
               </button>
             ))}
           </div>
-        )}
         <div className="flex min-h-6 items-center gap-3 text-sm">
           {zoomed ? (
             <>
@@ -127,7 +135,7 @@ export function SwingMap({
           viewBox={viewBox}
           className="h-auto w-full touch-manipulation"
           role="img"
-          aria-label="County swing from 2024 to 2026"
+          aria-label={base === "2026" ? "2026 margin by county" : "County swing to 2026"}
           onPointerLeave={(e) => e.pointerType === "mouse" && setHover(null)}
         >
           <path d={others} fill="var(--surface)" />
@@ -137,7 +145,7 @@ export function SwingMap({
               <path
                 key={c.fips}
                 d={c.d}
-                fill={shiftColor(shiftFrom(c, base))}
+                fill={shiftColor(valueFor(c, base), fullFor(base))}
                 stroke="var(--background)"
                 strokeWidth={0.3 / scale}
                 opacity={zoom && zoom !== c.state ? 0.35 : 1}
@@ -166,15 +174,15 @@ export function SwingMap({
       </section>
 
       <section className="flex flex-col gap-2">
-        <h2 className="text-xs uppercase tracking-[0.12em] text-muted">Statewide shift</h2>
+        <h2 className="text-xs uppercase tracking-[0.12em] text-muted">{base === "2026" ? "Statewide margin" : "Statewide shift"}</h2>
         <div className="overflow-x-auto">
           <table className="w-full text-left text-sm tabular-nums">
             <thead className="text-xs uppercase tracking-[0.12em] text-muted">
               <tr className="border-b border-line">
                 <th className="py-2 pr-4 font-normal">State</th>
-                <th className="py-2 pr-4 font-normal">{base === "2024" ? "Harris 2024" : "Senate 2020"}</th>
-                <th className="py-2 pr-4 font-normal">2026</th>
-                <th className="py-2 pr-4 font-normal">Shift</th>
+                <th className="py-2 pr-4 font-normal">{base === "2020" ? "Senate 2020" : "Harris 2024"}</th>
+                {base !== "2026" && <th className="py-2 pr-4 font-normal">2026</th>}
+                <th className="py-2 pr-4 font-normal">{base === "2026" ? "2026 margin" : "Shift"}</th>
                 <th className="py-2 pr-4 font-normal">Counted</th>
               </tr>
             </thead>
@@ -191,16 +199,22 @@ export function SwingMap({
                     </button>
                     {s.statewide && <span className="ml-1 text-xs text-muted">statewide only</span>}
                   </td>
-                  <td className="py-1.5 pr-4">{margin(base === "2024" ? s.margin2024 : s.margin2020, "D")}</td>
-                  <td className="py-1.5 pr-4">
-                    {margin(s.margin2026, s.opp.party)} <span className="text-muted">{last(s.opp.name)}</span>
-                  </td>
+                  <td className="py-1.5 pr-4">{margin(base === "2020" ? s.margin2020 : s.margin2024, "D")}</td>
+                  {base !== "2026" && (
+                    <td className="py-1.5 pr-4">
+                      {margin(s.margin2026, s.opp.party)} <span className="text-muted">{last(s.opp.name)}</span>
+                    </td>
+                  )}
                   <td className="py-1.5 pr-4">
                     <span
                       className="mr-2 inline-block h-3 w-3 rounded-sm align-middle"
-                      style={{ background: shiftColor(shift) }}
+                      style={{ background: shiftColor(shift, fullFor(base)) }}
                     />
-                    {shift === null && base === "2020" ? "no 2020 race" : shiftText(shift)}
+                    {base === "2026"
+                      ? `${margin(shift, s.opp.party)} ${last(s.opp.name)}`
+                      : shift === null && base === "2020"
+                        ? "no 2020 race"
+                        : shiftText(shift)}
                   </td>
                   <td className="py-1.5 pr-4">{Math.round(s.counted * 100)}%</td>
                 </tr>
@@ -214,20 +228,25 @@ export function SwingMap({
 }
 
 function Legend({ base }: { base: Base }) {
-  const ticks = [-FULL, -FULL / 2, 0, FULL / 2, FULL];
-  const stops = Array.from({ length: 21 }, (_, i) => -FULL + (i * 2 * FULL) / 20);
+  const full = fullFor(base);
+  const ticks = [-full, -full / 2, 0, full / 2, full];
+  const stops = Array.from({ length: 21 }, (_, i) => -full + (i * 2 * full) / 20);
   return (
     <div className="flex max-w-md flex-col gap-1 text-xs text-muted tabular-nums">
       <div
         className="h-3 rounded-sm"
-        style={{ background: `linear-gradient(to right, ${stops.map(shiftColor).join(", ")})` }}
+        style={{ background: `linear-gradient(to right, ${stops.map((v) => shiftColor(v, full)).join(", ")})` }}
       />
       <div className="flex justify-between">
         {ticks.map((t) => (
-          <span key={t}>{t === 0 ? "0" : `${t > 0 ? "D" : "R"}+${Math.abs(t)}${Math.abs(t) === FULL ? "+" : ""}`}</span>
+          <span key={t}>{t === 0 ? "0" : `${t > 0 ? "D" : "R"}+${Math.abs(t)}${Math.abs(t) === full ? "+" : ""}`}</span>
         ))}
       </div>
-      <p>Shift in margin from {base === "2024" ? "Harris 2024" : "the 2020 Senate race"} to the 2026 Democrat or independent.</p>
+      <p>
+        {base === "2026"
+          ? "2026 margin, Democrat or independent against the Republican."
+          : `Shift in margin from ${base === "2024" ? "Harris 2024" : "the 2020 Senate race"} to the 2026 Democrat or independent.`}
+      </p>
     </div>
   );
 }
@@ -237,9 +256,9 @@ function Readout({ info, base }: { info: Hover | null; base: Base }) {
   const { county: c, state: s } = info;
   const x = c ?? s;
   const rows: [string, string][] = [
-    base === "2024" ? ["Harris 2024", margin(x.margin2024, "D")] : ["Senate 2020", margin(x.margin2020, "D")],
+    base === "2020" ? ["Senate 2020", margin(x.margin2020, "D")] : ["Harris 2024", margin(x.margin2024, "D")],
     [`${last(s.opp.name)} 2026`, margin(x.margin2026, s.opp.party)],
-    ["Shift", shiftText(shiftFrom(x, base))],
+    [base === "2026" ? "Shift from Harris" : "Shift", shiftText(shiftFrom(x, base))],
     ["Votes", `${Math.round(x.votes).toLocaleString()} (${Math.round(x.counted * 100)}% counted)`],
   ];
   return (
