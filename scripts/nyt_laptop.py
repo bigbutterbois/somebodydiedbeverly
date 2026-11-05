@@ -267,9 +267,19 @@ def counties(data):
     names = candidate_names(data, race)
     units = race["reporting_units"]
     # The site's baselines are by county, so only county units are sent as is.
-    # States NYT reports by town or district (Maine, New Hampshire, Alaska) go
+    # States NYT reports by town (Maine, New Hampshire) go
     # in as one statewide row, which the model treats as one big county.
     pick = [u for u in units if str(first(u, "level", default="")).lower() == "county"]
+    # Alaska has no counties: NYT reports it by state House district, and the
+    # site's Alaska baselines use the same "State House District N" names.
+    # The few overseas absentee votes have no district and are left out.
+    districts = {}
+    for u in units:
+        m = re.match(r"\s*state house district (\d+)\s*$", str(first(u, "name", default="")), re.I)
+        if m:
+            districts[u.get("name")] = int(m.group(1))
+    if not pick and districts:
+        pick = [u for u in units if u.get("name") in districts]
     statewide = not pick
     if statewide:
         pick = [u for u in units if str(first(u, "level", default="")).lower() in ("state", "")][:1] or [sum_units(units)]
@@ -290,6 +300,8 @@ def counties(data):
             "candidates": cands,
         }
         fips = first(u, "fips_code", "fips", "county_fips")
+        if u.get("name") in districts:
+            fips = f"02{districts[u.get('name')]:03d}"
         if fips and not statewide:
             row["fips"] = str(fips).zfill(5)
         try:
