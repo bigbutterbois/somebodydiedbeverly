@@ -12,6 +12,8 @@ no extra packages.
     python3 scripts/nyt_laptop.py                  # election night: every state, every 60s, posts
     python3 scripts/nyt_laptop.py GA MI KS         # only these states
     python3 scripts/nyt_laptop.py --once           # one round for every state, post, then exit
+    python3 scripts/nyt_laptop.py --save           # one round, no sign-in, no post: write the batch to
+                                                   # ~/dev/election/nyt2026/latest.json (+ a timestamped copy)
 
 It asks for the site's owner email and password once (or set OWNER_EMAIL and
 OWNER_PASSWORD). SITE=http://localhost:3000 points it at a local copy.
@@ -339,10 +341,30 @@ def inspect(data):
 # ---------------------------------------------------------------- main
 
 
+def one_round(year, wanted):
+    """Reads every wanted state once: the batch to post, the failures, and states with no votes yet."""
+    batch, failed, waiting = [], [], []
+    for state, hit, err in load_all(year, wanted):
+        try:
+            if err:
+                raise err
+            url, data = hit
+            rows = counties(data)
+            if sum(c["votes"] for r in rows for c in r["candidates"]) > 0:
+                batch.append({"state": state, "source": url, "counties": rows})
+            else:
+                waiting.append(state)
+        except Exception as e:
+            print(f"{state}: {e}")
+            failed.append({"state": state, "error": str(e)[:200]})
+    return batch, failed, waiting
+
+
 def main():
     args = sys.argv[1:]
     once = "--once" in args
-    args = [a for a in args if a != "--once"]
+    save = "--save" in args
+    args = [a for a in args if a not in ("--once", "--save")]
     year = "2026"
     mode = "run"
     if args and args[0] in ("--test", "--inspect"):
@@ -374,6 +396,23 @@ def main():
                 print(f"\n{state}: FAILED {e}")
         return
 
+    if save:
+        batch, failed, waiting = one_round(year, wanted)
+        folder = os.path.expanduser("~/dev/election/nyt2026")
+        os.makedirs(folder, exist_ok=True)
+        payload = {
+            "fetched_at": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()),
+            "states": batch,
+            "failed": failed,
+            "waiting": waiting,
+        }
+        stamp = time.strftime("%Y%m%d-%H%M%S")
+        for name in ("latest.json", f"nyt-{stamp}.json"):
+            with open(os.path.join(folder, name), "w") as f:
+                json.dump(payload, f, indent=1)
+        print(f"Saved {len(batch)} states ({len(failed)} failed) to {folder}/latest.json and nyt-{stamp}.json")
+        return
+
     email = os.environ.get("OWNER_EMAIL") or input("Email: ").strip()
     password = os.environ.get("OWNER_PASSWORD") or getpass.getpass("Password: ")
     tokens = post("/api/app/login", {"email": email, "password": password})
@@ -389,20 +428,7 @@ def main():
                 tokens = post("/api/app/refresh", {"refresh_token": tokens["refresh_token"]})
         except Exception as e:
             print("token refresh failed:", e)
-        batch, failed, waiting = [], [], []
-        for state, hit, err in load_all(year, wanted):
-            try:
-                if err:
-                    raise err
-                url, data = hit
-                rows = counties(data)
-                if sum(c["votes"] for r in rows for c in r["candidates"]) > 0:
-                    batch.append({"state": state, "source": url, "counties": rows})
-                else:
-                    waiting.append(state)
-            except Exception as e:
-                print(f"{state}: {e}")
-                failed.append({"state": state, "error": str(e)[:200]})
+        batch, failed, waiting = one_round(year, wanted)
         # Posts every round, even with nothing new, so Admin -> Election can see
         # the script is alive and which states it couldn't read.
         try:
