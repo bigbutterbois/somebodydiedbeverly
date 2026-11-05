@@ -2,9 +2,7 @@ import {
   DEM,
   RATINGS,
   REP,
-  formatDay,
   formatMargin,
-  formatUpdated,
   getForecast,
   getHistory,
   pollDots,
@@ -40,21 +38,9 @@ export default async function ForecastPage() {
   const needed = 51 - (forecast.dem_seats_not_up ?? 34);
   const races = [...forecast.races].sort((a, b) => b.p_opp - a.p_opp || b.mean_margin - a.mean_margin);
   const independents = races.filter((r) => r.opp.party === "I").map((r) => r.name).sort();
-  const daysLeft = Math.round((Date.parse(forecast.election_day) - Date.parse(forecast.as_of)) / 86_400_000);
 
   return (
     <div className="flex flex-col gap-14 py-6">
-      <header className="flex flex-col gap-3">
-        <h1 className="text-4xl font-light tracking-tight">{t("forecast.senate.title")}</h1>
-        <p className="text-sm text-muted">
-          Updated{" "}
-          {forecast.generated_at
-            ? formatUpdated(forecast.generated_at)
-            : formatDay(forecast.as_of, { weekday: "long", month: "long", day: "numeric" })}
-          {daysLeft > 0 && ` · ${daysLeft} days to Election Day`}
-        </p>
-      </header>
-
       <Topline forecast={forecast} note={t("forecast.senate.topline")} />
 
       {forecast.dem_seat_distribution && (

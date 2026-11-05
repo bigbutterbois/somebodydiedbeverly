@@ -14,7 +14,7 @@ export function ElectionTabs() {
   const pathname = usePathname();
   const demo = useSearchParams().get("demo");
   return (
-    <nav className="flex gap-1 text-sm" aria-label="Election">
+    <nav className="flex flex-wrap gap-1 text-sm" aria-label="Election">
       {TABS.map(({ href, label }) => {
         const active = href === "/election" ? pathname === href : pathname.startsWith(href);
         return (
@@ -22,7 +22,7 @@ export function ElectionTabs() {
             key={href}
             href={demo ? `${href}?demo=${demo}` : href}
             aria-current={active ? "page" : undefined}
-            className={`rounded-full border px-3 py-1 transition-colors ${
+            className={`whitespace-nowrap rounded-full border px-3 py-1 transition-colors ${
               active ? "border-accent bg-accent text-background" : "border-line text-muted hover:text-foreground"
             }`}
           >
