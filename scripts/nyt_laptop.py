@@ -11,6 +11,7 @@ no extra packages.
     python3 scripts/nyt_laptop.py --inspect 2024 NE  # show the data file's layout (for fixing the parser)
     python3 scripts/nyt_laptop.py                  # election night: every state, every 60s, posts
     python3 scripts/nyt_laptop.py GA MI KS         # only these states
+    python3 scripts/nyt_laptop.py --once           # one round for every state, post, then exit
 
 It asks for the site's owner email and password once (or set OWNER_EMAIL and
 OWNER_PASSWORD). SITE=http://localhost:3000 points it at a local copy.
@@ -340,6 +341,8 @@ def inspect(data):
 
 def main():
     args = sys.argv[1:]
+    once = "--once" in args
+    args = [a for a in args if a != "--once"]
     year = "2026"
     mode = "run"
     if args and args[0] in ("--test", "--inspect"):
@@ -374,7 +377,10 @@ def main():
     email = os.environ.get("OWNER_EMAIL") or input("Email: ").strip()
     password = os.environ.get("OWNER_PASSWORD") or getpass.getpass("Password: ")
     tokens = post("/api/app/login", {"email": email, "password": password})
-    print(f"Feeding {len(wanted)} states from NYT to {SITE} every {EVERY}s. Ctrl-C to stop.")
+    if once:
+        print(f"Sending {len(wanted)} states from NYT to {SITE} once.")
+    else:
+        print(f"Feeding {len(wanted)} states from NYT to {SITE} every {EVERY}s. Ctrl-C to stop.")
 
     while True:
         started = time.time()
@@ -411,6 +417,9 @@ def main():
                 print(time.strftime("%H:%M:%S"), "checked in; no states with votes yet")
         except Exception as e:
             print(time.strftime("%H:%M:%S"), "post failed:", e)
+        if once:
+            print(f"Done: {len(batch)} states sent, {len(failed)} failed.")
+            return
         time.sleep(max(5, EVERY - (time.time() - started)))
 
 
