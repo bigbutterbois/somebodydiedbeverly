@@ -10,6 +10,8 @@
   --line: #2a2d31;
   --accent: #3fbfb2;
   --danger: #f07a6e;
+  /* States with no Senate race on the election maps: a few shades above the page. */
+  --map-empty: #33363b;
   color-scheme: dark;
 }
 
@@ -22,6 +24,7 @@
     --line: #dddcd8;
     --accent: #0f7c73;
     --danger: #c0392b;
+    --map-empty: #e8e8e4;
     color-scheme: light;
   }
 }
