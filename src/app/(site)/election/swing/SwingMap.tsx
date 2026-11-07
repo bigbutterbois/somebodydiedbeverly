@@ -239,7 +239,7 @@ export function SwingMap({
           onPointerLeave={(e) => e.pointerType === "mouse" && setHover(null)}
         >
           {zoom && <style>{`path[data-state]:not([data-state="${zoom}"]){fill-opacity:.35}`}</style>}
-          <path d={others} fill="var(--surface)" />
+          <path d={others} fill="var(--map-empty)" />
           {countyLayer}
           <path d={borders} fill="none" stroke="var(--background)" strokeWidth={1.2 * px}
               vectorEffect="non-scaling-stroke" pointerEvents="none" />
