@@ -666,30 +666,14 @@ function useTrains() {
   return state;
 }
 
-export function MetroMap() {
-  // Colored lines are off unless turned on; remembered on this device, and the tap still works where storage is off.
-  const [stored, store] = useStored(LINES_KEY);
-  const [chosen, setChosen] = useState<boolean | null>(null);
-  const showLines = chosen ?? stored === "1";
-  const simple = !showLines;
-  function toggleLines() {
-    setChosen(!showLines);
-    store(showLines ? "0" : "1");
-  }
-  const layout = simple ? SIMPLE : DIAGRAM;
-  const { W, H } = layout;
-  const paths = useMemo(() => linePaths(layout), [layout]);
-  const points = useMemo(() => stationPoints(layout, paths), [layout, paths]);
-  const { trains, updated, error } = useTrains();
-  const [selected, setSelected] = useState<string | null>(null);
-  const [hover, setHover] = useState<string | null>(null);
-  const picked = trains.find((t) => t.id === selected);
-
-  // Each train glides along the track to its new spot over one refresh, moved
-  // frame by frame outside React so the map itself doesn't re-render.
+/**
+ * Each train glides along the track to its new spot over one refresh, moved
+ * frame by frame outside React so the map itself doesn't re-render. Returns the
+ * ref callback for each train's <g>.
+ */
+function useGlide(trains: Train[], allRails: Map<string, Rail>) {
   const trips = useRef(new Map<string, Trip>());
   const dots = useRef(new Map<string, SVGGElement>());
-  const allRails = useMemo(() => rails(layout), [layout]);
   const railsRef = useRef(allRails);
   useEffect(() => {
     railsRef.current = allRails;
@@ -730,6 +714,43 @@ export function MetroMap() {
     frame = requestAnimationFrame(tick);
     return () => cancelAnimationFrame(frame);
   }, []);
+
+  return (t: Train, el: SVGGElement | null) => {
+    if (!el) {
+      dots.current.delete(t.id);
+      return;
+    }
+    dots.current.set(t.id, el);
+    // Where it stands right now, before the next frame moves it.
+    const trip = trips.current.get(t.id);
+    const p = trip
+      ? trainPoint(trip.line, tripAt(trip, performance.now()), trip.forward, railsRef.current)
+      : trainPoint(t.line, along(t), t.forward, railsRef.current);
+    if (p) el.setAttribute("transform", `translate(${p[0].toFixed(1)} ${p[1].toFixed(1)})`);
+  };
+}
+
+export function MetroMap() {
+  // Colored lines are off unless turned on; remembered on this device, and the tap still works where storage is off.
+  const [stored, store] = useStored(LINES_KEY);
+  const [chosen, setChosen] = useState<boolean | null>(null);
+  const showLines = chosen ?? stored === "1";
+  const simple = !showLines;
+  function toggleLines() {
+    setChosen(!showLines);
+    store(showLines ? "0" : "1");
+  }
+  const layout = simple ? SIMPLE : DIAGRAM;
+  const { W, H } = layout;
+  const paths = useMemo(() => linePaths(layout), [layout]);
+  const points = useMemo(() => stationPoints(layout, paths), [layout, paths]);
+  const { trains, updated, error } = useTrains();
+  const [selected, setSelected] = useState<string | null>(null);
+  const [hover, setHover] = useState<string | null>(null);
+  const picked = trains.find((t) => t.id === selected);
+
+  const allRails = useMemo(() => rails(layout), [layout]);
+  const placeTrain = useGlide(trains, allRails);
 
   // The map fills its box beside the key (below it on a phone, where the key sits
   // at the bottom), centered, with the spare room as margin: the drawing is a
@@ -893,19 +914,7 @@ export function MetroMap() {
             return (
               <g
                 key={t.id}
-                ref={(el) => {
-                  if (!el) {
-                    dots.current.delete(t.id);
-                    return;
-                  }
-                  dots.current.set(t.id, el);
-                  // Where it stands right now, before the next frame moves it.
-                  const trip = trips.current.get(t.id);
-                  const p = trip
-                    ? trainPoint(trip.line, tripAt(trip, performance.now()), trip.forward, railsRef.current)
-                    : trainPoint(t.line, along(t), t.forward, railsRef.current);
-                  if (p) el.setAttribute("transform", `translate(${p[0].toFixed(1)} ${p[1].toFixed(1)})`);
-                }}
+                ref={(el) => placeTrain(t, el)}
                 className="cursor-pointer"
                 onClick={() => !drag.current?.moved && setSelected(on ? null : t.id)}
               >
@@ -1014,6 +1023,50 @@ export function MetroMap() {
           <div className="text-muted">{status(picked)}</div>
         </div>
       )}
+    </div>
+  );
+}
+
+const PREVIEW_RAILS = rails(SIMPLE);
+const PREVIEW_PATHS = linePaths(SIMPLE);
+const PREVIEW_POINTS = stationPoints(SIMPLE, PREVIEW_PATHS);
+
+/**
+ * The homepage's small, live copy of the map: the plain grey track and every
+ * train moving on it, with no zoom, key or tapping. The whole thing is a link
+ * to the full map, so the stations here are plain dots.
+ */
+export function MetroPreview() {
+  const { trains, error } = useTrains();
+  const placeTrain = useGlide(trains, PREVIEW_RAILS);
+  const inService = trains.filter((t) => t.passengers).length;
+  const { W, H } = SIMPLE;
+  return (
+    <div className="flex flex-col gap-2">
+      <svg viewBox={`0 0 ${W} ${H}`} className="mx-auto h-auto max-h-[520px] w-full" role="img"
+        aria-label={`Map of Metrorail with ${trains.length} trains`}>
+        {PREVIEW_PATHS.map((p) => (
+          <path key={p.code} d={p.d} fill="none" stroke={TRACK} strokeWidth={SIMPLE.line + 1.2}
+            strokeLinecap="round" strokeLinejoin="round" />
+        ))}
+        {STATIONS.map((s) => {
+          const p = PREVIEW_POINTS.get(s.key);
+          return p && <circle key={s.key} cx={p[0]} cy={p[1]} r={SIMPLE.line * 0.42} fill={FACE} stroke={RING} strokeWidth={SIMPLE.line / 4.5} />;
+        })}
+        {trains.map((t) => (
+          <g key={t.id} ref={(el) => placeTrain(t, el)}>
+            <circle r={SIMPLE.train * 1.4} fill={t.passengers ? LINE_BY_CODE.get(t.line)!.color : EMPTY_TRAIN}
+              stroke="var(--foreground)" strokeWidth={1.5} />
+          </g>
+        ))}
+      </svg>
+      <p className="text-sm text-muted tabular-nums">
+        {error
+          ? "Live trains are taking a break; the full map will try again."
+          : trains.length
+            ? `${inService} trains carrying passengers right now`
+            : "Finding trains…"}
+      </p>
     </div>
   );
 }
