@@ -110,6 +110,11 @@ export const ELECTION = {
    */
   callKeepAt: 0.8,
   /**
+   * Races called by hand, whatever the model says (Mike, Nov 18: Mississippi
+   * and Alaska for the Democrats).
+   */
+  manualCalls: { MS: "opp", AK: "opp" } as Record<string, "opp" | "rep">,
+  /**
    * How much of the vote must be counted before a call depends on how sure
    * the forecast was (Mike, Nov 3): races the forecast had at callSafeOdds or
    * more can be called from callMinCounted, races under callCloseOdds wait
