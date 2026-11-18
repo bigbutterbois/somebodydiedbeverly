@@ -223,14 +223,26 @@ async function postCalls(snap: LiveSnapshot) {
   }
 }
 
+/** Whether any state's counts changed after the latest snapshot was saved. */
+async function countsChangedSinceSnapshot() {
+  const supabase = await contentClient();
+  const [{ data: counts }, { data: snap }] = await Promise.all([
+    supabase.from("election_counts").select("changed_at").not("changed_at", "is", null).order("changed_at", { ascending: false }).limit(1).maybeSingle(),
+    supabase.from("election_snapshots").select("created_at").order("created_at", { ascending: false }).limit(1).maybeSingle(),
+  ]);
+  if (!counts?.changed_at) return false;
+  return !snap?.created_at || new Date(counts.changed_at as string) > new Date(snap.created_at as string);
+}
+
 /**
  * Runs the model on the saved NYT counts and saves a new snapshot. Skips when
- * another refresh started under a minute ago (or, unless forced, outside
- * election night).
+ * another refresh started under a minute ago, and (unless forced) outside
+ * election night when no new counts have been published since the last one.
  */
 export async function refresh({ force = false } = {}) {
-  if (!force && !inWindow()) return { ran: false, reason: "not election night" };
   const supabase = await contentClient();
+  // After election night, rerun only when newer counts have been published.
+  if (!force && !inWindow() && !(await countsChangedSinceSnapshot())) return { ran: false, reason: "no new counts" };
   const { data: claimed } = await supabase.rpc("election_claim_refresh", {
     min_seconds: force ? 15 : ELECTION.refreshSeconds,
   });
