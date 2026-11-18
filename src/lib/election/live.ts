@@ -46,7 +46,10 @@ export function buildSnapshot(
   now = new Date(),
 ): LiveSnapshot {
   const closed = new Set(forecast.races.map((r) => r.state).filter((s) => pollsCloseAt(s) <= now));
-  const { races, signal } = runModel({ priors: priorsFrom(forecast), counts, closed });
+  const model = runModel({ priors: priorsFrom(forecast), counts, closed });
+  const { signal } = model;
+  // Calls made by hand override the model's.
+  const races = model.races.map((r) => (ELECTION.manualCalls[r.state] ? { ...r, called: ELECTION.manualCalls[r.state] } : r));
   const byState = new Map(forecast.races.map((r) => [r.state, r]));
   const caucusD = Object.fromEntries(forecast.races.map((r) => [r.state, r.opp.caucus !== "none"]));
   const seatsNotUp = forecast.dem_seats_not_up ?? 34;
