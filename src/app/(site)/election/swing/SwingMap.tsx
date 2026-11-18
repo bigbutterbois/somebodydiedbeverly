@@ -2,29 +2,10 @@
 
 import { useEffect, useMemo, useRef, useState } from "react";
 import type { SwingCounty, SwingState } from "./data";
+import { FULL, FULL_MARGIN, shiftColor } from "./color";
 
 const WIDTH = 975;
 const HEIGHT = 610;
-/** A shift this big (points of margin) or more gets the darkest color. */
-const FULL = 20;
-/** On the 2026 margins view, a margin this big or more gets the darkest color. */
-const FULL_MARGIN = 40;
-
-// White at no movement, through the party color at half, to a deep shade at FULL.
-const BLUE: [number, number, number][] = [[255, 255, 255], [74, 134, 232], [12, 42, 110]];
-const RED: [number, number, number][] = [[255, 255, 255], [229, 83, 75], [110, 16, 12]];
-
-export function shiftColor(shift: number | null, full = FULL) {
-  if (shift === null) return "var(--line)";
-  const stops = shift >= 0 ? BLUE : RED;
-  const t = Math.min(Math.abs(shift) / full, 1) * 2;
-  const i = Math.min(Math.floor(t), 1);
-  const f = t - i;
-  const [a, b] = [stops[i], stops[i + 1]];
-  const c = a.map((v, k) => Math.round(v + (b[k] - v) * f));
-  return `rgb(${c[0]},${c[1]},${c[2]})`;
-}
-
 const margin = (m: number | null, letter: string) =>
   m === null ? "–" : Math.abs(m) < 0.05 ? "Even" : m > 0 ? `${letter}+${m.toFixed(1)}` : `R+${(-m).toFixed(1)}`;
 const shiftText = (s: number | null) =>
