@@ -1051,7 +1051,7 @@ export function MetroPreview() {
         ))}
         {STATIONS.map((s) => {
           const p = PREVIEW_POINTS.get(s.key);
-          return p && <circle key={s.key} cx={p[0]} cy={p[1]} r={SIMPLE.line * 0.42} fill={FACE} stroke={RING} strokeWidth={SIMPLE.line / 4.5} />;
+          return p && <circle key={s.key} cx={p[0].toFixed(1)} cy={p[1].toFixed(1)} r={SIMPLE.line * 0.42} fill={FACE} stroke={RING} strokeWidth={SIMPLE.line / 4.5} />;
         })}
         {trains.map((t) => (
           <g key={t.id} ref={(el) => placeTrain(t, el)}>
